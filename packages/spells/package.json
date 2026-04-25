@@ -1,0 +1,7 @@
+{
+  "name": "@runecraftai/spells",
+  "version": "0.0.1",
+  "description": "Agent skill definitions for Arcanum",
+  "license": "MIT",
+  "files": ["skills/"]
+}

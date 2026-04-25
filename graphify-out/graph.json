@@ -1,0 +1,145 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "install.js",
+      "file_type": "code",
+      "source_file": "install.js",
+      "source_location": "L1",
+      "id": "install_js",
+      "community": 0,
+      "norm_label": "install.js"
+    },
+    {
+      "label": "findSkills()",
+      "file_type": "code",
+      "source_file": "install.js",
+      "source_location": "L48",
+      "id": "install_findskills",
+      "community": 0,
+      "norm_label": "findskills()"
+    },
+    {
+      "label": "installSkill()",
+      "file_type": "code",
+      "source_file": "install.js",
+      "source_location": "L76",
+      "id": "install_installskill",
+      "community": 0,
+      "norm_label": "installskill()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "install.js",
+      "source_location": "L112",
+      "id": "install_main",
+      "community": 0,
+      "norm_label": "main()"
+    },
+    {
+      "label": "cli.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/cli.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_cli_ts",
+      "community": 2,
+      "norm_label": "cli.ts"
+    },
+    {
+      "label": "install.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/commands/install.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_commands_install_ts",
+      "community": 1,
+      "norm_label": "install.ts"
+    },
+    {
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/commands/install.ts",
+      "source_location": "L9",
+      "id": "install_run",
+      "community": 1,
+      "norm_label": "run()"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "install.js",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_src": "install_js",
+      "_tgt": "install_findskills",
+      "source": "install_js",
+      "target": "install_findskills",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "install.js",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_src": "install_js",
+      "_tgt": "install_installskill",
+      "source": "install_js",
+      "target": "install_installskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "install.js",
+      "source_location": "L112",
+      "weight": 1.0,
+      "_src": "install_js",
+      "_tgt": "install_main",
+      "source": "install_js",
+      "target": "install_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "install.js",
+      "source_location": "L113",
+      "weight": 1.0,
+      "_src": "install_main",
+      "_tgt": "install_findskills",
+      "source": "install_findskills",
+      "target": "install_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "install.js",
+      "source_location": "L162",
+      "weight": 1.0,
+      "_src": "install_main",
+      "_tgt": "install_installskill",
+      "source": "install_installskill",
+      "target": "install_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/commands/install.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "packages_summon_src_commands_install_ts",
+      "_tgt": "install_run",
+      "source": "packages_summon_src_commands_install_ts",
+      "target": "install_run",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": []
+}

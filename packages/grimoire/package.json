@@ -1,0 +1,8 @@
+{
+  "name": "@runecraftai/grimoire",
+  "version": "0.0.1",
+  "private": false,
+  "description": "Shared configurations for Arcanum packages",
+  "license": "MIT",
+  "files": ["biome.json", "tsconfig.base.json"]
+}
