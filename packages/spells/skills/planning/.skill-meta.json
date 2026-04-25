@@ -1,6 +1,0 @@
-{
-  "name": "planning",
-  "version": "1.0.0",
-  "description": "Vertical slicing and task breakdown planning skill",
-  "phases": ["plan"]
-}

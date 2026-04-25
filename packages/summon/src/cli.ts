@@ -8,6 +8,9 @@ const main = defineCommand({
 	},
 	subCommands: {
 		install: () => import("./commands/install").then((m) => m.default),
+		update: () => import("./commands/update").then((m) => m.default),
+		remove: () => import("./commands/remove").then((m) => m.default),
+		list: () => import("./commands/list").then((m) => m.default),
 	},
 });
 

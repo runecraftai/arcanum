@@ -1,12 +1,9 @@
 ---
 name: spec-driven
-version: 3.0.0
-type: meta-skill
+version: "1.0.0"
 description: "Full lifecycle development pipeline — SPEC, PLAN, BUILD, TEST, REVIEW, SIMPLIFY, SHIP"
-trigger: /spec
-scope: public
-audience: development-teams
-license: CC-BY-4.0
+category: Architecture
+tags: [planning, lifecycle, specs]
 ---
 
 # spec-driven (v3.0.0)

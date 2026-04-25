@@ -4,13 +4,7 @@ Agent skill definitions for Arcanum. Each skill is a SKILL.md markdown file cons
 
 ## Available Skills
 
-1. **spec-driven** — Orchestrates the full development lifecycle (planning, building, testing, review, shipping)
-2. **planning** — Breaks down requirements into actionable subtasks
-3. **incremental-build** — Builds features step-by-step with validation
-4. **test-verification** — Validates implementation correctness via tests
-5. **code-review** — Reviews code for quality, security, and patterns
-6. **code-simplification** — Refactors and simplifies complex code
-7. **shipping** — Prepares, validates, and releases features
+1. **spec-driven** — Orchestrates the full development lifecycle (planning, building, testing, review, simplification, shipping)
 
 ## Usage
 
