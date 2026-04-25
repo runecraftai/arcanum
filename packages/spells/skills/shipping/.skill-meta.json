@@ -1,6 +1,0 @@
-{
-  "name": "shipping",
-  "version": "1.0.0",
-  "description": "Shipping and release management skill",
-  "phases": ["ship"]
-}

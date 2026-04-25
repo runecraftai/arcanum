@@ -1,6 +1,0 @@
-{
-  "name": "incremental-build",
-  "version": "1.0.0",
-  "description": "Incremental build cycle execution skill",
-  "phases": ["build"]
-}

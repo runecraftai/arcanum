@@ -1,6 +1,0 @@
-{
-  "name": "test-verification",
-  "version": "1.0.0",
-  "description": "Test verification and prove-it pattern skill",
-  "phases": ["test"]
-}

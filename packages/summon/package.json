@@ -1,17 +1,34 @@
 {
   "name": "@runecraftai/summon",
   "version": "0.0.1",
-  "description": "CLI installer for Arcanum agent skills",
+  "description": "Interactive CLI for installing Arcanum agent skills",
   "license": "MIT",
   "type": "module",
+  "main": "dist/summon",
+  "bin": {
+    "summon": "dist/summon"
+  },
+  "files": [
+    "dist/",
+    "src/",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "bun build src/cli.ts --compile --target bun --outfile dist/summon",
+    "dev": "bun run src/cli.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "arcanum",
+    "agent",
+    "skills",
+    "cli",
+    "installer"
+  ],
   "dependencies": {
     "citty": "^0.1.6",
     "@clack/prompts": "^0.7.0"
-  },
-  "scripts": {
-    "build": "bun build src/cli.ts --compile --target bun --outfile dist/summon"
-  },
-  "bin": {
-    "summon": "dist/summon"
   }
 }
