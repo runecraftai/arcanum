@@ -1,0 +1,6 @@
+{
+  "name": "code-simplification",
+  "version": "1.0.0",
+  "description": "Code simplification using simplification patterns",
+  "phases": ["simplify"]
+}

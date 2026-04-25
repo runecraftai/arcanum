@@ -1,0 +1,7 @@
+{
+  "name": "@runecraftai/guild",
+  "version": "0.0.1",
+  "private": false,
+  "description": "Agent party and swarm configurations for Arcanum",
+  "license": "MIT"
+}

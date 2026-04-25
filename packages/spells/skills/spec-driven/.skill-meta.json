@@ -1,0 +1,14 @@
+{
+  "name": "spec-driven",
+  "version": "3.0.0",
+  "type": "meta-skill",
+  "description": "Full lifecycle development pipeline — SPEC, PLAN, BUILD, TEST, REVIEW, SIMPLIFY, SHIP",
+  "phases": ["spec", "plan", "build", "test", "review", "simplify", "ship"],
+  "trigger": "/spec",
+  "scope": "public",
+  "audience": "development-teams",
+  "dependencies": {
+    "required": [],
+    "optional": ["mermaid-studio", "codenavi"]
+  }
+}
