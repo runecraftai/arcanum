@@ -1,15 +1,30 @@
 import * as clack from "@clack/prompts";
 
 /**
- * Display ASCII art banner for the summon CLI
+ * Runecraft ASCII art banner — vegvisir compass + bold block letters
  */
-export function showBanner(): void {
-  const banner = `
-╔════════════════════════════════════════════════════════╗
-║                       ARCANUM                          ║
-║                   AGENT SKILLS MANAGER                 ║
-╚════════════════════════════════════════════════════════╝
+export const RUNECRAFT_ASCII = `
+         .  ·  ᚾ  ·  .
+      ·    /|\\    ·
+   ᚹ ──── /─|─\\ ──── ᛖ
+    \\   /  \\|/  \\   /
+  ·──\\ /────●────\\ /──·
+    / \\   / | \\   / \\
+   ᛊ    \\ /  |  \\ /
+      ·    \\|/    ·
+         · ─|─ ·
+
+ ██████╗ ██╗   ██╗███╗  ██╗███████╗ ██████╗██████╗  █████╗ ███████╗████████╗
+ ██╔══██╗██║   ██║████╗ ██║██╔════╝██╔════╝██╔══██╗██╔══██╗██╔════╝╚══██╔══╝
+ ██████╔╝██║   ██║██╔██╗██║█████╗  ██║     ██████╔╝███████║█████╗     ██║
+ ██╔══██╗██║   ██║██║╚████║██╔══╝  ██║     ██╔══██╗██╔══██║██╔══╝     ██║
+ ██║  ██║╚██████╔╝██║ ╚███║███████╗╚██████╗██║  ██║██║  ██║██║        ██║
+ ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚══╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝        ╚═╝
 `;
 
-  clack.intro(banner);
+/**
+ * Display Runecraft ASCII art banner for the summon CLI
+ */
+export function showBanner(): void {
+  clack.intro(RUNECRAFT_ASCII);
 }

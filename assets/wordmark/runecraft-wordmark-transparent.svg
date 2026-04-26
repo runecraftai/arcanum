@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 100" width="540" height="100">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f5d070"/>
+      <stop offset="40%" stop-color="#d4a843"/>
+      <stop offset="75%" stop-color="#c9a84c"/>
+      <stop offset="100%" stop-color="#8a6820"/>
+    </linearGradient>
+    <filter id="goldGlow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Transparent background — text only for maximum flexibility -->
+  <text x="270" y="78"
+    text-anchor="middle"
+    font-family="'Georgia', 'Times New Roman', serif"
+    font-size="72"
+    font-weight="bold"
+    letter-spacing="9"
+    fill="url(#goldGrad)"
+    filter="url(#goldGlow)">RUNECRAFT</text>
+</svg>

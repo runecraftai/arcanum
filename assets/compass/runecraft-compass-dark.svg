@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f0c060"/>
+      <stop offset="50%" stop-color="#c9a84c"/>
+      <stop offset="100%" stop-color="#8a6820"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#3a3a3a"/>
+      <stop offset="100%" stop-color="#0d0d0d"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Icon background (rounded square for app) -->
+  <rect width="300" height="300" rx="55" ry="55" fill="#111111"/>
+
+  <!-- Outer coin rim -->
+  <circle cx="150" cy="150" r="128" fill="url(#bgGrad)" stroke="url(#goldGrad)" stroke-width="4.5"/>
+  <circle cx="150" cy="150" r="122" fill="none" stroke="#3a2e10" stroke-width="1.5"/>
+  <!-- Dashed decorative ring -->
+  <circle cx="150" cy="150" r="116" fill="none" stroke="#5a4a20" stroke-width="1" stroke-dasharray="3 9"/>
+
+  <!-- 8 Vegvisir arms -->
+  <!-- N -->
+  <line x1="150" y1="150" x2="150" y2="47" stroke="url(#goldGrad)" stroke-width="3.5" filter="url(#glow)"/>
+  <line x1="142" y1="70" x2="150" y2="47" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="158" y1="70" x2="150" y2="47" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="150" y1="84" x2="140" y2="74" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="150" y1="84" x2="160" y2="74" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="145" y1="95" x2="137" y2="86" stroke="#c9a84c" stroke-width="1.8"/>
+
+  <!-- NE -->
+  <line x1="150" y1="150" x2="223" y2="77" stroke="url(#goldGrad)" stroke-width="3" filter="url(#glow)"/>
+  <line x1="192" y1="100" x2="198" y2="92" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="186" y1="106" x2="192" y2="98" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="200" y1="100" x2="207" y2="88" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="196" y1="110" x2="202" y2="96" stroke="#c9a84c" stroke-width="2"/>
+
+  <!-- E -->
+  <line x1="150" y1="150" x2="253" y2="150" stroke="url(#goldGrad)" stroke-width="3.5" filter="url(#glow)"/>
+  <line x1="230" y1="142" x2="253" y2="150" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="230" y1="158" x2="253" y2="150" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="218" y1="145" x2="210" y2="137" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="218" y1="155" x2="210" y2="163" stroke="#c9a84c" stroke-width="2"/>
+
+  <!-- SE -->
+  <line x1="150" y1="150" x2="223" y2="223" stroke="url(#goldGrad)" stroke-width="3" filter="url(#glow)"/>
+  <line x1="194" y1="198" x2="200" y2="192" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="189" y1="193" x2="195" y2="187" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="203" y1="193" x2="210" y2="205" stroke="#c9a84c" stroke-width="2"/>
+
+  <!-- S -->
+  <line x1="150" y1="150" x2="150" y2="253" stroke="url(#goldGrad)" stroke-width="3.5" filter="url(#glow)"/>
+  <line x1="142" y1="230" x2="150" y2="253" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="158" y1="230" x2="150" y2="253" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="150" y1="216" x2="140" y2="226" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="150" y1="216" x2="160" y2="226" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="145" y1="205" x2="137" y2="214" stroke="#c9a84c" stroke-width="1.8"/>
+
+  <!-- SW -->
+  <line x1="150" y1="150" x2="77" y2="223" stroke="url(#goldGrad)" stroke-width="3" filter="url(#glow)"/>
+  <line x1="106" y1="198" x2="100" y2="192" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="111" y1="193" x2="105" y2="187" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="97" y1="193" x2="90" y2="205" stroke="#c9a84c" stroke-width="2"/>
+
+  <!-- W -->
+  <line x1="150" y1="150" x2="47" y2="150" stroke="url(#goldGrad)" stroke-width="3.5" filter="url(#glow)"/>
+  <line x1="70" y1="142" x2="47" y2="150" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="70" y1="158" x2="47" y2="150" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="82" y1="145" x2="90" y2="137" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="82" y1="155" x2="90" y2="163" stroke="#c9a84c" stroke-width="2"/>
+
+  <!-- NW -->
+  <line x1="150" y1="150" x2="77" y2="77" stroke="url(#goldGrad)" stroke-width="3" filter="url(#glow)"/>
+  <line x1="108" y1="100" x2="102" y2="92" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="114" y1="106" x2="108" y2="98" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="100" y1="100" x2="93" y2="88" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="104" y1="110" x2="98" y2="96" stroke="#c9a84c" stroke-width="2"/>
+
+  <!-- Center -->
+  <circle cx="150" cy="150" r="18" fill="#1a1a1a" stroke="url(#goldGrad)" stroke-width="2.5"/>
+  <circle cx="150" cy="150" r="10" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+
+  <!-- Cardinal rune labels -->
+  <text x="150" y="26" text-anchor="middle" font-family="serif" font-size="12" fill="#c9a84c" transform="rotate(0,150,150)">ᚾ</text>
+  <text x="150" y="26" text-anchor="middle" font-family="serif" font-size="12" fill="#8a7540" transform="rotate(90,150,150)">ᛖ</text>
+  <text x="150" y="26" text-anchor="middle" font-family="serif" font-size="12" fill="#8a7540" transform="rotate(180,150,150)">ᛊ</text>
+  <text x="150" y="26" text-anchor="middle" font-family="serif" font-size="12" fill="#8a7540" transform="rotate(270,150,150)">ᚹ</text>
+</svg>

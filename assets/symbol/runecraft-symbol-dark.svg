@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f0c060"/>
+      <stop offset="50%" stop-color="#c9a84c"/>
+      <stop offset="100%" stop-color="#8a6820"/>
+    </linearGradient>
+    <linearGradient id="goldGradR" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5d070"/>
+      <stop offset="40%" stop-color="#d4a843"/>
+      <stop offset="100%" stop-color="#7a5e20"/>
+    </linearGradient>
+    <filter id="goldGlow">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Dark background circle (app icon style) -->
+  <rect width="200" height="200" rx="40" ry="40" fill="#111111"/>
+
+  <!-- Gold ring -->
+  <circle cx="100" cy="100" r="75" fill="none" stroke="url(#goldGrad)" stroke-width="5" filter="url(#goldGlow)"/>
+  <circle cx="100" cy="100" r="69" fill="none" stroke="#3a2e10" stroke-width="1.5"/>
+
+  <!-- Runic R glyph — bold geometric/rune style -->
+  <!-- Vertical stem -->
+  <rect x="60" y="45" width="14" height="112" rx="2" fill="url(#goldGradR)" filter="url(#goldGlow)"/>
+  <!-- Top horizontal bar -->
+  <rect x="60" y="45" width="60" height="13" rx="2" fill="url(#goldGradR)"/>
+  <!-- Middle bar -->
+  <rect x="60" y="90" width="52" height="12" rx="2" fill="url(#goldGradR)"/>
+  <!-- Top curve right side (bowl top) -->
+  <rect x="110" y="45" width="14" height="30" rx="7" fill="url(#goldGradR)"/>
+  <!-- Bottom curve right side (bowl bottom) -->
+  <rect x="108" y="74" width="14" height="28" rx="7" fill="url(#goldGradR)"/>
+  <!-- Diagonal leg -->
+  <polygon points="74,102 88,102 130,157 116,157" fill="url(#goldGradR)" filter="url(#goldGlow)"/>
+</svg>

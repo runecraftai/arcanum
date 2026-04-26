@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 120" width="560" height="120">
+  <defs>
+    <linearGradient id="darkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2a2a2a"/>
+      <stop offset="50%" stop-color="#111111"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+    <linearGradient id="goldBorder" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d4a843"/>
+      <stop offset="100%" stop-color="#8a6820"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Light plate background -->
+  <rect x="0" y="0" width="560" height="120" rx="6" ry="6" fill="#f8f8f6"/>
+  <!-- Gold border -->
+  <rect x="0" y="0" width="560" height="120" rx="6" ry="6" fill="none" stroke="url(#goldBorder)" stroke-width="3"/>
+  <rect x="5" y="5" width="550" height="110" rx="4" ry="4" fill="none" stroke="#e0d0a0" stroke-width="1"/>
+
+  <!-- Diamond decorations -->
+  <polygon points="0,60 14,46 28,60 14,74" fill="url(#goldBorder)"/>
+  <polygon points="532,60 546,46 560,60 546,74" fill="url(#goldBorder)"/>
+
+  <!-- RUNECRAFT text dark on light -->
+  <text x="280" y="84"
+    text-anchor="middle"
+    font-family="'Georgia', 'Times New Roman', serif"
+    font-size="68"
+    font-weight="bold"
+    letter-spacing="8"
+    fill="url(#darkGrad)">RUNECRAFT</text>
+</svg>

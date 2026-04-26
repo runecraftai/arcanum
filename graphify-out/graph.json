@@ -9,7 +9,7 @@
       "source_file": "install.js",
       "source_location": "L1",
       "id": "install_js",
-      "community": 0,
+      "community": 2,
       "norm_label": "install.js"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "install.js",
       "source_location": "L48",
       "id": "install_findskills",
-      "community": 0,
+      "community": 2,
       "norm_label": "findskills()"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "install.js",
       "source_location": "L76",
       "id": "install_installskill",
-      "community": 0,
+      "community": 2,
       "norm_label": "installskill()"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "install.js",
       "source_location": "L112",
       "id": "install_main",
-      "community": 0,
+      "community": 2,
       "norm_label": "main()"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "packages/summon/src/cli.ts",
       "source_location": "L1",
       "id": "packages_summon_src_cli_ts",
-      "community": 2,
+      "community": 18,
       "norm_label": "cli.ts"
     },
     {
@@ -54,17 +54,431 @@
       "source_file": "packages/summon/src/commands/install.ts",
       "source_location": "L1",
       "id": "packages_summon_src_commands_install_ts",
-      "community": 1,
+      "community": 6,
       "norm_label": "install.ts"
     },
     {
       "label": "run()",
       "file_type": "code",
       "source_file": "packages/summon/src/commands/install.ts",
-      "source_location": "L9",
+      "source_location": "L23",
       "id": "install_run",
-      "community": 1,
+      "community": 6,
       "norm_label": "run()"
+    },
+    {
+      "label": "update.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/commands/update.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_commands_update_ts",
+      "community": 7,
+      "norm_label": "update.ts"
+    },
+    {
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/commands/update.ts",
+      "source_location": "L16",
+      "id": "update_run",
+      "community": 7,
+      "norm_label": "run()"
+    },
+    {
+      "label": "remove.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/commands/remove.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_commands_remove_ts",
+      "community": 8,
+      "norm_label": "remove.ts"
+    },
+    {
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/commands/remove.ts",
+      "source_location": "L13",
+      "id": "remove_run",
+      "community": 8,
+      "norm_label": "run()"
+    },
+    {
+      "label": "list.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/commands/list.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_commands_list_ts",
+      "community": 9,
+      "norm_label": "list.ts"
+    },
+    {
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/commands/list.ts",
+      "source_location": "L11",
+      "id": "list_run",
+      "community": 9,
+      "norm_label": "run()"
+    },
+    {
+      "label": "paths.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_utils_paths_ts",
+      "community": 3,
+      "norm_label": "paths.ts"
+    },
+    {
+      "label": "resolveHome()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L9",
+      "id": "paths_resolvehome",
+      "community": 3,
+      "norm_label": "resolvehome()"
+    },
+    {
+      "label": "resolveSpellsDir()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L20",
+      "id": "paths_resolvespellsdir",
+      "community": 3,
+      "norm_label": "resolvespellsdir()"
+    },
+    {
+      "label": "resolveAgentPath()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L38",
+      "id": "paths_resolveagentpath",
+      "community": 3,
+      "norm_label": "resolveagentpath()"
+    },
+    {
+      "label": "fs.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_utils_fs_ts",
+      "community": 0,
+      "norm_label": "fs.ts"
+    },
+    {
+      "label": "exists()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L7",
+      "id": "fs_exists",
+      "community": 0,
+      "norm_label": "exists()"
+    },
+    {
+      "label": "isSymlink()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L19",
+      "id": "fs_issymlink",
+      "community": 0,
+      "norm_label": "issymlink()"
+    },
+    {
+      "label": "copyFile()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L32",
+      "id": "fs_copyfile",
+      "community": 0,
+      "norm_label": "copyfile()"
+    },
+    {
+      "label": "symlinkFile()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L41",
+      "id": "fs_symlinkfile",
+      "community": 0,
+      "norm_label": "symlinkfile()"
+    },
+    {
+      "label": "removeFile()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L49",
+      "id": "fs_removefile",
+      "community": 0,
+      "norm_label": "removefile()"
+    },
+    {
+      "label": "ensureDir()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L67",
+      "id": "fs_ensuredir",
+      "community": 0,
+      "norm_label": "ensuredir()"
+    },
+    {
+      "label": "registry.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/agents/registry.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_agents_registry_ts",
+      "community": 19,
+      "norm_label": "registry.ts"
+    },
+    {
+      "label": "detector.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/agents/detector.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_agents_detector_ts",
+      "community": 10,
+      "norm_label": "detector.ts"
+    },
+    {
+      "label": "detectAgents()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/agents/detector.ts",
+      "source_location": "L15",
+      "id": "detector_detectagents",
+      "community": 10,
+      "norm_label": "detectagents()"
+    },
+    {
+      "label": "resolver.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/agents/resolver.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_agents_resolver_ts",
+      "community": 11,
+      "norm_label": "resolver.ts"
+    },
+    {
+      "label": "resolveInstallPath()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/agents/resolver.ts",
+      "source_location": "L7",
+      "id": "resolver_resolveinstallpath",
+      "community": 11,
+      "norm_label": "resolveinstallpath()"
+    },
+    {
+      "label": "loader.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/loader.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_skills_loader_ts",
+      "community": 4,
+      "norm_label": "loader.ts"
+    },
+    {
+      "label": "sanitizeSkillName()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/loader.ts",
+      "source_location": "L17",
+      "id": "loader_sanitizeskillname",
+      "community": 4,
+      "norm_label": "sanitizeskillname()"
+    },
+    {
+      "label": "parseFrontmatter()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/loader.ts",
+      "source_location": "L32",
+      "id": "loader_parsefrontmatter",
+      "community": 4,
+      "norm_label": "parsefrontmatter()"
+    },
+    {
+      "label": "loadSkillCatalog()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/loader.ts",
+      "source_location": "L87",
+      "id": "loader_loadskillcatalog",
+      "community": 4,
+      "norm_label": "loadskillcatalog()"
+    },
+    {
+      "label": "discovery.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/discovery.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_skills_discovery_ts",
+      "community": 12,
+      "norm_label": "discovery.ts"
+    },
+    {
+      "label": "discoverInstalledSkills()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/discovery.ts",
+      "source_location": "L21",
+      "id": "discovery_discoverinstalledskills",
+      "community": 12,
+      "norm_label": "discoverinstalledskills()"
+    },
+    {
+      "label": "installer.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_skills_installer_ts",
+      "community": 1,
+      "norm_label": "installer.ts"
+    },
+    {
+      "label": "isPathWithin()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L17",
+      "id": "installer_ispathwithin",
+      "community": 1,
+      "norm_label": "ispathwithin()"
+    },
+    {
+      "label": "installSkill()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L34",
+      "id": "installer_installskill",
+      "community": 1,
+      "norm_label": "installskill()"
+    },
+    {
+      "label": "removeSkill()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L108",
+      "id": "installer_removeskill",
+      "community": 1,
+      "norm_label": "removeskill()"
+    },
+    {
+      "label": "updateSkill()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L136",
+      "id": "installer_updateskill",
+      "community": 1,
+      "norm_label": "updateskill()"
+    },
+    {
+      "label": "banner.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/banner.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_tui_banner_ts",
+      "community": 13,
+      "norm_label": "banner.ts"
+    },
+    {
+      "label": "showBanner()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/banner.ts",
+      "source_location": "L28",
+      "id": "banner_showbanner",
+      "community": 13,
+      "norm_label": "showbanner()"
+    },
+    {
+      "label": "agent-select.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/agent-select.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_tui_agent_select_ts",
+      "community": 14,
+      "norm_label": "agent-select.ts"
+    },
+    {
+      "label": "selectAgents()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/agent-select.ts",
+      "source_location": "L8",
+      "id": "agent_select_selectagents",
+      "community": 14,
+      "norm_label": "selectagents()"
+    },
+    {
+      "label": "action-menu.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/action-menu.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_tui_action_menu_ts",
+      "community": 15,
+      "norm_label": "action-menu.ts"
+    },
+    {
+      "label": "selectAction()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/action-menu.ts",
+      "source_location": "L8",
+      "id": "action_menu_selectaction",
+      "community": 15,
+      "norm_label": "selectaction()"
+    },
+    {
+      "label": "skill-browse.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/skill-browse.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_tui_skill_browse_ts",
+      "community": 16,
+      "norm_label": "skill-browse.ts"
+    },
+    {
+      "label": "browseSkills()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/skill-browse.ts",
+      "source_location": "L8",
+      "id": "skill_browse_browseskills",
+      "community": 16,
+      "norm_label": "browseskills()"
+    },
+    {
+      "label": "method-select.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/method-select.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_tui_method_select_ts",
+      "community": 17,
+      "norm_label": "method-select.ts"
+    },
+    {
+      "label": "selectMethod()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/method-select.ts",
+      "source_location": "L7",
+      "id": "method_select_selectmethod",
+      "community": 17,
+      "norm_label": "selectmethod()"
+    },
+    {
+      "label": "progress.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/progress.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_tui_progress_ts",
+      "community": 5,
+      "norm_label": "progress.ts"
+    },
+    {
+      "label": "showProgress()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/progress.ts",
+      "source_location": "L7",
+      "id": "progress_showprogress",
+      "community": 5,
+      "norm_label": "showprogress()"
+    },
+    {
+      "label": "withSpinner()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/progress.ts",
+      "source_location": "L37",
+      "id": "progress_withspinner",
+      "community": 5,
+      "norm_label": "withspinner()"
     }
   ],
   "links": [
@@ -132,12 +546,444 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/commands/install.ts",
-      "source_location": "L9",
+      "source_location": "L23",
       "weight": 1.0,
       "_src": "packages_summon_src_commands_install_ts",
       "_tgt": "install_run",
       "source": "packages_summon_src_commands_install_ts",
       "target": "install_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/commands/update.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_src": "packages_summon_src_commands_update_ts",
+      "_tgt": "update_run",
+      "source": "packages_summon_src_commands_update_ts",
+      "target": "update_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/commands/remove.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_src": "packages_summon_src_commands_remove_ts",
+      "_tgt": "remove_run",
+      "source": "packages_summon_src_commands_remove_ts",
+      "target": "remove_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/commands/list.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_src": "packages_summon_src_commands_list_ts",
+      "_tgt": "list_run",
+      "source": "packages_summon_src_commands_list_ts",
+      "target": "list_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "packages_summon_src_utils_paths_ts",
+      "_tgt": "paths_resolvehome",
+      "source": "packages_summon_src_utils_paths_ts",
+      "target": "paths_resolvehome",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_src": "packages_summon_src_utils_paths_ts",
+      "_tgt": "paths_resolvespellsdir",
+      "source": "packages_summon_src_utils_paths_ts",
+      "target": "paths_resolvespellsdir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_src": "packages_summon_src_utils_paths_ts",
+      "_tgt": "paths_resolveagentpath",
+      "source": "packages_summon_src_utils_paths_ts",
+      "target": "paths_resolveagentpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_src": "paths_resolveagentpath",
+      "_tgt": "paths_resolvehome",
+      "source": "paths_resolvehome",
+      "target": "paths_resolveagentpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_src": "packages_summon_src_utils_fs_ts",
+      "_tgt": "fs_exists",
+      "source": "packages_summon_src_utils_fs_ts",
+      "target": "fs_exists",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_src": "packages_summon_src_utils_fs_ts",
+      "_tgt": "fs_issymlink",
+      "source": "packages_summon_src_utils_fs_ts",
+      "target": "fs_issymlink",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_src": "packages_summon_src_utils_fs_ts",
+      "_tgt": "fs_copyfile",
+      "source": "packages_summon_src_utils_fs_ts",
+      "target": "fs_copyfile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_src": "packages_summon_src_utils_fs_ts",
+      "_tgt": "fs_symlinkfile",
+      "source": "packages_summon_src_utils_fs_ts",
+      "target": "fs_symlinkfile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_src": "packages_summon_src_utils_fs_ts",
+      "_tgt": "fs_removefile",
+      "source": "packages_summon_src_utils_fs_ts",
+      "target": "fs_removefile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L67",
+      "weight": 1.0,
+      "_src": "packages_summon_src_utils_fs_ts",
+      "_tgt": "fs_ensuredir",
+      "source": "packages_summon_src_utils_fs_ts",
+      "target": "fs_ensuredir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_src": "fs_copyfile",
+      "_tgt": "fs_ensuredir",
+      "source": "fs_copyfile",
+      "target": "fs_ensuredir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_src": "fs_symlinkfile",
+      "_tgt": "fs_ensuredir",
+      "source": "fs_symlinkfile",
+      "target": "fs_ensuredir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/agents/detector.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_src": "packages_summon_src_agents_detector_ts",
+      "_tgt": "detector_detectagents",
+      "source": "packages_summon_src_agents_detector_ts",
+      "target": "detector_detectagents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/agents/resolver.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_src": "packages_summon_src_agents_resolver_ts",
+      "_tgt": "resolver_resolveinstallpath",
+      "source": "packages_summon_src_agents_resolver_ts",
+      "target": "resolver_resolveinstallpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/loader.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_loader_ts",
+      "_tgt": "loader_sanitizeskillname",
+      "source": "packages_summon_src_skills_loader_ts",
+      "target": "loader_sanitizeskillname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/loader.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_loader_ts",
+      "_tgt": "loader_parsefrontmatter",
+      "source": "packages_summon_src_skills_loader_ts",
+      "target": "loader_parsefrontmatter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/loader.ts",
+      "source_location": "L87",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_loader_ts",
+      "_tgt": "loader_loadskillcatalog",
+      "source": "packages_summon_src_skills_loader_ts",
+      "target": "loader_loadskillcatalog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/loader.ts",
+      "source_location": "L102",
+      "weight": 1.0,
+      "_src": "loader_loadskillcatalog",
+      "_tgt": "loader_sanitizeskillname",
+      "source": "loader_sanitizeskillname",
+      "target": "loader_loadskillcatalog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/loader.ts",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_src": "loader_loadskillcatalog",
+      "_tgt": "loader_parsefrontmatter",
+      "source": "loader_parsefrontmatter",
+      "target": "loader_loadskillcatalog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/discovery.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_discovery_ts",
+      "_tgt": "discovery_discoverinstalledskills",
+      "source": "packages_summon_src_skills_discovery_ts",
+      "target": "discovery_discoverinstalledskills",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_ispathwithin",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_ispathwithin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_installskill",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_installskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L108",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_removeskill",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_removeskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L136",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_updateskill",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_updateskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_src": "installer_installskill",
+      "_tgt": "installer_ispathwithin",
+      "source": "installer_ispathwithin",
+      "target": "installer_installskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L151",
+      "weight": 1.0,
+      "_src": "installer_updateskill",
+      "_tgt": "installer_installskill",
+      "source": "installer_installskill",
+      "target": "installer_updateskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/banner.ts",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_banner_ts",
+      "_tgt": "banner_showbanner",
+      "source": "packages_summon_src_tui_banner_ts",
+      "target": "banner_showbanner",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/agent-select.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_agent_select_ts",
+      "_tgt": "agent_select_selectagents",
+      "source": "packages_summon_src_tui_agent_select_ts",
+      "target": "agent_select_selectagents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/action-menu.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_action_menu_ts",
+      "_tgt": "action_menu_selectaction",
+      "source": "packages_summon_src_tui_action_menu_ts",
+      "target": "action_menu_selectaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/skill-browse.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_skill_browse_ts",
+      "_tgt": "skill_browse_browseskills",
+      "source": "packages_summon_src_tui_skill_browse_ts",
+      "target": "skill_browse_browseskills",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/method-select.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_method_select_ts",
+      "_tgt": "method_select_selectmethod",
+      "source": "packages_summon_src_tui_method_select_ts",
+      "target": "method_select_selectmethod",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/progress.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_progress_ts",
+      "_tgt": "progress_showprogress",
+      "source": "packages_summon_src_tui_progress_ts",
+      "target": "progress_showprogress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/progress.ts",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_progress_ts",
+      "_tgt": "progress_withspinner",
+      "source": "packages_summon_src_tui_progress_ts",
+      "target": "progress_withspinner",
       "confidence_score": 1.0
     }
   ],
