@@ -1,10 +1,12 @@
 import path from "node:path";
+import fs from "node:fs/promises";
 import {
   copyFile,
   symlinkFile,
   removeFile,
   ensureDir,
   exists,
+  isSymlink,
 } from "../utils/fs";
 import type { SkillMeta } from "./loader";
 
@@ -17,6 +19,15 @@ export type InstallMethod = "copy" | "symlink";
 function isPathWithin(parent: string, child: string): boolean {
   const relative = path.relative(parent, child);
   return !relative.startsWith("..") && !path.isAbsolute(relative);
+}
+
+/**
+ * Validates that a symlink target is safe (within expected directories)
+ */
+function isSymlinkTargetSafe(target: string, spellsDir: string): boolean {
+  const resolvedTarget = path.resolve(target);
+  const resolvedSpellsDir = path.resolve(spellsDir);
+  return isPathWithin(resolvedSpellsDir, resolvedTarget);
 }
 
 export interface InstallResult {
@@ -69,17 +80,46 @@ export async function installSkill(
       };
     }
 
-    // Ensure agent's install directory exists
-    await ensureDir(agentInstallDir);
+     // Ensure agent's install directory exists
+     await ensureDir(agentInstallDir);
 
-    if (method === "symlink") {
-      // Remove existing file if present
-      const alreadyExists = await exists(skillFilePath);
-      if (alreadyExists) {
-        await removeFile(skillFilePath);
-      }
+     if (method === "symlink") {
+       // Validate source file exists before creating symlink
+       if (!(await exists(skill.filePath))) {
+         return {
+           skillName: skill.name,
+           agentId,
+           success: false,
+           method,
+           error: `Source skill file not found: ${skill.filePath}`,
+         };
+       }
 
-      await symlinkFile(skill.filePath, skillFilePath);
+       // Remove existing file if present, with symlink target validation
+       const alreadyExists = await exists(skillFilePath);
+       if (alreadyExists) {
+         const isLink = await isSymlink(skillFilePath);
+         if (isLink) {
+           // Read symlink target and validate it's safe before removing
+           const target = await fs.readlink(skillFilePath);
+           const spellsDir = path.dirname(skill.filePath);
+           if (!isSymlinkTargetSafe(target, spellsDir)) {
+             console.warn(
+               `Skipping removal of symlink ${skillFilePath} — target outside safe directory: ${target}`
+             );
+             return {
+               skillName: skill.name,
+               agentId,
+               success: false,
+               method,
+               error: `Unsafe symlink target — not removing: ${target}`,
+             };
+           }
+         }
+         await removeFile(skillFilePath);
+       }
+
+       await symlinkFile(skill.filePath, skillFilePath);
     } else {
       // Copy method
       await copyFile(skillSourcePath, skillFilePath);

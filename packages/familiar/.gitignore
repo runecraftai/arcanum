@@ -1,0 +1,7 @@
+agent/auth.json
+agent/extensions/node_modules/
+agent/sessions/
+agent/agents/
+agent/skills/
+*.log
+.DS_Store

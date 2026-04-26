@@ -1,30 +1,32 @@
 import * as clack from "@clack/prompts";
-import type { DetectedAgent } from "../agents/detector";
+import pc from "picocolors";
+import { AGENTS } from "../agents/registry.js";
+import type { DetectedAgent } from "../agents/detector.js";
 
 /**
  * Multi-select TUI for agent selection
- * Pre-selects detected agents, shows badges
+ * Shows all registered agents, pre-selects detected ones with visual indicator
  */
 export async function selectAgents(
   detected: DetectedAgent[]
-): Promise<DetectedAgent[]> {
-  const options = detected.map((agent) => ({
+): Promise<string[] | symbol> {
+  const detectedIds = detected.filter((a) => a.detected).map((a) => a.id);
+
+  const options = AGENTS.map((agent) => ({
     value: agent.id,
-    label: agent.detected
-      ? `✓ ${agent.name} (detected)`
-      : `  ${agent.name}`,
-    hint: agent.detected ? "Found" : "Not found",
+    // Color detected agents for better visual distinction
+    label: detectedIds.includes(agent.id)
+      ? pc.green(agent.name)
+      : agent.name,
+    hint: detectedIds.includes(agent.id) ? "detected" : undefined,
   }));
 
-  const selected = await clack.multiselect({
-    message: "Select agents to install skills:",
+  clack.note("↑↓ navigate   Space toggle   Enter confirm   Esc exit", "Keys");
+
+  return clack.multiselect({
+    message: "Where do you want to install skills?",
     options,
-    initialValues: detected.filter((a) => a.detected).map((a) => a.id),
-  });
-
-  if (clack.isCancel(selected)) {
-    return [];
-  }
-
-  return detected.filter((agent) => selected.includes(agent.id));
+    initialValues: detectedIds,
+    required: true,
+  }) as Promise<string[] | symbol>;
 }

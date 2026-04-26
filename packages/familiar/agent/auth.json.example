@@ -1,0 +1,14 @@
+{
+  "anthropic": {
+    "type": "oauth",
+    "access": "<your-oauth-access-token>",
+    "refresh": "<your-oauth-refresh-token>",
+    "expires": 0
+  },
+  "anthropic-pro": {
+    "type": "oauth",
+    "access": "<your-oauth-access-token>",
+    "refresh": "<your-oauth-refresh-token>",
+    "expires": 0
+  }
+}

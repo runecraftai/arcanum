@@ -47,7 +47,7 @@ function parseFrontmatter(content: string): Record<string, unknown> | null {
     }
   }
 
-  if (firstDelim === -1 || secondDelim === -1 || firstDelim === 0) {
+  if (firstDelim === -1 || secondDelim === -1 || firstDelim !== 0) {
     return null;
   }
 
