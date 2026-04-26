@@ -1,9 +1,12 @@
 ---
 name: spec-driven
-version: "1.0.0"
-description: "Full lifecycle development pipeline — SPEC, PLAN, BUILD, TEST, REVIEW, SIMPLIFY, SHIP"
-category: Architecture
-tags: [planning, lifecycle, specs]
+description: >
+  Full lifecycle feature development from spec to ship. Use when saying "specify this feature",
+  "plan the work", "build and test it", "review code", "simplify this", or "release it".
+  Triggered by /spec, /plan, /build, /test, /review, /simplify, /ship — and their
+  Portuguese equivalents (especificar, planejar, implementar, testar, revisar, simplificar, publicar).
+  Do NOT use for quick one-off edits, standalone bugfixes, or tasks that don't fit a feature workflow.
+license: CC-BY-4.0
 ---
 
 # spec-driven (v3.0.0)
@@ -59,6 +62,20 @@ The meta-skill pattern-matches user input against these patterns (case-insensiti
 - `/spec resume` → Load last session, continue from checkpoint
 - `/spec pause` → Save checkpoint and session
 - `map codebase` → LOAD only, produce context summary
+
+---
+
+## Dispatch Algorithm
+
+Match the user's input against this decision tree (in order):
+
+1. **Explicit phase command** — If input starts with `/spec`, `/plan`, `/build`, `/test`, `/review`, `/simplify`, `/ship` → route to that phase directly
+2. **Resume command** — If input contains `resume`, `continue`, `retomar` → check `.specs/features/*/tasks.md` for incomplete tasks, route to most recent incomplete phase
+3. **Keyword match** — Scan for phase keywords (see Trigger Dispatch Table above); use highest-confidence match
+4. **Ambiguous** — If no clear match, ask: "Which phase? SPEC / PLAN / BUILD / TEST / REVIEW / SIMPLIFY / SHIP"
+5. **Default** — If user describes a new feature with no phase context → start SPEC
+
+Never guess silently. When ambiguous, surface the ambiguity.
 
 ---
 
@@ -126,6 +143,19 @@ After LOAD and scope detection, pattern-match the user's trigger against the Tri
 - User said "ship" or "release" → Load and execute `references/phase-ship.md`
 
 Each phase file is self-contained with: When, Goal, Steps, Supporting References, Approval Gate, Completion Criteria.
+
+---
+
+## Error Handling
+
+| Situation | Action |
+|-----------|--------|
+| `/spec resume` but no checkpoint found | Inform user, ask to start from SPEC |
+| `docs/` missing or empty | Note "No project docs found — operating without project context", proceed |
+| `docs/project.md` malformed | Skip that file, log warning, load remaining docs |
+| Tests fail during SHIP | Block ship, route to BUILD or TEST phase |
+| Scope estimate changes mid-phase | Note the change, update `.specs/features/*/tasks.md`, continue |
+| User interrupts mid-phase | Save progress note to `docs/sessions/`, confirm next step |
 
 ---
 

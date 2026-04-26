@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" width="400" height="480">
+  <defs>
+    <radialGradient id="coinGradDark" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#4a4a4a"/>
+      <stop offset="60%" stop-color="#1a1a1a"/>
+      <stop offset="100%" stop-color="#0d0d0d"/>
+    </radialGradient>
+    <radialGradient id="coinRimDark" cx="50%" cy="50%" r="50%">
+      <stop offset="80%" stop-color="transparent"/>
+      <stop offset="90%" stop-color="#8a7540"/>
+      <stop offset="100%" stop-color="#c9a84c"/>
+    </radialGradient>
+    <radialGradient id="glowCenter" cx="50%" cy="50%" r="40%">
+      <stop offset="0%" stop-color="#d4a843" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#d4a843" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f0c060"/>
+      <stop offset="50%" stop-color="#c9a84c"/>
+      <stop offset="100%" stop-color="#8a6820"/>
+    </linearGradient>
+    <linearGradient id="plateGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2a2a2a"/>
+      <stop offset="100%" stop-color="#111111"/>
+    </linearGradient>
+    <linearGradient id="plateGoldEdge" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c9a84c"/>
+      <stop offset="100%" stop-color="#7a5e20"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="goldGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Coin body -->
+  <circle cx="200" cy="185" r="168" fill="url(#coinGradDark)"/>
+  <!-- Coin rim gold -->
+  <circle cx="200" cy="185" r="168" fill="none" stroke="url(#goldGrad)" stroke-width="6"/>
+  <circle cx="200" cy="185" r="162" fill="none" stroke="#3a3020" stroke-width="2"/>
+  <!-- Outer decorative ring dots -->
+  <circle cx="200" cy="185" r="155" fill="none" stroke="#5a4a20" stroke-width="1" stroke-dasharray="3 8"/>
+
+  <!-- Center glow -->
+  <circle cx="200" cy="185" r="80" fill="url(#glowCenter)" opacity="0.7"/>
+
+  <!-- Vegvisir compass arms — 8 directions -->
+  <!-- N arm -->
+  <line x1="200" y1="185" x2="200" y2="75" stroke="url(#goldGrad)" stroke-width="4" filter="url(#goldGlow)"/>
+  <line x1="190" y1="100" x2="200" y2="75" stroke="url(#goldGrad)" stroke-width="3"/>
+  <line x1="210" y1="100" x2="200" y2="75" stroke="url(#goldGrad)" stroke-width="3"/>
+  <!-- Runic branch N -->
+  <line x1="200" y1="115" x2="188" y2="105" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="200" y1="115" x2="212" y2="105" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="193" y1="125" x2="185" y2="115" stroke="#c9a84c" stroke-width="2"/>
+
+  <!-- NE arm -->
+  <line x1="200" y1="185" x2="277" y2="108" stroke="url(#goldGrad)" stroke-width="3" filter="url(#goldGlow)"/>
+  <line x1="250" y1="125" x2="257" y2="118" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="245" y1="130" x2="252" y2="123" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="260" y1="130" x2="268" y2="115" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="255" y1="140" x2="262" y2="125" stroke="#c9a84c" stroke-width="2"/>
+
+  <!-- E arm -->
+  <line x1="200" y1="185" x2="310" y2="185" stroke="url(#goldGrad)" stroke-width="4" filter="url(#goldGlow)"/>
+  <line x1="285" y1="175" x2="310" y2="185" stroke="url(#goldGrad)" stroke-width="3"/>
+  <line x1="285" y1="195" x2="310" y2="185" stroke="url(#goldGrad)" stroke-width="3"/>
+  <line x1="275" y1="180" x2="265" y2="170" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="275" y1="190" x2="265" y2="200" stroke="#c9a84c" stroke-width="2.5"/>
+
+  <!-- SE arm -->
+  <line x1="200" y1="185" x2="277" y2="262" stroke="url(#goldGrad)" stroke-width="3" filter="url(#goldGlow)"/>
+  <line x1="252" y1="252" x2="260" y2="245" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="247" y1="247" x2="255" y2="240" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="262" y1="245" x2="270" y2="258" stroke="#c9a84c" stroke-width="2"/>
+
+  <!-- S arm -->
+  <line x1="200" y1="185" x2="200" y2="295" stroke="url(#goldGrad)" stroke-width="4" filter="url(#goldGlow)"/>
+  <line x1="190" y1="270" x2="200" y2="295" stroke="url(#goldGrad)" stroke-width="3"/>
+  <line x1="210" y1="270" x2="200" y2="295" stroke="url(#goldGrad)" stroke-width="3"/>
+  <line x1="200" y1="255" x2="188" y2="265" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="200" y1="255" x2="212" y2="265" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="200" y1="267" x2="188" y2="277" stroke="#c9a84c" stroke-width="2"/>
+
+  <!-- SW arm -->
+  <line x1="200" y1="185" x2="123" y2="262" stroke="url(#goldGrad)" stroke-width="3" filter="url(#goldGlow)"/>
+  <line x1="148" y1="252" x2="140" y2="245" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="153" y1="247" x2="145" y2="240" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="138" y1="245" x2="130" y2="258" stroke="#c9a84c" stroke-width="2"/>
+
+  <!-- W arm -->
+  <line x1="200" y1="185" x2="90" y2="185" stroke="url(#goldGrad)" stroke-width="4" filter="url(#goldGlow)"/>
+  <line x1="115" y1="175" x2="90" y2="185" stroke="url(#goldGrad)" stroke-width="3"/>
+  <line x1="115" y1="195" x2="90" y2="185" stroke="url(#goldGrad)" stroke-width="3"/>
+  <line x1="125" y1="180" x2="135" y2="170" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="125" y1="190" x2="135" y2="200" stroke="#c9a84c" stroke-width="2.5"/>
+
+  <!-- NW arm -->
+  <line x1="200" y1="185" x2="123" y2="108" stroke="url(#goldGrad)" stroke-width="3" filter="url(#goldGlow)"/>
+  <line x1="150" y1="125" x2="143" y2="118" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="155" y1="130" x2="148" y2="123" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="140" y1="130" x2="132" y2="115" stroke="#c9a84c" stroke-width="2"/>
+
+  <!-- Center circle -->
+  <circle cx="200" cy="185" r="22" fill="#1a1a1a" stroke="url(#goldGrad)" stroke-width="3"/>
+  <circle cx="200" cy="185" r="14" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+
+  <!-- Small rune marks around outer ring -->
+  <text x="200" y="32" text-anchor="middle" font-family="serif" font-size="11" fill="#8a7540" transform="rotate(0,200,185)">ᚱ</text>
+  <text x="200" y="32" text-anchor="middle" font-family="serif" font-size="11" fill="#8a7540" transform="rotate(45,200,185)">ᚢ</text>
+  <text x="200" y="32" text-anchor="middle" font-family="serif" font-size="11" fill="#8a7540" transform="rotate(90,200,185)">ᚾ</text>
+  <text x="200" y="32" text-anchor="middle" font-family="serif" font-size="11" fill="#8a7540" transform="rotate(135,200,185)">ᛖ</text>
+  <text x="200" y="32" text-anchor="middle" font-family="serif" font-size="11" fill="#8a7540" transform="rotate(180,200,185)">ᚲ</text>
+  <text x="200" y="32" text-anchor="middle" font-family="serif" font-size="11" fill="#8a7540" transform="rotate(225,200,185)">ᚱ</text>
+  <text x="200" y="32" text-anchor="middle" font-family="serif" font-size="11" fill="#8a7540" transform="rotate(270,200,185)">ᚨ</text>
+  <text x="200" y="32" text-anchor="middle" font-family="serif" font-size="11" fill="#8a7540" transform="rotate(315,200,185)">ᚠ</text>
+
+  <!-- Bottom connector diamond/tab -->
+  <polygon points="180,348 200,370 220,348" fill="url(#plateGrad)" stroke="url(#goldGrad)" stroke-width="2"/>
+
+  <!-- Name plate background -->
+  <rect x="20" y="365" width="360" height="80" rx="4" ry="4" fill="url(#plateGrad)" stroke="url(#plateGoldEdge)" stroke-width="3"/>
+  <!-- Inner plate bevel -->
+  <rect x="26" y="371" width="348" height="68" rx="2" ry="2" fill="none" stroke="#2a2010" stroke-width="1"/>
+  <!-- Diamond decorations on plate sides -->
+  <polygon points="20,405 32,395 44,405 32,415" fill="url(#goldGrad)"/>
+  <polygon points="356,405 368,395 380,405 368,415" fill="url(#goldGrad)"/>
+
+  <!-- RUNECRAFT text -->
+  <text x="200" y="418" text-anchor="middle"
+    font-family="'Georgia', 'Times New Roman', serif"
+    font-size="44"
+    font-weight="bold"
+    letter-spacing="6"
+    fill="url(#goldGrad)"
+    filter="url(#goldGlow)">RUNECRAFT</text>
+</svg>

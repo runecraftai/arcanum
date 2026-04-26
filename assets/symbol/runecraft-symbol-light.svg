@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="silverGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e8e8e8"/>
+      <stop offset="50%" stop-color="#b0b0b0"/>
+      <stop offset="100%" stop-color="#787878"/>
+    </linearGradient>
+    <linearGradient id="silverGradR" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d0d0d0"/>
+      <stop offset="50%" stop-color="#909090"/>
+      <stop offset="100%" stop-color="#606060"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Light background -->
+  <rect width="200" height="200" rx="40" ry="40" fill="#f5f5f5"/>
+
+  <!-- Silver/grey ring -->
+  <circle cx="100" cy="100" r="75" fill="none" stroke="url(#silverGrad)" stroke-width="5"/>
+  <circle cx="100" cy="100" r="69" fill="none" stroke="#d0d0d0" stroke-width="1.5"/>
+
+  <!-- Runic R glyph — same shape, silver/dark tone -->
+  <rect x="60" y="45" width="14" height="112" rx="2" fill="url(#silverGradR)"/>
+  <rect x="60" y="45" width="60" height="13" rx="2" fill="url(#silverGradR)"/>
+  <rect x="60" y="90" width="52" height="12" rx="2" fill="url(#silverGradR)"/>
+  <rect x="110" y="45" width="14" height="30" rx="7" fill="url(#silverGradR)"/>
+  <rect x="108" y="74" width="14" height="28" rx="7" fill="url(#silverGradR)"/>
+  <polygon points="74,102 88,102 130,157 116,157" fill="url(#silverGradR)"/>
+</svg>
