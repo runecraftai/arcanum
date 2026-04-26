@@ -24,8 +24,8 @@ export async function resolveSpellsDir(): Promise<string> {
       return customDir;
     }
   }
-  // Default: packages/summon/src → ../../../../spells/skills
-  return path.resolve(import.meta.dir, "../../commands/../../../../spells/skills");
+  // Default: packages/summon/src/utils → ../../../spells/skills
+  return path.resolve(import.meta.dir, "../../../spells/skills");
 }
 
 export type AgentScope = "global" | "project";

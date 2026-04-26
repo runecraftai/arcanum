@@ -1,0 +1,7 @@
+{
+  "name": "@runecraftai/familiar",
+  "version": "0.0.1",
+  "description": "Pi agent configuration — multi-agent orchestration with Claude",
+  "license": "MIT",
+  "private": true
+}
