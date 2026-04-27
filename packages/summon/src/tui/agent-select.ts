@@ -14,7 +14,6 @@ export async function selectAgents(
 
   const options = AGENTS.map((agent) => ({
     value: agent.id,
-    // Color detected agents for better visual distinction
     label: detectedIds.includes(agent.id)
       ? pc.green(agent.name)
       : agent.name,

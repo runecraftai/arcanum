@@ -6,47 +6,39 @@ import type { SkillMeta } from "../skills/loader.js";
  * Install: shows uninstalled skills grouped by category
  * Update/Remove: shows installed skills in flat list
  */
-export async function browseSkills(
+
+async function browseInstall(
   skills: SkillMeta[],
-  action: "install" | "update" | "remove",
-  installedNames: string[] = []
+  installedNames: string[]
 ): Promise<string[] | symbol> {
-  if (skills.length === 0) {
-    if (action === "install") {
-      clack.log.warn("All available skills are already installed.");
-    } else {
-      clack.log.warn("No installed skills found for the selected agents.");
-    }
-    return [];
+  const groups: Record<string, Array<{ value: string; label: string; hint?: string }>> = {};
+  for (const skill of skills) {
+    const cat = skill.category || "Other";
+    if (!groups[cat]) groups[cat] = [];
+    groups[cat].push({
+      value: skill.name,
+      label: skill.name,
+      hint: skill.description,
+    });
   }
 
-  if (action === "install") {
-    // Group by category for install
-    const groups: Record<string, Array<{ value: string; label: string; hint?: string }>> = {};
-    for (const skill of skills) {
-      const cat = skill.category || "Other";
-      if (!groups[cat]) groups[cat] = [];
-      groups[cat].push({
-        value: skill.name,
-        label: skill.name,
-        hint: skill.description,
-      });
-    }
-
-    if (installedNames.length > 0) {
-      clack.log.info(`Already installed: ${installedNames.join(", ")}`);
-    }
-
-    clack.note("↑↓ navigate   Space toggle   a select all   Enter confirm   Esc back", "Keys");
-
-    return clack.groupMultiselect({
-      message: "Select skills to install:",
-      options: groups,
-      required: true,
-    }) as Promise<string[] | symbol>;
+  if (installedNames.length > 0) {
+    clack.log.info(`Already installed: ${installedNames.join(", ")}`);
   }
 
-  // update or remove: flat list of installed skills
+  clack.note("↑↓ navigate   Space toggle   a select all   Enter confirm   Esc back", "Keys");
+
+  return clack.groupMultiselect({
+    message: "Select skills to install:",
+    options: groups,
+    required: true,
+  }) as Promise<string[] | symbol>;
+}
+
+async function browseUpdateRemove(
+  skills: SkillMeta[],
+  action: "update" | "remove"
+): Promise<string[] | symbol> {
   const options = skills.map((s) => ({
     value: s.name,
     label: s.name,
@@ -61,4 +53,28 @@ export async function browseSkills(
     options,
     required: true,
   }) as Promise<string[] | symbol>;
+}
+
+const actionBrowsers: Record<"install" | "update" | "remove", (skills: SkillMeta[], installedNames: string[]) => Promise<string[] | symbol>> = {
+  install: browseInstall,
+  update: (skills, installedNames) => browseUpdateRemove(skills, "update"),
+  remove: (skills, installedNames) => browseUpdateRemove(skills, "remove"),
+};
+
+export async function browseSkills(
+  skills: SkillMeta[],
+  action: "install" | "update" | "remove",
+  installedNames: string[] = []
+): Promise<string[] | symbol> {
+  if (skills.length === 0) {
+    if (action === "install") {
+      clack.log.warn("All available skills are already installed.");
+    } else {
+      clack.log.warn("No installed skills found for the selected agents.");
+    }
+    return [];
+  }
+
+  const browser = actionBrowsers[action];
+  return browser(skills, installedNames);
 }

@@ -1,6 +1,7 @@
 import path from "node:path";
 import * as nodeFs from "node:fs/promises";
 import { exists, isSymlink } from "../utils/fs";
+import { SKILLS_DIR, SKILL_MANIFEST } from "../constants";
 import { detectAgents } from "../agents/detector";
 import { sanitizeSkillName } from "./loader";
 import type { SkillMeta } from "./loader";
@@ -13,6 +14,7 @@ export interface InstalledSkill {
   agentId: string;
   filePath: string;
   method: InstallMethod;
+  broken?: boolean; // true if symlink is broken (target doesn't exist)
 }
 
 /**
@@ -29,13 +31,11 @@ export async function discoverInstalledSkills(): Promise<InstalledSkill[]> {
     if (!agent.detected) continue;
 
     try {
-      // Scan agent's install directory for skill subdirectories
       let entries: string[] = [];
 
       try {
         entries = await nodeFs.readdir(agent.installDir);
       } catch {
-        // Directory might not exist yet
         continue;
       }
 
@@ -46,8 +46,7 @@ export async function discoverInstalledSkills(): Promise<InstalledSkill[]> {
           const entryStat = await nodeFs.lstat(entryPath);
 
           if (entryStat.isDirectory()) {
-            // Check for SKILL.md in subdirectory (new structure)
-            const skillFilePath = path.join(entryPath, "SKILL.md");
+            const skillFilePath = path.join(entryPath, SKILL_MANIFEST);
             try {
               const skillStat = await nodeFs.lstat(skillFilePath);
               const rawName = entry;
@@ -64,11 +63,8 @@ export async function discoverInstalledSkills(): Promise<InstalledSkill[]> {
                 filePath: skillFilePath,
                 method,
               });
-            } catch {
-              // No SKILL.md in this subdirectory, skip
-            }
+            } catch {}
           } else if (entry.endsWith(".md")) {
-            // Legacy flat .md file structure
             const rawName = entry.replace(/\.md$/, "");
             const skillName = sanitizeSkillName(rawName);
             if (!skillName) continue;
@@ -84,12 +80,9 @@ export async function discoverInstalledSkills(): Promise<InstalledSkill[]> {
               method,
             });
           }
-        } catch {
-          // Skip unreadable entries
-        }
+        } catch {}
       }
     } catch (err) {
-      // Skip agents with read errors
       console.warn(`Warning: Could not scan agent ${agent.id}: ${String(err)}`);
     }
   }
@@ -97,9 +90,81 @@ export async function discoverInstalledSkills(): Promise<InstalledSkill[]> {
   return installed;
 }
 
+/**
+ * Discover hub-managed skills by scanning .agents/skills/ directory
+ * Returns array of hub-managed skill entries with metadata
+ * Handles missing .agents/skills/ dir gracefully (returns empty array)
+ * Detects broken symlinks
+ */
+export async function discoverHubSkills(
+  projectRoot: string = process.cwd()
+): Promise<InstalledSkill[]> {
+  const hubSkills: InstalledSkill[] = [];
+  const hubDir = path.join(projectRoot, SKILLS_DIR);
+
+  if (!(await exists(hubDir))) {
+    return hubSkills;
+  }
+
+  try {
+    const entries = await nodeFs.readdir(hubDir);
+
+    for (const entry of entries) {
+      const entryPath = path.join(hubDir, entry);
+
+      try {
+        const entryStat = await nodeFs.lstat(entryPath);
+
+        if (!entryStat.isDirectory()) continue;
+
+        const skillFilePath = path.join(entryPath, SKILL_MANIFEST);
+        const skillMetaPath = path.join(entryPath, ".skill-meta.json");
+
+        const skillExists = await exists(skillFilePath);
+        const skillIsSymlink = await isSymlink(skillFilePath);
+
+        if (!skillExists && !skillIsSymlink) {
+          continue;
+        }
+
+        const skillName = sanitizeSkillName(entry);
+        if (!skillName) continue;
+
+        let isBroken = false;
+        if (skillIsSymlink) {
+          try {
+            const linkTarget = await nodeFs.readlink(skillFilePath);
+            const resolvedTarget = path.resolve(entryPath, linkTarget);
+            try {
+              await nodeFs.stat(resolvedTarget);
+            } catch {
+              isBroken = true;
+            }
+          } catch {
+            isBroken = true;
+          }
+        }
+
+        hubSkills.push({
+          skillName,
+          agentId: "hub",
+          filePath: skillFilePath,
+          method: "symlink",
+          broken: isBroken,
+        });
+      } catch {}
+    }
+  } catch (err) {
+    console.warn(
+      `Warning: Could not scan hub skills directory: ${String(err)}`
+    );
+  }
+
+  return hubSkills;
+}
+
 export async function getInstalledSkillNames(agents: DetectedAgent[]): Promise<string[]> {
   const installed = await discoverInstalledSkills();
-  // Filter to only skills on the selected agents
   const relevantSkills = installed.filter(s => 
     agents.some(a => a.id === s.agentId)
   );
@@ -120,12 +185,10 @@ export function filterSkillsByInstallStatus(
   installedNames: string[],
   action: 'install' | 'update' | 'remove'
 ): SkillMeta[] {
-  // Normalize installed names once for efficient comparison
   const normalizedInstalled = installedNames.map(normalizeSkillName);
 
   if (action === 'install') {
     return allSkills.filter(s => !normalizedInstalled.includes(normalizeSkillName(s.name)));
   }
-  // update or remove: only show installed skills
   return allSkills.filter(s => normalizedInstalled.includes(normalizeSkillName(s.name)));
 }
