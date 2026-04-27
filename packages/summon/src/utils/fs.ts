@@ -37,12 +37,11 @@ export async function copyFile(src: string, dest: string): Promise<void> {
 /**
  * Create a symlink from source to destination
  * Creates parent directories if needed
+ * 
+ * Note: src should typically be a relative path from dest's directory
+ * fs.symlink() will fail with ENOENT if the target doesn't exist
  */
 export async function symlinkFile(src: string, dest: string): Promise<void> {
-  // Verify source file exists before creating symlink
-  if (!(await exists(src))) {
-    throw new Error(`Source file not found: ${src}`);
-  }
   await ensureDir(path.dirname(dest));
   await fs.symlink(src, dest);
 }

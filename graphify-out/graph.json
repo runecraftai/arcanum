@@ -40,22 +40,22 @@
       "norm_label": "main()"
     },
     {
-      "label": "debug-keys.ts",
-      "file_type": "code",
-      "source_file": "packages/summon/debug-keys.ts",
-      "source_location": "L1",
-      "id": "packages_summon_debug_keys_ts",
-      "community": 17,
-      "norm_label": "debug-keys.ts"
-    },
-    {
       "label": "cli.ts",
       "file_type": "code",
       "source_file": "packages/summon/src/cli.ts",
       "source_location": "L1",
       "id": "packages_summon_src_cli_ts",
-      "community": 1,
+      "community": 0,
       "norm_label": "cli.ts"
+    },
+    {
+      "label": "constants.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/constants.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_constants_ts",
+      "community": 17,
+      "norm_label": "constants.ts"
     },
     {
       "label": "update.ts",
@@ -135,7 +135,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L1",
       "id": "packages_summon_src_utils_fs_ts",
-      "community": 5,
+      "community": 6,
       "norm_label": "fs.ts"
     },
     {
@@ -144,7 +144,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L7",
       "id": "fs_exists",
-      "community": 5,
+      "community": 6,
       "norm_label": "exists()"
     },
     {
@@ -153,7 +153,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L19",
       "id": "fs_issymlink",
-      "community": 5,
+      "community": 6,
       "norm_label": "issymlink()"
     },
     {
@@ -162,34 +162,34 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L32",
       "id": "fs_copyfile",
-      "community": 5,
+      "community": 6,
       "norm_label": "copyfile()"
     },
     {
       "label": "symlinkFile()",
       "file_type": "code",
       "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L41",
+      "source_location": "L44",
       "id": "fs_symlinkfile",
-      "community": 5,
+      "community": 6,
       "norm_label": "symlinkfile()"
     },
     {
       "label": "removeFile()",
       "file_type": "code",
       "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L53",
+      "source_location": "L52",
       "id": "fs_removefile",
-      "community": 5,
+      "community": 6,
       "norm_label": "removefile()"
     },
     {
       "label": "ensureDir()",
       "file_type": "code",
       "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L71",
+      "source_location": "L70",
       "id": "fs_ensuredir",
-      "community": 5,
+      "community": 6,
       "norm_label": "ensuredir()"
     },
     {
@@ -322,16 +322,25 @@
       "label": "discoverInstalledSkills()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/discovery.ts",
-      "source_location": "L24",
+      "source_location": "L26",
       "id": "discovery_discoverinstalledskills",
       "community": 7,
       "norm_label": "discoverinstalledskills()"
     },
     {
+      "label": "discoverHubSkills()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/discovery.ts",
+      "source_location": "L99",
+      "id": "discovery_discoverhubskills",
+      "community": 7,
+      "norm_label": "discoverhubskills()"
+    },
+    {
       "label": "getInstalledSkillNames()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/discovery.ts",
-      "source_location": "L100",
+      "source_location": "L166",
       "id": "discovery_getinstalledskillnames",
       "community": 7,
       "norm_label": "getinstalledskillnames()"
@@ -340,7 +349,7 @@
       "label": "normalizeSkillName()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/discovery.ts",
-      "source_location": "L114",
+      "source_location": "L179",
       "id": "discovery_normalizeskillname",
       "community": 7,
       "norm_label": "normalizeskillname()"
@@ -349,7 +358,7 @@
       "label": "filterSkillsByInstallStatus()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/discovery.ts",
-      "source_location": "L118",
+      "source_location": "L183",
       "id": "discovery_filterskillsbyinstallstatus",
       "community": 7,
       "norm_label": "filterskillsbyinstallstatus()"
@@ -360,53 +369,170 @@
       "source_file": "packages/summon/src/skills/installer.ts",
       "source_location": "L1",
       "id": "packages_summon_src_skills_installer_ts",
-      "community": 6,
+      "community": 2,
       "norm_label": "installer.ts"
     },
     {
       "label": "isPathWithin()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L19",
+      "source_location": "L20",
       "id": "installer_ispathwithin",
-      "community": 6,
+      "community": 2,
       "norm_label": "ispathwithin()"
     },
     {
       "label": "isSymlinkTargetSafe()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L27",
+      "source_location": "L28",
       "id": "installer_issymlinktargetsafe",
-      "community": 6,
+      "community": 2,
       "norm_label": "issymlinktargetsafe()"
+    },
+    {
+      "label": "getHubSkillPath()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L46",
+      "id": "installer_gethubskillpath",
+      "community": 2,
+      "norm_label": "gethubskillpath()"
+    },
+    {
+      "label": "computeRelativePath()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L54",
+      "id": "installer_computerelativepath",
+      "community": 2,
+      "norm_label": "computerelativepath()"
+    },
+    {
+      "label": "createHubSymlink()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L63",
+      "id": "installer_createhubsymlink",
+      "community": 2,
+      "norm_label": "createhubsymlink()"
+    },
+    {
+      "label": "validateSkillSource()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L93",
+      "id": "installer_validateskillsource",
+      "community": 2,
+      "norm_label": "validateskillsource()"
+    },
+    {
+      "label": "resolveInstallTarget()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L111",
+      "id": "installer_resolveinstalltarget",
+      "community": 2,
+      "norm_label": "resolveinstalltarget()"
+    },
+    {
+      "label": "createHubSymlinkOrError()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L130",
+      "id": "installer_createhubsymlinkorerror",
+      "community": 2,
+      "norm_label": "createhubsymlinkorerror()"
+    },
+    {
+      "label": "linkAgentSkill()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L148",
+      "id": "installer_linkagentskill",
+      "community": 2,
+      "norm_label": "linkagentskill()"
+    },
+    {
+      "label": "resultError()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L162",
+      "id": "installer_resulterror",
+      "community": 2,
+      "norm_label": "resulterror()"
+    },
+    {
+      "label": "resultSuccess()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L171",
+      "id": "installer_resultsuccess",
+      "community": 2,
+      "norm_label": "resultsuccess()"
+    },
+    {
+      "label": "createSkillSymlink()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L179",
+      "id": "installer_createskillsymlink",
+      "community": 2,
+      "norm_label": "createskillsymlink()"
     },
     {
       "label": "installSkill()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L45",
+      "source_location": "L193",
       "id": "installer_installskill",
-      "community": 6,
+      "community": 2,
       "norm_label": "installskill()"
     },
     {
       "label": "removeSkill()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L148",
+      "source_location": "L221",
       "id": "installer_removeskill",
-      "community": 6,
+      "community": 2,
       "norm_label": "removeskill()"
+    },
+    {
+      "label": "validateUpdateTarget()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L243",
+      "id": "installer_validateupdatetarget",
+      "community": 2,
+      "norm_label": "validateupdatetarget()"
+    },
+    {
+      "label": "healSymlinkChain()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L258",
+      "id": "installer_healsymlinkchain",
+      "community": 2,
+      "norm_label": "healsymlinkchain()"
     },
     {
       "label": "updateSkill()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L176",
+      "source_location": "L292",
       "id": "installer_updateskill",
-      "community": 6,
+      "community": 2,
       "norm_label": "updateskill()"
+    },
+    {
+      "label": "installer.test.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/__tests__/installer.test.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_skills_tests_installer_test_ts",
+      "community": 19,
+      "norm_label": "installer.test.ts"
     },
     {
       "label": "action-menu.ts",
@@ -414,7 +540,7 @@
       "source_file": "packages/summon/src/tui/action-menu.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_action_menu_ts",
-      "community": 1,
+      "community": 0,
       "norm_label": "action-menu.ts"
     },
     {
@@ -423,7 +549,7 @@
       "source_file": "packages/summon/src/tui/action-menu.ts",
       "source_location": "L8",
       "id": "action_menu_selectaction",
-      "community": 1,
+      "community": 0,
       "norm_label": "selectaction()"
     },
     {
@@ -432,16 +558,34 @@
       "source_file": "packages/summon/src/tui/skill-browse.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_skill_browse_ts",
-      "community": 1,
+      "community": 0,
       "norm_label": "skill-browse.ts"
+    },
+    {
+      "label": "browseInstall()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/skill-browse.ts",
+      "source_location": "L10",
+      "id": "skill_browse_browseinstall",
+      "community": 0,
+      "norm_label": "browseinstall()"
+    },
+    {
+      "label": "browseUpdateRemove()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/skill-browse.ts",
+      "source_location": "L38",
+      "id": "skill_browse_browseupdateremove",
+      "community": 0,
+      "norm_label": "browseupdateremove()"
     },
     {
       "label": "browseSkills()",
       "file_type": "code",
       "source_file": "packages/summon/src/tui/skill-browse.ts",
-      "source_location": "L9",
+      "source_location": "L64",
       "id": "skill_browse_browseskills",
-      "community": 1,
+      "community": 0,
       "norm_label": "browseskills()"
     },
     {
@@ -450,7 +594,7 @@
       "source_file": "packages/summon/src/tui/method-select.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_method_select_ts",
-      "community": 1,
+      "community": 0,
       "norm_label": "method-select.ts"
     },
     {
@@ -459,7 +603,7 @@
       "source_file": "packages/summon/src/tui/method-select.ts",
       "source_location": "L7",
       "id": "method_select_selectmethod",
-      "community": 1,
+      "community": 0,
       "norm_label": "selectmethod()"
     },
     {
@@ -468,7 +612,7 @@
       "source_file": "packages/summon/src/tui/progress.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_progress_ts",
-      "community": 1,
+      "community": 0,
       "norm_label": "progress.ts"
     },
     {
@@ -477,7 +621,7 @@
       "source_file": "packages/summon/src/tui/progress.ts",
       "source_location": "L7",
       "id": "progress_showprogress",
-      "community": 1,
+      "community": 0,
       "norm_label": "showprogress()"
     },
     {
@@ -486,7 +630,7 @@
       "source_file": "packages/summon/src/tui/progress.ts",
       "source_location": "L37",
       "id": "progress_withspinner",
-      "community": 1,
+      "community": 0,
       "norm_label": "withspinner()"
     },
     {
@@ -495,7 +639,7 @@
       "source_file": "packages/summon/src/tui/scope-select.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_scope_select_ts",
-      "community": 1,
+      "community": 0,
       "norm_label": "scope-select.ts"
     },
     {
@@ -504,7 +648,7 @@
       "source_file": "packages/summon/src/tui/scope-select.ts",
       "source_location": "L3",
       "id": "scope_select_selectscope",
-      "community": 1,
+      "community": 0,
       "norm_label": "selectscope()"
     },
     {
@@ -513,7 +657,7 @@
       "source_file": "packages/summon/src/tui/confirmation.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_confirmation_ts",
-      "community": 1,
+      "community": 0,
       "norm_label": "confirmation.ts"
     },
     {
@@ -522,7 +666,7 @@
       "source_file": "packages/summon/src/tui/confirmation.ts",
       "source_location": "L11",
       "id": "confirmation_showconfirmation",
-      "community": 1,
+      "community": 0,
       "norm_label": "showconfirmation()"
     },
     {
@@ -531,7 +675,7 @@
       "source_file": "packages/summon/src/tui/agent-select.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_agent_select_ts",
-      "community": 1,
+      "community": 0,
       "norm_label": "agent-select.ts"
     },
     {
@@ -540,7 +684,7 @@
       "source_file": "packages/summon/src/tui/agent-select.ts",
       "source_location": "L10",
       "id": "agent_select_selectagents",
-      "community": 1,
+      "community": 0,
       "norm_label": "selectagents()"
     },
     {
@@ -549,16 +693,106 @@
       "source_file": "packages/summon/src/tui/flow.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_flow_ts",
-      "community": 1,
+      "community": 0,
       "norm_label": "flow.ts"
+    },
+    {
+      "label": "stepSelectAgent()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L41",
+      "id": "flow_stepselectagent",
+      "community": 0,
+      "norm_label": "stepselectagent()"
+    },
+    {
+      "label": "stepSelectAction()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L56",
+      "id": "flow_stepselectaction",
+      "community": 0,
+      "norm_label": "stepselectaction()"
+    },
+    {
+      "label": "stepBrowseSkills()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L68",
+      "id": "flow_stepbrowseskills",
+      "community": 0,
+      "norm_label": "stepbrowseskills()"
+    },
+    {
+      "label": "stepSelectMethod()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L111",
+      "id": "flow_stepselectmethod",
+      "community": 0,
+      "norm_label": "stepselectmethod()"
+    },
+    {
+      "label": "stepSelectScope()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L128",
+      "id": "flow_stepselectscope",
+      "community": 0,
+      "norm_label": "stepselectscope()"
+    },
+    {
+      "label": "stepConfirm()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L140",
+      "id": "flow_stepconfirm",
+      "community": 0,
+      "norm_label": "stepconfirm()"
+    },
+    {
+      "label": "executeInstall()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L166",
+      "id": "flow_executeinstall",
+      "community": 0,
+      "norm_label": "executeinstall()"
+    },
+    {
+      "label": "executeUpdate()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L182",
+      "id": "flow_executeupdate",
+      "community": 0,
+      "norm_label": "executeupdate()"
+    },
+    {
+      "label": "executeRemove()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L204",
+      "id": "flow_executeremove",
+      "community": 0,
+      "norm_label": "executeremove()"
+    },
+    {
+      "label": "stepExecute()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L244",
+      "id": "flow_stepexecute",
+      "community": 0,
+      "norm_label": "stepexecute()"
     },
     {
       "label": "runInteractiveFlow()",
       "file_type": "code",
       "source_file": "packages/summon/src/tui/flow.ts",
-      "source_location": "L27",
+      "source_location": "L291",
       "id": "flow_runinteractiveflow",
-      "community": 1,
+      "community": 0,
       "norm_label": "runinteractiveflow()"
     },
     {
@@ -567,7 +801,7 @@
       "source_file": "packages/summon/src/tui/banner.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_banner_ts",
-      "community": 1,
+      "community": 0,
       "norm_label": "banner.ts"
     },
     {
@@ -576,7 +810,7 @@
       "source_file": "packages/summon/src/tui/banner.ts",
       "source_location": "L19",
       "id": "banner_showbanner",
-      "community": 1,
+      "community": 0,
       "norm_label": "showbanner()"
     },
     {
@@ -585,7 +819,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L1",
       "id": "packages_familiar_agent_extensions_anthropic_pro_ts",
-      "community": 0,
+      "community": 1,
       "norm_label": "anthropic-pro.ts"
     },
     {
@@ -594,7 +828,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L44",
       "id": "anthropic_pro_decode",
-      "community": 0,
+      "community": 1,
       "norm_label": "decode()"
     },
     {
@@ -603,7 +837,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L51",
       "id": "anthropic_pro_generatepkce",
-      "community": 0,
+      "community": 1,
       "norm_label": "generatepkce()"
     },
     {
@@ -612,7 +846,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L63",
       "id": "anthropic_pro_loginanthropic",
-      "community": 0,
+      "community": 1,
       "norm_label": "loginanthropic()"
     },
     {
@@ -621,7 +855,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L83",
       "id": "anthropic_pro_refreshanthropictoken",
-      "community": 0,
+      "community": 1,
       "norm_label": "refreshanthropictoken()"
     },
     {
@@ -630,7 +864,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L104",
       "id": "anthropic_pro_readclaudeclicredentials",
-      "community": 0,
+      "community": 1,
       "norm_label": "readclaudeclicredentials()"
     },
     {
@@ -639,7 +873,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L121",
       "id": "anthropic_pro_writebacktoken",
-      "community": 0,
+      "community": 1,
       "norm_label": "writebacktoken()"
     },
     {
@@ -648,7 +882,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L145",
       "id": "anthropic_pro_extractfirstusermessagetext",
-      "community": 0,
+      "community": 1,
       "norm_label": "extractfirstusermessagetext()"
     },
     {
@@ -657,7 +891,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L159",
       "id": "anthropic_pro_computecch",
-      "community": 0,
+      "community": 1,
       "norm_label": "computecch()"
     },
     {
@@ -666,7 +900,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L163",
       "id": "anthropic_pro_computeversionsuffix",
-      "community": 0,
+      "community": 1,
       "norm_label": "computeversionsuffix()"
     },
     {
@@ -675,7 +909,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L171",
       "id": "anthropic_pro_buildbillingheadervalue",
-      "community": 0,
+      "community": 1,
       "norm_label": "buildbillingheadervalue()"
     },
     {
@@ -684,7 +918,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L181",
       "id": "anthropic_pro_transformbody",
-      "community": 0,
+      "community": 1,
       "norm_label": "transformbody()"
     },
     {
@@ -693,7 +927,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L303",
       "id": "anthropic_pro_tocc",
-      "community": 0,
+      "community": 1,
       "norm_label": "tocc()"
     },
     {
@@ -702,7 +936,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L304",
       "id": "anthropic_pro_fromcc",
-      "community": 0,
+      "community": 1,
       "norm_label": "fromcc()"
     },
     {
@@ -711,7 +945,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L306",
       "id": "anthropic_pro_sanitize",
-      "community": 0,
+      "community": 1,
       "norm_label": "sanitize()"
     },
     {
@@ -720,7 +954,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L310",
       "id": "anthropic_pro_convertcontentblocks",
-      "community": 0,
+      "community": 1,
       "norm_label": "convertcontentblocks()"
     },
     {
@@ -729,7 +963,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L322",
       "id": "anthropic_pro_convertmessages",
-      "community": 0,
+      "community": 1,
       "norm_label": "convertmessages()"
     },
     {
@@ -738,7 +972,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L373",
       "id": "anthropic_pro_converttools",
-      "community": 0,
+      "community": 1,
       "norm_label": "converttools()"
     },
     {
@@ -747,7 +981,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L381",
       "id": "anthropic_pro_mapstopreason",
-      "community": 0,
+      "community": 1,
       "norm_label": "mapstopreason()"
     },
     {
@@ -756,7 +990,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L390",
       "id": "anthropic_pro_striptoolprefix",
-      "community": 0,
+      "community": 1,
       "norm_label": "striptoolprefix()"
     },
     {
@@ -765,7 +999,7 @@
       "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
       "source_location": "L404",
       "id": "anthropic_pro_streamanthropicpro",
-      "community": 0,
+      "community": 1,
       "norm_label": "streamanthropicpro()"
     },
     {
@@ -774,7 +1008,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
       "source_location": "L1",
       "id": "packages_familiar_agent_extensions_tmux_delegate_agents_ts",
-      "community": 2,
+      "community": 3,
       "norm_label": "agents.ts"
     },
     {
@@ -783,7 +1017,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
       "source_location": "L20",
       "id": "agents_parsefrontmatter",
-      "community": 2,
+      "community": 3,
       "norm_label": "parsefrontmatter()"
     },
     {
@@ -792,7 +1026,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
       "source_location": "L44",
       "id": "agents_loadagentsfromdir",
-      "community": 2,
+      "community": 3,
       "norm_label": "loadagentsfromdir()"
     },
     {
@@ -801,7 +1035,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
       "source_location": "L95",
       "id": "agents_findprojectagentsdir",
-      "community": 2,
+      "community": 3,
       "norm_label": "findprojectagentsdir()"
     },
     {
@@ -810,7 +1044,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
       "source_location": "L108",
       "id": "agents_discoveragents",
-      "community": 2,
+      "community": 3,
       "norm_label": "discoveragents()"
     },
     {
@@ -819,7 +1053,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L1",
       "id": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
-      "community": 3,
+      "community": 4,
       "norm_label": "handoff.ts"
     },
     {
@@ -828,7 +1062,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L13",
       "id": "handoff_generateid",
-      "community": 3,
+      "community": 4,
       "norm_label": "generateid()"
     },
     {
@@ -837,7 +1071,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L18",
       "id": "handoff_buildhandofffile",
-      "community": 3,
+      "community": 4,
       "norm_label": "buildhandofffile()"
     },
     {
@@ -846,7 +1080,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L65",
       "id": "handoff_buildsystempromptfile",
-      "community": 3,
+      "community": 4,
       "norm_label": "buildsystempromptfile()"
     },
     {
@@ -855,7 +1089,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L72",
       "id": "handoff_buildrunscript",
-      "community": 3,
+      "community": 4,
       "norm_label": "buildrunscript()"
     },
     {
@@ -864,7 +1098,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L112",
       "id": "handoff_waitforresult",
-      "community": 3,
+      "community": 4,
       "norm_label": "waitforresult()"
     },
     {
@@ -873,7 +1107,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L140",
       "id": "handoff_readresult",
-      "community": 3,
+      "community": 4,
       "norm_label": "readresult()"
     },
     {
@@ -882,7 +1116,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L149",
       "id": "handoff_cleanup",
-      "community": 3,
+      "community": 4,
       "norm_label": "cleanup()"
     },
     {
@@ -891,7 +1125,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
       "source_location": "L1",
       "id": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
-      "community": 2,
+      "community": 3,
       "norm_label": "index.ts"
     },
     {
@@ -900,7 +1134,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
       "source_location": "L85",
       "id": "index_execute",
-      "community": 2,
+      "community": 3,
       "norm_label": "execute()"
     },
     {
@@ -909,7 +1143,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
       "source_location": "L181",
       "id": "index_runagent",
-      "community": 2,
+      "community": 3,
       "norm_label": "runagent()"
     },
     {
@@ -918,7 +1152,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
       "source_location": "L239",
       "id": "index_sleep",
-      "community": 2,
+      "community": 3,
       "norm_label": "sleep()"
     },
     {
@@ -927,7 +1161,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L1",
       "id": "packages_familiar_agent_extensions_tmux_delegate_tmux_ts",
-      "community": 2,
+      "community": 3,
       "norm_label": "tmux.ts"
     },
     {
@@ -936,7 +1170,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L22",
       "id": "tmux_tmuxlayout",
-      "community": 4,
+      "community": 5,
       "norm_label": "tmuxlayout"
     },
     {
@@ -945,7 +1179,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L25",
       "id": "tmux_tmuxlayout_isintmux",
-      "community": 4,
+      "community": 5,
       "norm_label": ".isintmux()"
     },
     {
@@ -954,7 +1188,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L30",
       "id": "tmux_tmuxlayout_createpane",
-      "community": 4,
+      "community": 5,
       "norm_label": ".createpane()"
     },
     {
@@ -963,7 +1197,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L38",
       "id": "tmux_tmuxlayout_removepane",
-      "community": 4,
+      "community": 5,
       "norm_label": ".removepane()"
     },
     {
@@ -972,7 +1206,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L58",
       "id": "tmux_tmuxlayout_spawntmuxpane",
-      "community": 4,
+      "community": 5,
       "norm_label": ".spawntmuxpane()"
     },
     {
@@ -981,7 +1215,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L98",
       "id": "tmux_tmuxlayout_spawnbackground",
-      "community": 4,
+      "community": 5,
       "norm_label": ".spawnbackground()"
     },
     {
@@ -990,7 +1224,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L117",
       "id": "tmux_tmuxlayout_count",
-      "community": 4,
+      "community": 5,
       "norm_label": ".count()"
     },
     {
@@ -999,7 +1233,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L121",
       "id": "tmux_tmuxlayout_getactiveagents",
-      "community": 4,
+      "community": 5,
       "norm_label": ".getactiveagents()"
     }
   ],
@@ -1164,7 +1398,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L41",
+      "source_location": "L44",
       "weight": 1.0,
       "_src": "packages_summon_src_utils_fs_ts",
       "_tgt": "fs_symlinkfile",
@@ -1176,7 +1410,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L53",
+      "source_location": "L52",
       "weight": 1.0,
       "_src": "packages_summon_src_utils_fs_ts",
       "_tgt": "fs_removefile",
@@ -1188,24 +1422,12 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L71",
+      "source_location": "L70",
       "weight": 1.0,
       "_src": "packages_summon_src_utils_fs_ts",
       "_tgt": "fs_ensuredir",
       "source": "packages_summon_src_utils_fs_ts",
       "target": "fs_ensuredir",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L43",
-      "weight": 1.0,
-      "_src": "fs_symlinkfile",
-      "_tgt": "fs_exists",
-      "source": "fs_exists",
-      "target": "fs_symlinkfile",
       "confidence_score": 1.0
     },
     {
@@ -1224,7 +1446,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L46",
+      "source_location": "L45",
       "weight": 1.0,
       "_src": "fs_symlinkfile",
       "_tgt": "fs_ensuredir",
@@ -1368,7 +1590,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/discovery.ts",
-      "source_location": "L24",
+      "source_location": "L26",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_discovery_ts",
       "_tgt": "discovery_discoverinstalledskills",
@@ -1380,7 +1602,19 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/discovery.ts",
-      "source_location": "L100",
+      "source_location": "L99",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_discovery_ts",
+      "_tgt": "discovery_discoverhubskills",
+      "source": "packages_summon_src_skills_discovery_ts",
+      "target": "discovery_discoverhubskills",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/discovery.ts",
+      "source_location": "L166",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_discovery_ts",
       "_tgt": "discovery_getinstalledskillnames",
@@ -1392,7 +1626,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/discovery.ts",
-      "source_location": "L114",
+      "source_location": "L179",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_discovery_ts",
       "_tgt": "discovery_normalizeskillname",
@@ -1404,7 +1638,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/discovery.ts",
-      "source_location": "L118",
+      "source_location": "L183",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_discovery_ts",
       "_tgt": "discovery_filterskillsbyinstallstatus",
@@ -1416,7 +1650,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/discovery.ts",
-      "source_location": "L101",
+      "source_location": "L167",
       "weight": 1.0,
       "_src": "discovery_getinstalledskillnames",
       "_tgt": "discovery_discoverinstalledskills",
@@ -1428,7 +1662,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L19",
+      "source_location": "L20",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_installer_ts",
       "_tgt": "installer_ispathwithin",
@@ -1440,7 +1674,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L27",
+      "source_location": "L28",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_installer_ts",
       "_tgt": "installer_issymlinktargetsafe",
@@ -1452,7 +1686,127 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L45",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_gethubskillpath",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_gethubskillpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_computerelativepath",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_computerelativepath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_createhubsymlink",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_createhubsymlink",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L93",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_validateskillsource",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_validateskillsource",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L111",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_resolveinstalltarget",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_resolveinstalltarget",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L130",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_createhubsymlinkorerror",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_createhubsymlinkorerror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L148",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_linkagentskill",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_linkagentskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L162",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_resulterror",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_resulterror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L171",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_resultsuccess",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_resultsuccess",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L179",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_createskillsymlink",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_createskillsymlink",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L193",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_installer_ts",
       "_tgt": "installer_installskill",
@@ -1464,7 +1818,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L148",
+      "source_location": "L221",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_installer_ts",
       "_tgt": "installer_removeskill",
@@ -1476,7 +1830,31 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L176",
+      "source_location": "L243",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_validateupdatetarget",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_validateupdatetarget",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L258",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_healsymlinkchain",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_healsymlinkchain",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L292",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_installer_ts",
       "_tgt": "installer_updateskill",
@@ -1488,7 +1866,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L30",
+      "source_location": "L31",
       "weight": 1.0,
       "_src": "installer_issymlinktargetsafe",
       "_tgt": "installer_ispathwithin",
@@ -1500,23 +1878,23 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L73",
+      "source_location": "L118",
       "weight": 1.0,
-      "_src": "installer_installskill",
+      "_src": "installer_resolveinstalltarget",
       "_tgt": "installer_ispathwithin",
       "source": "installer_ispathwithin",
-      "target": "installer_installskill",
+      "target": "installer_resolveinstalltarget",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L106",
+      "source_location": "L209",
       "weight": 1.0,
       "_src": "installer_installskill",
-      "_tgt": "installer_issymlinktargetsafe",
-      "source": "installer_issymlinktargetsafe",
+      "_tgt": "installer_gethubskillpath",
+      "source": "installer_gethubskillpath",
       "target": "installer_installskill",
       "confidence_score": 1.0
     },
@@ -1524,11 +1902,263 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L191",
+      "source_location": "L229",
+      "weight": 1.0,
+      "_src": "installer_removeskill",
+      "_tgt": "installer_gethubskillpath",
+      "source": "installer_gethubskillpath",
+      "target": "installer_removeskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L305",
+      "weight": 1.0,
+      "_src": "installer_updateskill",
+      "_tgt": "installer_gethubskillpath",
+      "source": "installer_gethubskillpath",
+      "target": "installer_updateskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_src": "installer_createhubsymlink",
+      "_tgt": "installer_computerelativepath",
+      "source": "installer_computerelativepath",
+      "target": "installer_createhubsymlink",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L155",
+      "weight": 1.0,
+      "_src": "installer_linkagentskill",
+      "_tgt": "installer_computerelativepath",
+      "source": "installer_computerelativepath",
+      "target": "installer_linkagentskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L282",
+      "weight": 1.0,
+      "_src": "installer_healsymlinkchain",
+      "_tgt": "installer_computerelativepath",
+      "source": "installer_computerelativepath",
+      "target": "installer_healsymlinkchain",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L135",
+      "weight": 1.0,
+      "_src": "installer_createhubsymlinkorerror",
+      "_tgt": "installer_createhubsymlink",
+      "source": "installer_createhubsymlink",
+      "target": "installer_createhubsymlinkorerror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L266",
+      "weight": 1.0,
+      "_src": "installer_healsymlinkchain",
+      "_tgt": "installer_createhubsymlink",
+      "source": "installer_createhubsymlink",
+      "target": "installer_healsymlinkchain",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L203",
+      "weight": 1.0,
+      "_src": "installer_installskill",
+      "_tgt": "installer_validateskillsource",
+      "source": "installer_validateskillsource",
+      "target": "installer_installskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L205",
+      "weight": 1.0,
+      "_src": "installer_installskill",
+      "_tgt": "installer_resolveinstalltarget",
+      "source": "installer_resolveinstalltarget",
+      "target": "installer_installskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L187",
+      "weight": 1.0,
+      "_src": "installer_createskillsymlink",
+      "_tgt": "installer_createhubsymlinkorerror",
+      "source": "installer_createhubsymlinkorerror",
+      "target": "installer_createskillsymlink",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L189",
+      "weight": 1.0,
+      "_src": "installer_createskillsymlink",
+      "_tgt": "installer_linkagentskill",
+      "source": "installer_linkagentskill",
+      "target": "installer_createskillsymlink",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L185",
+      "weight": 1.0,
+      "_src": "installer_createskillsymlink",
+      "_tgt": "installer_resulterror",
+      "source": "installer_resulterror",
+      "target": "installer_createskillsymlink",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L217",
+      "weight": 1.0,
+      "_src": "installer_installskill",
+      "_tgt": "installer_resulterror",
+      "source": "installer_resulterror",
+      "target": "installer_installskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L239",
+      "weight": 1.0,
+      "_src": "installer_removeskill",
+      "_tgt": "installer_resulterror",
+      "source": "installer_resulterror",
+      "target": "installer_removeskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L315",
+      "weight": 1.0,
+      "_src": "installer_updateskill",
+      "_tgt": "installer_resulterror",
+      "source": "installer_resulterror",
+      "target": "installer_updateskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L215",
+      "weight": 1.0,
+      "_src": "installer_installskill",
+      "_tgt": "installer_resultsuccess",
+      "source": "installer_resultsuccess",
+      "target": "installer_installskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L237",
+      "weight": 1.0,
+      "_src": "installer_removeskill",
+      "_tgt": "installer_resultsuccess",
+      "source": "installer_resultsuccess",
+      "target": "installer_removeskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L309",
+      "weight": 1.0,
+      "_src": "installer_updateskill",
+      "_tgt": "installer_resultsuccess",
+      "source": "installer_resultsuccess",
+      "target": "installer_updateskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L210",
+      "weight": 1.0,
+      "_src": "installer_installskill",
+      "_tgt": "installer_createskillsymlink",
+      "source": "installer_createskillsymlink",
+      "target": "installer_installskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L312",
       "weight": 1.0,
       "_src": "installer_updateskill",
       "_tgt": "installer_installskill",
       "source": "installer_installskill",
+      "target": "installer_updateskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L303",
+      "weight": 1.0,
+      "_src": "installer_updateskill",
+      "_tgt": "installer_validateupdatetarget",
+      "source": "installer_validateupdatetarget",
+      "target": "installer_updateskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L307",
+      "weight": 1.0,
+      "_src": "installer_updateskill",
+      "_tgt": "installer_healsymlinkchain",
+      "source": "installer_healsymlinkchain",
       "target": "installer_updateskill",
       "confidence_score": 1.0
     },
@@ -1560,7 +2190,31 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/tui/skill-browse.ts",
-      "source_location": "L9",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_skill_browse_ts",
+      "_tgt": "skill_browse_browseinstall",
+      "source": "packages_summon_src_tui_skill_browse_ts",
+      "target": "skill_browse_browseinstall",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/skill-browse.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_skill_browse_ts",
+      "_tgt": "skill_browse_browseupdateremove",
+      "source": "packages_summon_src_tui_skill_browse_ts",
+      "target": "skill_browse_browseupdateremove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/skill-browse.ts",
+      "source_location": "L64",
       "weight": 1.0,
       "_src": "packages_summon_src_tui_skill_browse_ts",
       "_tgt": "skill_browse_browseskills",
@@ -1728,7 +2382,127 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/tui/flow.ts",
-      "source_location": "L27",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "flow_stepselectagent",
+      "source": "packages_summon_src_tui_flow_ts",
+      "target": "flow_stepselectagent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "flow_stepselectaction",
+      "source": "packages_summon_src_tui_flow_ts",
+      "target": "flow_stepselectaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L68",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "flow_stepbrowseskills",
+      "source": "packages_summon_src_tui_flow_ts",
+      "target": "flow_stepbrowseskills",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L111",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "flow_stepselectmethod",
+      "source": "packages_summon_src_tui_flow_ts",
+      "target": "flow_stepselectmethod",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L128",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "flow_stepselectscope",
+      "source": "packages_summon_src_tui_flow_ts",
+      "target": "flow_stepselectscope",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L140",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "flow_stepconfirm",
+      "source": "packages_summon_src_tui_flow_ts",
+      "target": "flow_stepconfirm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L166",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "flow_executeinstall",
+      "source": "packages_summon_src_tui_flow_ts",
+      "target": "flow_executeinstall",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L182",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "flow_executeupdate",
+      "source": "packages_summon_src_tui_flow_ts",
+      "target": "flow_executeupdate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L204",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "flow_executeremove",
+      "source": "packages_summon_src_tui_flow_ts",
+      "target": "flow_executeremove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L244",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "flow_stepexecute",
+      "source": "packages_summon_src_tui_flow_ts",
+      "target": "flow_stepexecute",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L291",
       "weight": 1.0,
       "_src": "packages_summon_src_tui_flow_ts",
       "_tgt": "flow_runinteractiveflow",

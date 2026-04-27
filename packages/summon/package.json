@@ -1,6 +1,6 @@
 {
   "name": "@runecraft/summon",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Interactive CLI for installing Arcanum agent skills",
   "license": "MIT",
   "type": "module",
@@ -19,6 +19,7 @@
   "scripts": {
     "build": "rm -rf dist && bun build ./src/cli.ts --target node --outfile dist/summon.js && printf '#!/usr/bin/env node\\n' | cat - dist/summon.js > dist/_tmp.js && mv dist/_tmp.js dist/summon.js && chmod +x dist/summon.js",
     "build:verify": "node -e \"const f=require('fs').readFileSync('dist/summon.js','utf8');if(f.includes('import.meta.dir')){console.error('FATAL: import.meta.dir leaked into bundle — Node.js will break');process.exit(1)}else{console.log('Build verified: no import.meta.dir found')}\"",
+    "test": "bun test",
     "prepublishOnly": "bun run build && bun run build:verify",
     "dev": "bun run src/cli.ts",
     "postinstall": "node scripts/patch-clack.mjs"

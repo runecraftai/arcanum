@@ -22,12 +22,275 @@ import type { InstallResult } from "../skills/installer.js";
 import type { SkillMeta } from "../skills/loader.js";
 import type { DetectedAgent } from "../agents/detector.js";
 
+interface FlowState {
+  step: number;
+  selectedAgentIds?: string[];
+  selectedAgents: DetectedAgent[];
+  action?: string;
+  allSkills: SkillMeta[];
+  installedNames: string[];
+  filteredSkills: SkillMeta[];
+  selectedSkillNames?: string[];
+  selectedSkills: SkillMeta[];
+  method?: string;
+  scope?: string;
+  spellsDir: string;
+  detected: DetectedAgent[];
+}
 
+async function stepSelectAgent(state: FlowState): Promise<FlowState> {
+  const result = await selectAgents(state.detected);
+  if (clack.isCancel(result)) {
+    clack.outro("Cancelled.");
+    throw new Error("USER_CANCEL");
+  }
+  const selectedAgentIds = result as string[];
+  return {
+    ...state,
+    step: 2,
+    selectedAgentIds,
+    selectedAgents: state.detected.filter((a) => selectedAgentIds.includes(a.id)),
+  };
+}
+
+async function stepSelectAction(state: FlowState): Promise<FlowState> {
+  const result = await selectAction();
+  if (clack.isCancel(result)) {
+    return { ...state, step: 1 };
+  }
+  return {
+    ...state,
+    step: 3,
+    action: result,
+  };
+}
+
+async function stepBrowseSkills(state: FlowState): Promise<FlowState> {
+  const spinner = clack.spinner();
+  spinner.start("Loading skills...");
+  const allSkills = await loadSkillCatalog(state.spellsDir);
+  const installedNames = await getInstalledSkillNames(state.selectedAgents);
+  spinner.stop("Skills loaded");
+
+  const filteredSkills = filterSkillsByInstallStatus(
+    allSkills,
+    installedNames,
+    state.action as "install" | "update" | "remove"
+  );
+
+  const result = await browseSkills(
+    filteredSkills,
+    state.action as "install" | "update" | "remove",
+    installedNames
+  );
+
+  if (clack.isCancel(result)) {
+    return { ...state, step: 2 };
+  }
+  if (!Array.isArray(result) || result.length === 0) {
+    clack.outro("Nothing to do.");
+    throw new Error("USER_CANCEL");
+  }
+
+  const selectedSkillNames = result;
+  const selectedSkills = filteredSkills.filter((s) =>
+    selectedSkillNames.includes(s.name)
+  );
+
+  return {
+    ...state,
+    step: state.action === "install" ? 4 : 6,
+    allSkills,
+    installedNames,
+    filteredSkills,
+    selectedSkillNames,
+    selectedSkills,
+  };
+}
+
+async function stepSelectMethod(state: FlowState): Promise<FlowState> {
+  const result = await selectMethod();
+  if (clack.isCancel(result)) {
+    return { ...state, step: 3 };
+  }
+  const method = result;
+  const nextStep = method === "symlink" ? 6 : 5;
+  const scope = method === "symlink" ? "local" : state.scope;
+
+  return {
+    ...state,
+    step: nextStep,
+    method,
+    scope,
+  };
+}
+
+async function stepSelectScope(state: FlowState): Promise<FlowState> {
+  const result = await selectScope();
+  if (clack.isCancel(result)) {
+    return { ...state, step: 4 };
+  }
+  return {
+    ...state,
+    step: 6,
+    scope: result as string,
+  };
+}
+
+async function stepConfirm(state: FlowState): Promise<FlowState> {
+  const result = await showConfirmation({
+    agents: state.selectedAgents.map((a) => a.name),
+    skills: state.selectedSkills.map((s) => s.name),
+    action: state.action as string,
+    method: state.method,
+    scope: state.scope,
+  });
+
+  if (clack.isCancel(result) || result === "back") {
+    const step =
+      state.action === "install" && state.method === "copy"
+        ? 5
+        : state.action === "install"
+          ? 4
+          : 3;
+    return { ...state, step };
+  }
+  if (result === "cancel") {
+    clack.outro("Aborted.");
+    throw new Error("USER_CANCEL");
+  }
+
+  return { ...state, step: 7 };
+}
+
+async function executeInstall(
+  skill: SkillMeta,
+  agent: DetectedAgent,
+  state: FlowState
+): Promise<InstallResult> {
+  const skillSourcePath = path.join(state.spellsDir, skill.name, "SKILL.md");
+  return await installSkill(
+    skill,
+    skillSourcePath,
+    agent.installDir,
+    state.method as "copy" | "symlink",
+    agent.id,
+    process.cwd()
+  );
+}
+
+async function executeUpdate(
+  skill: SkillMeta,
+  agent: DetectedAgent,
+  installed: InstalledSkill[],
+  state: FlowState
+): Promise<InstallResult | null> {
+  const installedSkill = installed.find(
+    (s) => s.skillName === skill.name && s.agentId === agent.id
+  );
+  if (!installedSkill) return null;
+
+  const skillSourcePath = path.join(state.spellsDir, skill.name, "SKILL.md");
+  return await updateSkill(
+    skill,
+    skillSourcePath,
+    installedSkill.filePath,
+    installedSkill.method,
+    installedSkill.agentId,
+    process.cwd()
+  );
+}
+
+async function executeRemove(
+  skill: SkillMeta,
+  agent: DetectedAgent,
+  installed: InstalledSkill[],
+  state: FlowState
+): Promise<InstallResult | null> {
+  const installedSkill = installed.find(
+    (s) => s.skillName === skill.name && s.agentId === agent.id
+  );
+  if (!installedSkill) return null;
+
+  return await removeSkill(
+    installedSkill.skillName,
+    installedSkill.filePath,
+    installedSkill.agentId,
+    process.cwd()
+  );
+}
+
+type ActionExecutor = (
+  skill: SkillMeta,
+  agent: DetectedAgent,
+  installed: InstalledSkill[],
+  state: FlowState
+) => Promise<InstallResult | null>;
+
+interface InstalledSkill {
+  skillName: string;
+  agentId: string;
+  filePath: string;
+  method: "copy" | "symlink";
+}
+
+const actionExecutors: Record<string, ActionExecutor> = {
+  install: async (skill, agent, _installed, state) =>
+    executeInstall(skill, agent, state),
+  update: executeUpdate,
+  remove: executeRemove,
+};
+
+async function stepExecute(state: FlowState): Promise<FlowState> {
+  const results: InstallResult[] = [];
+  const installed: InstalledSkill[] =
+    state.action === "update" || state.action === "remove"
+      ? await discoverInstalledSkills()
+      : [];
+
+  const executor = actionExecutors[state.action || ""] as ActionExecutor;
+
+  for (const agent of state.selectedAgents) {
+    for (const skill of state.selectedSkills) {
+      try {
+        let res: InstallResult | null;
+        if (state.action === "install") {
+          res = await executor(skill, agent, installed, state);
+        } else {
+          res = await executor(skill, agent, installed as never, state);
+        }
+         if (res) results.push(res);
+       } catch (err) {
+         results.push({
+           skillName: skill.name,
+           agentId: agent.id,
+           success: false,
+           method: (state.method as "copy" | "symlink") || "copy",
+           error:
+             err instanceof Error ? err.message : String(err || "Unknown error"),
+         });
+       }
+    }
+  }
+
+  await showProgress(results);
+  clack.outro("Done!");
+  throw new Error("COMPLETE");
+}
+
+const stepHandlers: Record<number, (state: FlowState) => Promise<FlowState>> = {
+  1: stepSelectAgent,
+  2: stepSelectAction,
+  3: stepBrowseSkills,
+  4: stepSelectMethod,
+  5: stepSelectScope,
+  6: stepConfirm,
+  7: stepExecute,
+};
 
 export async function runInteractiveFlow(): Promise<void> {
   showBanner();
 
-  // Detect agents once up front
   const spinner = clack.spinner();
   spinner.start("Detecting agents...");
   const detected = await detectAgents();
@@ -36,194 +299,34 @@ export async function runInteractiveFlow(): Promise<void> {
     `${detectedCount} agent${detectedCount !== 1 ? "s" : ""} detected`
   );
 
-  // Load spells dir once up front
   const spellsDir = await resolveSpellsDir();
 
-  // State
-  let step = 1;
-  let selectedAgentIds: string[] | undefined;
-  let selectedAgents: DetectedAgent[] = [];
-  let action: string | undefined;
-  let allSkills: SkillMeta[] = [];
-  let installedNames: string[] = [];
-  let filteredSkills: SkillMeta[] = [];
-  let selectedSkillNames: string[] | undefined;
-  let selectedSkills: SkillMeta[] = [];
-  let method: string | undefined;
-  let scope: string | undefined;
+  let state: FlowState = {
+    step: 1,
+    selectedAgents: [],
+    allSkills: [],
+    installedNames: [],
+    filteredSkills: [],
+    selectedSkills: [],
+    spellsDir,
+    detected,
+  };
 
   while (true) {
-    // ── Step 1: Agent selection ──────────────────────────────────────────
-    if (step === 1) {
-      const result = await selectAgents(detected);
-      if (clack.isCancel(result)) {
-        clack.outro("Cancelled.");
+    try {
+      const handler = stepHandlers[state.step];
+      if (!handler) {
+        throw new Error(`Unknown step: ${state.step}`);
+      }
+      state = await handler(state);
+    } catch (err) {
+      if (err instanceof Error && err.message === "COMPLETE") {
         return;
       }
-      selectedAgentIds = result as string[];
-      selectedAgents = detected.filter((a) => selectedAgentIds!.includes(a.id));
-      step = 2;
-    }
-
-    // ── Step 2: Action ───────────────────────────────────────────────────
-     else if (step === 2) {
-       const result = await selectAction();
-       if (clack.isCancel(result)) {
-         step = 1;
-         continue;
-       }
-       action = result;
-       step = 3;
-     }
-
-    // ── Step 3: Skill browse ─────────────────────────────────────────────
-     else if (step === 3) {
-       // Load/refresh skills for the current agent selection
-       const spinner2 = clack.spinner();
-       spinner2.start("Loading skills...");
-       allSkills = await loadSkillCatalog(spellsDir);
-       installedNames = await getInstalledSkillNames(selectedAgents);
-       spinner2.stop("Skills loaded");
-
-       filteredSkills = filterSkillsByInstallStatus(
-         allSkills,
-         installedNames,
-         action as "install" | "update" | "remove"
-       );
-
-       const result = await browseSkills(
-         filteredSkills,
-         action as "install" | "update" | "remove",
-         installedNames
-       );
-
-       if (clack.isCancel(result)) {
-         step = 2;
-         continue;
-       }
-       if (!Array.isArray(result) || result.length === 0) {
-         clack.outro("Nothing to do.");
-         return;
-       }
-       selectedSkillNames = result;
-       selectedSkills = filteredSkills.filter((s) =>
-         selectedSkillNames!.includes(s.name)
-       );
-       step = action === "install" ? 4 : 6;
-     }
-
-     // ── Step 4: Method (install only) ────────────────────────────────────
-      else if (step === 4) {
-        const result = await selectMethod();
-        if (clack.isCancel(result)) {
-          step = 3;
-          continue;
-        }
-        method = result;
-        step = method === "copy" ? 5 : 6;
+      if (err instanceof Error && err.message === "USER_CANCEL") {
+        return;
       }
-
-     // ── Step 5: Scope (install + copy only) ──────────────────────────────
-      else if (step === 5) {
-        const result = await selectScope();
-        if (clack.isCancel(result)) {
-          step = 4;
-          continue;
-        }
-        scope = result as string;
-        step = 6;
-      }
-
-    // ── Step 6: Confirmation ─────────────────────────────────────────────
-     else if (step === 6) {
-       const result = await showConfirmation({
-         agents: selectedAgents.map((a) => a.name),
-         skills: selectedSkills.map((s) => s.name),
-         action: action as string,
-         method,
-         scope,
-       });
-
-       if (clack.isCancel(result) || result === "back") {
-         // back from confirmation goes to last applicable step
-         if (action === "install" && method === "copy") step = 5;
-         else if (action === "install") step = 4;
-         else step = 3;
-         continue;
-       }
-       if (result === "cancel") {
-         clack.outro("Aborted.");
-         return;
-       }
-
-      // ── Execute ──────────────────────────────────────────────────────────
-      const results: InstallResult[] = [];
-
-      // Pre-discover installed skills for update/remove actions
-      const installed =
-        action === "update" || action === "remove"
-          ? await discoverInstalledSkills()
-          : [];
-
-      for (const agent of selectedAgents) {
-        for (const skill of selectedSkills) {
-          try {
-            if (action === "install") {
-              const skillSourcePath = path.join(spellsDir, skill.name, "SKILL.md");
-              const res = await installSkill(
-                skill,
-                skillSourcePath,
-                agent.installDir,
-                method as "copy" | "symlink",
-                agent.id
-              );
-              results.push(res);
-            } else if (action === "update") {
-              const installedSkill = installed.find(
-                (s) => s.skillName === skill.name && s.agentId === agent.id
-              );
-              if (installedSkill) {
-                const skillSourcePath = path.join(spellsDir, skill.name, "SKILL.md");
-                const res = await updateSkill(
-                  skill,
-                  skillSourcePath,
-                  installedSkill.filePath,
-                  installedSkill.method,
-                  installedSkill.agentId
-                );
-                results.push(res);
-              }
-            } else if (action === "remove") {
-              const installedSkill = installed.find(
-                (s) => s.skillName === skill.name && s.agentId === agent.id
-              );
-              if (installedSkill) {
-                const res = await removeSkill(
-                  installedSkill.skillName,
-                  installedSkill.filePath,
-                  installedSkill.agentId
-                );
-                results.push(res);
-              }
-            }
-          } catch (err) {
-            results.push({
-              skillName: skill.name,
-              agentId: agent.id,
-              success: false,
-              method: method as "copy" | "symlink" | undefined,
-              error:
-                err instanceof Error
-                  ? err.message
-                  : String(err || "Unknown error"),
-            });
-          }
-        }
-      }
-
-      await showProgress(results);
-      clack.outro("Done!");
-      return;
+      throw err;
     }
   }
 }
