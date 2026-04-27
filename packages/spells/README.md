@@ -8,7 +8,7 @@ Agent skill definitions for Arcanum. Each skill is a SKILL.md markdown file cons
 
 ## Usage
 
-Skills are distributed as part of the `@runecraftai/spells` package. Install via:
+Skills are distributed as part of the `@runecraft/spells` package. Install via:
 
 ```bash
 bunx summon install
