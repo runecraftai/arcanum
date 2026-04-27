@@ -1,11 +1,11 @@
-# Graph Report - .  (2026-04-25)
+# Graph Report - .  (2026-04-26)
 
 ## Corpus Check
-- 20 files · ~19,874 words
+- 29 files · ~140,701 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 53 nodes · 42 edges · 20 communities detected
+- 111 nodes · 123 edges · 19 communities detected
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
@@ -29,19 +29,18 @@
 - [[_COMMUNITY_Community 16|Community 16]]
 - [[_COMMUNITY_Community 17|Community 17]]
 - [[_COMMUNITY_Community 18|Community 18]]
-- [[_COMMUNITY_Community 19|Community 19]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `main()` - 3 edges
-2. `ensureDir()` - 3 edges
-3. `loadSkillCatalog()` - 3 edges
-4. `installSkill()` - 3 edges
-5. `findSkills()` - 2 edges
-6. `installSkill()` - 2 edges
-7. `resolveHome()` - 2 edges
-8. `resolveAgentPath()` - 2 edges
-9. `copyFile()` - 2 edges
-10. `symlinkFile()` - 2 edges
+1. `TmuxLayout` - 8 edges
+2. `buildBillingHeaderValue()` - 5 edges
+3. `installSkill()` - 4 edges
+4. `convertMessages()` - 4 edges
+5. `main()` - 3 edges
+6. `symlinkFile()` - 3 edges
+7. `ensureDir()` - 3 edges
+8. `loadSkillCatalog()` - 3 edges
+9. `isPathWithin()` - 3 edges
+10. `isSymlinkTargetSafe()` - 3 edges
 
 ## Surprising Connections (you probably didn't know these)
 - None detected - all connections are within the same source files.
@@ -49,48 +48,48 @@
 ## Communities
 
 ### Community 0 - "Community 0"
-Cohesion: 0.38
-Nodes (3): copyFile(), ensureDir(), symlinkFile()
+Cohesion: 0.14
+Nodes (11): buildBillingHeaderValue(), computeCch(), computeVersionSuffix(), convertContentBlocks(), convertMessages(), extractFirstUserMessageText(), generatePKCE(), loginAnthropic() (+3 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.6
-Nodes (3): installSkill(), isPathWithin(), updateSkill()
+Cohesion: 0.1
+Nodes (0): 
 
 ### Community 2 - "Community 2"
+Cohesion: 0.27
+Nodes (5): discoverAgents(), findProjectAgentsDir(), loadAgentsFromDir(), runAgent(), sleep()
+
+### Community 3 - "Community 3"
+Cohesion: 0.25
+Nodes (0): 
+
+### Community 4 - "Community 4"
+Cohesion: 0.39
+Nodes (1): TmuxLayout
+
+### Community 5 - "Community 5"
+Cohesion: 0.43
+Nodes (4): copyFile(), ensureDir(), exists(), symlinkFile()
+
+### Community 6 - "Community 6"
+Cohesion: 0.6
+Nodes (4): installSkill(), isPathWithin(), isSymlinkTargetSafe(), updateSkill()
+
+### Community 7 - "Community 7"
+Cohesion: 0.5
+Nodes (2): discoverInstalledSkills(), getInstalledSkillNames()
+
+### Community 8 - "Community 8"
 Cohesion: 0.83
 Nodes (3): findSkills(), installSkill(), main()
 
-### Community 3 - "Community 3"
+### Community 9 - "Community 9"
 Cohesion: 0.67
 Nodes (2): resolveAgentPath(), resolveHome()
 
-### Community 4 - "Community 4"
+### Community 10 - "Community 10"
 Cohesion: 0.83
 Nodes (3): loadSkillCatalog(), parseFrontmatter(), sanitizeSkillName()
-
-### Community 5 - "Community 5"
-Cohesion: 0.67
-Nodes (0): 
-
-### Community 6 - "Community 6"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 7 - "Community 7"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 8 - "Community 8"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 9 - "Community 9"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 10 - "Community 10"
-Cohesion: 1.0
-Nodes (0): 
 
 ### Community 11 - "Community 11"
 Cohesion: 1.0
@@ -124,39 +123,30 @@ Nodes (0):
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 19 - "Community 19"
-Cohesion: 1.0
-Nodes (0): 
-
 ## Knowledge Gaps
-- **Thin community `Community 6`** (2 nodes): `run()`, `install.ts`
+- **Thin community `Community 11`** (2 nodes): `update.ts`, `run()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 7`** (2 nodes): `update.ts`, `run()`
+- **Thin community `Community 12`** (2 nodes): `remove.ts`, `run()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 8`** (2 nodes): `remove.ts`, `run()`
+- **Thin community `Community 13`** (2 nodes): `run()`, `list.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 9`** (2 nodes): `run()`, `list.ts`
+- **Thin community `Community 14`** (2 nodes): `run()`, `install.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 10`** (2 nodes): `detectAgents()`, `detector.ts`
+- **Thin community `Community 15`** (2 nodes): `detectAgents()`, `detector.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 11`** (2 nodes): `resolver.ts`, `resolveInstallPath()`
+- **Thin community `Community 16`** (2 nodes): `resolver.ts`, `resolveInstallPath()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 12`** (2 nodes): `discoverInstalledSkills()`, `discovery.ts`
+- **Thin community `Community 17`** (1 nodes): `debug-keys.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 13`** (2 nodes): `showBanner()`, `banner.ts`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 14`** (2 nodes): `selectAgents()`, `agent-select.ts`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 15`** (2 nodes): `selectAction()`, `action-menu.ts`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 16`** (2 nodes): `skill-browse.ts`, `browseSkills()`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 17`** (2 nodes): `selectMethod()`, `method-select.ts`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 18`** (1 nodes): `cli.ts`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 19`** (1 nodes): `registry.ts`
+- **Thin community `Community 18`** (1 nodes): `registry.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
-_Not enough signal to generate questions. This usually means the corpus has no AMBIGUOUS edges, no bridge nodes, no INFERRED relationships, and all communities are tightly cohesive. Add more files or run with --mode deep to extract richer edges._
+_Questions this graph is uniquely positioned to answer:_
+
+- **Why does `TmuxLayout` connect `Community 4` to `Community 2`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **Should `Community 0` be split into smaller, more focused modules?**
+  _Cohesion score 0.14 - nodes in this community are weakly interconnected._
+- **Should `Community 1` be split into smaller, more focused modules?**
+  _Cohesion score 0.1 - nodes in this community are weakly interconnected._

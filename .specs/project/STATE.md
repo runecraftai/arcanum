@@ -29,6 +29,14 @@
    - Added Error Handling table
    - Improves skill clarity and reduces ambiguity in agent dispatch
 
+## Active Features
+(none)
+
+## Completed & Archived Features
+- `npm-publish` → `.specs/archive/npm-publish/` (2026-04-26)
+- `summon-cli` → `.specs/archive/summon-cli/` (2026-04-26)
+- `summon-tui-revision` → `.specs/archive/summon-tui-revision/` (2026-04-26)
+
 ## Running Status
 - ✓ Spec-driven skill operational
 - ✓ No external standalone skills active

@@ -1,7 +1,7 @@
 # Spec: summon-cli
 
 **Feature**: Summon CLI — Interactive agent skill manager
-**Package**: `@runecraftai/summon`
+**Package**: `@runecraft/summon`
 **Scope**: Large
 **Status**: Draft
 **Date**: 2026-04-24
@@ -20,13 +20,13 @@ Provide a single CLI tool (`summon`) that:
 - Detects installed coding agents on the user's machine
 - Lets users browse, install, update, and remove skills interactively
 - Supports both copy and symlink installation methods
-- Works via `npx @runecraftai/summon` with zero config
+- Works via `npx @runecraft/summon` with zero config
 
 ## 3. User Stories
 
 ### US-1: First-time user installs skills
 **As** a developer with multiple coding agents installed,
-**I want** to run `npx @runecraftai/summon` and be guided through skill installation,
+**I want** to run `npx @runecraft/summon` and be guided through skill installation,
 **So that** I can set up agent skills without knowing each agent's config format.
 
 ### US-2: User updates skills
@@ -99,12 +99,12 @@ Provide a single CLI tool (`summon`) that:
 - **NFR-1**: Runs on macOS, Linux, and Windows (path resolution must be cross-platform)
 - **NFR-2**: Zero runtime dependencies beyond what's in package.json (citty, @clack/prompts)
 - **NFR-3**: Binary compiles via `bun build --compile` for standalone distribution
-- **NFR-4**: npm-publishable as `@runecraftai/summon`, executable via `npx`
+- **NFR-4**: npm-publishable as `@runecraft/summon`, executable via `npx`
 - **NFR-5**: Graceful degradation — if no agents detected, show helpful message instead of crash
 
 ## 6. Acceptance Criteria
 
-- [ ] `npx @runecraftai/summon` launches interactive TUI
+- [ ] `npx @runecraft/summon` launches interactive TUI
 - [ ] All 9 agents are detected when their config dirs exist
 - [ ] All 7 skills have valid YAML frontmatter
 - [ ] Install (copy) writes skill content to correct agent config path

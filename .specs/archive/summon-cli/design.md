@@ -145,16 +145,16 @@ Interactive flow orchestrated by `commands/install.ts`:
 
 ```
 banner() → detectAgents() → agentSelect() → actionMenu()
-                                                  │
-                                ┌─────────────────┼──────────────────┐
-                                ▼                 ▼                  ▼
-                          skillBrowse()    updateFlow()       removeFlow()
-                                │
-                                ▼
-                          methodSelect()
-                                │
-                                ▼
-                          execute() + progress()
+                                                   │
+                                 ┌─────────────────┼──────────────────┐
+                                 ▼                 ▼                  ▼
+                           skillBrowse()    updateFlow()       removeFlow()
+                                 │
+                                 ▼
+                           methodSelect()
+                                 │
+                                 ▼
+                           execute() + progress()
 ```
 
 Each TUI step is a separate module using @clack/prompts primitives:
