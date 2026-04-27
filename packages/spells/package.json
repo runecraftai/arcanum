@@ -1,7 +1,25 @@
 {
-  "name": "@runecraftai/spells",
+  "name": "@runecraft/spells",
   "version": "0.0.1",
-  "description": "Agent skill definitions for Arcanum",
+  "description": "Agent skill definitions for Arcanum — prompts and instructions for AI coding agents",
   "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "arcanum",
+    "agent",
+    "skills",
+    "prompts",
+    "ai",
+    "coding-agent",
+    "cursor",
+    "claude",
+    "copilot"
+  ],
   "files": ["skills/"]
 }

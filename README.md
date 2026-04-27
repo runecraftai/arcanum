@@ -8,9 +8,9 @@ A Bun monorepo for agent skills, CLI tools, and shared configurations for the Ru
 
 | Package | npm name | Description | Status |
 |---------|----------|-------------|--------|
-| **spells** | `@runecraftai/spells` | Agent skill definitions (7 skills) | Active |
+| **spells** | `@runecraft/spells` | Agent skill definitions (7 skills) | Active |
 | **grimoire** | `@runecraftai/grimoire` | Shared Biome and TypeScript configs | Active |
-| **summon** | `@runecraftai/summon` | CLI installer for agent skills | Scaffold |
+| **summon** | `@runecraft/summon` | CLI installer for agent skills | Scaffold |
 | **guild** | `@runecraftai/guild` | Agent party/swarm configurations | Placeholder |
 
 ---

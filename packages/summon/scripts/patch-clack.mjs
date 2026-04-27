@@ -17,7 +17,21 @@ import { execSync } from 'child_process';
 import { createRequire } from 'node:module';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const promptsPath = join(__dirname, '../node_modules/@clack/prompts/dist/index.mjs');
+
+// Dynamically resolve @clack/prompts dist path using createRequire
+// This handles both nested (npm) and hoisted (bun/pnpm) node_modules layouts
+function resolvePromptsPath() {
+  try {
+    const require = createRequire(import.meta.url);
+    const resolved = require.resolve('@clack/prompts');
+    return resolved;
+  } catch {
+    // Fallback to relative path
+    return join(__dirname, '../node_modules/@clack/prompts/dist/index.mjs');
+  }
+}
+
+const promptsPath = resolvePromptsPath();
 
 // Patch @clack/core for Escape key handling
 function patchClackCore() {
@@ -247,6 +261,7 @@ try {
   // Also patch clack/core for Escape key handling
   patchClackCore();
 } catch (error) {
+  // Fail gracefully — postinstall patches are cosmetic and should never block installation
   console.error('✗ Failed to patch @clack/prompts:', error.message);
-  process.exit(1);
+  process.exit(0);
 }
