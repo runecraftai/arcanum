@@ -1,0 +1,54 @@
+{
+  "version": "2.11",
+  "children": [
+    {
+      "type": "frame",
+      "id": "bi8Au",
+      "x": -424,
+      "y": -258,
+      "name": "Frame",
+      "clip": true,
+      "width": 800,
+      "height": 600,
+      "fill": "#FFFFFF",
+      "layout": "none"
+    },
+    {
+      "type": "rectangle",
+      "id": "KkXcL",
+      "x": -1230,
+      "y": -1501,
+      "fill": {
+        "type": "image",
+        "enabled": true,
+        "url": "images/Gemini_Generated_Image_ezpimmezpimmezpi.png",
+        "mode": "fill"
+      },
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "type": "rectangle",
+      "id": "Lyl7K",
+      "x": 113,
+      "y": -1660,
+      "fill": {
+        "type": "image",
+        "enabled": true,
+        "url": "images/Gemini_Generated_Image_zelchjzelchjzelc.png",
+        "mode": "fill"
+      },
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "type": "ellipse",
+      "id": "wVuQq",
+      "x": 113,
+      "y": -1623,
+      "fill": "#CCCCCC",
+      "width": 490,
+      "height": 475
+    }
+  ]
+}

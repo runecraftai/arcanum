@@ -9,7 +9,7 @@
       "source_file": "install.js",
       "source_location": "L1",
       "id": "install_js",
-      "community": 2,
+      "community": 8,
       "norm_label": "install.js"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "install.js",
       "source_location": "L48",
       "id": "install_findskills",
-      "community": 2,
+      "community": 8,
       "norm_label": "findskills()"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "install.js",
       "source_location": "L76",
       "id": "install_installskill",
-      "community": 2,
+      "community": 8,
       "norm_label": "installskill()"
     },
     {
@@ -36,8 +36,17 @@
       "source_file": "install.js",
       "source_location": "L112",
       "id": "install_main",
-      "community": 2,
+      "community": 8,
       "norm_label": "main()"
+    },
+    {
+      "label": "debug-keys.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/debug-keys.ts",
+      "source_location": "L1",
+      "id": "packages_summon_debug_keys_ts",
+      "community": 17,
+      "norm_label": "debug-keys.ts"
     },
     {
       "label": "cli.ts",
@@ -45,26 +54,8 @@
       "source_file": "packages/summon/src/cli.ts",
       "source_location": "L1",
       "id": "packages_summon_src_cli_ts",
-      "community": 18,
+      "community": 1,
       "norm_label": "cli.ts"
-    },
-    {
-      "label": "install.ts",
-      "file_type": "code",
-      "source_file": "packages/summon/src/commands/install.ts",
-      "source_location": "L1",
-      "id": "packages_summon_src_commands_install_ts",
-      "community": 6,
-      "norm_label": "install.ts"
-    },
-    {
-      "label": "run()",
-      "file_type": "code",
-      "source_file": "packages/summon/src/commands/install.ts",
-      "source_location": "L23",
-      "id": "install_run",
-      "community": 6,
-      "norm_label": "run()"
     },
     {
       "label": "update.ts",
@@ -72,7 +63,7 @@
       "source_file": "packages/summon/src/commands/update.ts",
       "source_location": "L1",
       "id": "packages_summon_src_commands_update_ts",
-      "community": 7,
+      "community": 11,
       "norm_label": "update.ts"
     },
     {
@@ -81,7 +72,7 @@
       "source_file": "packages/summon/src/commands/update.ts",
       "source_location": "L16",
       "id": "update_run",
-      "community": 7,
+      "community": 11,
       "norm_label": "run()"
     },
     {
@@ -90,7 +81,7 @@
       "source_file": "packages/summon/src/commands/remove.ts",
       "source_location": "L1",
       "id": "packages_summon_src_commands_remove_ts",
-      "community": 8,
+      "community": 12,
       "norm_label": "remove.ts"
     },
     {
@@ -99,7 +90,7 @@
       "source_file": "packages/summon/src/commands/remove.ts",
       "source_location": "L13",
       "id": "remove_run",
-      "community": 8,
+      "community": 12,
       "norm_label": "run()"
     },
     {
@@ -108,7 +99,7 @@
       "source_file": "packages/summon/src/commands/list.ts",
       "source_location": "L1",
       "id": "packages_summon_src_commands_list_ts",
-      "community": 9,
+      "community": 13,
       "norm_label": "list.ts"
     },
     {
@@ -117,44 +108,26 @@
       "source_file": "packages/summon/src/commands/list.ts",
       "source_location": "L11",
       "id": "list_run",
-      "community": 9,
+      "community": 13,
       "norm_label": "run()"
     },
     {
-      "label": "paths.ts",
+      "label": "install.ts",
       "file_type": "code",
-      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_file": "packages/summon/src/commands/install.ts",
       "source_location": "L1",
-      "id": "packages_summon_src_utils_paths_ts",
-      "community": 3,
-      "norm_label": "paths.ts"
+      "id": "packages_summon_src_commands_install_ts",
+      "community": 14,
+      "norm_label": "install.ts"
     },
     {
-      "label": "resolveHome()",
+      "label": "run()",
       "file_type": "code",
-      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_file": "packages/summon/src/commands/install.ts",
       "source_location": "L9",
-      "id": "paths_resolvehome",
-      "community": 3,
-      "norm_label": "resolvehome()"
-    },
-    {
-      "label": "resolveSpellsDir()",
-      "file_type": "code",
-      "source_file": "packages/summon/src/utils/paths.ts",
-      "source_location": "L20",
-      "id": "paths_resolvespellsdir",
-      "community": 3,
-      "norm_label": "resolvespellsdir()"
-    },
-    {
-      "label": "resolveAgentPath()",
-      "file_type": "code",
-      "source_file": "packages/summon/src/utils/paths.ts",
-      "source_location": "L38",
-      "id": "paths_resolveagentpath",
-      "community": 3,
-      "norm_label": "resolveagentpath()"
+      "id": "install_run",
+      "community": 14,
+      "norm_label": "run()"
     },
     {
       "label": "fs.ts",
@@ -162,7 +135,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L1",
       "id": "packages_summon_src_utils_fs_ts",
-      "community": 0,
+      "community": 5,
       "norm_label": "fs.ts"
     },
     {
@@ -171,7 +144,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L7",
       "id": "fs_exists",
-      "community": 0,
+      "community": 5,
       "norm_label": "exists()"
     },
     {
@@ -180,7 +153,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L19",
       "id": "fs_issymlink",
-      "community": 0,
+      "community": 5,
       "norm_label": "issymlink()"
     },
     {
@@ -189,7 +162,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L32",
       "id": "fs_copyfile",
-      "community": 0,
+      "community": 5,
       "norm_label": "copyfile()"
     },
     {
@@ -198,26 +171,62 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L41",
       "id": "fs_symlinkfile",
-      "community": 0,
+      "community": 5,
       "norm_label": "symlinkfile()"
     },
     {
       "label": "removeFile()",
       "file_type": "code",
       "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L49",
+      "source_location": "L53",
       "id": "fs_removefile",
-      "community": 0,
+      "community": 5,
       "norm_label": "removefile()"
     },
     {
       "label": "ensureDir()",
       "file_type": "code",
       "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L67",
+      "source_location": "L71",
       "id": "fs_ensuredir",
-      "community": 0,
+      "community": 5,
       "norm_label": "ensuredir()"
+    },
+    {
+      "label": "paths.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_utils_paths_ts",
+      "community": 9,
+      "norm_label": "paths.ts"
+    },
+    {
+      "label": "resolveHome()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L10",
+      "id": "paths_resolvehome",
+      "community": 9,
+      "norm_label": "resolvehome()"
+    },
+    {
+      "label": "resolveSpellsDir()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L26",
+      "id": "paths_resolvespellsdir",
+      "community": 9,
+      "norm_label": "resolvespellsdir()"
+    },
+    {
+      "label": "resolveAgentPath()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L54",
+      "id": "paths_resolveagentpath",
+      "community": 9,
+      "norm_label": "resolveagentpath()"
     },
     {
       "label": "registry.ts",
@@ -225,7 +234,7 @@
       "source_file": "packages/summon/src/agents/registry.ts",
       "source_location": "L1",
       "id": "packages_summon_src_agents_registry_ts",
-      "community": 19,
+      "community": 18,
       "norm_label": "registry.ts"
     },
     {
@@ -234,7 +243,7 @@
       "source_file": "packages/summon/src/agents/detector.ts",
       "source_location": "L1",
       "id": "packages_summon_src_agents_detector_ts",
-      "community": 10,
+      "community": 15,
       "norm_label": "detector.ts"
     },
     {
@@ -243,7 +252,7 @@
       "source_file": "packages/summon/src/agents/detector.ts",
       "source_location": "L15",
       "id": "detector_detectagents",
-      "community": 10,
+      "community": 15,
       "norm_label": "detectagents()"
     },
     {
@@ -252,7 +261,7 @@
       "source_file": "packages/summon/src/agents/resolver.ts",
       "source_location": "L1",
       "id": "packages_summon_src_agents_resolver_ts",
-      "community": 11,
+      "community": 16,
       "norm_label": "resolver.ts"
     },
     {
@@ -261,7 +270,7 @@
       "source_file": "packages/summon/src/agents/resolver.ts",
       "source_location": "L7",
       "id": "resolver_resolveinstallpath",
-      "community": 11,
+      "community": 16,
       "norm_label": "resolveinstallpath()"
     },
     {
@@ -270,7 +279,7 @@
       "source_file": "packages/summon/src/skills/loader.ts",
       "source_location": "L1",
       "id": "packages_summon_src_skills_loader_ts",
-      "community": 4,
+      "community": 10,
       "norm_label": "loader.ts"
     },
     {
@@ -279,7 +288,7 @@
       "source_file": "packages/summon/src/skills/loader.ts",
       "source_location": "L17",
       "id": "loader_sanitizeskillname",
-      "community": 4,
+      "community": 10,
       "norm_label": "sanitizeskillname()"
     },
     {
@@ -288,7 +297,7 @@
       "source_file": "packages/summon/src/skills/loader.ts",
       "source_location": "L32",
       "id": "loader_parsefrontmatter",
-      "community": 4,
+      "community": 10,
       "norm_label": "parsefrontmatter()"
     },
     {
@@ -297,7 +306,7 @@
       "source_file": "packages/summon/src/skills/loader.ts",
       "source_location": "L87",
       "id": "loader_loadskillcatalog",
-      "community": 4,
+      "community": 10,
       "norm_label": "loadskillcatalog()"
     },
     {
@@ -306,17 +315,44 @@
       "source_file": "packages/summon/src/skills/discovery.ts",
       "source_location": "L1",
       "id": "packages_summon_src_skills_discovery_ts",
-      "community": 12,
+      "community": 7,
       "norm_label": "discovery.ts"
     },
     {
       "label": "discoverInstalledSkills()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/discovery.ts",
-      "source_location": "L21",
+      "source_location": "L24",
       "id": "discovery_discoverinstalledskills",
-      "community": 12,
+      "community": 7,
       "norm_label": "discoverinstalledskills()"
+    },
+    {
+      "label": "getInstalledSkillNames()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/discovery.ts",
+      "source_location": "L100",
+      "id": "discovery_getinstalledskillnames",
+      "community": 7,
+      "norm_label": "getinstalledskillnames()"
+    },
+    {
+      "label": "normalizeSkillName()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/discovery.ts",
+      "source_location": "L114",
+      "id": "discovery_normalizeskillname",
+      "community": 7,
+      "norm_label": "normalizeskillname()"
+    },
+    {
+      "label": "filterSkillsByInstallStatus()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/discovery.ts",
+      "source_location": "L118",
+      "id": "discovery_filterskillsbyinstallstatus",
+      "community": 7,
+      "norm_label": "filterskillsbyinstallstatus()"
     },
     {
       "label": "installer.ts",
@@ -324,80 +360,53 @@
       "source_file": "packages/summon/src/skills/installer.ts",
       "source_location": "L1",
       "id": "packages_summon_src_skills_installer_ts",
-      "community": 1,
+      "community": 6,
       "norm_label": "installer.ts"
     },
     {
       "label": "isPathWithin()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L17",
+      "source_location": "L19",
       "id": "installer_ispathwithin",
-      "community": 1,
+      "community": 6,
       "norm_label": "ispathwithin()"
+    },
+    {
+      "label": "isSymlinkTargetSafe()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L27",
+      "id": "installer_issymlinktargetsafe",
+      "community": 6,
+      "norm_label": "issymlinktargetsafe()"
     },
     {
       "label": "installSkill()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L34",
+      "source_location": "L45",
       "id": "installer_installskill",
-      "community": 1,
+      "community": 6,
       "norm_label": "installskill()"
     },
     {
       "label": "removeSkill()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L108",
+      "source_location": "L148",
       "id": "installer_removeskill",
-      "community": 1,
+      "community": 6,
       "norm_label": "removeskill()"
     },
     {
       "label": "updateSkill()",
       "file_type": "code",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L136",
+      "source_location": "L176",
       "id": "installer_updateskill",
-      "community": 1,
+      "community": 6,
       "norm_label": "updateskill()"
-    },
-    {
-      "label": "banner.ts",
-      "file_type": "code",
-      "source_file": "packages/summon/src/tui/banner.ts",
-      "source_location": "L1",
-      "id": "packages_summon_src_tui_banner_ts",
-      "community": 13,
-      "norm_label": "banner.ts"
-    },
-    {
-      "label": "showBanner()",
-      "file_type": "code",
-      "source_file": "packages/summon/src/tui/banner.ts",
-      "source_location": "L28",
-      "id": "banner_showbanner",
-      "community": 13,
-      "norm_label": "showbanner()"
-    },
-    {
-      "label": "agent-select.ts",
-      "file_type": "code",
-      "source_file": "packages/summon/src/tui/agent-select.ts",
-      "source_location": "L1",
-      "id": "packages_summon_src_tui_agent_select_ts",
-      "community": 14,
-      "norm_label": "agent-select.ts"
-    },
-    {
-      "label": "selectAgents()",
-      "file_type": "code",
-      "source_file": "packages/summon/src/tui/agent-select.ts",
-      "source_location": "L8",
-      "id": "agent_select_selectagents",
-      "community": 14,
-      "norm_label": "selectagents()"
     },
     {
       "label": "action-menu.ts",
@@ -405,7 +414,7 @@
       "source_file": "packages/summon/src/tui/action-menu.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_action_menu_ts",
-      "community": 15,
+      "community": 1,
       "norm_label": "action-menu.ts"
     },
     {
@@ -414,7 +423,7 @@
       "source_file": "packages/summon/src/tui/action-menu.ts",
       "source_location": "L8",
       "id": "action_menu_selectaction",
-      "community": 15,
+      "community": 1,
       "norm_label": "selectaction()"
     },
     {
@@ -423,16 +432,16 @@
       "source_file": "packages/summon/src/tui/skill-browse.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_skill_browse_ts",
-      "community": 16,
+      "community": 1,
       "norm_label": "skill-browse.ts"
     },
     {
       "label": "browseSkills()",
       "file_type": "code",
       "source_file": "packages/summon/src/tui/skill-browse.ts",
-      "source_location": "L8",
+      "source_location": "L9",
       "id": "skill_browse_browseskills",
-      "community": 16,
+      "community": 1,
       "norm_label": "browseskills()"
     },
     {
@@ -441,7 +450,7 @@
       "source_file": "packages/summon/src/tui/method-select.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_method_select_ts",
-      "community": 17,
+      "community": 1,
       "norm_label": "method-select.ts"
     },
     {
@@ -450,7 +459,7 @@
       "source_file": "packages/summon/src/tui/method-select.ts",
       "source_location": "L7",
       "id": "method_select_selectmethod",
-      "community": 17,
+      "community": 1,
       "norm_label": "selectmethod()"
     },
     {
@@ -459,7 +468,7 @@
       "source_file": "packages/summon/src/tui/progress.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_progress_ts",
-      "community": 5,
+      "community": 1,
       "norm_label": "progress.ts"
     },
     {
@@ -468,7 +477,7 @@
       "source_file": "packages/summon/src/tui/progress.ts",
       "source_location": "L7",
       "id": "progress_showprogress",
-      "community": 5,
+      "community": 1,
       "norm_label": "showprogress()"
     },
     {
@@ -477,8 +486,521 @@
       "source_file": "packages/summon/src/tui/progress.ts",
       "source_location": "L37",
       "id": "progress_withspinner",
-      "community": 5,
+      "community": 1,
       "norm_label": "withspinner()"
+    },
+    {
+      "label": "scope-select.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/scope-select.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_tui_scope_select_ts",
+      "community": 1,
+      "norm_label": "scope-select.ts"
+    },
+    {
+      "label": "selectScope()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/scope-select.ts",
+      "source_location": "L3",
+      "id": "scope_select_selectscope",
+      "community": 1,
+      "norm_label": "selectscope()"
+    },
+    {
+      "label": "confirmation.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/confirmation.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_tui_confirmation_ts",
+      "community": 1,
+      "norm_label": "confirmation.ts"
+    },
+    {
+      "label": "showConfirmation()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/confirmation.ts",
+      "source_location": "L11",
+      "id": "confirmation_showconfirmation",
+      "community": 1,
+      "norm_label": "showconfirmation()"
+    },
+    {
+      "label": "agent-select.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/agent-select.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_tui_agent_select_ts",
+      "community": 1,
+      "norm_label": "agent-select.ts"
+    },
+    {
+      "label": "selectAgents()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/agent-select.ts",
+      "source_location": "L10",
+      "id": "agent_select_selectagents",
+      "community": 1,
+      "norm_label": "selectagents()"
+    },
+    {
+      "label": "flow.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_tui_flow_ts",
+      "community": 1,
+      "norm_label": "flow.ts"
+    },
+    {
+      "label": "runInteractiveFlow()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L27",
+      "id": "flow_runinteractiveflow",
+      "community": 1,
+      "norm_label": "runinteractiveflow()"
+    },
+    {
+      "label": "banner.ts",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/banner.ts",
+      "source_location": "L1",
+      "id": "packages_summon_src_tui_banner_ts",
+      "community": 1,
+      "norm_label": "banner.ts"
+    },
+    {
+      "label": "showBanner()",
+      "file_type": "code",
+      "source_file": "packages/summon/src/tui/banner.ts",
+      "source_location": "L19",
+      "id": "banner_showbanner",
+      "community": 1,
+      "norm_label": "showbanner()"
+    },
+    {
+      "label": "anthropic-pro.ts",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L1",
+      "id": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "community": 0,
+      "norm_label": "anthropic-pro.ts"
+    },
+    {
+      "label": "decode()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L44",
+      "id": "anthropic_pro_decode",
+      "community": 0,
+      "norm_label": "decode()"
+    },
+    {
+      "label": "generatePKCE()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L51",
+      "id": "anthropic_pro_generatepkce",
+      "community": 0,
+      "norm_label": "generatepkce()"
+    },
+    {
+      "label": "loginAnthropic()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L63",
+      "id": "anthropic_pro_loginanthropic",
+      "community": 0,
+      "norm_label": "loginanthropic()"
+    },
+    {
+      "label": "refreshAnthropicToken()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L83",
+      "id": "anthropic_pro_refreshanthropictoken",
+      "community": 0,
+      "norm_label": "refreshanthropictoken()"
+    },
+    {
+      "label": "readClaudeCliCredentials()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L104",
+      "id": "anthropic_pro_readclaudeclicredentials",
+      "community": 0,
+      "norm_label": "readclaudeclicredentials()"
+    },
+    {
+      "label": "writeBackToken()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L121",
+      "id": "anthropic_pro_writebacktoken",
+      "community": 0,
+      "norm_label": "writebacktoken()"
+    },
+    {
+      "label": "extractFirstUserMessageText()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L145",
+      "id": "anthropic_pro_extractfirstusermessagetext",
+      "community": 0,
+      "norm_label": "extractfirstusermessagetext()"
+    },
+    {
+      "label": "computeCch()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L159",
+      "id": "anthropic_pro_computecch",
+      "community": 0,
+      "norm_label": "computecch()"
+    },
+    {
+      "label": "computeVersionSuffix()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L163",
+      "id": "anthropic_pro_computeversionsuffix",
+      "community": 0,
+      "norm_label": "computeversionsuffix()"
+    },
+    {
+      "label": "buildBillingHeaderValue()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L171",
+      "id": "anthropic_pro_buildbillingheadervalue",
+      "community": 0,
+      "norm_label": "buildbillingheadervalue()"
+    },
+    {
+      "label": "transformBody()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L181",
+      "id": "anthropic_pro_transformbody",
+      "community": 0,
+      "norm_label": "transformbody()"
+    },
+    {
+      "label": "toCC()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L303",
+      "id": "anthropic_pro_tocc",
+      "community": 0,
+      "norm_label": "tocc()"
+    },
+    {
+      "label": "fromCC()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L304",
+      "id": "anthropic_pro_fromcc",
+      "community": 0,
+      "norm_label": "fromcc()"
+    },
+    {
+      "label": "sanitize()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L306",
+      "id": "anthropic_pro_sanitize",
+      "community": 0,
+      "norm_label": "sanitize()"
+    },
+    {
+      "label": "convertContentBlocks()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L310",
+      "id": "anthropic_pro_convertcontentblocks",
+      "community": 0,
+      "norm_label": "convertcontentblocks()"
+    },
+    {
+      "label": "convertMessages()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L322",
+      "id": "anthropic_pro_convertmessages",
+      "community": 0,
+      "norm_label": "convertmessages()"
+    },
+    {
+      "label": "convertTools()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L373",
+      "id": "anthropic_pro_converttools",
+      "community": 0,
+      "norm_label": "converttools()"
+    },
+    {
+      "label": "mapStopReason()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L381",
+      "id": "anthropic_pro_mapstopreason",
+      "community": 0,
+      "norm_label": "mapstopreason()"
+    },
+    {
+      "label": "stripToolPrefix()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L390",
+      "id": "anthropic_pro_striptoolprefix",
+      "community": 0,
+      "norm_label": "striptoolprefix()"
+    },
+    {
+      "label": "streamAnthropicPro()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L404",
+      "id": "anthropic_pro_streamanthropicpro",
+      "community": 0,
+      "norm_label": "streamanthropicpro()"
+    },
+    {
+      "label": "agents.ts",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
+      "source_location": "L1",
+      "id": "packages_familiar_agent_extensions_tmux_delegate_agents_ts",
+      "community": 2,
+      "norm_label": "agents.ts"
+    },
+    {
+      "label": "parseFrontmatter()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
+      "source_location": "L20",
+      "id": "agents_parsefrontmatter",
+      "community": 2,
+      "norm_label": "parsefrontmatter()"
+    },
+    {
+      "label": "loadAgentsFromDir()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
+      "source_location": "L44",
+      "id": "agents_loadagentsfromdir",
+      "community": 2,
+      "norm_label": "loadagentsfromdir()"
+    },
+    {
+      "label": "findProjectAgentsDir()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
+      "source_location": "L95",
+      "id": "agents_findprojectagentsdir",
+      "community": 2,
+      "norm_label": "findprojectagentsdir()"
+    },
+    {
+      "label": "discoverAgents()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
+      "source_location": "L108",
+      "id": "agents_discoveragents",
+      "community": 2,
+      "norm_label": "discoveragents()"
+    },
+    {
+      "label": "handoff.ts",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L1",
+      "id": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "community": 3,
+      "norm_label": "handoff.ts"
+    },
+    {
+      "label": "generateId()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L13",
+      "id": "handoff_generateid",
+      "community": 3,
+      "norm_label": "generateid()"
+    },
+    {
+      "label": "buildHandoffFile()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L18",
+      "id": "handoff_buildhandofffile",
+      "community": 3,
+      "norm_label": "buildhandofffile()"
+    },
+    {
+      "label": "buildSystemPromptFile()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L65",
+      "id": "handoff_buildsystempromptfile",
+      "community": 3,
+      "norm_label": "buildsystempromptfile()"
+    },
+    {
+      "label": "buildRunScript()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L72",
+      "id": "handoff_buildrunscript",
+      "community": 3,
+      "norm_label": "buildrunscript()"
+    },
+    {
+      "label": "waitForResult()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L112",
+      "id": "handoff_waitforresult",
+      "community": 3,
+      "norm_label": "waitforresult()"
+    },
+    {
+      "label": "readResult()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L140",
+      "id": "handoff_readresult",
+      "community": 3,
+      "norm_label": "readresult()"
+    },
+    {
+      "label": "cleanup()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L149",
+      "id": "handoff_cleanup",
+      "community": 3,
+      "norm_label": "cleanup()"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
+      "source_location": "L1",
+      "id": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "community": 2,
+      "norm_label": "index.ts"
+    },
+    {
+      "label": "execute()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
+      "source_location": "L85",
+      "id": "index_execute",
+      "community": 2,
+      "norm_label": "execute()"
+    },
+    {
+      "label": "runAgent()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
+      "source_location": "L181",
+      "id": "index_runagent",
+      "community": 2,
+      "norm_label": "runagent()"
+    },
+    {
+      "label": "sleep()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
+      "source_location": "L239",
+      "id": "index_sleep",
+      "community": 2,
+      "norm_label": "sleep()"
+    },
+    {
+      "label": "tmux.ts",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L1",
+      "id": "packages_familiar_agent_extensions_tmux_delegate_tmux_ts",
+      "community": 2,
+      "norm_label": "tmux.ts"
+    },
+    {
+      "label": "TmuxLayout",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L22",
+      "id": "tmux_tmuxlayout",
+      "community": 4,
+      "norm_label": "tmuxlayout"
+    },
+    {
+      "label": ".isInTmux()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L25",
+      "id": "tmux_tmuxlayout_isintmux",
+      "community": 4,
+      "norm_label": ".isintmux()"
+    },
+    {
+      "label": ".createPane()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L30",
+      "id": "tmux_tmuxlayout_createpane",
+      "community": 4,
+      "norm_label": ".createpane()"
+    },
+    {
+      "label": ".removePane()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L38",
+      "id": "tmux_tmuxlayout_removepane",
+      "community": 4,
+      "norm_label": ".removepane()"
+    },
+    {
+      "label": ".spawnTmuxPane()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L58",
+      "id": "tmux_tmuxlayout_spawntmuxpane",
+      "community": 4,
+      "norm_label": ".spawntmuxpane()"
+    },
+    {
+      "label": ".spawnBackground()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L98",
+      "id": "tmux_tmuxlayout_spawnbackground",
+      "community": 4,
+      "norm_label": ".spawnbackground()"
+    },
+    {
+      "label": ".count()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L117",
+      "id": "tmux_tmuxlayout_count",
+      "community": 4,
+      "norm_label": ".count()"
+    },
+    {
+      "label": ".getActiveAgents()",
+      "file_type": "code",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L121",
+      "id": "tmux_tmuxlayout_getactiveagents",
+      "community": 4,
+      "norm_label": ".getactiveagents()"
     }
   ],
   "links": [
@@ -543,15 +1065,15 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
+      "relation": "imports_from",
       "confidence": "EXTRACTED",
-      "source_file": "packages/summon/src/commands/install.ts",
-      "source_location": "L23",
+      "source_file": "packages/summon/src/cli.ts",
+      "source_location": "L2",
       "weight": 1.0,
-      "_src": "packages_summon_src_commands_install_ts",
-      "_tgt": "install_run",
-      "source": "packages_summon_src_commands_install_ts",
-      "target": "install_run",
+      "_src": "packages_summon_src_cli_ts",
+      "_tgt": "packages_summon_src_tui_flow_ts",
+      "source": "packages_summon_src_cli_ts",
+      "target": "packages_summon_src_tui_flow_ts",
       "confidence_score": 1.0
     },
     {
@@ -593,49 +1115,13 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_file": "packages/summon/src/commands/install.ts",
       "source_location": "L9",
       "weight": 1.0,
-      "_src": "packages_summon_src_utils_paths_ts",
-      "_tgt": "paths_resolvehome",
-      "source": "packages_summon_src_utils_paths_ts",
-      "target": "paths_resolvehome",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/summon/src/utils/paths.ts",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_src": "packages_summon_src_utils_paths_ts",
-      "_tgt": "paths_resolvespellsdir",
-      "source": "packages_summon_src_utils_paths_ts",
-      "target": "paths_resolvespellsdir",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/summon/src/utils/paths.ts",
-      "source_location": "L38",
-      "weight": 1.0,
-      "_src": "packages_summon_src_utils_paths_ts",
-      "_tgt": "paths_resolveagentpath",
-      "source": "packages_summon_src_utils_paths_ts",
-      "target": "paths_resolveagentpath",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/summon/src/utils/paths.ts",
-      "source_location": "L43",
-      "weight": 1.0,
-      "_src": "paths_resolveagentpath",
-      "_tgt": "paths_resolvehome",
-      "source": "paths_resolvehome",
-      "target": "paths_resolveagentpath",
+      "_src": "packages_summon_src_commands_install_ts",
+      "_tgt": "install_run",
+      "source": "packages_summon_src_commands_install_ts",
+      "target": "install_run",
       "confidence_score": 1.0
     },
     {
@@ -690,7 +1176,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L49",
+      "source_location": "L53",
       "weight": 1.0,
       "_src": "packages_summon_src_utils_fs_ts",
       "_tgt": "fs_removefile",
@@ -702,12 +1188,24 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L67",
+      "source_location": "L71",
       "weight": 1.0,
       "_src": "packages_summon_src_utils_fs_ts",
       "_tgt": "fs_ensuredir",
       "source": "packages_summon_src_utils_fs_ts",
       "target": "fs_ensuredir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/fs.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_src": "fs_symlinkfile",
+      "_tgt": "fs_exists",
+      "source": "fs_exists",
+      "target": "fs_symlinkfile",
       "confidence_score": 1.0
     },
     {
@@ -726,12 +1224,60 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/utils/fs.ts",
-      "source_location": "L42",
+      "source_location": "L46",
       "weight": 1.0,
       "_src": "fs_symlinkfile",
       "_tgt": "fs_ensuredir",
       "source": "fs_symlinkfile",
       "target": "fs_ensuredir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "packages_summon_src_utils_paths_ts",
+      "_tgt": "paths_resolvehome",
+      "source": "packages_summon_src_utils_paths_ts",
+      "target": "paths_resolvehome",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_src": "packages_summon_src_utils_paths_ts",
+      "_tgt": "paths_resolvespellsdir",
+      "source": "packages_summon_src_utils_paths_ts",
+      "target": "paths_resolvespellsdir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_src": "packages_summon_src_utils_paths_ts",
+      "_tgt": "paths_resolveagentpath",
+      "source": "packages_summon_src_utils_paths_ts",
+      "target": "paths_resolveagentpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/utils/paths.ts",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_src": "paths_resolveagentpath",
+      "_tgt": "paths_resolvehome",
+      "source": "paths_resolvehome",
+      "target": "paths_resolveagentpath",
       "confidence_score": 1.0
     },
     {
@@ -822,7 +1368,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/discovery.ts",
-      "source_location": "L21",
+      "source_location": "L24",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_discovery_ts",
       "_tgt": "discovery_discoverinstalledskills",
@@ -833,8 +1379,56 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/discovery.ts",
+      "source_location": "L100",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_discovery_ts",
+      "_tgt": "discovery_getinstalledskillnames",
+      "source": "packages_summon_src_skills_discovery_ts",
+      "target": "discovery_getinstalledskillnames",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/discovery.ts",
+      "source_location": "L114",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_discovery_ts",
+      "_tgt": "discovery_normalizeskillname",
+      "source": "packages_summon_src_skills_discovery_ts",
+      "target": "discovery_normalizeskillname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/discovery.ts",
+      "source_location": "L118",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_discovery_ts",
+      "_tgt": "discovery_filterskillsbyinstallstatus",
+      "source": "packages_summon_src_skills_discovery_ts",
+      "target": "discovery_filterskillsbyinstallstatus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/discovery.ts",
+      "source_location": "L101",
+      "weight": 1.0,
+      "_src": "discovery_getinstalledskillnames",
+      "_tgt": "discovery_discoverinstalledskills",
+      "source": "discovery_discoverinstalledskills",
+      "target": "discovery_getinstalledskillnames",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L17",
+      "source_location": "L19",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_installer_ts",
       "_tgt": "installer_ispathwithin",
@@ -846,7 +1440,19 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L34",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_src": "packages_summon_src_skills_installer_ts",
+      "_tgt": "installer_issymlinktargetsafe",
+      "source": "packages_summon_src_skills_installer_ts",
+      "target": "installer_issymlinktargetsafe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L45",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_installer_ts",
       "_tgt": "installer_installskill",
@@ -858,7 +1464,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L108",
+      "source_location": "L148",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_installer_ts",
       "_tgt": "installer_removeskill",
@@ -870,7 +1476,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L136",
+      "source_location": "L176",
       "weight": 1.0,
       "_src": "packages_summon_src_skills_installer_ts",
       "_tgt": "installer_updateskill",
@@ -882,7 +1488,19 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L62",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_src": "installer_issymlinktargetsafe",
+      "_tgt": "installer_ispathwithin",
+      "source": "installer_ispathwithin",
+      "target": "installer_issymlinktargetsafe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L73",
       "weight": 1.0,
       "_src": "installer_installskill",
       "_tgt": "installer_ispathwithin",
@@ -894,36 +1512,24 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/skills/installer.ts",
-      "source_location": "L151",
+      "source_location": "L106",
+      "weight": 1.0,
+      "_src": "installer_installskill",
+      "_tgt": "installer_issymlinktargetsafe",
+      "source": "installer_issymlinktargetsafe",
+      "target": "installer_installskill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/skills/installer.ts",
+      "source_location": "L191",
       "weight": 1.0,
       "_src": "installer_updateskill",
       "_tgt": "installer_installskill",
       "source": "installer_installskill",
       "target": "installer_updateskill",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/summon/src/tui/banner.ts",
-      "source_location": "L28",
-      "weight": 1.0,
-      "_src": "packages_summon_src_tui_banner_ts",
-      "_tgt": "banner_showbanner",
-      "source": "packages_summon_src_tui_banner_ts",
-      "target": "banner_showbanner",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/summon/src/tui/agent-select.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_src": "packages_summon_src_tui_agent_select_ts",
-      "_tgt": "agent_select_selectagents",
-      "source": "packages_summon_src_tui_agent_select_ts",
-      "target": "agent_select_selectagents",
       "confidence_score": 1.0
     },
     {
@@ -939,15 +1545,39 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "packages_summon_src_tui_action_menu_ts",
+      "source": "packages_summon_src_tui_action_menu_ts",
+      "target": "packages_summon_src_tui_flow_ts",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/summon/src/tui/skill-browse.ts",
-      "source_location": "L8",
+      "source_location": "L9",
       "weight": 1.0,
       "_src": "packages_summon_src_tui_skill_browse_ts",
       "_tgt": "skill_browse_browseskills",
       "source": "packages_summon_src_tui_skill_browse_ts",
       "target": "skill_browse_browseskills",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "packages_summon_src_tui_skill_browse_ts",
+      "source": "packages_summon_src_tui_skill_browse_ts",
+      "target": "packages_summon_src_tui_flow_ts",
       "confidence_score": 1.0
     },
     {
@@ -960,6 +1590,18 @@
       "_tgt": "method_select_selectmethod",
       "source": "packages_summon_src_tui_method_select_ts",
       "target": "method_select_selectmethod",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "packages_summon_src_tui_method_select_ts",
+      "source": "packages_summon_src_tui_method_select_ts",
+      "target": "packages_summon_src_tui_flow_ts",
       "confidence_score": 1.0
     },
     {
@@ -984,6 +1626,858 @@
       "_tgt": "progress_withspinner",
       "source": "packages_summon_src_tui_progress_ts",
       "target": "progress_withspinner",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "packages_summon_src_tui_progress_ts",
+      "source": "packages_summon_src_tui_progress_ts",
+      "target": "packages_summon_src_tui_flow_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/scope-select.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_scope_select_ts",
+      "_tgt": "scope_select_selectscope",
+      "source": "packages_summon_src_tui_scope_select_ts",
+      "target": "scope_select_selectscope",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "packages_summon_src_tui_scope_select_ts",
+      "source": "packages_summon_src_tui_scope_select_ts",
+      "target": "packages_summon_src_tui_flow_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/confirmation.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_confirmation_ts",
+      "_tgt": "confirmation_showconfirmation",
+      "source": "packages_summon_src_tui_confirmation_ts",
+      "target": "confirmation_showconfirmation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "packages_summon_src_tui_confirmation_ts",
+      "source": "packages_summon_src_tui_confirmation_ts",
+      "target": "packages_summon_src_tui_flow_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/agent-select.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_agent_select_ts",
+      "_tgt": "agent_select_selectagents",
+      "source": "packages_summon_src_tui_agent_select_ts",
+      "target": "agent_select_selectagents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "packages_summon_src_tui_agent_select_ts",
+      "source": "packages_summon_src_tui_agent_select_ts",
+      "target": "packages_summon_src_tui_flow_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "packages_summon_src_tui_banner_ts",
+      "source": "packages_summon_src_tui_flow_ts",
+      "target": "packages_summon_src_tui_banner_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/flow.ts",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_flow_ts",
+      "_tgt": "flow_runinteractiveflow",
+      "source": "packages_summon_src_tui_flow_ts",
+      "target": "flow_runinteractiveflow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/summon/src/tui/banner.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_src": "packages_summon_src_tui_banner_ts",
+      "_tgt": "banner_showbanner",
+      "source": "packages_summon_src_tui_banner_ts",
+      "target": "banner_showbanner",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_decode",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_decode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_generatepkce",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_generatepkce",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_loginanthropic",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_loginanthropic",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L83",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_refreshanthropictoken",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_refreshanthropictoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L104",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_readclaudeclicredentials",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_readclaudeclicredentials",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L121",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_writebacktoken",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_writebacktoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L145",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_extractfirstusermessagetext",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_extractfirstusermessagetext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L159",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_computecch",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_computecch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L163",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_computeversionsuffix",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_computeversionsuffix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L171",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_buildbillingheadervalue",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_buildbillingheadervalue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L181",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_transformbody",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_transformbody",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L303",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_tocc",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_tocc",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L304",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_fromcc",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_fromcc",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L306",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_sanitize",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_sanitize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L310",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_convertcontentblocks",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_convertcontentblocks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L322",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_convertmessages",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_convertmessages",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L373",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_converttools",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_converttools",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L381",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_mapstopreason",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_mapstopreason",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L390",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_striptoolprefix",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_striptoolprefix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L404",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "_tgt": "anthropic_pro_streamanthropicpro",
+      "source": "packages_familiar_agent_extensions_anthropic_pro_ts",
+      "target": "anthropic_pro_streamanthropicpro",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_src": "anthropic_pro_loginanthropic",
+      "_tgt": "anthropic_pro_generatepkce",
+      "source": "anthropic_pro_generatepkce",
+      "target": "anthropic_pro_loginanthropic",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L172",
+      "weight": 1.0,
+      "_src": "anthropic_pro_buildbillingheadervalue",
+      "_tgt": "anthropic_pro_extractfirstusermessagetext",
+      "source": "anthropic_pro_extractfirstusermessagetext",
+      "target": "anthropic_pro_buildbillingheadervalue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L174",
+      "weight": 1.0,
+      "_src": "anthropic_pro_buildbillingheadervalue",
+      "_tgt": "anthropic_pro_computecch",
+      "source": "anthropic_pro_computecch",
+      "target": "anthropic_pro_buildbillingheadervalue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L173",
+      "weight": 1.0,
+      "_src": "anthropic_pro_buildbillingheadervalue",
+      "_tgt": "anthropic_pro_computeversionsuffix",
+      "source": "anthropic_pro_computeversionsuffix",
+      "target": "anthropic_pro_buildbillingheadervalue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L187",
+      "weight": 1.0,
+      "_src": "anthropic_pro_transformbody",
+      "_tgt": "anthropic_pro_buildbillingheadervalue",
+      "source": "anthropic_pro_buildbillingheadervalue",
+      "target": "anthropic_pro_transformbody",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L347",
+      "weight": 1.0,
+      "_src": "anthropic_pro_convertmessages",
+      "_tgt": "anthropic_pro_tocc",
+      "source": "anthropic_pro_tocc",
+      "target": "anthropic_pro_convertmessages",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L312",
+      "weight": 1.0,
+      "_src": "anthropic_pro_convertcontentblocks",
+      "_tgt": "anthropic_pro_sanitize",
+      "source": "anthropic_pro_sanitize",
+      "target": "anthropic_pro_convertcontentblocks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L328",
+      "weight": 1.0,
+      "_src": "anthropic_pro_convertmessages",
+      "_tgt": "anthropic_pro_sanitize",
+      "source": "anthropic_pro_sanitize",
+      "target": "anthropic_pro_convertmessages",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/anthropic-pro.ts",
+      "source_location": "L351",
+      "weight": 1.0,
+      "_src": "anthropic_pro_convertmessages",
+      "_tgt": "anthropic_pro_convertcontentblocks",
+      "source": "anthropic_pro_convertcontentblocks",
+      "target": "anthropic_pro_convertmessages",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_agents_ts",
+      "_tgt": "agents_parsefrontmatter",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_agents_ts",
+      "target": "agents_parsefrontmatter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_agents_ts",
+      "_tgt": "agents_loadagentsfromdir",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_agents_ts",
+      "target": "agents_loadagentsfromdir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_agents_ts",
+      "_tgt": "agents_findprojectagentsdir",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_agents_ts",
+      "target": "agents_findprojectagentsdir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
+      "source_location": "L108",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_agents_ts",
+      "_tgt": "agents_discoveragents",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_agents_ts",
+      "target": "agents_discoveragents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "_tgt": "packages_familiar_agent_extensions_tmux_delegate_agents_ts",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_agents_ts",
+      "target": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
+      "source_location": "L114",
+      "weight": 1.0,
+      "_src": "agents_discoveragents",
+      "_tgt": "agents_loadagentsfromdir",
+      "source": "agents_loadagentsfromdir",
+      "target": "agents_discoveragents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/agents.ts",
+      "source_location": "L110",
+      "weight": 1.0,
+      "_src": "agents_discoveragents",
+      "_tgt": "agents_findprojectagentsdir",
+      "source": "agents_findprojectagentsdir",
+      "target": "agents_discoveragents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "_tgt": "handoff_generateid",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "target": "handoff_generateid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "_tgt": "handoff_buildhandofffile",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "target": "handoff_buildhandofffile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "_tgt": "handoff_buildsystempromptfile",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "target": "handoff_buildsystempromptfile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "_tgt": "handoff_buildrunscript",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "target": "handoff_buildrunscript",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L112",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "_tgt": "handoff_waitforresult",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "target": "handoff_waitforresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L140",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "_tgt": "handoff_readresult",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "target": "handoff_readresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
+      "source_location": "L149",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "_tgt": "handoff_cleanup",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "target": "handoff_cleanup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "_tgt": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
+      "target": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "_tgt": "packages_familiar_agent_extensions_tmux_delegate_tmux_ts",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "target": "packages_familiar_agent_extensions_tmux_delegate_tmux_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "_tgt": "index_execute",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "target": "index_execute",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
+      "source_location": "L181",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "_tgt": "index_runagent",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "target": "index_runagent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
+      "source_location": "L239",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "_tgt": "index_sleep",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_index_ts",
+      "target": "index_sleep",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/index.ts",
+      "source_location": "L230",
+      "weight": 1.0,
+      "_src": "index_runagent",
+      "_tgt": "index_sleep",
+      "source": "index_runagent",
+      "target": "index_sleep",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_src": "packages_familiar_agent_extensions_tmux_delegate_tmux_ts",
+      "_tgt": "tmux_tmuxlayout",
+      "source": "packages_familiar_agent_extensions_tmux_delegate_tmux_ts",
+      "target": "tmux_tmuxlayout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_src": "tmux_tmuxlayout",
+      "_tgt": "tmux_tmuxlayout_isintmux",
+      "source": "tmux_tmuxlayout",
+      "target": "tmux_tmuxlayout_isintmux",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_src": "tmux_tmuxlayout",
+      "_tgt": "tmux_tmuxlayout_createpane",
+      "source": "tmux_tmuxlayout",
+      "target": "tmux_tmuxlayout_createpane",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_src": "tmux_tmuxlayout",
+      "_tgt": "tmux_tmuxlayout_removepane",
+      "source": "tmux_tmuxlayout",
+      "target": "tmux_tmuxlayout_removepane",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_src": "tmux_tmuxlayout",
+      "_tgt": "tmux_tmuxlayout_spawntmuxpane",
+      "source": "tmux_tmuxlayout",
+      "target": "tmux_tmuxlayout_spawntmuxpane",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_src": "tmux_tmuxlayout",
+      "_tgt": "tmux_tmuxlayout_spawnbackground",
+      "source": "tmux_tmuxlayout",
+      "target": "tmux_tmuxlayout_spawnbackground",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L117",
+      "weight": 1.0,
+      "_src": "tmux_tmuxlayout",
+      "_tgt": "tmux_tmuxlayout_count",
+      "source": "tmux_tmuxlayout",
+      "target": "tmux_tmuxlayout_count",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L121",
+      "weight": 1.0,
+      "_src": "tmux_tmuxlayout",
+      "_tgt": "tmux_tmuxlayout_getactiveagents",
+      "source": "tmux_tmuxlayout",
+      "target": "tmux_tmuxlayout_getactiveagents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_src": "tmux_tmuxlayout_createpane",
+      "_tgt": "tmux_tmuxlayout_isintmux",
+      "source": "tmux_tmuxlayout_isintmux",
+      "target": "tmux_tmuxlayout_createpane",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_src": "tmux_tmuxlayout_createpane",
+      "_tgt": "tmux_tmuxlayout_spawnbackground",
+      "source": "tmux_tmuxlayout_createpane",
+      "target": "tmux_tmuxlayout_spawnbackground",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_src": "tmux_tmuxlayout_createpane",
+      "_tgt": "tmux_tmuxlayout_spawntmuxpane",
+      "source": "tmux_tmuxlayout_createpane",
+      "target": "tmux_tmuxlayout_spawntmuxpane",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
+      "source_location": "L91",
+      "weight": 1.0,
+      "_src": "tmux_tmuxlayout_spawntmuxpane",
+      "_tgt": "tmux_tmuxlayout_spawnbackground",
+      "source": "tmux_tmuxlayout_spawntmuxpane",
+      "target": "tmux_tmuxlayout_spawnbackground",
       "confidence_score": 1.0
     }
   ],
