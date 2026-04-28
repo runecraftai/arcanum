@@ -9,7 +9,9 @@ import {
   isSymlink,
 } from "../utils/fs";
 import { SKILLS_DIR, SKILL_MANIFEST } from "../constants";
+import { resolveGlobalSkillsHub } from "../utils/paths";
 import type { SkillMeta } from "./loader";
+import type { AgentScope } from "../utils/paths";
 
 export type InstallMethod = "copy" | "symlink";
 
@@ -41,9 +43,18 @@ export interface InstallResult {
 
 /**
  * Get the hub skill path for a given project root and skill name.
- * Returns: <projectRoot>/.agents/skills/<skillName>/
+ * Returns: 
+ *   - For global scope: ~/.agents/skills/<skillName>
+ *   - Otherwise: <projectRoot>/.agents/skills/<skillName>/
  */
-export function getHubSkillPath(projectRoot: string, skillName: string): string {
+export function getHubSkillPath(
+  projectRoot: string,
+  skillName: string,
+  scope: AgentScope = "project"
+): string {
+  if (scope === "global") {
+    return resolveGlobalSkillsHub(skillName);
+  }
   return path.join(projectRoot, SKILLS_DIR, skillName);
 }
 
@@ -62,7 +73,8 @@ export function computeRelativePath(from: string, to: string): string {
  */
 export async function createHubSymlink(
   sourcePath: string,
-  hubPath: string
+  hubPath: string,
+  scope: AgentScope = "project"
 ): Promise<void> {
   await ensureDir(hubPath);
 
@@ -196,7 +208,8 @@ export async function installSkill(
   agentInstallDir: string,
   method: InstallMethod = "copy",
   agentId: string = "",
-  cwd: string = process.cwd()
+  cwd: string = process.cwd(),
+  scope: AgentScope = "project"
 ): Promise<InstallResult> {
   const skillFilePath = path.join(agentInstallDir, `${skill.name}.md`);
   try {
@@ -206,7 +219,7 @@ export async function installSkill(
     if (err) return { ...err, agentId };
     await ensureDir(agentInstallDir);
     if (method === "symlink") {
-      const hubPath = getHubSkillPath(cwd, skill.name);
+      const hubPath = getHubSkillPath(cwd, skill.name, scope);
       const symErr = await createSkillSymlink(skill, hubPath, skillFilePath);
       if (symErr) return { ...symErr, agentId };
     } else {
@@ -222,11 +235,12 @@ export async function removeSkill(
   skillName: string,
   skillFilePath: string,
   agentId: string = "",
-  cwd: string = process.cwd()
+  cwd: string = process.cwd(),
+  scope: AgentScope = "project"
 ): Promise<InstallResult> {
   try {
     await removeFile(skillFilePath);
-    const hubPath = getHubSkillPath(cwd, skillName);
+    const hubPath = getHubSkillPath(cwd, skillName, scope);
     if (await exists(hubPath)) {
       try {
         await fs.rm(hubPath, { recursive: true, force: true });
@@ -295,21 +309,22 @@ export async function updateSkill(
   skillFilePath: string,
   method: InstallMethod = "copy",
   agentId: string = "",
-  cwd: string = process.cwd()
+  cwd: string = process.cwd(),
+  scope: AgentScope = "project"
 ): Promise<InstallResult> {
   try {
     const agentInstallDir = path.dirname(skillFilePath);
     if (method === "symlink") {
       let err = await validateUpdateTarget(skill);
       if (err) return { ...err, agentId };
-      const hubPath = getHubSkillPath(cwd, skill.name);
+      const hubPath = getHubSkillPath(cwd, skill.name, scope);
       const hubSkillFile = path.join(hubPath, SKILL_MANIFEST);
       const healErr = await healSymlinkChain(skill, hubPath, hubSkillFile, skillFilePath);
       if (healErr) return { ...healErr, agentId };
       return resultSuccess(skill.name, agentId, method);
     } else {
       await removeFile(skillFilePath);
-      return await installSkill(skill, skillSourcePath, agentInstallDir, method, agentId, cwd);
+      return await installSkill(skill, skillSourcePath, agentInstallDir, method, agentId, cwd, scope);
     }
   } catch (error) {
     return resultError(skill.name, agentId, method, "Update failed — check file permissions");

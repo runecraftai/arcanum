@@ -11,6 +11,7 @@ import {
 } from "../installer";
 import type { SkillMeta } from "../loader";
 import { copyFile } from "../../utils/fs";
+import * as pathUtils from "../../utils/paths";
 
 describe("installer", () => {
   let tmpDir: string;
@@ -34,6 +35,15 @@ describe("installer", () => {
   afterEach(async () => {
     try {
       await fs.rm(tmpDir, { recursive: true, force: true });
+    } catch {}
+    // Clean up any global test skills created during tests
+    try {
+      const globalTestSkillDir = path.join(os.homedir(), ".agents", "skills", "test-skill");
+      await fs.rm(globalTestSkillDir, { recursive: true, force: true });
+    } catch {}
+    try {
+      const globalTestSkillCopyDir = path.join(os.homedir(), ".agents", "skills", "test-skill-copy");
+      await fs.rm(globalTestSkillCopyDir, { recursive: true, force: true });
     } catch {}
   });
 
@@ -153,6 +163,105 @@ describe("installer", () => {
     try {
       await fs.lstat(hubPath);
       expect.unreachable();
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code !== "ENOENT") {
+        throw err;
+      }
+    }
+  });
+
+  it("getHubSkillPath with scope='global' returns ~/.agents/skills/<name>", () => {
+    const skillName = "test-skill";
+    const globalPath = getHubSkillPath(tmpDir, skillName, "global");
+    const homedir = os.homedir();
+    const expectedPath = path.join(homedir, ".agents", "skills", skillName);
+    expect(globalPath).toBe(expectedPath);
+  });
+
+  it("getHubSkillPath with scope='project' returns <root>/.agents/skills/<name>", () => {
+    const skillName = "test-skill";
+    const projectPath = getHubSkillPath(tmpDir, skillName, "project");
+    const expectedPath = path.join(tmpDir, ".agents", "skills", skillName);
+    expect(projectPath).toBe(expectedPath);
+  });
+
+  it("getHubSkillPath with default scope returns <root>/.agents/skills/<name>", () => {
+    const skillName = "test-skill";
+    const defaultPath = getHubSkillPath(tmpDir, skillName);
+    const expectedPath = path.join(tmpDir, ".agents", "skills", skillName);
+    expect(defaultPath).toBe(expectedPath);
+  });
+
+  it("installSkill with global scope symlink uses global hub path", async () => {
+    const skill: SkillMeta = {
+      name: "test-skill",
+      category: "test",
+      description: "Test skill",
+      filePath: skillSourcePath,
+    };
+
+    const result = await installSkill(
+      skill,
+      skillSourcePath,
+      agentInstallDir,
+      "symlink",
+      "test-agent",
+      tmpDir,
+      "global"
+    );
+
+    expect(result.success).toBe(true);
+    expect(result.method).toBe("symlink");
+
+    // Check agent symlink was created
+    const agentSkillFile = path.join(agentInstallDir, "test-skill.md");
+    const stats = await fs.lstat(agentSkillFile);
+    expect(stats.isSymbolicLink()).toBe(true);
+
+    // Check that global hub was created
+    const globalHubPath = pathUtils.resolveGlobalSkillsHub("test-skill");
+    const hubSkillFile = path.join(globalHubPath, "SKILL.md");
+    try {
+      const hubStats = await fs.lstat(hubSkillFile);
+      expect(hubStats.isSymbolicLink()).toBe(true);
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code === "ENOENT") {
+        expect.unreachable(`Global hub symlink not created at ${hubSkillFile}`);
+      }
+      throw err;
+    }
+  });
+
+  it("installSkill with copy method does NOT use hub path regardless of scope", async () => {
+    const skill: SkillMeta = {
+      name: "test-skill-copy",
+      category: "test",
+      description: "Test skill",
+      filePath: skillSourcePath,
+    };
+
+    const result = await installSkill(
+      skill,
+      skillSourcePath,
+      agentInstallDir,
+      "copy",
+      "test-agent",
+      tmpDir,
+      "global"
+    );
+
+    expect(result.success).toBe(true);
+    expect(result.method).toBe("copy");
+
+    const agentSkillFile = path.join(agentInstallDir, "test-skill-copy.md");
+    const stats = await fs.lstat(agentSkillFile);
+    expect(stats.isSymbolicLink()).toBe(false);
+
+    // Verify no global hub was created for copy method
+    const globalHubPath = pathUtils.resolveGlobalSkillsHub("test-skill-copy");
+    try {
+      await fs.lstat(globalHubPath);
+      expect.unreachable("Copy method should NOT create hub directory");
     } catch (err) {
       if ((err as NodeJS.ErrnoException).code !== "ENOENT") {
         throw err;

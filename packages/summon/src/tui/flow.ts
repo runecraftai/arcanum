@@ -114,14 +114,12 @@ async function stepSelectMethod(state: FlowState): Promise<FlowState> {
     return { ...state, step: 3 };
   }
   const method = result;
-  const nextStep = method === "symlink" ? 6 : 5;
-  const scope = method === "symlink" ? "local" : state.scope;
+  const nextStep = 5; // always go through scope selection
 
   return {
     ...state,
     step: nextStep,
     method,
-    scope,
   };
 }
 
@@ -175,7 +173,8 @@ async function executeInstall(
     agent.installDir,
     state.method as "copy" | "symlink",
     agent.id,
-    process.cwd()
+    process.cwd(),
+    agent.scope as "global" | "project"
   );
 }
 
@@ -197,7 +196,8 @@ async function executeUpdate(
     installedSkill.filePath,
     installedSkill.method,
     installedSkill.agentId,
-    process.cwd()
+    process.cwd(),
+    agent.scope as "global" | "project"
   );
 }
 
@@ -216,7 +216,8 @@ async function executeRemove(
     installedSkill.skillName,
     installedSkill.filePath,
     installedSkill.agentId,
-    process.cwd()
+    process.cwd(),
+    agent.scope as "global" | "project"
   );
 }
 

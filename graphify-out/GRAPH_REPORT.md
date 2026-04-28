@@ -1,11 +1,11 @@
-# Graph Report - .  (2026-04-27)
+# Graph Report - .  (2026-04-28)
 
 ## Corpus Check
-- 30 files · ~32,588 words
+- 30 files · ~33,089 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 137 nodes · 168 edges · 20 communities detected
+- 138 nodes · 169 edges · 21 communities detected
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
@@ -30,6 +30,7 @@
 - [[_COMMUNITY_Community 17|Community 17]]
 - [[_COMMUNITY_Community 18|Community 18]]
 - [[_COMMUNITY_Community 19|Community 19]]
+- [[_COMMUNITY_Community 20|Community 20]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `installSkill()` - 8 edges
@@ -49,7 +50,7 @@
 ## Communities
 
 ### Community 0 - "Community 0"
-Cohesion: 0.06
+Cohesion: 0.07
 Nodes (0): 
 
 ### Community 1 - "Community 1"
@@ -81,19 +82,19 @@ Cohesion: 0.4
 Nodes (2): discoverInstalledSkills(), getInstalledSkillNames()
 
 ### Community 8 - "Community 8"
-Cohesion: 0.83
-Nodes (3): findSkills(), installSkill(), main()
+Cohesion: 0.5
+Nodes (2): resolveAgentPath(), resolveHome()
 
 ### Community 9 - "Community 9"
-Cohesion: 0.67
-Nodes (2): resolveAgentPath(), resolveHome()
+Cohesion: 0.83
+Nodes (3): findSkills(), installSkill(), main()
 
 ### Community 10 - "Community 10"
 Cohesion: 0.83
 Nodes (3): loadSkillCatalog(), parseFrontmatter(), sanitizeSkillName()
 
 ### Community 11 - "Community 11"
-Cohesion: 1.0
+Cohesion: 0.5
 Nodes (0): 
 
 ### Community 12 - "Community 12"
@@ -128,24 +129,28 @@ Nodes (0):
 Cohesion: 1.0
 Nodes (0): 
 
+### Community 20 - "Community 20"
+Cohesion: 1.0
+Nodes (0): 
+
 ## Knowledge Gaps
-- **Thin community `Community 11`** (2 nodes): `update.ts`, `run()`
+- **Thin community `Community 12`** (2 nodes): `update.ts`, `run()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 12`** (2 nodes): `remove.ts`, `run()`
+- **Thin community `Community 13`** (2 nodes): `remove.ts`, `run()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 13`** (2 nodes): `run()`, `list.ts`
+- **Thin community `Community 14`** (2 nodes): `run()`, `list.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 14`** (2 nodes): `run()`, `install.ts`
+- **Thin community `Community 15`** (2 nodes): `run()`, `install.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 15`** (2 nodes): `detectAgents()`, `detector.ts`
+- **Thin community `Community 16`** (2 nodes): `detectAgents()`, `detector.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 16`** (2 nodes): `resolver.ts`, `resolveInstallPath()`
+- **Thin community `Community 17`** (2 nodes): `resolver.ts`, `resolveInstallPath()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 17`** (1 nodes): `constants.ts`
+- **Thin community `Community 18`** (1 nodes): `constants.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 18`** (1 nodes): `registry.ts`
+- **Thin community `Community 19`** (1 nodes): `registry.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 19`** (1 nodes): `installer.test.ts`
+- **Thin community `Community 20`** (1 nodes): `installer.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
@@ -154,6 +159,6 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `TmuxLayout` connect `Community 5` to `Community 3`?**
   _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.06 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.14 - nodes in this community are weakly interconnected._

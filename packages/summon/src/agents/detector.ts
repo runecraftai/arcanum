@@ -7,6 +7,7 @@ export interface DetectedAgent {
   name: string;
   detected: boolean;
   installDir: string;
+  scope: string; // "global" or "project"
 }
 
 /**
@@ -34,6 +35,7 @@ export async function detectAgents(): Promise<DetectedAgent[]> {
       name: agent.name,
       detected,
       installDir,
+      scope: agent.scope,
     });
   }
 
