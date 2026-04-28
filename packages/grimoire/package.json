@@ -1,7 +1,7 @@
 {
   "name": "@runecraftai/grimoire",
   "version": "0.0.2",
-  "private": false,
+  "private": true,
   "description": "Shared configurations for Arcanum packages",
   "license": "MIT",
   "files": [
