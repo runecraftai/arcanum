@@ -16,10 +16,10 @@ When making changes that affect public packages, you'll need to create a changes
    ```
 
 2. **Select affected packages** — You'll be prompted to select which packages are affected by your changes:
-    - ✓ `@runecraftai/guild` (public)
-    - ✓ `@runecraftai/grimoire` (public)
-    - ✓ `@runecraft/summon` (public)
-    - ✗ `@runecraftai/familiar` (private — automatically excluded)
+     - ✓ `@runecraft/guild` (public)
+     - ✓ `@runecraft/grimoire` (public)
+     - ✓ `@runecraft/summon` (public)
+     - ✗ `@runecraft/familiar` (private — automatically excluded)
 
 3. **Choose a change type** — Select the appropriate semver bump:
    - `patch` — Bug fixes, small improvements
@@ -38,8 +38,8 @@ When making changes that affect public packages, you'll need to create a changes
 
 ```markdown
 ---
-"@runecraftai/guild": minor
-"@runecraftai/grimoire": patch
+"@runecraft/guild": minor
+"@runecraft/grimoire": patch
 "@runecraft/summon": patch
 ---
 
@@ -50,11 +50,11 @@ Add new agent configuration schema and fix typo in grimoire docs.
 
 | Package | Status | Built | Published |
 |---------|--------|-------|-----------|
-| `@runecraftai/guild` | Public | Yes | Yes (npm) |
-| `@runecraftai/grimoire` | Public | Yes | Yes (npm) |
+| `@runecraft/guild` | Public | Yes | Yes (npm) |
+| `@runecraft/grimoire` | Public | Yes | Yes (npm) |
 | `@runecraft/summon` | Public | Yes | Yes (npm) |
 | `@runecraft/spells` | Public | Yes | Yes (npm) |
-| `@runecraftai/familiar` | **Private** | Yes | No |
+| `@runecraft/familiar` | **Private** | Yes | No |
 
 - **Built packages** have a `build` script and produce dist/ artifacts
 - **Published packages** are pushed to npm registry on release
@@ -77,7 +77,7 @@ To set up publishing, you need an npm Automation token:
 2. Navigate to **Secrets and variables** → **Actions**
 3. Click **New repository secret**
 4. Create secret named `NPM_TOKEN` and paste your token
-5. Verify the token has access to both `@runecraftai/*` orgs
+5. Verify the token has access to the `@runecraft` org
 
 ### Release Process (Automated)
 
@@ -114,26 +114,25 @@ All packages use `workspace:*` to reference each other:
 ```json
 {
   "dependencies": {
-    "@runecraftai/grimoire": "workspace:*"
+    "@runecraft/grimoire": "workspace:*"
   }
 }
 ```
 
 This ensures they stay in sync during development. The `@changesets/cli` automatically converts these to proper semver ranges during publishing.
 
-### Package Scopes
+### Package Scope
 
-The monorepo uses two scopes for packages:
-- **`@runecraft`** — summon, spells
-- **`@runecraftai`** — guild, grimoire, familiar
+The monorepo uses the `@runecraft` scope for all packages:
+- **`@runecraft`** — guild, grimoire, summon, spells, familiar
 
 ### Familiar is Excluded
 
-`@runecraftai/familiar` is configured in `.changeset/config.json` as an ignored package:
+`@runecraft/familiar` is configured in `.changeset/config.json` as an ignored package:
 
 ```json
 {
-  "ignore": ["@runecraftai/familiar"]
+  "ignore": ["@runecraft/familiar"]
 }
 ```
 
