@@ -7,5 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@runecraftai/familiar"]
+  "ignore": ["@runecraftai/familiar", "@runecraftai/guild", "@runecraftai/grimoire"]
 }
