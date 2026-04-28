@@ -193,7 +193,17 @@ After shipping:
    - Share changelog with team
    - Update documentation websites
 
-### Step 7: Post-Ship Documentation
+### Step 7: Final Step: Update STATE
+
+After shipping:
+1. Update `.specs/features/<name>/STATE.md`: set `status: shipped`, set `shipped: YYYY-MM-DD`
+2. Update `.specs/project/STATE.md`:
+   - Add lesson entry if anything noteworthy was learned during this feature
+   - Close any blockers in `## Blockers` that were resolved by this feature
+   - Add shipped feature to `## Decisions` if it introduced an architectural decision
+3. Archive session log: ensure `.specs/sessions/YYYY-MM-DD-<name>.md` is written
+
+### Step 8: Post-Ship Documentation
 
 Create a post-ship summary:
 
@@ -229,7 +239,7 @@ Create a post-ship summary:
 - Schedule post-release review in 1 week
 ```
 
-### Step 8: Archive Feature
+### Step 9: Archive Feature
 
 Once shipped:
 

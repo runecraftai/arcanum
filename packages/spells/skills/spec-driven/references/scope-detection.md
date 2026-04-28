@@ -20,7 +20,8 @@ When the user invokes `/spec`, the agent scores the complexity of the request us
 |-------|-------|-----------|
 | ≤ 4 | **Quick** | TASK.md only |
 | 5–9 | **Medium** | spec.md + tasks.md |
-| ≥ 10 | **Large** | spec.md + design.md + tasks.md |
+| 10–11 | **Large** | spec.md + design.md + tasks.md |
+| ≥ 12 | **Complex** | spec.md + context.md + design.md + tasks.md |
 
 ## Presenting to the User
 
@@ -33,12 +34,24 @@ After scoring, the agent should:
 Example:
 > "Based on your description, I'm scoring this as: files=2 (×2=4), concepts=1 (×2=2), ambiguity=0, integrations=1, risk=0 → Total: 7 → **Medium scope**. Does this look right, or would you like to adjust?"
 
+### Complex Scope (Score ≥12)
+
+Characteristics of Complex features:
+- Touches 4+ distinct modules or subsystems
+- Requires new architectural patterns not currently in the codebase
+- Has 4+ external integration points
+- Involves data migrations or breaking API changes
+- Requires domain expertise not currently documented
+
+Complex workflow: SPEC (with mandatory Discuss → context.md) → PLAN (formal design.md) → BUILD → TEST (with UAT) → REVIEW → SIMPLIFY → SHIP
+
 ## Manual Override
 
 The user can specify scope explicitly:
 - `/spec quick <description>` → force Quick
 - `/spec medium <description>` → force Medium
 - `/spec large <description>` → force Large
+- `/spec complex <description>` → force Complex
 
 ## Examples
 
@@ -68,3 +81,12 @@ The user can specify scope explicitly:
 - Integrations: 2 (1)
 - Risk: medium (1)
 - **Total: 15 → Large**
+
+### Complex (score 13)
+"Implement multi-tenant billing with Stripe, usage metering, and invoice generation"
+- Files: 10+ files (score 3 ×2 = 6)
+- Concepts: 3+ new (Stripe webhooks, metering, invoice PDF) (score 3 ×2 = 6)
+- Ambiguity: significant (2)
+- Integrations: 4+ (Stripe, metering service, invoice service) (2)
+- Risk: high (2)
+- **Total: 18 → Complex**

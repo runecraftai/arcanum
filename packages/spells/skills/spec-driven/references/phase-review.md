@@ -8,6 +8,17 @@ After TEST passes, when user triggers: `/review`, `code review`, `review this`, 
 
 Assess code quality comprehensively across multiple dimensions. Provide constructive feedback and a verdict on readiness for simplification and shipping.
 
+## Multi-Agent Review Flow
+
+In the multi-agent system, REVIEW maps to two sequential sub-agents:
+
+1. **Ward** (security review) — reviews for vulnerabilities, auth issues, input validation, secrets. See `sub-agent-delegation.md` for input/output contracts.
+2. **Arbiter** (quality review) — reviews for code quality, spec compliance, consistency. See `sub-agent-delegation.md` for input/output contracts.
+
+Flow: `Forge completes BUILD` → `Ward reviews` → if APPROVE → `Arbiter reviews` → if APPROVE → proceed to SIMPLIFY.
+
+If Ward or Arbiter returns REJECT: return all findings to BUILD phase with explicit list of items to fix. Re-run full review after fix.
+
 ## Steps
 
 ### Step 1: Load Implementation

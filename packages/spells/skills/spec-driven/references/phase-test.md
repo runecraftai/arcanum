@@ -139,6 +139,13 @@ curl -X POST http://localhost:3000/auth/login \
   -d '{"email":"user@example.com","password":"pass123"}'
 ```
 
+### UAT Sub-Step
+
+After automated tests pass, run UAT scenarios for user-facing features.
+→ See `test-uat.md` for scenario template, scope rules, and sign-off criteria.
+
+Skip UAT if: feature has no user-facing changes (backend only, internal tooling, refactoring).
+
 ### Step 8: Completion
 
 When all tests pass and coverage is adequate:
