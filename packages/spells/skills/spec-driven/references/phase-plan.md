@@ -8,6 +8,21 @@ After SPEC is approved, when user triggers: `/plan`, `plan this`, `break into ta
 
 Break the specification into atomic, verifiable, sequentially ordered tasks that can be executed independently while respecting dependencies. Produce a comprehensive task breakdown that guides implementation.
 
+## Auto-Skip Rules
+
+The PLAN phase depth depends on scope:
+
+| Scope | Score | PLAN Action | Artifacts |
+|-------|-------|-------------|-----------|
+| Quick | 1-3 | **Skip entirely** — tasks implicit in BUILD | None |
+| Medium | 4-6 | **Inline plan** — write plan as section in spec.md | spec.md section only |
+| Large | 7-11 | **Formal plan** — produce design.md | design.md |
+| Complex | ≥12 | **Formal plan + Discuss** — context.md required before planning | context.md + design.md |
+
+**Safety valve**: If during planning the knowledge chain returns MEDIUM or LOW confidence, pause and request Scout exploration before continuing. Do not plan from uncertain context.
+
+**Pre-condition**: Run knowledge chain verification (→ see `knowledge-chain.md`). If confidence = LOW, pause and request Scout exploration before proceeding.
+
 ## Steps
 
 ### Step 1: Read Specification
@@ -93,11 +108,11 @@ If scope is Large, create `.specs/features/<name>/design.md` using template `des
 1. Check existing codebase for reusable components (search by domain)
 2. If `codenavi` skill available, use it for deeper navigation
 3. Apply **Knowledge Verification Chain**:
-   - First: existing codebase (`src/`, `lib/`, `packages/`)
-   - Second: project docs (`docs/`, `.specs/codebase/`)
-   - Third: `context7` if available (external library docs)
-   - Fourth: general knowledge
-   - Flag anything uncertain
+    - First: existing codebase (`src/`, `lib/`, `packages/`)
+    - Second: project docs (`.specs/project/`, `.specs/codebase/`)
+    - Third: `context7` if available (external library docs)
+    - Fourth: general knowledge
+    - Flag anything uncertain
 
 4. Fill design.md sections:
    - **Architecture Overview**: How components fit together

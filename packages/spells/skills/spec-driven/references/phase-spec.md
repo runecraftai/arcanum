@@ -8,6 +8,8 @@ After LOAD, when user triggers: `/spec`, `specify`, `write spec`, `what should w
 
 Capture what to build with testable, traceable requirements. Produce a specification artifact that serves as the source of truth for subsequent phases.
 
+**Pre-condition**: Run knowledge chain verification (→ see `knowledge-chain.md`). If confidence = LOW, pause and request Scout exploration before proceeding.
+
 ## Steps
 
 ### Step 1: Scope Detection
@@ -22,9 +24,11 @@ Use the scoring matrix in `scope-detection.md` to determine scope (Quick/Medium/
    - **Risk**: High-impact or experimental? (low = 0 pts, medium = 1 pt, high = 2 pts)
 
 2. Calculate total score:
-   - **0-2**: Quick scope (single task, simple changes)
-   - **3-5**: Medium scope (small feature, few integrations)
-   - **6-10**: Large scope (complex feature, many concepts)
+    - **0-2**: Quick scope (single task, simple changes)
+    - **3-5**: Medium scope (small feature, few integrations)
+    - **6-10**: Large scope (complex feature, many concepts)
+
+   For quick estimation, use these simplified ranges. For formal scope detection, use the weighted matrix in `references/scope-detection.md`.
 
 3. Present reasoning and recommended scope to user
 4. If user specified scope explicitly → use it, skip detection
@@ -39,6 +43,15 @@ Examples:
 - "Is backwards compatibility required?"
 
 Wait for user response before proceeding.
+
+### Step 2b: Discuss Sub-Step (Large/Complex)
+
+For Large or Complex scope: run the Discuss sub-step before writing spec.md.
+→ See `spec-discuss.md` for the question framework and `context.md` output format.
+
+- **Complex scope**: Discuss is REQUIRED. Do not start spec.md until context.md is written.
+- **Large scope**: Discuss is recommended. Ask user: "Run Discuss to capture context first? (yes/skip)"
+- **Quick/Medium**: Skip Discuss entirely.
 
 ### Step 3: Produce Artifact
 

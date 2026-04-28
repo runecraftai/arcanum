@@ -1,120 +1,150 @@
-# Context Loading
+# Context Loading Strategy
 
-Context loading establishes shared understanding before planning or execution.
+Context loading establishes shared understanding before planning or execution using a 3-tier strategy.
 
-## Loading Strategy
+## 3-Tier Loading Strategy
 
-Load context in this order, stopping at token budget:
+Load context in tier order, respecting token budget and phase needs.
 
-### Load Tier 1: Project Context (Every invocation)
+### Tier 1: Project Context (Always)
 
-**Files** (2k token budget):
-- `docs/project.md` — project overview, modules, tech stack
-- `docs/conventions.md` — coding patterns, naming rules
-- `docs/decisions.md` — past architectural decisions
-
-**Load if**:
-- docs/ exists at project root
-- Files are under 2k tokens each
-
-### Load Tier 2: Session Context (Every invocation)
-
-**Files** (6k token budget):
-- 3 most recent `docs/sessions/*.md` (sorted by date, descending)
+**Files** (~6k token budget):
+- `.specs/project/PROJECT.md` — project vision, goals, active modules
+- `.specs/project/ROADMAP.md` — planned features and milestones
+- `.specs/project/STATE.md` — architectural decisions, blockers, lessons
+- 3 most recent `.specs/sessions/*.md` (sorted by date, descending)
 
 **Load if**:
-- docs/sessions/ exists
-- To understand recent work and decisions
+- `.specs/project/` exists at project root
+- Files are under budget
 
-### Load Tier 3: Feature Context (When resuming or planning)
+**Purpose**: Understand current project direction, recent work, and architectural constraints.
 
-**Files** (4k token budget):
-- `.specs/features/<name>/spec.md` — current feature spec
-- `.specs/features/<name>/design.md` — design decisions
+### Tier 2: Codebase Context (On-demand, budget-aware)
+
+**Files** (~50k token budget, selective loading):
+
+Load in priority order, only when active phase needs them:
+
+1. **STACK.md** — languages, frameworks, build tools, deployment
+2. **ARCHITECTURE.md** — module boundaries, data flow, entry points
+3. **CONVENTIONS.md** — naming rules, code patterns, organization
+4. **STRUCTURE.md** — directory tree, module responsibilities
+5. **TESTING.md** — test framework, coverage, CI commands
+6. **INTEGRATIONS.md** — external APIs, databases, message queues
+7. **CONCERNS.md** — tech debt, security/perf/scale/ops risks
+
+**Load if**:
+- Codebase mapping has been run (`/map` command)
+- Active phase needs specific knowledge
+  - **BUILD/TEST phases**: Always load STACK + ARCHITECTURE
+  - **TEST phase**: Always load TESTING
+  - **PLAN/SPEC phases**: Load as needed for design decisions
+  - **Other phases**: Load on-demand
+
+**How to select**:
+- Don't load all 7 docs automatically
+- Load only docs relevant to current phase
+- Stop loading when budget exhausted or phase needs satisfied
+
+**Purpose**: Understand existing codebase structure, patterns, and constraints to avoid conflicts with current feature work.
+
+### Tier 3: Feature Context (When resuming)
+
+**Files** (~8k token budget):
+- `.specs/features/<name>/STATE.md` — feature checkpoint, resume context
+- `.specs/features/<name>/spec.md` — feature specification
+- `.specs/features/<name>/context.md` — discussion context (if exists)
+- `.specs/features/<name>/design.md` — technical design (if exists)
 - `.specs/features/<name>/tasks.md` — task breakdown
 
 **Load if**:
-- Resuming work on feature
-- Planning next phase
+- Resuming work on a specific feature
+- User specifies a feature by name
 
-### Load Tier 4: Codebase Context (On-demand during planning)
-
-**Files** (5k token budget per file):
-- `.specs/codebase/*.md` — domain-specific architecture docs
-- Existing code files relevant to feature domain
-
-**Load if**:
-- DESIGN or PLAN phase
-- Need to understand existing code structure
-
-**How to select**:
-- Use glob to find relevant files (e.g., `src/auth/*` for auth feature)
-- Read only files with clear relevance
-- Avoid loading entire codebase
-
-### Load Tier 5: External Context (On-demand)
-
-**Sources** (unlimited, within token budget):
-- Library/framework documentation (via context7)
-- API documentation
-- Best practices guides
-
-**Load if**:
-- Need external library knowledge
-- Planning integration with external service
+**Purpose**: Resume work from where it was left off; understand design and implementation progress.
 
 ## Total Budget
 
-**Hard limit**: 40k tokens total across all loaded context.
+**Hard limit**: 160k tokens total across all loaded context per invocation.
 
 **Allocation**:
-- Tiers 1–2: 8k tokens (always)
-- Tier 3: 4k tokens (feature specific)
-- Tier 4: 5k tokens (codebase)
-- Tier 5: Remaining tokens for external context
+- Tier 1 (project): ~6k tokens (always)
+- Tier 2 (codebase): ~50k tokens (on-demand, selective)
+- Tier 3 (feature): ~8k tokens (when resuming)
+- **Reserve**: 40k tokens for active phase work
+- **Total**: 160k tokens
 
-## Loading Rules
+**Strategy**:
+- Load project context always (6k)
+- Load codebase docs selectively (0-50k depending on phase)
+- Load feature context on-demand (0-8k when resuming)
+- Ensure 40k minimum available for active phase (SPEC/PLAN/BUILD/TEST work)
 
-1. **Load on-demand**: Don't preload everything
-2. **Prefer summaries**: If file is large, load recent sections only
-3. **Cache context**: Reuse context within same session
-4. **Signal importance**: Flag uncertain or conflicting information
-5. **Dedup**: Don't load same file twice
+## On-Demand Loading Rules
+
+1. **Load by phase needs, not comprehensively**:
+   - SPEC/PLAN: Load STACK + ARCHITECTURE (10k); add others only if needed
+   - BUILD/TEST: Load STACK + ARCHITECTURE + TESTING (15k); add others if needed
+   - REVIEW/SIMPLIFY: Load CONVENTIONS + CONCERNS as needed
+
+2. **Load within budget**: Stop loading when budget nears exhaustion (40k reserve for active work)
+
+3. **Prefer summaries**: If file is large, load recent sections only
+
+4. **Cache context**: Reuse context within same session
+
+5. **Signal importance**: Flag uncertain or conflicting information
+
+## Knowledge Chain Verification
+
+After loading, run knowledge chain verification (→ see `knowledge-chain.md`):
+
+1. **Source Verify**: Where did each loaded item come from? `.specs/` = trusted; inference = untrusted
+2. **Freshness Check**: Are loaded files recent? Stale files (>7 days) flag for re-verification
+3. **Conflict Detect**: Cross-reference loaded items for contradictions
+4. **Gaps Scan**: Check for referenced files that don't exist
+5. **Confidence Score**: Aggregate to HIGH / MEDIUM / LOW
+
+**Decision**:
+- HIGH confidence → proceed with phase
+- MEDIUM confidence → proceed with caution; note gaps
+- LOW confidence → PAUSE; request Scout exploration before proceeding
 
 ## Context Summary Output
 
-After loading, produce a summary:
+After loading and verification, produce a summary:
 
 ```markdown
 ## Context Summary
 
-Project: [name from docs/project.md, or "unknown"]
-Tech stack: [from docs/project.md]
-Active feature: [from STATE.md, or "none"]
-Last session: [date and name, or "none"]
+Project: [name from .specs/project/PROJECT.md, or "unknown"]
+Active feature: [if resuming]
 
-Known conventions:
-- [pattern 1 from docs/conventions.md]
-- [pattern 2]
-
-Recent decisions:
-- [decision 1 from docs/decisions.md]
-- [decision 2]
+Knowledge chain confidence: [HIGH | MEDIUM | LOW]
+- [if MEDIUM/LOW, list gaps/conflicts]
 
 Context loaded from:
-- docs/project.md (2.1k tokens)
-- docs/conventions.md (1.8k tokens)
-- docs/sessions/2026-04-23-feature.md (2.3k tokens)
-- Total: 6.2k tokens / 40k budget
+- .specs/project/PROJECT.md (1.5k tokens)
+- .specs/project/ROADMAP.md (0.8k tokens)
+- .specs/project/STATE.md (2.1k tokens)
+- .specs/sessions/2026-04-23-feature.md (1.6k tokens)
+- .specs/codebase/STACK.md (2.3k tokens)
+- .specs/codebase/ARCHITECTURE.md (3.2k tokens)
+- Total: 11.5k tokens / 160k budget
 ```
 
 ## First-Run Behavior
 
-If `docs/` does not exist:
-- Note "first run"
+If `.specs/project/` does not exist:
+- Note: "Project not initialized. Run `/init` to bootstrap."
 - Skip Tier 1 and 2 loading
-- Proceed with LOAD phase
-- Create docs/ scaffold during LEARN phase
+- Recommend user run `/init` before starting features
+
+If `.specs/codebase/` does not exist:
+- Note: "Codebase not mapped. Run `/map` to generate docs."
+- Skip Tier 2 loading
+- Recommend user run `/map` after `/init`
 
 ## Cache Invalidation
 
@@ -122,5 +152,12 @@ Reload context if:
 - User explicitly says "refresh context"
 - Session is new (24+ hours since last load)
 - User mentions significant repo changes
+- Knowledge chain confidence drops to LOW
 
 Otherwise, reuse context from earlier in same session.
+
+## See Also
+
+- `knowledge-chain.md` — 5-step context verification
+- `knowledge-base.md` — `.specs/` structure and routing
+- `context-loading.md` — this file (detailed strategy)

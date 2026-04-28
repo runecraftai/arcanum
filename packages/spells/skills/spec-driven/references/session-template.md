@@ -1,4 +1,4 @@
-<!-- IMMUTABLE after creation. File: docs/sessions/YYYY-MM-DD-<feature>.md -->
+<!-- IMMUTABLE after creation. File: .specs/sessions/YYYY-MM-DD-<feature>.md -->
 <!-- Do not edit after first write. Append a new session file instead. -->
 ---
 title: "{{feature-name}}"

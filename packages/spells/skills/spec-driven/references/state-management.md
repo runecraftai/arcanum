@@ -1,10 +1,26 @@
 # State Management
 
-State management tracks the progress of feature execution across sessions.
+State management tracks the progress of feature execution across sessions. The spec-driven skill maintains two levels of STATE.
+
+## Dual-Level STATE
+
+### Global STATE — `.specs/project/STATE.md`
+- **Scope**: cross-cutting, project-wide
+- **Content**: architectural decisions, project-wide blockers, lessons learned across features, cross-feature todos, deferred ideas
+- **Lifecycle**: persists indefinitely; pruned monthly for completed items
+- **Schema**: → see `state-global.md`
+
+### Feature STATE — `.specs/features/<name>/STATE.md`
+- **Scope**: single feature only
+- **Content**: checkpoint (last completed phase), artifact status, feature-specific blockers, resume context
+- **Lifecycle**: created at SPEC start → updated each phase → archived (status: shipped) at SHIP
+- **Schema**: → see below (existing frontmatter format)
+
+**Rule**: Never duplicate information between global and feature STATE. If an item affects only one feature → feature STATE. If it affects multiple features or the project as a whole → global STATE.
 
 ## State File Location
 
-State is stored in `.specs/features/<name>/STATE.md` (optional, created as needed).
+Feature state is stored in `.specs/features/<name>/STATE.md` (optional, created as needed).
 
 ## State Frontmatter
 

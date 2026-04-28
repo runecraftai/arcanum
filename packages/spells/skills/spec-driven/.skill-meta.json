@@ -1,9 +1,9 @@
 {
   "name": "spec-driven",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "type": "meta-skill",
-  "description": "Full lifecycle development pipeline — SPEC, PLAN, BUILD, TEST, REVIEW, SIMPLIFY, SHIP",
-  "phases": ["spec", "plan", "build", "test", "review", "simplify", "ship"],
+  "description": "Full lifecycle development pipeline — MAP, INIT, SPEC, PLAN, BUILD, TEST, REVIEW, SIMPLIFY, SHIP",
+  "phases": ["map", "init", "spec", "plan", "build", "test", "review", "simplify", "ship"],
   "trigger": "/spec",
   "scope": "public",
   "audience": "development-teams",

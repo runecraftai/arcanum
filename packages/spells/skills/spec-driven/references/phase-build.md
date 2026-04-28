@@ -8,6 +8,29 @@ After PLAN is approved, when user triggers: `/build`, `build this`, `implement`,
 
 Execute each task directly, one at a time, implementing features while verifying each step. Mark tasks complete as they are verified.
 
+**Pre-condition**: Run knowledge chain verification (→ see `knowledge-chain.md`). If confidence = LOW, pause and request Scout exploration before proceeding.
+
+## Safety Valve
+
+If during BUILD the executor encounters codebase state that contradicts loaded context (e.g., a file that should exist doesn't, an API that differs from STACK.md):
+
+1. **STOP immediately.** Do not guess or infer.
+2. Return `FORGE_STATUS: BLOCKED` with a clear description of the contradiction.
+3. Herald will delegate Scout for targeted re-exploration.
+4. Resume after context is corrected.
+
+Never fabricate. An explicit BLOCKED is always better than incorrect implementation.
+
+## Delegation Rules
+
+Follow the contracts in `sub-agent-delegation.md`.
+
+Key rule: Forge should never explore the codebase. If you need to understand existing code before implementing, return BLOCKED and let Scout explore first.
+
+## Commit Policy
+
+Each completed task should result in one atomic commit. See `build-cycle.md` for the commit message format and size rules.
+
 ## Steps
 
 ### Step 1: Load Task Checklist
@@ -33,7 +56,7 @@ For each task in document order:
 **2c. Implement the change**:
 - Make the modification directly
 - Keep changes minimal and focused on this task
-- Follow project conventions from `docs/conventions.md`
+- Follow project conventions from `.specs/codebase/CONVENTIONS.md`
 
 **2d. Verify acceptance criteria**:
 

@@ -9,12 +9,12 @@ description: >
 license: CC-BY-4.0
 ---
 
-# spec-driven (v3.0.0)
+# spec-driven (v4.0.0)
 
-A 7-phase meta-skill that orchestrates the complete development lifecycle. Routes user triggers to individual phase handlers.
+A 7-phase meta-skill that orchestrates the complete development lifecycle. Routes user triggers to individual phase handlers. v4 uses `.specs/` instead of `docs/`.
 
 ```
-LOAD → DISPATCH → [SPEC|PLAN|BUILD|TEST|REVIEW|SIMPLIFY|SHIP] → LEARN
+LOAD → DISPATCH → [MAP|SPEC|PLAN|BUILD|TEST|REVIEW|SIMPLIFY|SHIP] → LEARN
 ```
 
 ---
@@ -23,6 +23,7 @@ LOAD → DISPATCH → [SPEC|PLAN|BUILD|TEST|REVIEW|SIMPLIFY|SHIP] → LEARN
 
 | Phase | PT Triggers | EN Triggers | Scope | Output |
 |-------|------------|-------------|-------|--------|
+| **MAP** | `mapear codebase`, `analisar projeto existente` | `/map`, `map codebase` | Auto | `.specs/codebase/` (7 docs) |
 | **SPEC** | `vamos especificar`, `preciso de um spec` | `specify`, `write spec`, `what should we build` | Auto | `.specs/features/<name>/spec.md` |
 | **PLAN** | `vamos planejar`, `quebra em tarefas` | `plan this`, `break into tasks`, `design the approach` | Auto | `.specs/features/<name>/tasks.md` |
 | **BUILD** | `vamos construir`, `implementar` | `build this`, `implement`, `execute tasks` | Auto | Code files + task checkmarks |
@@ -36,6 +37,9 @@ LOAD → DISPATCH → [SPEC|PLAN|BUILD|TEST|REVIEW|SIMPLIFY|SHIP] → LEARN
 ## Trigger Dispatch Table
 
 The meta-skill pattern-matches user input against these patterns (case-insensitive, PT/EN):
+
+**MAP phase triggers:**
+- `/map`, `map codebase`, `mapear código`, `analisar projeto existente`
 
 **SPEC phase triggers:**
 - `/spec`, `specify`, `write spec`, `what should we build`, `vamos especificar`, `preciso de um spec`
@@ -61,7 +65,8 @@ The meta-skill pattern-matches user input against these patterns (case-insensiti
 **Special triggers:**
 - `/spec resume` → Load last session, continue from checkpoint
 - `/spec pause` → Save checkpoint and session
-- `map codebase` → LOAD only, produce context summary
+- `/init`, `initialize project`, `setup project`, `inicializar projeto` → Initialize `.specs/project/`
+- `/map <doc>` → Selective codebase mapping (e.g., `/map stack`, `/map architecture`)
 
 ---
 
@@ -69,11 +74,13 @@ The meta-skill pattern-matches user input against these patterns (case-insensiti
 
 Match the user's input against this decision tree (in order):
 
-1. **Explicit phase command** — If input starts with `/spec`, `/plan`, `/build`, `/test`, `/review`, `/simplify`, `/ship` → route to that phase directly
-2. **Resume command** — If input contains `resume`, `continue`, `retomar` → check `.specs/features/*/tasks.md` for incomplete tasks, route to most recent incomplete phase
-3. **Keyword match** — Scan for phase keywords (see Trigger Dispatch Table above); use highest-confidence match
-4. **Ambiguous** — If no clear match, ask: "Which phase? SPEC / PLAN / BUILD / TEST / REVIEW / SIMPLIFY / SHIP"
-5. **Default** — If user describes a new feature with no phase context → start SPEC
+1. **MAP command** — If input matches MAP triggers (e.g., `/map`, `map codebase`) → route to MAP phase directly
+2. **INIT command** — If input matches INIT triggers (e.g., `/init`, `initialize project`) → route to INIT phase directly
+3. **Explicit phase command** — If input starts with `/spec`, `/plan`, `/build`, `/test`, `/review`, `/simplify`, `/ship` → route to that phase directly
+4. **Resume command** — If input contains `resume`, `continue`, `retomar` → check `.specs/features/*/tasks.md` for incomplete tasks, route to most recent incomplete phase
+5. **Keyword match** — Scan for phase keywords (see Trigger Dispatch Table above); use highest-confidence match
+6. **Ambiguous** — If no clear match, ask: "Which phase? MAP / INIT / SPEC / PLAN / BUILD / TEST / REVIEW / SIMPLIFY / SHIP"
+7. **Default** — If user describes a new feature with no phase context → start SPEC
 
 Never guess silently. When ambiguous, surface the ambiguity.
 
@@ -87,33 +94,37 @@ Never guess silently. When ambiguous, surface the ambiguity.
 
 ### Steps
 
-1. Check whether `docs/` exists at the project root.
-   - If missing → note "first run" and proceed. `docs/` will be scaffolded in LEARN phase.
+1. Check whether `.specs/project/` exists at the project root.
+   - If missing → note "first run" and suggest: `Run /init to bootstrap .specs/project/`
+   - If exists, proceed to step 2
 
-2. If `docs/` exists, read:
-   - `docs/project.md` — project overview, modules, active features
-   - `docs/conventions.md` — coding patterns, naming rules
-   - `docs/decisions.md` — architectural choices
-   - The 3 most recent files in `docs/sessions/` (by date, descending)
+2. If `.specs/project/` exists, read (always):
+   - `.specs/project/PROJECT.md` — project vision, goals, active modules
+   - `.specs/project/ROADMAP.md` — planned features and milestones
+   - `.specs/project/STATE.md` — architectural decisions, blockers, lessons
+   - The 3 most recent files in `.specs/sessions/` (by date, descending)
 
-3. If `.specs/codebase/` exists, load domain-specific reference files on-demand.
+3. **Load `.specs/codebase/` docs on-demand (budget-aware)**: Only load when active phase needs them. See `context-loading.md` for tier strategy.
 
-4. **Context budget**: Total loaded ≤ 40k tokens. If files are large, load recent sections only.
+4. **Context budget**: Total loaded ≤ 160k tokens. Reserve 40k for active phase work. Load in priority order; stop when budget exhausted. See `context-loading.md`.
 
-5. Produce a **Context Summary**:
+5. Run **knowledge chain verification** (→ see `knowledge-chain.md`). If confidence = LOW, pause and request Scout exploration before proceeding.
+
+6. Produce a **Context Summary**:
 
 ```
 ## Context Summary
 
-Project: [inferred from docs/project.md or "unknown"]
+Project: [inferred from .specs/project/PROJECT.md or "unknown"]
 Active feature: [if resuming]
 Known conventions: [bullet list, max 5]
 Recent decisions: [bullet list, max 3]
 Last session: [date/feature, or "none"]
+Knowledge chain confidence: [HIGH | MEDIUM | LOW]
 Prior context from: [file list]
 ```
 
-6. If user said `map codebase` → **stop here**, present Context Summary. Do not proceed to phase dispatch.
+7. If confidence = MEDIUM or LOW → flag caution in output and alert user.
 
 ---
 
@@ -151,11 +162,11 @@ Each phase file is self-contained with: When, Goal, Steps, Supporting References
 | Situation | Action |
 |-----------|--------|
 | `/spec resume` but no checkpoint found | Inform user, ask to start from SPEC |
-| `docs/` missing or empty | Note "No project docs found — operating without project context", proceed |
-| `docs/project.md` malformed | Skip that file, log warning, load remaining docs |
+| `.specs/project/` missing or empty | Note "Project not initialized. Run `/init` to bootstrap.", proceed |
+| `.specs/project/PROJECT.md` malformed | Skip that file, log warning, load remaining `.specs/` files |
 | Tests fail during SHIP | Block ship, route to BUILD or TEST phase |
 | Scope estimate changes mid-phase | Note the change, update `.specs/features/*/tasks.md`, continue |
-| User interrupts mid-phase | Save progress note to `docs/sessions/`, confirm next step |
+| User interrupts mid-phase | Save progress note to `.specs/sessions/`, confirm next step |
 
 ---
 
@@ -163,11 +174,11 @@ Each phase file is self-contained with: When, Goal, Steps, Supporting References
 
 **When**: After phase completes or on explicit `/spec pause`.
 
-**Goal**: Capture session knowledge and update persistent docs/ knowledge base.
+**Goal**: Capture session knowledge and update persistent `.specs/` knowledge base.
 
 ### 6a. Session Log
 
-Create `docs/sessions/YYYY-MM-DD-<feature>.md` using template `references/session-template.md`.
+Create `.specs/sessions/YYYY-MM-DD-<feature>.md` using template `references/session-template.md`.
 
 Fill:
 - **What Was Done**: bullet list of changes
@@ -184,9 +195,11 @@ Update only when genuinely new:
 
 | Discovery | Target | Action |
 |-----------|--------|--------|
-| New module/feature | `docs/project.md` | Append section |
-| New code pattern | `docs/conventions.md` | Append entry |
-| Architectural decision | `docs/decisions.md` | Append ADR |
+| New module/feature shipped | `.specs/project/PROJECT.md` (active modules) + `.specs/project/STATE.md` (lessons) | Append sections |
+| New code pattern | `.specs/codebase/CONVENTIONS.md` (if `/map` done) | Append entry |
+| Architectural decision | `.specs/project/STATE.md` (Decisions section) | Append entry |
+| Tech debt or risk discovered | `.specs/codebase/CONCERNS.md` (if `/map` done) or `.specs/project/STATE.md` (Blockers) | Append entry |
+| Cross-feature action item | `.specs/project/STATE.md` (Todos section) | Append entry |
 | Nothing new | (none) | Skip |
 
 Rules:
@@ -196,22 +209,14 @@ Rules:
 
 ### 6c. First-Run Scaffold
 
-If `docs/` missing:
+If `.specs/project/` missing:
 
-```
-docs/
-├── project.md
-├── conventions.md
-├── decisions.md
-└── sessions/
-```
-
-See `references/knowledge-base.md` for full scaffold content.
+Run `/init` command. See `project-init.md` for full scaffold.
 
 ### 6d. Graphify (Optional)
 
 If `graphify` skill available, suggest:
-> "Run `/graphify --update docs/` to update the knowledge graph."
+> "Run `/graphify --update .` to update the knowledge graph."
 Do not auto-invoke.
 
 ### 6e. Completion
@@ -220,7 +225,7 @@ Present LEARN summary:
 ```
 ## LEARN Complete
 
-Session log: docs/sessions/{{date}}-{{feature}}.md
+Session log: .specs/sessions/{{date}}-{{feature}}.md
 Updated: [files, or "none"]
 Graphify: [available / not available]
 ```
@@ -262,15 +267,15 @@ Optional integrations. Check availability before suggesting:
 
 ## Context Loading Strategy
 
-| Content | Load when | Token budget |
-|---------|----------|--------------|
-| `docs/project.md` | Every invocation | ~2k max |
-| `docs/conventions.md` | Every invocation | ~2k max |
-| `docs/decisions.md` | Every invocation | ~2k max |
-| 3 recent `docs/sessions/*.md` | Every invocation | ~6k max |
-| `.specs/codebase/*.md` | On-demand | ~5k per file |
-| Feature spec/design/tasks | When resuming | ~4k max |
-| **Total** | | **< 40k tokens** |
+See `context-loading.md` for detailed 3-tier strategy:
+
+1. **Project context** (always): `.specs/project/PROJECT.md`, `.specs/project/ROADMAP.md`, `.specs/project/STATE.md` (~6k tokens)
+2. **Codebase context** (on-demand, budget-aware): `.specs/codebase/` docs in priority order: STACK → ARCHITECTURE → CONVENTIONS → STRUCTURE → TESTING → INTEGRATIONS → CONCERNS (~5k per file)
+3. **Feature context** (when resuming): `.specs/features/<name>/STATE.md` → `spec.md` → `context.md` → `design.md` → `tasks.md` (~8k tokens)
+
+**Total budget**: 160k tokens. Reserve 40k for active phase work. Load in priority order; stop when budget exhausted.
+
+**On-demand strategy**: Load `.specs/codebase/` docs only when the active phase needs them. Build and architecture phases always load STACK + ARCHITECTURE. Test phase always loads TESTING.
 
 If file exceeds budget, load recent sections only.
 
@@ -280,6 +285,8 @@ If file exceeds budget, load recent sections only.
 
 All phase files and supporting documentation are in `references/`:
 
+**Phase files:**
+- `phase-map.md` — MAP phase (codebase mapping) details
 - `phase-spec.md` — SPEC phase details
 - `phase-plan.md` — PLAN phase details
 - `phase-build.md` — BUILD phase details
@@ -287,23 +294,36 @@ All phase files and supporting documentation are in `references/`:
 - `phase-review.md` — REVIEW phase details
 - `phase-simplify.md` — SIMPLIFY phase details
 - `phase-ship.md` — SHIP phase details
-- `scope-detection.md` — Scope scoring matrix
+
+**Templates & Reference Structures:**
+- `knowledge-base.md` — `.specs/` structure and knowledge routing
+- `project-init.md` — `/init` command and `.specs/project/` scaffold
+- `state-global.md` — Global STATE.md schema and rules
+- `brownfield-mapping.md` — Codebase mapping templates and Scout questions
+- `concerns.md` — Tech debt & risk documentation
 - `spec-template.md` — Spec artifact template
 - `task-template.md` — Task artifact template
 - `tasks-template.md` — Tasks file template
 - `design-template.md` — Design artifact template
 - `session-template.md` — Session log template
-- `knowledge-base.md` — docs/ scaffold template
+
+**Discipline & Patterns:**
+- `knowledge-chain.md` — Context verification (5-step)
+- `sub-agent-delegation.md` — Delegation contracts (Scout, Sage, Forge, Ward, Arbiter)
+- `spec-discuss.md` — Discuss sub-step for Complex scope
+- `test-uat.md` — UAT sub-step for user-facing features
 - `vertical-slicing.md` — Vertical slicing guide
-- `build-cycle.md` — Build cycle patterns
+- `build-cycle.md` — Build cycle patterns & atomic commit policy
 - `prove-it-pattern.md` — Test-first patterns
 - `review-axes.md` — Code review framework
 - `simplification-patterns.md` — Refactoring patterns
+
+**Utilities:**
+- `scope-detection.md` — Scope scoring matrix (with Complex tier)
 - `skill-anatomy.md` — Skill structure guide
 - `task-format.md` — Task formatting rules
-- `state-management.md` — State tracking patterns
+- `state-management.md` — Dual-level STATE tracking patterns
 - `archive-workflow.md` — Archival and cleanup
-- `context-loading.md` — Context management rules
+- `context-loading.md` — Context management rules (3-tier, 160k budget)
 - `scope-discipline.md` — Scope control principles
-- `state-template.md` — State checkpoint format
 

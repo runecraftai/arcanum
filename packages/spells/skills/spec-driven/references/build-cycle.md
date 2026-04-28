@@ -17,3 +17,30 @@ The incremental build cycle executes one task at a time, verifies it, and moves 
 - Tests pass
 - Linting passes
 - No regressions
+
+## Atomic Commit Policy
+
+Each task in `tasks.md` should result in exactly one atomic commit.
+
+**Rules:**
+- **One concern per commit.** Never mix feature code + refactoring + formatting in the same commit.
+- **Independently revertable.** Each commit must leave the build in a passing state.
+- **Size limit.** If a task produces >300 lines changed, consider splitting into sub-commits by logical boundary.
+
+**Commit message format:** `type(scope): description`
+
+| Type | Use for |
+|------|---------|
+| `feat` | New feature or capability |
+| `fix` | Bug fix |
+| `refactor` | Code restructure without behavior change |
+| `docs` | Documentation only |
+| `test` | Test additions or corrections |
+| `chore` | Build, tooling, dependency updates |
+
+**Examples:**
+- ✅ `feat(spec-driven): add phase-map.md reference`
+- ✅ `refactor(spec-driven): migrate docs/ paths to .specs/`
+- ✅ `docs(spec-driven): add knowledge-chain verification guide`
+- ❌ `update spec-driven` — no type, no scope, vague
+- ❌ `feat(spec-driven): add phase-map + fix typos + update README` — mixed concerns
