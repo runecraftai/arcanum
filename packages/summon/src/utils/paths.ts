@@ -2,6 +2,7 @@ import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
 import { exists } from "./fs";
+import { SKILLS_DIR } from "../constants";
 
 /**
  * Resolve home directory path (~) to absolute path
@@ -12,6 +13,18 @@ export function resolveHome(filePath: string): string {
     return path.join(os.homedir(), filePath.slice(2));
   }
   return filePath;
+}
+
+/**
+ * Resolve global skills hub directory
+ * Returns: ~/.agents/skills (no arg) or ~/.agents/skills/<skillName> (with arg)
+ */
+export function resolveGlobalSkillsHub(skillName?: string): string {
+  const hubBase = path.join(os.homedir(), SKILLS_DIR);
+  if (skillName) {
+    return path.join(hubBase, skillName);
+  }
+  return hubBase;
 }
 
 /**
