@@ -4,7 +4,7 @@
   "packageManager": "bun@1.3.5",
   "workspaces": ["packages/*"],
   "scripts": {
-    "build": "turbo build",
+    "build": "bunx turbo build",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish"
