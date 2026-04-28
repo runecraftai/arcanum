@@ -1,55 +1,65 @@
-# Arcanum
+<p align="center">
+  <img src="./assets/hero/runecraft-hero.png" alt="Runecraft" width="320" />
+</p>
 
-A Bun monorepo for agent skills, CLI tools, and shared configurations for the Runecraft AI ecosystem.
+<p align="center">
+  <em>The forge where modern wizards bind their craft.</em>
+</p>
+
+<p align="center">
+  <a href="https://bun.sh"><img src="https://img.shields.io/badge/bun-workspaces-black?logo=bun&logoColor=white" alt="Bun Workspaces" /></a>
+  <a href="https://turbo.build"><img src="https://img.shields.io/badge/turborepo-v2-EF4444?logo=turborepo&logoColor=white" alt="Turborepo" /></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-22c55e" alt="MIT License" /></a>
+</p>
 
 ---
 
-## Packages
+## The Arcanum
 
-| Package | npm name | Description | Status |
-|---------|----------|-------------|--------|
-| **spells** | `@runecraft/spells` | Agent skill definitions (7 skills) | Active |
-| **grimoire** | `@runecraft/grimoire` | Shared Biome and TypeScript configs | Active |
-| **summon** | `@runecraft/summon` | CLI installer for agent skills | Scaffold |
-| **guild** | `@runecraft/guild` | Agent party/swarm configurations | Placeholder |
+Every age has its wizards. Ours write TypeScript.
+
+**Arcanum** is the central vault of the [Runecraft](https://github.com/runecraft) ecosystem — a monorepo where ancient sigils meet modern silicon. Here, skills are spells studied by AI agents, configurations are grimoires shared across the codebase, and the command line is the circle of summoning. Each package is an artifact: forged with intent, bound to a purpose, ready to be conjured into any project.
+
+This is not a framework. It is a craft.
 
 ---
 
-## Getting Started
+## Artifacts
 
-### Install Dependencies
+| Artifact                             | Package                 | Bound Essence                                                                  | Status      |
+| ------------------------------------ | ----------------------- | ------------------------------------------------------------------------------ | ----------- |
+| [**Spells**](./packages/spells/)     | `@runecraft/spells`     | Skill scrolls — SKILL.md files studied by AI agents to learn specialized rites | Active      |
+| [**Summon**](./packages/summon/)     | `@runecraft/summon`     | The summoning circle — CLI that invokes and installs spells into any project   | Scaffold    |
+| [**Grimoire**](./packages/grimoire/) | `@runecraft/grimoire`   | Shared sigils — Biome and TypeScript configs inherited by every package        | Active      |
+| [**Guild**](./packages/guild/)       | `@runecraft/guild`      | Party charters — multi-agent swarm and orchestration configurations            | Placeholder |
+| [**Familiar**](./packages/familiar/) | `@runecraftai/familiar` | A bound familiar — internal Pi multi-agent runtime, not published              | Internal    |
+
+---
+
+## Quickstart
 
 ```bash
 bun install
+bun run build
 ```
 
-This uses Bun workspaces to resolve all local packages as symlinks in `node_modules/@runecraft/`.
-
-### Build All Packages
+Common incantations:
 
 ```bash
+bunx turbo lint
+bunx turbo test
 bunx turbo build
 ```
 
-Turborepo orchestrates builds across all packages with caching and parallel execution.
+---
+
+## Stack
+
+- **[Bun](https://bun.sh) workspaces** — native package linking and runtime
+- **[Turborepo](https://turbo.build) v2** — task orchestration with caching and parallelization
+- **[Changesets](https://github.com/changesets/changesets)** — independent semver versioning per artifact
+- **[Biome](https://biomejs.dev)** — unified lint and format, configured via grimoire
 
 ---
 
-## Development
-
-- **Lint**: `bunx turbo lint`
-- **Test**: `bunx turbo test`
-- **Build**: `bunx turbo build`
-
-For documentation on individual packages, see `packages/<package>/README.md`.
-
----
-
-## Architecture
-
-- **Bun Workspaces**: Native workspace support for local package resolution
-- **Turborepo v2**: Task orchestration with caching and parallelization
-- **Changesets**: Independent versioning per package
-- **Biome**: Unified linting and formatting via grimoire
-
-See `.specs/features/arcanum-monorepo-migration/` for architecture decisions.
+[CONTRIBUTING](./CONTRIBUTING.md) &nbsp;·&nbsp; [Architecture](./.specs/) &nbsp;·&nbsp; [MIT](./LICENSE)
