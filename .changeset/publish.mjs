@@ -6,20 +6,85 @@
  * Called by changesets/action after versioning packages.
  * Replaces: changeset publish (which uses npm publish internally)
  * With: bun publish (which resolves workspace:* automatically)
+ *
+ * This script:
+ * 1. Iterates over each package in packages/
+ * 2. Skips private packages and ignored packages (from changesets config)
+ * 3. Runs bun publish from each package's directory
  */
 
 import { execSync } from "child_process";
+import { readdirSync, readFileSync } from "fs";
+import { join } from "path";
 
 try {
   console.log("Publishing packages with bun (workspace:* will be resolved)...");
 
-  // bun publish from current directory (package dir set by changesets)
-  // automatically resolves workspace:* to concrete versions
-  execSync("bun publish", {
-    stdio: "inherit",
-  });
+  // Read changesets config to get ignored packages
+  const configPath = join(process.cwd(), ".changeset", "config.json");
+  const config = JSON.parse(readFileSync(configPath, "utf-8"));
+  const ignoredPackages = new Set(config.ignore || []);
 
-  console.log("✓ Published successfully with bun");
+  // Find all packages in packages/ directory
+  const packagesDir = join(process.cwd(), "packages");
+  const packageDirs = readdirSync(packagesDir, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
+
+  let publishedCount = 0;
+  let skippedCount = 0;
+
+  for (const pkgName of packageDirs) {
+    const pkgDir = join(packagesDir, pkgName);
+    const pkgJsonPath = join(pkgDir, "package.json");
+
+    // Check if package.json exists
+    let pkgJson;
+    try {
+      pkgJson = JSON.parse(readFileSync(pkgJsonPath, "utf-8"));
+    } catch (error) {
+      if (error.code === "ENOENT") {
+        console.log(`⊘ Skipping ${pkgName} (no package.json found)`);
+        skippedCount++;
+        continue;
+      }
+      throw error;
+    }
+
+    // Skip private packages
+    if (pkgJson.private) {
+      console.log(`⊘ Skipping private package: ${pkgJson.name}`);
+      skippedCount++;
+      continue;
+    }
+
+    // Skip ignored packages
+    if (ignoredPackages.has(pkgJson.name)) {
+      console.log(`⊘ Skipping ignored package: ${pkgJson.name}`);
+      skippedCount++;
+      continue;
+    }
+
+    try {
+      console.log(`\n→ Publishing ${pkgJson.name} from ${pkgDir}`);
+      execSync("bun publish", {
+        stdio: "inherit",
+        cwd: pkgDir,
+      });
+
+      publishedCount++;
+    } catch (error) {
+      console.error(
+        `✗ Failed to publish ${pkgJson.name}:`,
+        error.message || error
+      );
+      process.exit(1);
+    }
+  }
+
+  console.log(
+    `\n✓ Published successfully with bun (${publishedCount} packages, ${skippedCount} skipped)`
+  );
   process.exit(0);
 } catch (error) {
   console.error("✗ Publish failed:", error.message || error);
