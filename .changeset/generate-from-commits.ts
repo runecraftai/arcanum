@@ -54,7 +54,7 @@ function readChangesetConfig(): ChangesetConfig {
   }
 }
 
-// Build package map from packages/*/package.json (or packages/*/package/package.json for nested)
+// Build package map from packages/*/package.json
 function buildPackageMap(): Map<string, string> {
   const packageMap = new Map<string, string>();
   try {
@@ -68,30 +68,16 @@ function buildPackageMap(): Map<string, string> {
     for (const dirName of dirs) {
       const dirPath = join(packagesDir, dirName);
       
-      // Try standard location first: packages/<name>/package.json
-      let pkgJsonPath = join(dirPath, "package.json");
-      let found = false;
+      // Read packages/<name>/package.json
+      const pkgJsonPath = join(dirPath, "package.json");
 
       try {
         const pkgContent = readFileSync(pkgJsonPath, "utf-8");
         const pkg = JSON.parse(pkgContent);
         if (pkg.name) {
           packageMap.set(`packages/${dirName}`, pkg.name);
-          found = true;
         }
       } catch {}
-
-      // If not found, try nested location: packages/<name>/package/package.json
-      if (!found) {
-        pkgJsonPath = join(dirPath, "package", "package.json");
-        try {
-          const pkgContent = readFileSync(pkgJsonPath, "utf-8");
-          const pkg = JSON.parse(pkgContent);
-          if (pkg.name) {
-            packageMap.set(`packages/${dirName}`, pkg.name);
-          }
-        } catch {}
-      }
     }
   } catch (error) {
     // Silently ignore errors building package map
