@@ -66,6 +66,25 @@ try {
     }
 
     try {
+      // Check if version already exists on npm
+      const versionCheckCmd = `npm view ${pkgJson.name}@${pkgJson.version} version`;
+      let versionExists = false;
+      try {
+        execSync(versionCheckCmd, { stdio: "pipe" });
+        versionExists = true;
+      } catch (e) {
+        // npm view throws if version doesn't exist, that's expected
+        versionExists = false;
+      }
+
+      if (versionExists) {
+        console.log(
+          `⊘ Skipping ${pkgJson.name}@${pkgJson.version} (already published on npm)`
+        );
+        skippedCount++;
+        continue;
+      }
+
       console.log(`\n→ Publishing ${pkgJson.name} from ${pkgDir}`);
       execSync("bun publish", {
         stdio: "inherit",
