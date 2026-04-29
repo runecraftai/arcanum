@@ -35,7 +35,7 @@
     "installer"
   ],
   "dependencies": {
-    "@runecraft/spells": "workspace:*",
+    "@runecraft/spells": "0.0.2",
     "citty": "^0.1.6",
     "@clack/prompts": "^0.7.0",
     "picocolors": "^1.0.0"
