@@ -48,11 +48,9 @@ jobs:
       run: bun run build
 
     - name: Generate changesets from conventional commits
-      if: "!startsWith(github.event.head_commit.message, 'chore: version packages')"
       run: bun run .changeset/generate-from-commits.ts
 
     - name: Commit generated changesets
-      if: "!startsWith(github.event.head_commit.message, 'chore: version packages')"
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"

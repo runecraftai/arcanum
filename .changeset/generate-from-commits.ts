@@ -243,16 +243,32 @@ function determineBumpType(parsed: CommitParsed): BumpType {
 
 // Main execution
 function main() {
-  // Skip if running on version bump commit (prevents loop)
+  // Skip if running on version bump commit or merge of version bump (prevents loop)
   try {
+    // Check HEAD commit message
     const headMsgResult = spawnSync(
       ["git", "log", "-1", "--format=%s"],
       { cwd: process.cwd() }
     );
     if (headMsgResult.success) {
       const headMsg = headMsgResult.stdout.toString().trim();
-      if (headMsg.startsWith("chore: version packages")) {
-        console.log("⊘ Skipping: triggered by version bump commit");
+      if (
+        headMsg.startsWith("chore: version packages") ||
+        headMsg.includes("changeset-release/")
+      ) {
+        console.log("⊘ Skipping: triggered by version bump or release branch merge");
+        process.exit(0);
+      }
+    }
+    // Also check if the parent commit is "chore: version packages"
+    const parentMsgResult = spawnSync(
+      ["git", "log", "-1", "--format=%s", "HEAD^1"],
+      { cwd: process.cwd() }
+    );
+    if (parentMsgResult.success) {
+      const parentMsg = parentMsgResult.stdout.toString().trim();
+      if (parentMsg.startsWith("chore: version packages")) {
+        console.log("⊘ Skipping: parent commit is a version bump");
         process.exit(0);
       }
     }
