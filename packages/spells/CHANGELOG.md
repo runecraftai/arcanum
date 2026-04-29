@@ -1,5 +1,14 @@
 # @runecraft/spells
 
+## 0.3.0
+
+### Minor Changes
+
+- feat: set up changeset-publish workflow for monorepo versioning and npm publishing
+  fix(spec-driven): resolve arbiter findings — add MAP/INIT phases to meta, clarify scope thresholds
+  fix(summon): fix postinstall crash blocking npx usage (v0.0.8)
+  fix(spec-driven): skill-architect compliance — frontmatter, dispatch, error handling
+
 ## 0.2.0
 
 ### Minor Changes
