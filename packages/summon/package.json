@@ -1,6 +1,6 @@
 {
   "name": "@runecraft/summon",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Interactive CLI for installing Arcanum agent skills",
   "license": "MIT",
   "type": "module",
@@ -35,7 +35,7 @@
     "installer"
   ],
   "dependencies": {
-    "@runecraft/spells": "0.0.2",
+    "@runecraft/spells": "0.1.0",
     "citty": "^0.1.6",
     "@clack/prompts": "^0.7.0",
     "picocolors": "^1.0.0"
