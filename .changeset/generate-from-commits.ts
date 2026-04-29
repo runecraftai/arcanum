@@ -243,6 +243,23 @@ function determineBumpType(parsed: CommitParsed): BumpType {
 
 // Main execution
 function main() {
+  // Skip if running on version bump commit (prevents loop)
+  try {
+    const headMsgResult = spawnSync(
+      ["git", "log", "-1", "--format=%s"],
+      { cwd: process.cwd() }
+    );
+    if (headMsgResult.success) {
+      const headMsg = headMsgResult.stdout.toString().trim();
+      if (headMsg.startsWith("chore: version packages")) {
+        console.log("⊘ Skipping: triggered by version bump commit");
+        process.exit(0);
+      }
+    }
+  } catch (error) {
+    // Continue on error
+  }
+
   const config = readChangesetConfig();
   const packageMap = buildPackageMap();
 
