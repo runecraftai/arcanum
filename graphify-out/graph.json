@@ -40,6 +40,15 @@
       "norm_label": "main()"
     },
     {
+      "label": "commitlint.config.ts",
+      "file_type": "code",
+      "source_file": "commitlint.config.ts",
+      "source_location": "L1",
+      "id": "commitlint_config_ts",
+      "community": 18,
+      "norm_label": "commitlint.config.ts"
+    },
+    {
       "label": "cli.ts",
       "file_type": "code",
       "source_file": "packages/summon/src/cli.ts",
@@ -54,7 +63,7 @@
       "source_file": "packages/summon/src/constants.ts",
       "source_location": "L1",
       "id": "packages_summon_src_constants_ts",
-      "community": 18,
+      "community": 19,
       "norm_label": "constants.ts"
     },
     {
@@ -243,7 +252,7 @@
       "source_file": "packages/summon/src/agents/registry.ts",
       "source_location": "L1",
       "id": "packages_summon_src_agents_registry_ts",
-      "community": 19,
+      "community": 20,
       "norm_label": "registry.ts"
     },
     {
@@ -540,7 +549,7 @@
       "source_file": "packages/summon/src/skills/__tests__/installer.test.ts",
       "source_location": "L1",
       "id": "packages_summon_src_skills_tests_installer_test_ts",
-      "community": 20,
+      "community": 21,
       "norm_label": "installer.test.ts"
     },
     {
