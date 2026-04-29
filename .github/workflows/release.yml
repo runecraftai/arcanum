@@ -13,6 +13,11 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    # IMPORTANT: This workflow requires the following GitHub repository setting to be enabled:
+    # Settings → Actions → General → Workflow permissions
+    # ✓ Enable: "Allow GitHub Actions to create and approve pull requests"
+    # Without this setting, changesets/action will fail with:
+    # "GitHub Actions is not permitted to create or approve pull requests"
     permissions:
       contents: write
       pull-requests: write
