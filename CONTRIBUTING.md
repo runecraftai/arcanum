@@ -46,6 +46,83 @@ When making changes that affect public packages, you'll need to create a changes
 Add new agent configuration schema and fix typo in grimoire docs.
 ```
 
+## Committing
+
+### Conventional Commits Format
+
+Commits should follow the [Conventional Commits](https://www.conventionalcommits.org/) standard:
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+### Valid Commit Types
+
+The following types are enforced by commitlint:
+
+- `feat` — ✨ A new feature
+- `fix` — 🐛 A bug fix
+- `docs` — 📝 Documentation only changes
+- `style` — 💄 Markup, white-space, formatting
+- `refactor` — ♻️ A code change that neither fixes nor adds
+- `perf` — ⚡️ A code change that improves performance
+- `test` — ✅ Adding missing tests
+- `build` — 📦️ Changes affecting build system or deps
+- `ci` — 🎡 Changes to CI configuration
+- `chore` — 🔧 Other changes that don't modify src
+- `revert` — ⏪️ Reverts a previous commit
+
+### Valid Scopes
+
+Scopes help organize commits by area of change:
+
+- `summon` — `@runecraft/summon` package
+- `spells` — `@runecraft/spells` package
+- `familiar` — `@runecraft/familiar` package
+- `guild` — `@runecraft/guild` package
+- `grimoire` — `@runecraft/grimoire` package
+- `deps` — Dependency updates
+- `release` — Release-related changes
+
+### Interactive Commit with `bun run commit`
+
+Use the interactive prompt for guided commit creation:
+
+```bash
+bun run commit
+```
+
+This will present a multi-step wizard to:
+1. Select the commit type (feat, fix, docs, etc.)
+2. Choose the scope (optional)
+3. Write a short description
+4. Provide a longer description (optional)
+5. Mark breaking changes (if applicable)
+6. Reference related issues
+7. Confirm the commit message
+
+### Automated Release Flow
+
+The release process is fully automated:
+
+1. **Push commits** with conventional commit messages to `main`
+2. **CI generates changesets** from conventional commits automatically via `.changeset/generate-from-commits.ts`
+3. **Version PR created** by the release workflow with bumped versions and updated changelogs
+4. **Merge the PR** to trigger package publishing
+5. **Publish to npm** — Packages are automatically pushed to the npm registry
+6. **Create GitHub Release** — A GitHub Release is created with auto-generated changelog
+
+### Git Hooks
+
+- **Pre-commit hooks** (coming soon) — Lint and format checks
+- **Commit-msg hook** — Validates commits against the conventional commits standard
+
+If a commit message is invalid, the hook will reject it with details on what's wrong.
+
 ## Package Overview
 
 | Package | Status | Built | Published |
@@ -154,6 +231,30 @@ This respects:
 - `build` scripts in each `package.json`
 - Task caching for faster rebuilds
 - Proper dependency ordering across packages
+
+### Tag Lifecycle
+
+Release tags are created automatically by the `changesets/action` workflow when a Version PR is merged and packages are published.
+
+**Tag Format:**
+```
+@runecraft/<package>@<version>
+```
+
+Examples: `@runecraft/summon@1.2.3`, `@runecraft/spells@2.0.0`
+
+**Purpose:**
+Tags serve as anchors for the changeset generation script (`.changeset/generate-from-commits.ts`) to identify the last release and generate changesets only for commits since that point.
+
+**Bootstrap (First Run):**
+If no tags exist yet (first release), the script automatically reads all commits from the first commit in the repository.
+
+**Important: Do NOT manually create or delete tags**
+
+- Tags matching the pattern `@runecraft/*@*` are automatically managed by the release workflow
+- Manual manipulation of these tags can break the automated release process
+- Breaking a tag reference will cause the changeset generation script to misidentify commit ranges
+- If a tag is accidentally deleted or created, contact the maintainers to restore the workflow state
 
 ## Questions?
 

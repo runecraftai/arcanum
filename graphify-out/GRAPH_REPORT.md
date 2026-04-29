@@ -1,11 +1,11 @@
-# Graph Report - .  (2026-04-28)
+# Graph Report - .  (2026-04-29)
 
 ## Corpus Check
-- 30 files · ~77,703 words
+- 31 files · ~78,521 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 138 nodes · 169 edges · 21 communities detected
+- 139 nodes · 169 edges · 22 communities detected
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
@@ -31,6 +31,7 @@
 - [[_COMMUNITY_Community 18|Community 18]]
 - [[_COMMUNITY_Community 19|Community 19]]
 - [[_COMMUNITY_Community 20|Community 20]]
+- [[_COMMUNITY_Community 21|Community 21]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `installSkill()` - 8 edges
@@ -133,6 +134,10 @@ Nodes (0):
 Cohesion: 1.0
 Nodes (0): 
 
+### Community 21 - "Community 21"
+Cohesion: 1.0
+Nodes (0): 
+
 ## Knowledge Gaps
 - **Thin community `Community 12`** (2 nodes): `update.ts`, `run()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -146,11 +151,13 @@ Nodes (0):
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 17`** (2 nodes): `resolver.ts`, `resolveInstallPath()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 18`** (1 nodes): `constants.ts`
+- **Thin community `Community 18`** (1 nodes): `commitlint.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 19`** (1 nodes): `registry.ts`
+- **Thin community `Community 19`** (1 nodes): `constants.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 20`** (1 nodes): `installer.test.ts`
+- **Thin community `Community 20`** (1 nodes): `registry.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 21`** (1 nodes): `installer.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
