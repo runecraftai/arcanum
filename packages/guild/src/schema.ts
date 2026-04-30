@@ -10,6 +10,60 @@ export const AgentVariantSchema = z.object({
   model: z.string().optional(),
 });
 
+// V2: Skills discovery schema
+export const SkillsConfigSchema = z
+  .object({
+    auto_discover: z.boolean().default(true),
+    paths: z
+      .object({
+        global: z.string().default("~/.config/opencode/skills/"),
+        legacy: z.string().default("~/.config/opencode/.agents/skills/"),
+        project: z.string().default(".agents/skills/"),
+      })
+      .optional(),
+  })
+  .optional();
+
+// V2: Custom agents schema
+export const CustomAgentSchema = z.object({
+  prompt_file: z.string().optional(),
+  skills: z.array(z.string()).optional(),
+  model: z.string().optional(),
+});
+
+export const CustomAgentsConfigSchema = z
+  .record(z.string(), CustomAgentSchema)
+  .optional();
+
+// V2: Workflow schema
+export const WorkflowStepSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("agent"),
+    id: z.string(),
+    agent: z.string(),
+    mode: z.enum(["autonomous", "interactive"]).default("autonomous"),
+    input: z.string().optional(),
+    output: z.string().optional(),
+    on_error: z.enum(["end", "continue"]).or(z.string()).default("end"),
+  }),
+  z.object({
+    type: z.literal("gate"),
+    id: z.string(),
+    gate: z.string(),
+    on_reject: z.enum(["end"]).or(z.string()).default("end"),
+    on_approve: z.string().optional(),
+  }),
+]);
+
+export const WorkflowSchema = z.object({
+  description: z.string().optional(),
+  steps: z.array(WorkflowStepSchema).min(1),
+});
+
+export const WorkflowsConfigSchema = z
+  .record(z.string(), WorkflowSchema)
+  .optional();
+
 export const GuildConfigSchema = z.object({
   agents: z
     .record(
@@ -40,6 +94,10 @@ export const GuildConfigSchema = z.object({
       maxLength: z.number(),
     })
     .optional(),
+  // V2 sections (all optional for backward compatibility)
+  skills: SkillsConfigSchema,
+  custom_agents: CustomAgentsConfigSchema,
+  workflows: WorkflowsConfigSchema,
 });
 
 export type GuildConfig = z.infer<typeof GuildConfigSchema>;
@@ -75,6 +133,41 @@ export function generateJsonSchema() {
         properties: {
           appendCoordination: { type: "boolean" },
           maxLength: { type: "number" },
+        },
+      },
+      skills: {
+        type: "object",
+        properties: {
+          auto_discover: { type: "boolean" },
+          paths: {
+            type: "object",
+            properties: {
+              global: { type: "string" },
+              legacy: { type: "string" },
+              project: { type: "string" },
+            },
+          },
+        },
+      },
+      custom_agents: {
+        type: "object",
+        additionalProperties: {
+          type: "object",
+          properties: {
+            prompt_file: { type: "string" },
+            skills: { type: "array", items: { type: "string" } },
+            model: { type: "string" },
+          },
+        },
+      },
+      workflows: {
+        type: "object",
+        additionalProperties: {
+          type: "object",
+          properties: {
+            description: { type: "string" },
+            steps: { type: "array" },
+          },
         },
       },
     },
