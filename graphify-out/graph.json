@@ -9,7 +9,7 @@
       "source_file": "install.js",
       "source_location": "L1",
       "id": "install_js",
-      "community": 9,
+      "community": 13,
       "norm_label": "install.js"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "install.js",
       "source_location": "L48",
       "id": "install_findskills",
-      "community": 9,
+      "community": 13,
       "norm_label": "findskills()"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "install.js",
       "source_location": "L76",
       "id": "install_installskill",
-      "community": 9,
+      "community": 13,
       "norm_label": "installskill()"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "install.js",
       "source_location": "L112",
       "id": "install_main",
-      "community": 9,
+      "community": 13,
       "norm_label": "main()"
     },
     {
@@ -45,8 +45,521 @@
       "source_file": "commitlint.config.ts",
       "source_location": "L1",
       "id": "commitlint_config_ts",
-      "community": 18,
+      "community": 22,
       "norm_label": "commitlint.config.ts"
+    },
+    {
+      "label": "types.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/types.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_types_ts",
+      "community": 4,
+      "norm_label": "types.ts"
+    },
+    {
+      "label": "schema.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/schema.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_schema_ts",
+      "community": 4,
+      "norm_label": "schema.ts"
+    },
+    {
+      "label": "generateJsonSchema()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/schema.ts",
+      "source_location": "L109",
+      "id": "schema_generatejsonschema",
+      "community": 4,
+      "norm_label": "generatejsonschema()"
+    },
+    {
+      "label": "config.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_config_ts",
+      "community": 4,
+      "norm_label": "config.ts"
+    },
+    {
+      "label": "tryReadFile()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L19",
+      "id": "config_tryreadfile",
+      "community": 4,
+      "norm_label": "tryreadfile()"
+    },
+    {
+      "label": "deepMerge()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L37",
+      "id": "config_deepmerge",
+      "community": 4,
+      "norm_label": "deepmerge()"
+    },
+    {
+      "label": "resolvePath()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L69",
+      "id": "config_resolvepath",
+      "community": 4,
+      "norm_label": "resolvepath()"
+    },
+    {
+      "label": "loadConfig()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L79",
+      "id": "config_loadconfig",
+      "community": 4,
+      "norm_label": "loadconfig()"
+    },
+    {
+      "label": "hooks.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/hooks.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_hooks_ts",
+      "community": 4,
+      "norm_label": "hooks.ts"
+    },
+    {
+      "label": "fileExists()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/hooks.ts",
+      "source_location": "L19",
+      "id": "hooks_fileexists",
+      "community": 4,
+      "norm_label": "fileexists()"
+    },
+    {
+      "label": "buildHooks()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/hooks.ts",
+      "source_location": "L31",
+      "id": "hooks_buildhooks",
+      "community": 4,
+      "norm_label": "buildhooks()"
+    },
+    {
+      "label": "tools.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/tools.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_tools_ts",
+      "community": 4,
+      "norm_label": "tools.ts"
+    },
+    {
+      "label": "fileExists()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/tools.ts",
+      "source_location": "L19",
+      "id": "tools_fileexists",
+      "community": 4,
+      "norm_label": "fileexists()"
+    },
+    {
+      "label": "buildTools()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/tools.ts",
+      "source_location": "L31",
+      "id": "tools_buildtools",
+      "community": 4,
+      "norm_label": "buildtools()"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/index.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_index_ts",
+      "community": 4,
+      "norm_label": "index.ts"
+    },
+    {
+      "label": "GuildPlugin()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/index.ts",
+      "source_location": "L32",
+      "id": "index_guildplugin",
+      "community": 4,
+      "norm_label": "guildplugin()"
+    },
+    {
+      "label": "types.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/skills/types.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_skills_types_ts",
+      "community": 7,
+      "norm_label": "types.ts"
+    },
+    {
+      "label": "discovery.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_skills_discovery_ts",
+      "community": 7,
+      "norm_label": "discovery.ts"
+    },
+    {
+      "label": "expandTilde()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L19",
+      "id": "discovery_expandtilde",
+      "community": 7,
+      "norm_label": "expandtilde()"
+    },
+    {
+      "label": "parseFrontmatter()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L36",
+      "id": "discovery_parsefrontmatter",
+      "community": 7,
+      "norm_label": "parsefrontmatter()"
+    },
+    {
+      "label": "scanDirectory()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L87",
+      "id": "discovery_scandirectory",
+      "community": 7,
+      "norm_label": "scandirectory()"
+    },
+    {
+      "label": "discoverSkills()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L168",
+      "id": "discovery_discoverskills",
+      "community": 7,
+      "norm_label": "discoverskills()"
+    },
+    {
+      "label": "registry-compat.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/skills/registry-compat.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_skills_registry_compat_ts",
+      "community": 7,
+      "norm_label": "registry-compat.ts"
+    },
+    {
+      "label": "loadRegistry()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/skills/registry-compat.ts",
+      "source_location": "L24",
+      "id": "registry_compat_loadregistry",
+      "community": 7,
+      "norm_label": "loadregistry()"
+    },
+    {
+      "label": "mergeRegistryMetadata()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/skills/registry-compat.ts",
+      "source_location": "L49",
+      "id": "registry_compat_mergeregistrymetadata",
+      "community": 7,
+      "norm_label": "mergeregistrymetadata()"
+    },
+    {
+      "label": "types.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/agents/types.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_agents_types_ts",
+      "community": 10,
+      "norm_label": "types.ts"
+    },
+    {
+      "label": "validator.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/agents/validator.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_agents_validator_ts",
+      "community": 10,
+      "norm_label": "validator.ts"
+    },
+    {
+      "label": "validatePromptFilePath()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/agents/validator.ts",
+      "source_location": "L20",
+      "id": "validator_validatepromptfilepath",
+      "community": 10,
+      "norm_label": "validatepromptfilepath()"
+    },
+    {
+      "label": "validateSkillRefs()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/agents/validator.ts",
+      "source_location": "L64",
+      "id": "validator_validateskillrefs",
+      "community": 10,
+      "norm_label": "validateskillrefs()"
+    },
+    {
+      "label": "resolver.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/agents/resolver.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_agents_resolver_ts",
+      "community": 10,
+      "norm_label": "resolver.ts"
+    },
+    {
+      "label": "resolveAgentConfig()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/agents/resolver.ts",
+      "source_location": "L26",
+      "id": "resolver_resolveagentconfig",
+      "community": 10,
+      "norm_label": "resolveagentconfig()"
+    },
+    {
+      "label": "types.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/types.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_workflows_types_ts",
+      "community": 5,
+      "norm_label": "types.ts"
+    },
+    {
+      "label": "interpolation.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/interpolation.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_workflows_interpolation_ts",
+      "community": 5,
+      "norm_label": "interpolation.ts"
+    },
+    {
+      "label": "extractOutputRef()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/interpolation.ts",
+      "source_location": "L9",
+      "id": "interpolation_extractoutputref",
+      "community": 5,
+      "norm_label": "extractoutputref()"
+    },
+    {
+      "label": "interpolateTemplate()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/interpolation.ts",
+      "source_location": "L19",
+      "id": "interpolation_interpolatetemplate",
+      "community": 5,
+      "norm_label": "interpolatetemplate()"
+    },
+    {
+      "label": "gates.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/gates.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_workflows_gates_ts",
+      "community": 5,
+      "norm_label": "gates.ts"
+    },
+    {
+      "label": "handleGateStep()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/gates.ts",
+      "source_location": "L38",
+      "id": "gates_handlegatestep",
+      "community": 5,
+      "norm_label": "handlegatestep()"
+    },
+    {
+      "label": "state.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/state.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_workflows_state_ts",
+      "community": 5,
+      "norm_label": "state.ts"
+    },
+    {
+      "label": "generateResumeToken()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/state.ts",
+      "source_location": "L13",
+      "id": "state_generateresumetoken",
+      "community": 5,
+      "norm_label": "generateresumetoken()"
+    },
+    {
+      "label": "sanitizeWorkflowName()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/state.ts",
+      "source_location": "L21",
+      "id": "state_sanitizeworkflowname",
+      "community": 5,
+      "norm_label": "sanitizeworkflowname()"
+    },
+    {
+      "label": "persistState()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/state.ts",
+      "source_location": "L29",
+      "id": "state_persiststate",
+      "community": 5,
+      "norm_label": "persiststate()"
+    },
+    {
+      "label": "loadState()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/state.ts",
+      "source_location": "L64",
+      "id": "state_loadstate",
+      "community": 5,
+      "norm_label": "loadstate()"
+    },
+    {
+      "label": "engine.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_workflows_engine_ts",
+      "community": 5,
+      "norm_label": "engine.ts"
+    },
+    {
+      "label": "WorkflowEngine",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L18",
+      "id": "engine_workflowengine",
+      "community": 6,
+      "norm_label": "workflowengine"
+    },
+    {
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L22",
+      "id": "engine_workflowengine_constructor",
+      "community": 6,
+      "norm_label": ".constructor()"
+    },
+    {
+      "label": ".start()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L33",
+      "id": "engine_workflowengine_start",
+      "community": 6,
+      "norm_label": ".start()"
+    },
+    {
+      "label": ".handleGateActionWait()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L64",
+      "id": "engine_workflowengine_handlegateactionwait",
+      "community": 6,
+      "norm_label": ".handlegateactionwait()"
+    },
+    {
+      "label": ".handleGateActionAdvance()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L76",
+      "id": "engine_workflowengine_handlegateactionadvance",
+      "community": 6,
+      "norm_label": ".handlegateactionadvance()"
+    },
+    {
+      "label": ".handleGateActionJump()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L85",
+      "id": "engine_workflowengine_handlegateactionjump",
+      "community": 6,
+      "norm_label": ".handlegateactionjump()"
+    },
+    {
+      "label": ".handleGateActionEnd()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L114",
+      "id": "engine_workflowengine_handlegateactionend",
+      "community": 6,
+      "norm_label": ".handlegateactionend()"
+    },
+    {
+      "label": ".resume()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L139",
+      "id": "engine_workflowengine_resume",
+      "community": 6,
+      "norm_label": ".resume()"
+    },
+    {
+      "label": ".handleAgentStep()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L187",
+      "id": "engine_workflowengine_handleagentstep",
+      "community": 6,
+      "norm_label": ".handleagentstep()"
+    },
+    {
+      "label": ".handleGateStepWait()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L220",
+      "id": "engine_workflowengine_handlegatestepwait",
+      "community": 6,
+      "norm_label": ".handlegatestepwait()"
+    },
+    {
+      "label": ".advanceToNextStep()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L255",
+      "id": "engine_workflowengine_advancetonextstep",
+      "community": 6,
+      "norm_label": ".advancetonextstep()"
+    },
+    {
+      "label": ".buildResponse()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L283",
+      "id": "engine_workflowengine_buildresponse",
+      "community": 6,
+      "norm_label": ".buildresponse()"
+    },
+    {
+      "label": "generate-schema.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/scripts/generate-schema.ts",
+      "source_location": "L1",
+      "id": "packages_guild_scripts_generate_schema_ts",
+      "community": 15,
+      "norm_label": "generate-schema.ts"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "packages/guild/scripts/generate-schema.ts",
+      "source_location": "L12",
+      "id": "generate_schema_main",
+      "community": 15,
+      "norm_label": "main()"
     },
     {
       "label": "cli.ts",
@@ -63,7 +576,7 @@
       "source_file": "packages/summon/src/constants.ts",
       "source_location": "L1",
       "id": "packages_summon_src_constants_ts",
-      "community": 19,
+      "community": 23,
       "norm_label": "constants.ts"
     },
     {
@@ -72,7 +585,7 @@
       "source_file": "packages/summon/src/commands/update.ts",
       "source_location": "L1",
       "id": "packages_summon_src_commands_update_ts",
-      "community": 12,
+      "community": 16,
       "norm_label": "update.ts"
     },
     {
@@ -81,7 +594,7 @@
       "source_file": "packages/summon/src/commands/update.ts",
       "source_location": "L16",
       "id": "update_run",
-      "community": 12,
+      "community": 16,
       "norm_label": "run()"
     },
     {
@@ -90,7 +603,7 @@
       "source_file": "packages/summon/src/commands/remove.ts",
       "source_location": "L1",
       "id": "packages_summon_src_commands_remove_ts",
-      "community": 13,
+      "community": 17,
       "norm_label": "remove.ts"
     },
     {
@@ -99,7 +612,7 @@
       "source_file": "packages/summon/src/commands/remove.ts",
       "source_location": "L13",
       "id": "remove_run",
-      "community": 13,
+      "community": 17,
       "norm_label": "run()"
     },
     {
@@ -108,7 +621,7 @@
       "source_file": "packages/summon/src/commands/list.ts",
       "source_location": "L1",
       "id": "packages_summon_src_commands_list_ts",
-      "community": 14,
+      "community": 18,
       "norm_label": "list.ts"
     },
     {
@@ -117,7 +630,7 @@
       "source_file": "packages/summon/src/commands/list.ts",
       "source_location": "L11",
       "id": "list_run",
-      "community": 14,
+      "community": 18,
       "norm_label": "run()"
     },
     {
@@ -126,7 +639,7 @@
       "source_file": "packages/summon/src/commands/install.ts",
       "source_location": "L1",
       "id": "packages_summon_src_commands_install_ts",
-      "community": 15,
+      "community": 19,
       "norm_label": "install.ts"
     },
     {
@@ -135,7 +648,7 @@
       "source_file": "packages/summon/src/commands/install.ts",
       "source_location": "L9",
       "id": "install_run",
-      "community": 15,
+      "community": 19,
       "norm_label": "run()"
     },
     {
@@ -144,7 +657,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L1",
       "id": "packages_summon_src_utils_fs_ts",
-      "community": 6,
+      "community": 9,
       "norm_label": "fs.ts"
     },
     {
@@ -153,7 +666,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L7",
       "id": "fs_exists",
-      "community": 6,
+      "community": 9,
       "norm_label": "exists()"
     },
     {
@@ -162,7 +675,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L19",
       "id": "fs_issymlink",
-      "community": 6,
+      "community": 9,
       "norm_label": "issymlink()"
     },
     {
@@ -171,7 +684,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L32",
       "id": "fs_copyfile",
-      "community": 6,
+      "community": 9,
       "norm_label": "copyfile()"
     },
     {
@@ -180,7 +693,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L44",
       "id": "fs_symlinkfile",
-      "community": 6,
+      "community": 9,
       "norm_label": "symlinkfile()"
     },
     {
@@ -189,7 +702,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L52",
       "id": "fs_removefile",
-      "community": 6,
+      "community": 9,
       "norm_label": "removefile()"
     },
     {
@@ -198,7 +711,7 @@
       "source_file": "packages/summon/src/utils/fs.ts",
       "source_location": "L70",
       "id": "fs_ensuredir",
-      "community": 6,
+      "community": 9,
       "norm_label": "ensuredir()"
     },
     {
@@ -207,7 +720,7 @@
       "source_file": "packages/summon/src/utils/paths.ts",
       "source_location": "L1",
       "id": "packages_summon_src_utils_paths_ts",
-      "community": 8,
+      "community": 12,
       "norm_label": "paths.ts"
     },
     {
@@ -216,7 +729,7 @@
       "source_file": "packages/summon/src/utils/paths.ts",
       "source_location": "L11",
       "id": "paths_resolvehome",
-      "community": 8,
+      "community": 12,
       "norm_label": "resolvehome()"
     },
     {
@@ -225,7 +738,7 @@
       "source_file": "packages/summon/src/utils/paths.ts",
       "source_location": "L22",
       "id": "paths_resolveglobalskillshub",
-      "community": 8,
+      "community": 12,
       "norm_label": "resolveglobalskillshub()"
     },
     {
@@ -234,7 +747,7 @@
       "source_file": "packages/summon/src/utils/paths.ts",
       "source_location": "L39",
       "id": "paths_resolvespellsdir",
-      "community": 8,
+      "community": 12,
       "norm_label": "resolvespellsdir()"
     },
     {
@@ -243,7 +756,7 @@
       "source_file": "packages/summon/src/utils/paths.ts",
       "source_location": "L67",
       "id": "paths_resolveagentpath",
-      "community": 8,
+      "community": 12,
       "norm_label": "resolveagentpath()"
     },
     {
@@ -252,7 +765,7 @@
       "source_file": "packages/summon/src/agents/registry.ts",
       "source_location": "L1",
       "id": "packages_summon_src_agents_registry_ts",
-      "community": 20,
+      "community": 24,
       "norm_label": "registry.ts"
     },
     {
@@ -261,7 +774,7 @@
       "source_file": "packages/summon/src/agents/detector.ts",
       "source_location": "L1",
       "id": "packages_summon_src_agents_detector_ts",
-      "community": 16,
+      "community": 20,
       "norm_label": "detector.ts"
     },
     {
@@ -270,7 +783,7 @@
       "source_file": "packages/summon/src/agents/detector.ts",
       "source_location": "L16",
       "id": "detector_detectagents",
-      "community": 16,
+      "community": 20,
       "norm_label": "detectagents()"
     },
     {
@@ -279,7 +792,7 @@
       "source_file": "packages/summon/src/agents/resolver.ts",
       "source_location": "L1",
       "id": "packages_summon_src_agents_resolver_ts",
-      "community": 17,
+      "community": 21,
       "norm_label": "resolver.ts"
     },
     {
@@ -288,7 +801,7 @@
       "source_file": "packages/summon/src/agents/resolver.ts",
       "source_location": "L7",
       "id": "resolver_resolveinstallpath",
-      "community": 17,
+      "community": 21,
       "norm_label": "resolveinstallpath()"
     },
     {
@@ -297,7 +810,7 @@
       "source_file": "packages/summon/src/skills/loader.ts",
       "source_location": "L1",
       "id": "packages_summon_src_skills_loader_ts",
-      "community": 10,
+      "community": 14,
       "norm_label": "loader.ts"
     },
     {
@@ -306,7 +819,7 @@
       "source_file": "packages/summon/src/skills/loader.ts",
       "source_location": "L17",
       "id": "loader_sanitizeskillname",
-      "community": 10,
+      "community": 14,
       "norm_label": "sanitizeskillname()"
     },
     {
@@ -315,7 +828,7 @@
       "source_file": "packages/summon/src/skills/loader.ts",
       "source_location": "L32",
       "id": "loader_parsefrontmatter",
-      "community": 10,
+      "community": 14,
       "norm_label": "parsefrontmatter()"
     },
     {
@@ -324,7 +837,7 @@
       "source_file": "packages/summon/src/skills/loader.ts",
       "source_location": "L87",
       "id": "loader_loadskillcatalog",
-      "community": 10,
+      "community": 14,
       "norm_label": "loadskillcatalog()"
     },
     {
@@ -333,7 +846,7 @@
       "source_file": "packages/summon/src/skills/discovery.ts",
       "source_location": "L1",
       "id": "packages_summon_src_skills_discovery_ts",
-      "community": 7,
+      "community": 11,
       "norm_label": "discovery.ts"
     },
     {
@@ -342,7 +855,7 @@
       "source_file": "packages/summon/src/skills/discovery.ts",
       "source_location": "L26",
       "id": "discovery_discoverinstalledskills",
-      "community": 7,
+      "community": 11,
       "norm_label": "discoverinstalledskills()"
     },
     {
@@ -351,7 +864,7 @@
       "source_file": "packages/summon/src/skills/discovery.ts",
       "source_location": "L99",
       "id": "discovery_discoverhubskills",
-      "community": 7,
+      "community": 11,
       "norm_label": "discoverhubskills()"
     },
     {
@@ -360,7 +873,7 @@
       "source_file": "packages/summon/src/skills/discovery.ts",
       "source_location": "L166",
       "id": "discovery_getinstalledskillnames",
-      "community": 7,
+      "community": 11,
       "norm_label": "getinstalledskillnames()"
     },
     {
@@ -369,7 +882,7 @@
       "source_file": "packages/summon/src/skills/discovery.ts",
       "source_location": "L179",
       "id": "discovery_normalizeskillname",
-      "community": 7,
+      "community": 11,
       "norm_label": "normalizeskillname()"
     },
     {
@@ -378,7 +891,7 @@
       "source_file": "packages/summon/src/skills/discovery.ts",
       "source_location": "L183",
       "id": "discovery_filterskillsbyinstallstatus",
-      "community": 7,
+      "community": 11,
       "norm_label": "filterskillsbyinstallstatus()"
     },
     {
@@ -549,7 +1062,7 @@
       "source_file": "packages/summon/src/skills/__tests__/installer.test.ts",
       "source_location": "L1",
       "id": "packages_summon_src_skills_tests_installer_test_ts",
-      "community": 21,
+      "community": 25,
       "norm_label": "installer.test.ts"
     },
     {
@@ -576,7 +1089,7 @@
       "source_file": "packages/summon/src/tui/skill-browse.ts",
       "source_location": "L1",
       "id": "packages_summon_src_tui_skill_browse_ts",
-      "community": 11,
+      "community": 0,
       "norm_label": "skill-browse.ts"
     },
     {
@@ -585,7 +1098,7 @@
       "source_file": "packages/summon/src/tui/skill-browse.ts",
       "source_location": "L10",
       "id": "skill_browse_browseinstall",
-      "community": 11,
+      "community": 0,
       "norm_label": "browseinstall()"
     },
     {
@@ -594,7 +1107,7 @@
       "source_file": "packages/summon/src/tui/skill-browse.ts",
       "source_location": "L38",
       "id": "skill_browse_browseupdateremove",
-      "community": 11,
+      "community": 0,
       "norm_label": "browseupdateremove()"
     },
     {
@@ -603,7 +1116,7 @@
       "source_file": "packages/summon/src/tui/skill-browse.ts",
       "source_location": "L64",
       "id": "skill_browse_browseskills",
-      "community": 11,
+      "community": 0,
       "norm_label": "browseskills()"
     },
     {
@@ -1071,7 +1584,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L1",
       "id": "packages_familiar_agent_extensions_tmux_delegate_handoff_ts",
-      "community": 4,
+      "community": 8,
       "norm_label": "handoff.ts"
     },
     {
@@ -1080,7 +1593,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L13",
       "id": "handoff_generateid",
-      "community": 4,
+      "community": 8,
       "norm_label": "generateid()"
     },
     {
@@ -1089,7 +1602,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L18",
       "id": "handoff_buildhandofffile",
-      "community": 4,
+      "community": 8,
       "norm_label": "buildhandofffile()"
     },
     {
@@ -1098,7 +1611,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L65",
       "id": "handoff_buildsystempromptfile",
-      "community": 4,
+      "community": 8,
       "norm_label": "buildsystempromptfile()"
     },
     {
@@ -1107,7 +1620,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L72",
       "id": "handoff_buildrunscript",
-      "community": 4,
+      "community": 8,
       "norm_label": "buildrunscript()"
     },
     {
@@ -1116,7 +1629,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L112",
       "id": "handoff_waitforresult",
-      "community": 4,
+      "community": 8,
       "norm_label": "waitforresult()"
     },
     {
@@ -1125,7 +1638,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L140",
       "id": "handoff_readresult",
-      "community": 4,
+      "community": 8,
       "norm_label": "readresult()"
     },
     {
@@ -1134,7 +1647,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/handoff.ts",
       "source_location": "L149",
       "id": "handoff_cleanup",
-      "community": 4,
+      "community": 8,
       "norm_label": "cleanup()"
     },
     {
@@ -1188,7 +1701,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L22",
       "id": "tmux_tmuxlayout",
-      "community": 5,
+      "community": 3,
       "norm_label": "tmuxlayout"
     },
     {
@@ -1197,7 +1710,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L25",
       "id": "tmux_tmuxlayout_isintmux",
-      "community": 5,
+      "community": 3,
       "norm_label": ".isintmux()"
     },
     {
@@ -1206,7 +1719,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L30",
       "id": "tmux_tmuxlayout_createpane",
-      "community": 5,
+      "community": 3,
       "norm_label": ".createpane()"
     },
     {
@@ -1215,7 +1728,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L38",
       "id": "tmux_tmuxlayout_removepane",
-      "community": 5,
+      "community": 3,
       "norm_label": ".removepane()"
     },
     {
@@ -1224,7 +1737,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L58",
       "id": "tmux_tmuxlayout_spawntmuxpane",
-      "community": 5,
+      "community": 3,
       "norm_label": ".spawntmuxpane()"
     },
     {
@@ -1233,7 +1746,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L98",
       "id": "tmux_tmuxlayout_spawnbackground",
-      "community": 5,
+      "community": 3,
       "norm_label": ".spawnbackground()"
     },
     {
@@ -1242,7 +1755,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L117",
       "id": "tmux_tmuxlayout_count",
-      "community": 5,
+      "community": 3,
       "norm_label": ".count()"
     },
     {
@@ -1251,7 +1764,7 @@
       "source_file": "packages/familiar/agent/extensions/tmux-delegate/tmux.ts",
       "source_location": "L121",
       "id": "tmux_tmuxlayout_getactiveagents",
-      "community": 5,
+      "community": 3,
       "norm_label": ".getactiveagents()"
     }
   ],
@@ -1314,6 +1827,906 @@
       "_tgt": "install_installskill",
       "source": "install_installskill",
       "target": "install_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/tools.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "packages_guild_src_tools_ts",
+      "_tgt": "packages_guild_src_types_ts",
+      "source": "packages_guild_src_types_ts",
+      "target": "packages_guild_src_tools_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/index.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_src": "packages_guild_src_index_ts",
+      "_tgt": "packages_guild_src_types_ts",
+      "source": "packages_guild_src_types_ts",
+      "target": "packages_guild_src_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/schema.ts",
+      "source_location": "L109",
+      "weight": 1.0,
+      "_src": "packages_guild_src_schema_ts",
+      "_tgt": "schema_generatejsonschema",
+      "source": "packages_guild_src_schema_ts",
+      "target": "schema_generatejsonschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_src": "packages_guild_src_config_ts",
+      "_tgt": "packages_guild_src_schema_ts",
+      "source": "packages_guild_src_schema_ts",
+      "target": "packages_guild_src_config_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/hooks.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "packages_guild_src_hooks_ts",
+      "_tgt": "packages_guild_src_schema_ts",
+      "source": "packages_guild_src_schema_ts",
+      "target": "packages_guild_src_hooks_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/tools.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_src": "packages_guild_src_tools_ts",
+      "_tgt": "packages_guild_src_schema_ts",
+      "source": "packages_guild_src_schema_ts",
+      "target": "packages_guild_src_tools_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_src": "packages_guild_src_config_ts",
+      "_tgt": "config_tryreadfile",
+      "source": "packages_guild_src_config_ts",
+      "target": "config_tryreadfile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_src": "packages_guild_src_config_ts",
+      "_tgt": "config_deepmerge",
+      "source": "packages_guild_src_config_ts",
+      "target": "config_deepmerge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L69",
+      "weight": 1.0,
+      "_src": "packages_guild_src_config_ts",
+      "_tgt": "config_resolvepath",
+      "source": "packages_guild_src_config_ts",
+      "target": "config_resolvepath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_src": "packages_guild_src_config_ts",
+      "_tgt": "config_loadconfig",
+      "source": "packages_guild_src_config_ts",
+      "target": "config_loadconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/index.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "packages_guild_src_index_ts",
+      "_tgt": "packages_guild_src_config_ts",
+      "source": "packages_guild_src_config_ts",
+      "target": "packages_guild_src_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_src": "config_loadconfig",
+      "_tgt": "config_tryreadfile",
+      "source": "config_tryreadfile",
+      "target": "config_loadconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L125",
+      "weight": 1.0,
+      "_src": "config_loadconfig",
+      "_tgt": "config_deepmerge",
+      "source": "config_deepmerge",
+      "target": "config_loadconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L133",
+      "weight": 1.0,
+      "_src": "config_loadconfig",
+      "_tgt": "config_resolvepath",
+      "source": "config_resolvepath",
+      "target": "config_loadconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/hooks.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_src": "packages_guild_src_hooks_ts",
+      "_tgt": "hooks_fileexists",
+      "source": "packages_guild_src_hooks_ts",
+      "target": "hooks_fileexists",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/hooks.ts",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_src": "packages_guild_src_hooks_ts",
+      "_tgt": "hooks_buildhooks",
+      "source": "packages_guild_src_hooks_ts",
+      "target": "hooks_buildhooks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/index.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "packages_guild_src_index_ts",
+      "_tgt": "packages_guild_src_hooks_ts",
+      "source": "packages_guild_src_hooks_ts",
+      "target": "packages_guild_src_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/tools.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_src": "packages_guild_src_tools_ts",
+      "_tgt": "packages_guild_src_workflows_engine_ts",
+      "source": "packages_guild_src_tools_ts",
+      "target": "packages_guild_src_workflows_engine_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/tools.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_src": "packages_guild_src_tools_ts",
+      "_tgt": "packages_guild_src_agents_resolver_ts",
+      "source": "packages_guild_src_tools_ts",
+      "target": "packages_guild_src_agents_resolver_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/tools.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_src": "packages_guild_src_tools_ts",
+      "_tgt": "tools_fileexists",
+      "source": "packages_guild_src_tools_ts",
+      "target": "tools_fileexists",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/tools.ts",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_src": "packages_guild_src_tools_ts",
+      "_tgt": "tools_buildtools",
+      "source": "packages_guild_src_tools_ts",
+      "target": "tools_buildtools",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/index.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "packages_guild_src_index_ts",
+      "_tgt": "packages_guild_src_tools_ts",
+      "source": "packages_guild_src_tools_ts",
+      "target": "packages_guild_src_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/index.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_src": "packages_guild_src_index_ts",
+      "_tgt": "packages_guild_src_skills_discovery_ts",
+      "source": "packages_guild_src_index_ts",
+      "target": "packages_guild_src_skills_discovery_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/index.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_src": "packages_guild_src_index_ts",
+      "_tgt": "packages_guild_src_workflows_engine_ts",
+      "source": "packages_guild_src_index_ts",
+      "target": "packages_guild_src_workflows_engine_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/index.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_src": "packages_guild_src_index_ts",
+      "_tgt": "index_guildplugin",
+      "source": "packages_guild_src_index_ts",
+      "target": "index_guildplugin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "packages_guild_src_skills_discovery_ts",
+      "_tgt": "packages_guild_src_skills_types_ts",
+      "source": "packages_guild_src_skills_types_ts",
+      "target": "packages_guild_src_skills_discovery_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/skills/registry-compat.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "packages_guild_src_skills_registry_compat_ts",
+      "_tgt": "packages_guild_src_skills_types_ts",
+      "source": "packages_guild_src_skills_types_ts",
+      "target": "packages_guild_src_skills_registry_compat_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_src": "packages_guild_src_skills_discovery_ts",
+      "_tgt": "discovery_expandtilde",
+      "source": "packages_guild_src_skills_discovery_ts",
+      "target": "discovery_expandtilde",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_src": "packages_guild_src_skills_discovery_ts",
+      "_tgt": "discovery_parsefrontmatter",
+      "source": "packages_guild_src_skills_discovery_ts",
+      "target": "discovery_parsefrontmatter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L87",
+      "weight": 1.0,
+      "_src": "packages_guild_src_skills_discovery_ts",
+      "_tgt": "discovery_scandirectory",
+      "source": "packages_guild_src_skills_discovery_ts",
+      "target": "discovery_scandirectory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L168",
+      "weight": 1.0,
+      "_src": "packages_guild_src_skills_discovery_ts",
+      "_tgt": "discovery_discoverskills",
+      "source": "packages_guild_src_skills_discovery_ts",
+      "target": "discovery_discoverskills",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L92",
+      "weight": 1.0,
+      "_src": "discovery_scandirectory",
+      "_tgt": "discovery_expandtilde",
+      "source": "discovery_expandtilde",
+      "target": "discovery_scandirectory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L189",
+      "weight": 1.0,
+      "_src": "discovery_discoverskills",
+      "_tgt": "discovery_expandtilde",
+      "source": "discovery_expandtilde",
+      "target": "discovery_discoverskills",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L109",
+      "weight": 1.0,
+      "_src": "discovery_scandirectory",
+      "_tgt": "discovery_parsefrontmatter",
+      "source": "discovery_parsefrontmatter",
+      "target": "discovery_scandirectory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/skills/discovery.ts",
+      "source_location": "L192",
+      "weight": 1.0,
+      "_src": "discovery_discoverskills",
+      "_tgt": "discovery_scandirectory",
+      "source": "discovery_scandirectory",
+      "target": "discovery_discoverskills",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/skills/registry-compat.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_src": "packages_guild_src_skills_registry_compat_ts",
+      "_tgt": "registry_compat_loadregistry",
+      "source": "packages_guild_src_skills_registry_compat_ts",
+      "target": "registry_compat_loadregistry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/skills/registry-compat.ts",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_src": "packages_guild_src_skills_registry_compat_ts",
+      "_tgt": "registry_compat_mergeregistrymetadata",
+      "source": "packages_guild_src_skills_registry_compat_ts",
+      "target": "registry_compat_mergeregistrymetadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/agents/validator.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "packages_guild_src_agents_validator_ts",
+      "_tgt": "packages_guild_src_agents_types_ts",
+      "source": "packages_guild_src_agents_types_ts",
+      "target": "packages_guild_src_agents_validator_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/agents/resolver.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "packages_guild_src_agents_resolver_ts",
+      "_tgt": "packages_guild_src_agents_types_ts",
+      "source": "packages_guild_src_agents_types_ts",
+      "target": "packages_guild_src_agents_resolver_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/agents/validator.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_src": "packages_guild_src_agents_validator_ts",
+      "_tgt": "validator_validatepromptfilepath",
+      "source": "packages_guild_src_agents_validator_ts",
+      "target": "validator_validatepromptfilepath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/agents/validator.ts",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_src": "packages_guild_src_agents_validator_ts",
+      "_tgt": "validator_validateskillrefs",
+      "source": "packages_guild_src_agents_validator_ts",
+      "target": "validator_validateskillrefs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/agents/resolver.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "packages_guild_src_agents_resolver_ts",
+      "_tgt": "packages_guild_src_agents_validator_ts",
+      "source": "packages_guild_src_agents_validator_ts",
+      "target": "packages_guild_src_agents_resolver_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/agents/resolver.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_src": "packages_guild_src_agents_resolver_ts",
+      "_tgt": "resolver_resolveagentconfig",
+      "source": "packages_guild_src_agents_resolver_ts",
+      "target": "resolver_resolveagentconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/gates.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_gates_ts",
+      "_tgt": "packages_guild_src_workflows_types_ts",
+      "source": "packages_guild_src_workflows_types_ts",
+      "target": "packages_guild_src_workflows_gates_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/state.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_state_ts",
+      "_tgt": "packages_guild_src_workflows_types_ts",
+      "source": "packages_guild_src_workflows_types_ts",
+      "target": "packages_guild_src_workflows_state_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_engine_ts",
+      "_tgt": "packages_guild_src_workflows_types_ts",
+      "source": "packages_guild_src_workflows_types_ts",
+      "target": "packages_guild_src_workflows_engine_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/interpolation.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_interpolation_ts",
+      "_tgt": "interpolation_extractoutputref",
+      "source": "packages_guild_src_workflows_interpolation_ts",
+      "target": "interpolation_extractoutputref",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/interpolation.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_interpolation_ts",
+      "_tgt": "interpolation_interpolatetemplate",
+      "source": "packages_guild_src_workflows_interpolation_ts",
+      "target": "interpolation_interpolatetemplate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_engine_ts",
+      "_tgt": "packages_guild_src_workflows_interpolation_ts",
+      "source": "packages_guild_src_workflows_interpolation_ts",
+      "target": "packages_guild_src_workflows_engine_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/gates.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_gates_ts",
+      "_tgt": "gates_handlegatestep",
+      "source": "packages_guild_src_workflows_gates_ts",
+      "target": "gates_handlegatestep",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_engine_ts",
+      "_tgt": "packages_guild_src_workflows_gates_ts",
+      "source": "packages_guild_src_workflows_gates_ts",
+      "target": "packages_guild_src_workflows_engine_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/state.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_state_ts",
+      "_tgt": "state_generateresumetoken",
+      "source": "packages_guild_src_workflows_state_ts",
+      "target": "state_generateresumetoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/state.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_state_ts",
+      "_tgt": "state_sanitizeworkflowname",
+      "source": "packages_guild_src_workflows_state_ts",
+      "target": "state_sanitizeworkflowname",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/state.ts",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_state_ts",
+      "_tgt": "state_persiststate",
+      "source": "packages_guild_src_workflows_state_ts",
+      "target": "state_persiststate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/state.ts",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_state_ts",
+      "_tgt": "state_loadstate",
+      "source": "packages_guild_src_workflows_state_ts",
+      "target": "state_loadstate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_engine_ts",
+      "_tgt": "packages_guild_src_workflows_state_ts",
+      "source": "packages_guild_src_workflows_state_ts",
+      "target": "packages_guild_src_workflows_engine_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/state.ts",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_src": "state_persiststate",
+      "_tgt": "state_sanitizeworkflowname",
+      "source": "state_sanitizeworkflowname",
+      "target": "state_persiststate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_src": "packages_guild_src_workflows_engine_ts",
+      "_tgt": "engine_workflowengine",
+      "source": "packages_guild_src_workflows_engine_ts",
+      "target": "engine_workflowengine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_src": "engine_workflowengine",
+      "_tgt": "engine_workflowengine_constructor",
+      "source": "engine_workflowengine",
+      "target": "engine_workflowengine_constructor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_src": "engine_workflowengine",
+      "_tgt": "engine_workflowengine_start",
+      "source": "engine_workflowengine",
+      "target": "engine_workflowengine_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_src": "engine_workflowengine",
+      "_tgt": "engine_workflowengine_handlegateactionwait",
+      "source": "engine_workflowengine",
+      "target": "engine_workflowengine_handlegateactionwait",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_src": "engine_workflowengine",
+      "_tgt": "engine_workflowengine_handlegateactionadvance",
+      "source": "engine_workflowengine",
+      "target": "engine_workflowengine_handlegateactionadvance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_src": "engine_workflowengine",
+      "_tgt": "engine_workflowengine_handlegateactionjump",
+      "source": "engine_workflowengine",
+      "target": "engine_workflowengine_handlegateactionjump",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L114",
+      "weight": 1.0,
+      "_src": "engine_workflowengine",
+      "_tgt": "engine_workflowengine_handlegateactionend",
+      "source": "engine_workflowengine",
+      "target": "engine_workflowengine_handlegateactionend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L139",
+      "weight": 1.0,
+      "_src": "engine_workflowengine",
+      "_tgt": "engine_workflowengine_resume",
+      "source": "engine_workflowengine",
+      "target": "engine_workflowengine_resume",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L187",
+      "weight": 1.0,
+      "_src": "engine_workflowengine",
+      "_tgt": "engine_workflowengine_handleagentstep",
+      "source": "engine_workflowengine",
+      "target": "engine_workflowengine_handleagentstep",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L220",
+      "weight": 1.0,
+      "_src": "engine_workflowengine",
+      "_tgt": "engine_workflowengine_handlegatestepwait",
+      "source": "engine_workflowengine",
+      "target": "engine_workflowengine_handlegatestepwait",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L255",
+      "weight": 1.0,
+      "_src": "engine_workflowengine",
+      "_tgt": "engine_workflowengine_advancetonextstep",
+      "source": "engine_workflowengine",
+      "target": "engine_workflowengine_advancetonextstep",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L283",
+      "weight": 1.0,
+      "_src": "engine_workflowengine",
+      "_tgt": "engine_workflowengine_buildresponse",
+      "source": "engine_workflowengine",
+      "target": "engine_workflowengine_buildresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_src": "engine_workflowengine_start",
+      "_tgt": "engine_workflowengine_advancetonextstep",
+      "source": "engine_workflowengine_start",
+      "target": "engine_workflowengine_advancetonextstep",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L70",
+      "weight": 1.0,
+      "_src": "engine_workflowengine_handlegateactionwait",
+      "_tgt": "engine_workflowengine_buildresponse",
+      "source": "engine_workflowengine_handlegateactionwait",
+      "target": "engine_workflowengine_buildresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L120",
+      "weight": 1.0,
+      "_src": "engine_workflowengine_handlegateactionend",
+      "_tgt": "engine_workflowengine_buildresponse",
+      "source": "engine_workflowengine_handlegateactionend",
+      "target": "engine_workflowengine_buildresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L181",
+      "weight": 1.0,
+      "_src": "engine_workflowengine_resume",
+      "_tgt": "engine_workflowengine_advancetonextstep",
+      "source": "engine_workflowengine_resume",
+      "target": "engine_workflowengine_advancetonextstep",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/workflows/engine.ts",
+      "source_location": "L263",
+      "weight": 1.0,
+      "_src": "engine_workflowengine_advancetonextstep",
+      "_tgt": "engine_workflowengine_buildresponse",
+      "source": "engine_workflowengine_advancetonextstep",
+      "target": "engine_workflowengine_buildresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/scripts/generate-schema.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_src": "packages_guild_scripts_generate_schema_ts",
+      "_tgt": "generate_schema_main",
+      "source": "packages_guild_scripts_generate_schema_ts",
+      "target": "generate_schema_main",
       "confidence_score": 1.0
     },
     {

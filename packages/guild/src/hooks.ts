@@ -30,7 +30,8 @@ async function fileExists(path: string): Promise<boolean> {
  */
 export function buildHooks(
   config: GuildConfig,
-  ctx: PluginInput
+  ctx: PluginInput,
+  skillsReloader?: () => Promise<void>
 ): Partial<Hooks> {
   return {
     "tool.execute.before": async (input, output) => {
@@ -51,13 +52,16 @@ export function buildHooks(
           if (!output.args) output.args = {};
           output.args._graphify_context = GRAPHIFY_REMINDER;
         }
-      } catch {
-        // Silently handle file check errors
+      } catch (error) {
+        console.warn(
+          "[guild] Failed to check graphify report:",
+          error instanceof Error ? error.message : error
+        );
       }
     },
 
     /**
-     * Validate agent system on plugin init
+     * Validate agent system on plugin init and re-discover skills
      */
     event: async (input) => {
       // Only validate on session start events (LOW-6 type safety fix)
@@ -83,6 +87,22 @@ export function buildHooks(
         console.warn(pc.dim("  → Agent routing may not work correctly."));
       } else {
         console.log(pc.dim("[guild] Agent system ready"));
+      }
+
+      // Re-discover skills on session start if auto_discover enabled
+      if (
+        skillsReloader &&
+        config.skills?.auto_discover !== false
+      ) {
+        try {
+          await skillsReloader();
+        } catch (error) {
+          console.warn(
+            pc.yellow("[guild]"),
+            "Failed to re-discover skills on session start:",
+            error instanceof Error ? error.message : error
+          );
+        }
       }
     },
   };

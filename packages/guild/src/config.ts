@@ -16,10 +16,17 @@ const PROJECT_CONFIG_NAME = "guild-opencode.jsonc";
 /**
  * Try to read a file, return null if not found or error
  */
-async function tryReadFile(path: string): Promise<string | null> {
+async function tryReadFile(filePath: string): Promise<string | null> {
   try {
-    return await fs.readFile(path, "utf-8");
+    return await fs.readFile(filePath, "utf-8");
   } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+      console.warn(
+        pc.yellow("[guild]"),
+        `Failed to read ${filePath}:`,
+        error instanceof Error ? error.message : error
+      );
+    }
     return null;
   }
 }
@@ -57,6 +64,16 @@ export function deepMerge<T extends Record<string, any>>(
 }
 
 /**
+ * Resolve tilde in paths
+ */
+function resolvePath(path: string, projectDir: string): string {
+  if (path.startsWith("~")) {
+    return path.replace("~", homedir());
+  }
+  return path;
+}
+
+/**
  * Load and merge user + project config, validate, return defaults if missing
  */
 export async function loadConfig(projectDir: string): Promise<GuildConfig> {
@@ -82,7 +99,8 @@ export async function loadConfig(projectDir: string): Promise<GuildConfig> {
       console.warn(
         pc.yellow("[guild]"),
         "Failed to parse user config at",
-        USER_CONFIG
+        USER_CONFIG,
+        error instanceof Error ? error.message : error
       );
       console.warn(pc.dim("  → Using defaults"));
     }
@@ -96,7 +114,8 @@ export async function loadConfig(projectDir: string): Promise<GuildConfig> {
       console.warn(
         pc.yellow("[guild]"),
         "Failed to parse project config at",
-        join(normalizedDir, ".opencode", PROJECT_CONFIG_NAME)
+        join(normalizedDir, ".opencode", PROJECT_CONFIG_NAME),
+        error instanceof Error ? error.message : error
       );
       console.warn(pc.dim("  → Using user config"));
     }
@@ -107,6 +126,28 @@ export async function loadConfig(projectDir: string): Promise<GuildConfig> {
 
   // Validate and apply defaults
   const parsed = GuildConfigSchema.parse(merged);
+
+  // Resolve ~ in skill discovery paths
+  if (parsed.skills?.paths) {
+    if (parsed.skills.paths.global) {
+      parsed.skills.paths.global = resolvePath(
+        parsed.skills.paths.global,
+        normalizedDir
+      );
+    }
+    if (parsed.skills.paths.legacy) {
+      parsed.skills.paths.legacy = resolvePath(
+        parsed.skills.paths.legacy,
+        normalizedDir
+      );
+    }
+    if (parsed.skills.paths.project) {
+      parsed.skills.paths.project = resolvePath(
+        parsed.skills.paths.project,
+        normalizedDir
+      );
+    }
+  }
 
   // Apply defaults for missing sections
   const withDefaults = {
@@ -127,6 +168,9 @@ export async function loadConfig(projectDir: string): Promise<GuildConfig> {
       appendCoordination: parsed.prompt?.appendCoordination ?? true,
       maxLength: parsed.prompt?.maxLength ?? 500,
     },
+    skills: parsed.skills,
+    custom_agents: parsed.custom_agents,
+    workflows: parsed.workflows,
   };
 
   return withDefaults;
