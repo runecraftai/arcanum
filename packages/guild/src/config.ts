@@ -13,6 +13,34 @@ import type { GuildConfig } from "./schema.js";
 const USER_CONFIG = join(homedir(), ".config/opencode/guild-opencode.jsonc");
 const PROJECT_CONFIG_NAME = "guild-opencode.jsonc";
 
+const DEFAULT_USER_CONFIG = `// @runecraft/guild — User-level configuration
+// Docs: https://github.com/runecraft/arcanum/tree/main/packages/guild
+
+{
+  // Agent enabled/disabled status and optional model overrides
+  "agents": {
+    "herald": { "enabled": true },
+    "scout": { "enabled": true },
+    "sage": { "enabled": true },
+    "forge": { "enabled": true },
+    "ward": { "enabled": false },
+    "arbiter": { "enabled": false }
+  },
+
+  // Graphify knowledge graph integration
+  "graphify": {
+    "enabled": true,
+    "reportPath": "graphify-out/GRAPH_REPORT.md"
+  },
+
+  // TUI prompt coordination
+  "prompt": {
+    "appendCoordination": true,
+    "maxLength": 500
+  }
+}
+`;
+
 /**
  * Try to read a file, return null if not found or error
  */
@@ -88,7 +116,30 @@ export async function loadConfig(projectDir: string): Promise<GuildConfig> {
     join(normalizedDir, ".opencode", PROJECT_CONFIG_NAME)
   );
 
+  // Create user config with defaults if it doesn't exist
   let userConfig: Record<string, any> = {};
+  if (!userRaw) {
+    try {
+      const userConfigDir = join(homedir(), ".config", "opencode");
+      await fs.mkdir(userConfigDir, { recursive: true });
+      await fs.writeFile(USER_CONFIG, DEFAULT_USER_CONFIG, "utf-8");
+      console.log(
+        pc.green("[guild]"),
+        "Created default user config at",
+        USER_CONFIG
+      );
+      // Reload the newly created file
+      userConfig = parseJSONC(DEFAULT_USER_CONFIG) || {};
+    } catch (error) {
+      console.warn(
+        pc.yellow("[guild]"),
+        "Failed to create default user config:",
+        error instanceof Error ? error.message : error
+      );
+      console.warn(pc.dim("  → Using in-memory defaults"));
+    }
+  }
+
   let projectConfig: Record<string, any> = {};
 
   // Parse user config
