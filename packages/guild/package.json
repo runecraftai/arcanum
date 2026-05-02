@@ -1,6 +1,6 @@
 {
   "name": "@runecraft/guild",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "description": "OpenCode plugin for multi-agent coordination with hierarchical config loading",
   "license": "MIT",
