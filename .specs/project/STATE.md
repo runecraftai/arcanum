@@ -36,6 +36,7 @@
 - `npm-publish` → `.specs/archive/npm-publish/` (2026-04-26)
 - `summon-cli` → `.specs/archive/summon-cli/` (2026-04-26)
 - `summon-tui-revision` → `.specs/archive/summon-tui-revision/` (2026-04-26)
+- `guild-auto-create-user-config` → `.specs/archive/2026-05-01-guild-auto-create-user-config/` (2026-05-01)
 
 ## Running Status
 - ✓ Spec-driven skill operational

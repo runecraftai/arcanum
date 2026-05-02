@@ -20,6 +20,19 @@
     "registry": "https://registry.npmjs.org",
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/runecraft/guild.git"
+  },
+  "author": "Runecraft <hello@runecraft.ai>",
+  "keywords": ["guild", "runecraft", "opencode", "plugin", "ai", "agent"],
+  "homepage": "https://github.com/runecraft/guild#readme",
+  "bugs": {
+    "url": "https://github.com/runecraft/guild/issues"
+  },
+  "engines": {
+    "bun": ">=1.3.0"
+  },
   "dependencies": {
     "@opencode-ai/plugin": "^1.3.15",
     "jsonc-parser": "^3.3.1",
@@ -35,6 +48,7 @@
   "scripts": {
     "build": "tsc",
     "build:schema": "bun run scripts/generate-schema.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "bun run build && bun run build:schema"
   }
 }
