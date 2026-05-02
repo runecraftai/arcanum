@@ -1,4 +1,4 @@
-# @runecraftai/guild
+# @runecraft/guild
 
 ## 0.0.2
 
