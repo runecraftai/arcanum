@@ -1,6 +1,6 @@
 {
   "name": "@runecraft/guild",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "OpenCode plugin for multi-agent coordination with hierarchical config loading",
   "license": "MIT",
@@ -15,7 +15,9 @@
       "import": "./dist/schema.json"
     }
   },
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
@@ -25,7 +27,14 @@
     "url": "https://github.com/runecraft/guild.git"
   },
   "author": "Runecraft <hello@runecraft.ai>",
-  "keywords": ["guild", "runecraft", "opencode", "plugin", "ai", "agent"],
+  "keywords": [
+    "guild",
+    "runecraft",
+    "opencode",
+    "plugin",
+    "ai",
+    "agent"
+  ],
   "homepage": "https://github.com/runecraft/guild#readme",
   "bugs": {
     "url": "https://github.com/runecraft/guild/issues"
