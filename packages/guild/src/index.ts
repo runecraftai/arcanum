@@ -66,3 +66,5 @@ export const GuildPlugin: Plugin = async (ctx) => {
     tool: buildTools(config, ctx, discoveredSkills, workflowEngine),
   };
 };
+
+export default GuildPlugin;
