@@ -90,8 +90,21 @@ function buildPackageMap(): Map<string, string> {
 function findLastReleaseRef(): string {
   try {
     // Look for tags matching @runecraft/*@*
-    const result = spawnSync(
+    let result = spawnSync(
       ["git", "tag", "--list", "@runecraft/*@*", "--sort=-version:refname"],
+      { cwd: process.cwd() }
+    );
+
+    if (result.success) {
+      const tags = result.stdout.toString().trim().split("\n");
+      if (tags.length > 0 && tags[0]) {
+        return tags[0];
+      }
+    }
+
+    // Fallback: look for v* tags (e.g. v0.1.0-guild)
+    result = spawnSync(
+      ["git", "tag", "--list", "v*", "--sort=-version:refname"],
       { cwd: process.cwd() }
     );
 
@@ -209,7 +222,7 @@ function getAffectedPackages(
 
       // Check which package this file belongs to
       for (const [dirPrefix, pkgName] of packageMap.entries()) {
-        if (file.startsWith(dirPrefix)) {
+        if (file.startsWith(dirPrefix + "/")) {
           affected.add(pkgName);
         }
       }
@@ -239,6 +252,35 @@ function determineBumpType(parsed: CommitParsed): BumpType {
   }
 
   return "patch";
+}
+
+// Get packages that already have pending changesets
+function getPendingChangesetPackages(): Set<string> {
+  const pending = new Set<string>();
+  try {
+    const changesetDir = join(process.cwd(), ".changeset");
+    const files = readdirSync(changesetDir, { withFileTypes: true })
+      .filter((f) => f.isFile() && f.name.endsWith(".md") && f.name !== "README.md")
+      .map((f) => f.name);
+
+    for (const file of files) {
+      const filePath = join(changesetDir, file);
+      const content = readFileSync(filePath, "utf-8");
+      // Extract package names from YAML frontmatter: "package-name@version": bump
+      const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+      if (frontmatterMatch) {
+        const frontmatter = frontmatterMatch[1];
+        // Match lines like: "@runecraft/core": patch  or  "some-pkg": minor
+        const pkgMatches = frontmatter.matchAll(/^"([^"]+)":/gm);
+        for (const match of pkgMatches) {
+          pending.add(match[1]);
+        }
+      }
+    }
+  } catch {
+    // Ignore errors
+  }
+  return pending;
 }
 
 // Main execution
@@ -347,9 +389,17 @@ function main() {
     }
   }
 
+  // Get packages with pending changesets to avoid duplicates
+  const pendingPackages = getPendingChangesetPackages();
+
   // Write changeset files
   if (changesByPackage.size > 0) {
-    for (const [, changes] of changesByPackage) {
+    for (const [pkgName, changes] of changesByPackage) {
+      // Skip packages that already have a pending changeset
+      if (pendingPackages.has(pkgName)) {
+        continue;
+      }
+
       const id = randomUUID().slice(0, 8);
       const filename = join(process.cwd(), ".changeset", `${id}.md`);
 

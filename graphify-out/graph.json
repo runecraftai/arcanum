@@ -76,51 +76,6 @@
       "norm_label": "generatejsonschema()"
     },
     {
-      "label": "config.ts",
-      "file_type": "code",
-      "source_file": "packages/guild/src/config.ts",
-      "source_location": "L1",
-      "id": "packages_guild_src_config_ts",
-      "community": 4,
-      "norm_label": "config.ts"
-    },
-    {
-      "label": "tryReadFile()",
-      "file_type": "code",
-      "source_file": "packages/guild/src/config.ts",
-      "source_location": "L47",
-      "id": "config_tryreadfile",
-      "community": 4,
-      "norm_label": "tryreadfile()"
-    },
-    {
-      "label": "deepMerge()",
-      "file_type": "code",
-      "source_file": "packages/guild/src/config.ts",
-      "source_location": "L65",
-      "id": "config_deepmerge",
-      "community": 4,
-      "norm_label": "deepmerge()"
-    },
-    {
-      "label": "resolvePath()",
-      "file_type": "code",
-      "source_file": "packages/guild/src/config.ts",
-      "source_location": "L97",
-      "id": "config_resolvepath",
-      "community": 4,
-      "norm_label": "resolvepath()"
-    },
-    {
-      "label": "loadConfig()",
-      "file_type": "code",
-      "source_file": "packages/guild/src/config.ts",
-      "source_location": "L107",
-      "id": "config_loadconfig",
-      "community": 4,
-      "norm_label": "loadconfig()"
-    },
-    {
       "label": "hooks.ts",
       "file_type": "code",
       "source_file": "packages/guild/src/hooks.ts",
@@ -173,6 +128,51 @@
       "id": "tools_buildtools",
       "community": 4,
       "norm_label": "buildtools()"
+    },
+    {
+      "label": "config.ts",
+      "file_type": "code",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L1",
+      "id": "packages_guild_src_config_ts",
+      "community": 4,
+      "norm_label": "config.ts"
+    },
+    {
+      "label": "tryReadFile()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L47",
+      "id": "config_tryreadfile",
+      "community": 4,
+      "norm_label": "tryreadfile()"
+    },
+    {
+      "label": "deepMerge()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L65",
+      "id": "config_deepmerge",
+      "community": 4,
+      "norm_label": "deepmerge()"
+    },
+    {
+      "label": "resolvePath()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L97",
+      "id": "config_resolvepath",
+      "community": 4,
+      "norm_label": "resolvepath()"
+    },
+    {
+      "label": "loadConfig()",
+      "file_type": "code",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L107",
+      "id": "config_loadconfig",
+      "community": 4,
+      "norm_label": "loadconfig()"
     },
     {
       "label": "index.ts",
@@ -1868,18 +1868,6 @@
     {
       "relation": "imports_from",
       "confidence": "EXTRACTED",
-      "source_file": "packages/guild/src/config.ts",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_src": "packages_guild_src_config_ts",
-      "_tgt": "packages_guild_src_schema_ts",
-      "source": "packages_guild_src_schema_ts",
-      "target": "packages_guild_src_config_ts",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "confidence": "EXTRACTED",
       "source_file": "packages/guild/src/hooks.ts",
       "source_location": "L9",
       "weight": 1.0,
@@ -1902,99 +1890,15 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/guild/src/config.ts",
-      "source_location": "L47",
-      "weight": 1.0,
-      "_src": "packages_guild_src_config_ts",
-      "_tgt": "config_tryreadfile",
-      "source": "packages_guild_src_config_ts",
-      "target": "config_tryreadfile",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/guild/src/config.ts",
-      "source_location": "L65",
-      "weight": 1.0,
-      "_src": "packages_guild_src_config_ts",
-      "_tgt": "config_deepmerge",
-      "source": "packages_guild_src_config_ts",
-      "target": "config_deepmerge",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/guild/src/config.ts",
-      "source_location": "L97",
-      "weight": 1.0,
-      "_src": "packages_guild_src_config_ts",
-      "_tgt": "config_resolvepath",
-      "source": "packages_guild_src_config_ts",
-      "target": "config_resolvepath",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/guild/src/config.ts",
-      "source_location": "L107",
-      "weight": 1.0,
-      "_src": "packages_guild_src_config_ts",
-      "_tgt": "config_loadconfig",
-      "source": "packages_guild_src_config_ts",
-      "target": "config_loadconfig",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "imports_from",
       "confidence": "EXTRACTED",
-      "source_file": "packages/guild/src/index.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_src": "packages_guild_src_index_ts",
-      "_tgt": "packages_guild_src_config_ts",
-      "source": "packages_guild_src_config_ts",
-      "target": "packages_guild_src_index_ts",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
       "source_file": "packages/guild/src/config.ts",
-      "source_location": "L114",
+      "source_location": "L11",
       "weight": 1.0,
-      "_src": "config_loadconfig",
-      "_tgt": "config_tryreadfile",
-      "source": "config_tryreadfile",
-      "target": "config_loadconfig",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/guild/src/config.ts",
-      "source_location": "L176",
-      "weight": 1.0,
-      "_src": "config_loadconfig",
-      "_tgt": "config_deepmerge",
-      "source": "config_deepmerge",
-      "target": "config_loadconfig",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/guild/src/config.ts",
-      "source_location": "L184",
-      "weight": 1.0,
-      "_src": "config_loadconfig",
-      "_tgt": "config_resolvepath",
-      "source": "config_resolvepath",
-      "target": "config_loadconfig",
+      "_src": "packages_guild_src_config_ts",
+      "_tgt": "packages_guild_src_schema_ts",
+      "source": "packages_guild_src_schema_ts",
+      "target": "packages_guild_src_config_ts",
       "confidence_score": 1.0
     },
     {
@@ -2091,6 +1995,102 @@
       "_tgt": "packages_guild_src_tools_ts",
       "source": "packages_guild_src_tools_ts",
       "target": "packages_guild_src_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_src": "packages_guild_src_config_ts",
+      "_tgt": "config_tryreadfile",
+      "source": "packages_guild_src_config_ts",
+      "target": "config_tryreadfile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_src": "packages_guild_src_config_ts",
+      "_tgt": "config_deepmerge",
+      "source": "packages_guild_src_config_ts",
+      "target": "config_deepmerge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L97",
+      "weight": 1.0,
+      "_src": "packages_guild_src_config_ts",
+      "_tgt": "config_resolvepath",
+      "source": "packages_guild_src_config_ts",
+      "target": "config_resolvepath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L107",
+      "weight": 1.0,
+      "_src": "packages_guild_src_config_ts",
+      "_tgt": "config_loadconfig",
+      "source": "packages_guild_src_config_ts",
+      "target": "config_loadconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/index.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_src": "packages_guild_src_index_ts",
+      "_tgt": "packages_guild_src_config_ts",
+      "source": "packages_guild_src_config_ts",
+      "target": "packages_guild_src_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L114",
+      "weight": 1.0,
+      "_src": "config_loadconfig",
+      "_tgt": "config_tryreadfile",
+      "source": "config_tryreadfile",
+      "target": "config_loadconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L176",
+      "weight": 1.0,
+      "_src": "config_loadconfig",
+      "_tgt": "config_deepmerge",
+      "source": "config_deepmerge",
+      "target": "config_loadconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/guild/src/config.ts",
+      "source_location": "L184",
+      "weight": 1.0,
+      "_src": "config_loadconfig",
+      "_tgt": "config_resolvepath",
+      "source": "config_resolvepath",
+      "target": "config_loadconfig",
       "confidence_score": 1.0
     },
     {
