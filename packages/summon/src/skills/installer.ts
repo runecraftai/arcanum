@@ -44,7 +44,7 @@ export interface InstallResult {
 /**
  * Get the hub skill path for a given project root and skill name.
  * Returns: 
- *   - For global scope: ~/.agents/skills/<skillName>
+ *   - For global scope: ~/.config/opencode/skills/<skillName>
  *   - Otherwise: <projectRoot>/.agents/skills/<skillName>/
  */
 export function getHubSkillPath(

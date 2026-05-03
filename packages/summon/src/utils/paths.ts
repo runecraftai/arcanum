@@ -2,7 +2,6 @@ import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
 import { exists } from "./fs";
-import { SKILLS_DIR } from "../constants";
 
 /**
  * Resolve home directory path (~) to absolute path
@@ -17,10 +16,10 @@ export function resolveHome(filePath: string): string {
 
 /**
  * Resolve global skills hub directory
- * Returns: ~/.agents/skills (no arg) or ~/.agents/skills/<skillName> (with arg)
+ * Returns: ~/.config/opencode/skills (no arg) or ~/.config/opencode/skills/<skillName> (with arg)
  */
 export function resolveGlobalSkillsHub(skillName?: string): string {
-  const hubBase = path.join(os.homedir(), SKILLS_DIR);
+  const hubBase = path.join(os.homedir(), ".config/opencode/skills");
   if (skillName) {
     return path.join(hubBase, skillName);
   }

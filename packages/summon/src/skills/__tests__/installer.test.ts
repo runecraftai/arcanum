@@ -170,11 +170,11 @@ describe("installer", () => {
     }
   });
 
-  it("getHubSkillPath with scope='global' returns ~/.agents/skills/<name>", () => {
+  it("getHubSkillPath with scope='global' returns ~/.config/opencode/skills/<name>", () => {
     const skillName = "test-skill";
     const globalPath = getHubSkillPath(tmpDir, skillName, "global");
     const homedir = os.homedir();
-    const expectedPath = path.join(homedir, ".agents", "skills", skillName);
+    const expectedPath = path.join(homedir, ".config", "opencode", "skills", skillName);
     expect(globalPath).toBe(expectedPath);
   });
 
