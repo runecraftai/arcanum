@@ -12,6 +12,7 @@ Load context in tier order, respecting token budget and phase needs.
 - `.specs/project/PROJECT.md` — project vision, goals, active modules
 - `.specs/project/ROADMAP.md` — planned features and milestones
 - `.specs/project/STATE.md` — architectural decisions, blockers, lessons
+- `.specs/project/HANDOFF.md` — latest pause/resume checkpoint, if present
 - 3 most recent `.specs/sessions/*.md` (sorted by date, descending)
 
 **Load if**:
@@ -95,6 +96,8 @@ Load in priority order, only when active phase needs them:
 4. **Cache context**: Reuse context within same session
 
 5. **Signal importance**: Flag uncertain or conflicting information
+
+6. **Skip archives by default**: Do not load `.specs/archive/` unless the user explicitly names an archived feature or asks for historical comparison.
 
 ## Knowledge Chain Verification
 

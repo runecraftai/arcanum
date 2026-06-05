@@ -29,7 +29,7 @@ Key rule: Forge should never explore the codebase. If you need to understand exi
 
 ## Commit Policy
 
-Each completed task should result in one atomic commit. See `build-cycle.md` for the commit message format and size rules.
+Each completed task should result in one atomic commit when the user wants commits. See `build-cycle.md` for the commit message format and size rules. Agents must not commit automatically; actual commits require explicit user approval.
 
 ## Steps
 
@@ -160,3 +160,4 @@ Before marking complete, verify:
 3. tasks.md `status: completed` or `partial`
 4. All non-blocked tasks verified
 5. Ready to proceed to TEST phase
+6. No commit was created without explicit user approval

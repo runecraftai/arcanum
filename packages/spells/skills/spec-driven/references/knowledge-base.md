@@ -9,7 +9,8 @@ The `.specs/` directory is the persistent knowledge base for this project. It li
 ├── project/
 │   ├── PROJECT.md          # Vision, goals, active modules
 │   ├── ROADMAP.md          # Features, milestones, schedule
-│   └── STATE.md            # Decisions, blockers, lessons, todos, deferred items
+│   ├── STATE.md            # Decisions, blockers, lessons, todos, deferred items
+│   └── HANDOFF.md          # Latest pause/resume checkpoint
 ├── codebase/
 │   ├── STACK.md            # Languages, frameworks, package manager, build tools
 │   ├── ARCHITECTURE.md     # High-level design, module boundaries, data flow
@@ -33,7 +34,7 @@ The `.specs/` directory is the persistent knowledge base for this project. It li
     └── YYYY-MM-DD-<feature>.md    # Immutable session logs, one per feature per day
 ```
 
-## `.specs/project/` — Project Context (3 files)
+## `.specs/project/` — Project Context (4 files)
 
 **Purpose:** Centralized, persistent project knowledge updated across all features.
 
@@ -57,6 +58,11 @@ The `.specs/` directory is the persistent knowledge base for this project. It li
   - **Deferred**: items explicitly deferred with reason and target date
 - **Rules**: append-only; no deletion; monthly pruning of completed items
 - **Lifecycle**: created at `/init`, continuously updated through feature development
+
+### HANDOFF.md
+- **Content**: latest resumable checkpoint: active feature, phase, task, completed work, pending work, blockers, and uncommitted changes
+- **Rules**: overwritten on each pause; not append-only
+- **Lifecycle**: created at `/init`, updated by `/spec pause`, read by `/spec resume`
 
 ## `.specs/codebase/` — Brownfield Mapping (7 files, on-demand)
 
@@ -133,6 +139,7 @@ The `.specs/` directory is the persistent knowledge base for this project. It li
 | Feature-specific blocker or context | `.specs/features/<name>/STATE.md` | Append to blockers section |
 | Code pattern or naming convention | `.specs/codebase/CONVENTIONS.md` (if `/map` done) | Append or document in design.md for future reference |
 | Tech debt or risk | `.specs/codebase/CONCERNS.md` (if `/map` done) | Append with severity/likelihood; or log in `.specs/project/STATE.md` |
+| Pause/resume checkpoint | `.specs/project/HANDOFF.md` | Overwrite with latest resumable state |
 | No new knowledge | (none) | Skip silently |
 
 ## Update Rules
@@ -142,3 +149,4 @@ The `.specs/` directory is the persistent knowledge base for this project. It li
 3. **Attribute** — end each new entry with: `_(from: feature-name, date: YYYY-MM-DD)_` when updating live docs
 4. **Session logs are immutable** — once written, never edited. Create a new log for the same feature on a subsequent day.
 5. **Quick scope**: always write session log; update live docs (.specs/project/ or .specs/codebase/) only if significant knowledge was discovered
+6. **Archives**: do not load `.specs/archive/` by default; archived specs are historical and opt-in only

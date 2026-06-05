@@ -1,204 +1,122 @@
-# @runecraft/guild
+<p align="center">
+  <img src="assets/weave_logo.png" alt="Guild" width="400">
+</p>
 
-[![npm version](https://img.shields.io/npm/v/@runecraft/guild?label=@runecraft/guild)](https://www.npmjs.com/package/@runecraft/guild)
+# Guild
 
-OpenCode plugin for hierarchical agent coordination with multi-level configuration loading.
+Guild is a multi-agent orchestration plugin for OpenCode. It provides a cohesive framework for coordinating agents, tools, and skills into structured workflows. By delegating complex tasks to specialized agents and monitoring execution state through hooks, Guild ensures reliable and efficient project development.
 
 ## Overview
 
-**Guild** brings the Arcanum multi-agent system (Herald, Scout, Sage, Forge, Ward, Arbiter) into any OpenCode workspace as a single, distributable npm package. It provides:
+- **8 specialized agents** designed for specific roles in the development lifecycle.
+- **Category-based task dispatch** to route work to domain-optimized models and configurations.
+- **Skill system** for injecting domain-specific expertise that modifies agent behavior via prompt orchestration.
+- **Background agent management** for parallel asynchronous sub-agent execution with concurrency control.
+- **Context window monitoring** to track token usage and suggest recovery strategies when limits are approached.
+- **Tool permissions** enforced per-agent to ensure safety and prevent unauthorized file modifications.
+- **JSONC configuration** supporting comments and trailing commas with hierarchical user and project-level merging.
 
-- **Hierarchical JSONC config** — user-level and project-level merged configuration
-- **Agent system validation** — warns if agent-variants.json is missing
-- **Graphify integration** — automatically injects knowledge graph context before tool execution
-- **Custom tool** — `agent_status` to introspect enabled/disabled agents
-- **Typed exports** — Full TypeScript support with Zod schema validation
+## Documentation
+
+Refer to the [Arcanum monorepo](https://github.com/anomalyco/arcanum) for build, test, and publishing instructions.
+
+### Config schema
+
+Guild ships a generated config schema at `schema/guild-config.schema.json`.
+
+- Regenerate it: `bun run schema:config`
+
+Runtime config supports JSONC comments and trailing commas even though the published schema artifact is plain JSON.
+
+## Agents
+
+| Agent | Role | Mode | Description |
+| :--- | :--- | :--- | :--- |
+| **Loom** | main orchestrator | primary | The central team lead that plans tasks, coordinates work, and delegates to specialized agents. |
+| **Tapestry** | execution orchestrator | primary | Manages todo-list driven execution of multi-step plans, focusing on sequential implementation without subagent spawning. |
+| **Shuttle** | category worker | all | Domain-specific specialist worker with full tool access, dispatched dynamically via the category system. |
+| **Pattern** | strategic planner | subagent | Analyzes requirements and produces detailed implementation plans with research and dependency mapping. |
+| **Thread** | codebase explorer | subagent | Fast, read-only codebase navigation and analysis using grep, glob, and read tools. |
+| **Spindle** | external researcher | subagent | Performs external documentation lookups and reference searches, providing synthesized answers with source citations. |
+| **Weft** | reviewer/auditor | subagent | Reviews completed work and plans with a critical but fair eye, rejecting only for true blocking issues. |
+| **Warp** | security auditor | subagent | Audits code changes for security vulnerabilities and specification compliance with a skeptical bias. |
 
 ## Installation
 
-```bash
-# Using bun
-bun add @runecraft/guild
+This package is published on [npm](https://www.npmjs.com/package/@opencode_weave/weave).
 
-# Using npm
-npm install @runecraft/guild
+### Prerequisites
 
-# Using pnpm
-pnpm add @runecraft/guild
-```
+- [OpenCode](https://opencode.ai)
 
-Then add to your `opencode.json`:
+### Step 1: Add to opencode.json
+
+Add the plugin to your `opencode.json` file:
 
 ```json
 {
-  "plugins": ["@runecraft/guild"]
+  "plugin": ["@runecraft/guild"]
 }
 ```
 
-## Configuration
+### Step 2: Restart OpenCode
 
-Guild loads configuration from two locations (merged with project-level overriding user-level):
+OpenCode automatically installs npm plugins at startup — no manual `bun add` or `npm install` required. The plugin loads automatically upon restart and works with zero configuration out of the box.
 
-1. **User-level:** `~/.config/opencode/guild-opencode.jsonc`
-2. **Project-level:** `.opencode/guild-opencode.jsonc`
+### Troubleshooting
 
-### Example Configuration
+| Issue | Solution |
+|-------|----------|
+| `404 Not Found` | Ensure the package name is correct: `@runecraft/guild`. |
+| Package not found after publish | npm can take a few minutes to propagate. Wait and retry. |
 
-```jsonc
-{
-  // Agent enabled/disabled status and model overrides
-  agents: {
-    herald: { enabled: true },
-    scout: { enabled: true },
-    sage: { enabled: true },
-    forge: { enabled: true },
-    ward: { enabled: false },
-    arbiter: { enabled: false }
-  },
-  
-  // Graphify integration
-  graphify: {
-    enabled: true,
-    reportPath: "graphify-out/GRAPH_REPORT.md"
-  },
-  
-  // TUI prompt coordination reminder
-  prompt: {
-    appendCoordination: true,
-    maxLength: 500
-  }
-}
-```
+## Uninstalling
 
-### Defaults
+To fully remove Guild from your project:
 
-All configuration sections are optional. Defaults:
+### Step 1: Remove from opencode.json
 
-```jsonc
-{
-  agents: {
-    herald: { enabled: true },
-    scout: { enabled: true },
-    sage: { enabled: true },
-    forge: { enabled: true },
-    ward: { enabled: false },
-    arbiter: { enabled: false }
-  },
-  graphify: {
-    enabled: true,
-    reportPath: "graphify-out/GRAPH_REPORT.md"
-  },
-  prompt: {
-    appendCoordination: true,
-    maxLength: 500
-  }
-}
-```
+Delete the `@runecraft/guild` entry from the `plugin` array in your `opencode.json`:
 
-## Hooks
-
-Guild registers the following hooks in OpenCode:
-
-### `tool.execute.before`
-
-When graphify is enabled and `graphify-out/GRAPH_REPORT.md` exists, injects a context reminder to check the knowledge graph before tool execution.
-
-### `event`
-
-Listens for session start events and validates that `.agents/agent-variants.json` exists. Emits a warning if missing with instructions for fixing agent routing.
-
-## Tools
-
-### `agent_status`
-
-Displays the current agent configuration (enabled/disabled status and optional model overrides):
-
-```bash
-$ opencode --tool agent_status
-```
-
-Output:
 ```json
 {
-  "agents": {
-    "herald": { "enabled": true },
-    "scout": { "enabled": true },
-    ...
-  }
+  "plugin": []
 }
 ```
 
-## Types
+### Step 2: Clean up project artifacts (optional)
 
-The package exports the following TypeScript types:
+Guild may have created plan and state files during usage. Remove them if no longer needed:
 
-```typescript
-import type {
-  GuildConfig,      // Full config object
-  AgentName,        // Union: "herald" | "scout" | "sage" | "forge" | "ward" | "arbiter"
-  AgentVariant,     // { enabled: boolean; model?: string }
-  AgentStatusResult // Tool output type
-} from "@runecraft/guild";
+```bash
+rm -rf .guild/
+```
 
-import { GuildConfigSchema, generateJsonSchema } from "@runecraft/guild";
+You can also remove any project-level configuration if present:
+
+```bash
+rm -f .opencode/guild-opencode.jsonc .opencode/guild-opencode.json
+```
+
+### Step 3: Clean up user-level configuration (optional)
+
+If you no longer use Guild in any project, remove the global configuration:
+
+```bash
+rm -f ~/.config/opencode/guild-opencode.jsonc ~/.config/opencode/guild-opencode.json
 ```
 
 ## Development
 
-### Building
+- **Build**: `bun run build`
+- **Test**: `bun test`
+- **Typecheck**: `bun run typecheck`
+- **Clean**: `bun run clean`
 
-```bash
-# TypeScript compilation
-bun run build
+## Acknowledgments
 
-# Generate JSON schema
-bun run build:schema
-
-# Type checking
-bun run typecheck
-```
-
-### Project Structure
-
-```
-packages/guild/
-├── src/
-│   ├── index.ts      # Plugin entry point
-│   ├── config.ts     # JSONC loading + merging
-│   ├── schema.ts     # Zod schema + JSON schema generation
-│   ├── hooks.ts      # OpenCode hooks
-│   ├── tools.ts      # Custom tools (agent_status)
-│   └── types.ts      # Exported TypeScript types
-├── scripts/
-│   └── generate-schema.ts # Build-time schema generation
-├── dist/             # Compiled output
-├── package.json
-├── tsconfig.json
-└── README.md
-```
-
-## Integration with Agent System
-
-Guild assumes the following directory structure for the Arcanum agent system:
-
-```
-project-root/
-├── .agents/
-│   ├── agent-variants.json    # Agent configuration
-│   └── skills/
-├── .opencode/
-│   └── guild-opencode.jsonc   # Project-level config
-└── graphify-out/
-    ├── GRAPH_REPORT.md        # Knowledge graph summary
-    └── graph.json
-```
-
-See the [Arcanum documentation](https://github.com/yourusername/arcanum) for full setup instructions.
+Guild's technical foundation is based on [opencode-weave](https://github.com/pgermishuys/opencode-weave) by [@pgermishuys](https://github.com/pgermishuys). The agent architecture, skill system, and workflow engine were adapted from Weave's implementation.
 
 ## License
 
 MIT
-
----
-
-**Part of Arcanum** — Multi-agent system for OpenCode

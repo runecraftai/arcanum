@@ -26,23 +26,28 @@ from: herald  to: arbiter  id: <id>
 ## Protocol
 
 1. **Read the changes** — Read modified files to understand what was done
-2. **Check quality** — Verify:
-   - Correctness (does it work as intended?)
-   - Consistency (follows project patterns?)
-   - Test coverage (are there tests?)
-   - Edge cases (did it handle errors, nulls, boundaries?)
+2. **Check quality axes** — Verify:
+   - **Clean Code** — Naming, function size, complexity, readability
+   - **DDD** — Bounded contexts, aggregate roots, value objects, layer boundaries
+   - **Test Coverage** — Unit tests for new code, edge cases handled
+   - **Architecture** — Layer violations, dependency direction, coupling
+   - **Performance** — N+1 queries, unbounded loops, memory leaks
+   - **Correctness** — Does it work as intended?
+   - **Consistency** — Follows project patterns?
 3. **Return verdict** — Either `[APPROVE]` or `[REJECT]` with specific issues
 
 ## Output Format
 
 ```
-## Verdict: [APPROVE | REJECT]
-
-### Issues (if REJECT)
-- `file:line` — [problem]. Fix: [suggestion]
-
-### Highlights (if APPROVE)
-- [What was done well]
+ARBITER_STATUS: <APPROVE | REJECT>
+issues:
+  - severity: <critical|high|medium|low>
+    category: <clean-code|ddd|testing|architecture|performance|correctness>
+    file: <path:line>
+    description: <what's wrong>
+    suggestion: <how to fix>
+highlights:
+  - <what was done well>
 ```
 
 ## Rules

@@ -30,7 +30,39 @@
    - Improves skill clarity and reduces ambiguity in agent dispatch
 
 ## Active Features
-(none)
+- `guild-weave-replatform` — **completed** (2026-06-04)
+  - Goal: replace `packages/guild` implementation with `opencode-weave`, preserve legacy guild in archive, and rename public surfaces from weave to guild
+  - Status: ✅ All 5 phases complete, build/typecheck pass, 1918/1936 tests pass (18 env-only failures)
+  - Backup: `packages/_archived/guild-legacy-20260604/`
+  - Migration source: `/home/rehem/Projects/opencode-weave`
+
+### Rename sweep status
+| Surface | Status | Notes |
+|---------|--------|-------|
+| NPM package identity (`@runecraft/guild`) | ✅ Done | |
+| Plugin export (`GuildPlugin`, `GuildConfig`, `GuildAgentName`) | ✅ Done | Types exported as aliases |
+| Config paths (`guild-opencode.jsonc`) | ✅ Done | loader, fixtures, tests |
+| State dir (`.guild/`) | ✅ Done | constants, storage, tests |
+| Log service (`service: "guild"`) | ✅ Done | log.ts, health-report |
+| Log prefix (`[guild:LEVEL]`) | ✅ Done | console.error prefix |
+| Env var (`GUILD_LOG_LEVEL`) | ✅ Done | |
+| Schema artifact (`guild-config.schema.json`) | ✅ Done | regenerated |
+| Schema version key (`x-guild-version`) | ✅ Done | |
+| Health command (`guild-health`) | ✅ Done | command, routing, tests |
+| Envelope tags (`guild-command-envelope`, etc.) | ✅ Done | protocol.ts |
+| Continuation markers (`<!-- guild:* -->`) | ✅ Done | |
+| README/docs | ✅ Done | |
+| Build/test pipeline | ✅ Done | tsc, tests, schema all working |
+
+### Explicitly deferred (intentional non-rename)
+| Item | Reason |
+|------|--------|
+| Agent names (`loom`, `tapestry`, `shuttle`, `pattern`, `thread`, `spindle`, `weft`, `warp`) | Internal architecture only |
+| `call_weave_agent` tool | Used in agent configs, too risky to rename |
+| `getWeaveVersion()` function | Internal utility, no public surface impact |
+| `WeaveConfig` type name | Used in 40+ files, rename adds risk without user-facing gain |
+| `WeaveConfigSchema` zod schema | Same as above |
+| `GenerateWeaveConfigJsonSchemaOptions` type | Internal config generation
 
 ## Completed & Archived Features
 - `npm-publish` → `.specs/archive/npm-publish/` (2026-04-26)

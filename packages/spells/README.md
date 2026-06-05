@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Package-%40runecraft%2Fspells-blue?style=for-the-badge" alt="package badge" />
   <img src="https://img.shields.io/badge/Skills-Catalog-green?style=for-the-badge" alt="catalog" />
-  <img src="https://img.shields.io/badge/Version-0.0.2-purple?style=for-the-badge" alt="version" />
+   <img src="https://img.shields.io/badge/Version-0.7.0-purple?style=for-the-badge" alt="version" />
 </p>
 
 <h1 align="center">🪄 @runecraft/spells</h1>
@@ -24,7 +24,8 @@ This package is the distributable catalog of production-ready skills for the Arc
 
 | Skill | Version | Description | Main Trigger | Docs |
 |-------|---------|-------------|--------------|------|
-| **spec-driven** | 4.0.0 | Full lifecycle dev pipeline — MAP, SPEC, PLAN, BUILD, TEST, REVIEW, SIMPLIFY, SHIP | `/spec` | [→ README](skills/spec-driven/README.md) |
+| **spec-driven** | 4.1.0 | Full lifecycle dev pipeline — INIT, MAP, QUICK, SPEC, PLAN, BUILD, TEST, VALIDATE, REVIEW, SIMPLIFY, SHIP, PAUSE/RESUME | `/spec` | [→ README](skills/spec-driven/README.md) |
+| **git-commit-learning** | 1.0.0 | RPI model: analyze git log for patterns and write AI-learnable commits (Research → Plan → Implement → Verify). PT/EN. | `/commit` | [→ README](skills/git-commit-learning/README.md) |
 
 ---
 
@@ -78,7 +79,7 @@ cp node_modules/@runecraft/spells/skills/spec-driven/SKILL.md ~/.claude/skills/s
     └── spec-driven/
         ├── SKILL.md              (Agent instructions — load this)
         ├── .skill-meta.json      (Metadata)
-        └── references/           (35 supporting docs, loaded on-demand)
+        └── references/           (39 supporting docs, loaded on-demand)
             ├── MAP.md
             ├── SPEC.md
             ├── PLAN.md

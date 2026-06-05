@@ -1,0 +1,135 @@
+/**
+ * Work continuation hook: checks if there's an active plan with remaining tasks
+ * and returns a continuation prompt to keep the executor going.
+ */
+
+import { createPlanFsRepository } from "../infrastructure/fs/plan-fs-repository"
+import { createPlanService } from "../domain/plans/plan-service"
+import { renderContinuationEnvelope } from "../runtime/opencode/protocol"
+import { createExecutionLeaseFsStore } from "../infrastructure/fs/execution-lease-fs-store"
+import { projectExecutionTransition } from "../domain/session/execution-lease"
+
+const PlanRepository = createPlanFsRepository()
+const PlanService = createPlanService(PlanRepository)
+const ExecutionLeaseRepository = createExecutionLeaseFsStore()
+
+/**
+ * Marker embedded in continuation prompts so that `chat.message` can distinguish
+ * continuation-injected messages from user-initiated messages.
+ * When a user message arrives WITHOUT this marker (and is not a /start-work command),
+ * the plugin auto-pauses work to prevent the infinite continuation loop.
+ */
+export const CONTINUATION_MARKER = "<!-- guild:continuation -->"
+
+/** Maximum consecutive continuations without progress before auto-pausing */
+export const MAX_STALE_CONTINUATIONS = 3
+
+export interface ContinuationInput {
+  sessionId: string
+  directory: string
+}
+
+export interface ContinuationResult {
+  /** Continuation prompt to inject, or null if no active work / plan complete */
+  continuationPrompt: string | null
+  /** Agent to restore before injecting continuation, when needed */
+  switchAgent?: string | null
+}
+
+/**
+ * Check if there's active work that should continue.
+ * Returns a continuation prompt if the plan has remaining tasks, null otherwise.
+ */
+export function checkContinuation(input: ContinuationInput): ContinuationResult {
+  const { directory } = input
+
+  const state = PlanService.readWorkState(directory)
+  if (!state) {
+    return { continuationPrompt: null, switchAgent: null }
+  }
+
+  if (state.paused) {
+    return { continuationPrompt: null, switchAgent: null }
+  }
+
+  const activeLease = ExecutionLeaseRepository.readExecutionLease(directory)
+  if (activeLease?.owner_kind === "plan" && activeLease.session_id && activeLease.session_id !== input.sessionId) {
+    return { continuationPrompt: null, switchAgent: null }
+  }
+
+  // Session scoping: only fire continuations for sessions that are working on this plan.
+  // Empty session_ids (legacy states) are allowed through gracefully.
+  if (state.session_ids.length > 0 && state.session_ids.at(-1) !== input.sessionId) {
+    return { continuationPrompt: null, switchAgent: null }
+  }
+
+  const progress = PlanService.getPlanProgress(state.active_plan)
+  if (progress.isComplete) {
+    const projection = projectExecutionTransition({
+      event: "complete_owner",
+      sessionId: input.sessionId,
+      executionRef: state.active_plan,
+      currentLease: ExecutionLeaseRepository.readExecutionLease(directory),
+      currentSessionRuntime: ExecutionLeaseRepository.readSessionRuntime(directory, input.sessionId),
+    })
+
+    ExecutionLeaseRepository.clearExecutionLease(directory)
+    if (projection.sessionRuntime) {
+      ExecutionLeaseRepository.writeSessionRuntime(directory, projection.sessionRuntime)
+    }
+    return { continuationPrompt: null, switchAgent: null }
+  }
+
+  // Stale progress detection: compare current progress to the last-seen snapshot.
+  // If progress hasn't changed after MAX_STALE_CONTINUATIONS consecutive calls, auto-pause.
+  if (state.continuation_completed_snapshot === undefined) {
+    // First continuation call — initialize tracking fields
+    state.continuation_completed_snapshot = progress.completed
+    state.stale_continuation_count = 0
+    PlanRepository.writeWorkState(directory, state)
+  } else if (progress.completed > state.continuation_completed_snapshot) {
+    // Progress was made — reset stale counter
+    state.continuation_completed_snapshot = progress.completed
+    state.stale_continuation_count = 0
+    PlanRepository.writeWorkState(directory, state)
+  } else {
+    // No progress — increment stale counter
+    state.stale_continuation_count = (state.stale_continuation_count ?? 0) + 1
+    if (state.stale_continuation_count >= MAX_STALE_CONTINUATIONS) {
+      // Auto-pause: inline write to preserve stale-tracking fields
+      state.paused = true
+      PlanRepository.writeWorkState(directory, state)
+      return { continuationPrompt: null, switchAgent: null }
+    }
+    PlanRepository.writeWorkState(directory, state)
+  }
+
+  const remaining = progress.total - progress.completed
+  return {
+    switchAgent: state.agent ?? "tapestry",
+    continuationPrompt: `${renderContinuationEnvelope({
+      continuation: "work",
+      sessionId: input.sessionId,
+      planName: state.plan_name,
+      planPath: state.active_plan,
+      progress: `${progress.completed}/${progress.total} tasks completed`,
+      workingDirectory: directory,
+    })}
+${CONTINUATION_MARKER}
+You have an active work plan with incomplete tasks. Continue working.
+
+**Plan**: ${state.plan_name}
+**File**: \`${state.active_plan}\`
+**Working directory**: \`${directory}\`
+**Progress**: ${progress.completed}/${progress.total} tasks completed (${remaining} remaining)
+
+1. Read the plan file NOW to check exact current progress
+2. Use todowrite to restore sidebar: summary todo "${state.plan_name} ${progress.completed}/${progress.total}" (in_progress) + next task (in_progress) + 2-3 upcoming (pending). Max 35 chars each.
+3. Find the first unchecked \`- [ ]\` task
+4. Execute it, verify it, mark \`- [ ]\` → \`- [x]\`
+5. Update sidebar todos as you complete tasks
+6. Immediately continue to the next unchecked task
+7. Do not stop, ask what to do next, or mention post-execution review while unchecked tasks remain
+8. Only stop when all tasks are complete, the user explicitly stops you, or every remaining unchecked task is truly blocked`,
+  }
+}

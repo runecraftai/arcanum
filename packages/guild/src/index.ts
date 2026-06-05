@@ -1,70 +1,67 @@
-/**
- * @runecraft/guild — OpenCode plugin for multi-agent coordination
- * Entry point: loads config, builds hooks and tools, initializes V2 features
- */
+import type { Plugin } from "@opencode-ai/plugin"
+import { join } from "path"
+import { loadGuildConfig } from "./config/loader"
+import { resolveContinuationConfig } from "./config/continuation"
+import { createManagers } from "./create-managers"
+import { createTools } from "./create-tools"
+import { createHooks } from "./hooks/create-hooks"
+import { createPluginInterface } from "./plugin/plugin-interface"
+import { createAnalytics } from "./features/analytics"
+import { getOrCreateFingerprint } from "./features/analytics/fingerprint"
+import { setClient, setLogLevel } from "./shared/log"
 
-import type { Plugin } from "@opencode-ai/plugin";
-import { join } from "path";
-import { loadConfig } from "./config.js";
-import { buildHooks } from "./hooks.js";
-import { buildTools } from "./tools.js";
-import { discoverSkills } from "./skills/discovery.js";
-import { WorkflowEngine } from "./workflows/engine.js";
-import type { DiscoveredSkill } from "./types.js";
-
-// Re-export types
-export type { GuildConfig } from "./schema.js";
-export type { AgentName, AgentVariant, AgentStatusResult } from "./types.js";
-export type {
-  DiscoveredSkill,
-  SkillDiscoveryResult,
-  ResolvedAgentConfig,
-  WorkflowState,
-  WorkflowResponse,
-} from "./types.js";
-export { GuildConfigSchema, generateJsonSchema } from "./schema.js";
-
-/**
- * Guild plugin factory
- * Async initialization: loads config, initializes V2 features (skills, workflows),
- * builds hooks and tools
- */
-export const GuildPlugin: Plugin = async (ctx) => {
-  const config = await loadConfig(ctx.directory);
-
-  // V2: Initialize skills discovery (cached in closure)
-  let discoveredSkills: DiscoveredSkill[] = [];
-  const skillsReloader = async () => {
-    const result = await discoverSkills(
-      config.skills || { auto_discover: true }
-    );
-    discoveredSkills = result.skills;
-
-    // Log errors if any
-    if (result.errors.length > 0) {
-      console.warn("[guild] Skills discovery warnings:");
-      result.errors.forEach((err) => console.warn(`  - ${err}`));
-    }
-  };
-
-  // Initial skills discovery
-  try {
-    await skillsReloader();
-  } catch (error) {
-    console.warn("[guild] Failed to discover skills on init:", error);
+const GuildPlugin: Plugin = async (ctx) => {
+  // Set the SDK client FIRST so that config validation warnings reach
+  // OpenCode's app log (visible in the TUI), not just stderr.
+  setClient(ctx.client)
+  const pluginConfig = loadGuildConfig(ctx.directory, ctx)
+  const continuation = resolveContinuationConfig(pluginConfig.continuation)
+  if (pluginConfig.log_level) {
+    setLogLevel(pluginConfig.log_level)
   }
+  const disabledHooks = new Set(pluginConfig.disabled_hooks ?? [])
+  const isHookEnabled = (name: string) => !disabledHooks.has(name)
+  const analyticsEnabled = pluginConfig.analytics?.enabled === true
+  const fingerprintEnabled = analyticsEnabled && pluginConfig.analytics?.use_fingerprint === true
 
-  // V2: Initialize workflow engine (if workflows configured)
-  const sessionDir = join(ctx.directory, ".specs/sessions");
-  const workflowEngine = new WorkflowEngine(
-    config.workflows,
-    sessionDir
-  );
+  // Generate fingerprint early so it can be injected into agent prompts.
+  // Only materialised when both analytics and use_fingerprint are opted in,
+  // so no fingerprint context is sent to the model provider by default.
+  const fingerprint = fingerprintEnabled ? getOrCreateFingerprint(ctx.directory) : null
 
-  return {
-    ...buildHooks(config, ctx, skillsReloader),
-    tool: buildTools(config, ctx, discoveredSkills, workflowEngine),
-  };
-};
+  const configDir = join(ctx.directory, ".opencode")
+  const toolsResult = await createTools({ ctx, pluginConfig })
+  const managers = createManagers({
+    ctx,
+    pluginConfig,
+    continuation,
+    resolveSkills: toolsResult.resolveSkillsFn,
+    fingerprint,
+    configDir,
+  })
+  const hooks = createHooks({
+    pluginConfig,
+    continuation,
+    isHookEnabled,
+    directory: ctx.directory,
+    analyticsEnabled,
+  })
 
-export default GuildPlugin;
+  // Analytics: session tracking + project fingerprinting (fire-and-forget)
+  const analytics = analyticsEnabled ? createAnalytics(ctx.directory, fingerprint) : null
+
+  return createPluginInterface({
+    pluginConfig,
+    hooks,
+    tools: toolsResult.tools,
+    configHandler: managers.configHandler,
+    agents: managers.agents,
+    client: ctx.client,
+    directory: ctx.directory,
+    tracker: analytics?.tracker,
+  })
+}
+
+export default GuildPlugin
+export type { WeaveConfig as GuildConfig } from "./config/schema"
+export type { WeaveAgentName as GuildAgentName } from "./agents/types"

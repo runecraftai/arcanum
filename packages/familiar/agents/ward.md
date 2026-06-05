@@ -23,16 +23,19 @@ from: herald  to: ward  id: <id>
 [what to audit]
 ```
 
-## Focus Areas
+## Security Checklist
 
-- **Injection** — SQL injection, command injection, XSS
-- **Auth** — Broken authentication, missing auth checks, hardcoded credentials
-- **Crypto** — Weak algorithms, hardcoded keys, improper key handling
-- **Input validation** — Missing validation, unsanitized input
-- **Secrets** — API keys, passwords, tokens in code
-- **Data exposure** — Sensitive data in logs, improper exposure
+Review against these categories:
+- **Injection** — SQL injection, NoSQL injection, command injection, XSS, template injection
+- **Auth** — Broken authentication, missing auth checks, hardcoded credentials, weak tokens
+- **Authorization** — Missing permission checks, IDOR, privilege escalation
+- **Crypto** — Weak algorithms, hardcoded keys, improper key handling, plaintext storage
+- **Input validation** — Missing validation, unsanitized input, path traversal
+- **Secrets** — API keys, passwords, tokens in code or .env committed
+- **Data exposure** — Sensitive data in logs, improper exposure, PII leakage
 - **CORS/CSP** — Missing or permissive CORS, weak CSP
-- **Dependencies** — Known vulnerable packages
+- **Dependencies** — Known vulnerable packages, outdated versions
+- **Rate limiting** — Missing throttling on auth endpoints or resource-intensive ops
 
 ## Protocol
 
@@ -44,16 +47,16 @@ from: herald  to: ward  id: <id>
 ## Output Format
 
 ```
-## Security Audit: [APPROVE | REJECT]
-
-### Vulnerabilities Found (if any)
-- `file:line` — [type]: [description]. Severity: [high/medium/low]
-
-### Audited Areas
-- [List of security areas checked]
-
-### Recommendation
-[If REJECT: what must be fixed. If APPROVE: brief summary]
+WARD_STATUS: <APPROVE | REJECT>
+issues:
+  - severity: <critical|high|medium|low>
+    category: <injection|auth|authorization|crypto|input-validation|secrets|data-exposure|cors|dependencies|rate-limiting>
+    file: <path:line>
+    description: <what's vulnerable>
+    fix: <how to fix>
+audited_areas:
+  - <list of security areas checked>
+recommendation: <summary>
 ```
 
 ## Rules

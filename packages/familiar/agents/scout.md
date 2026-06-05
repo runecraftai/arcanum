@@ -54,15 +54,28 @@ from: herald  to: scout  id: <id>
 
 ## Output Format
 
-Return ONLY:
+Return structured findings that Sage can consume:
+
 ```
 SCOUT_FINDINGS:
 topic: <exploration-topic>
+scope_recommendation: <quick|medium|large>
 summary: <1-3 sentences>
 key_facts:
   - <fact 1>
   - <fact 2>
   - <fact 3>
+architecture:
+  stack: <tech stack>
+  entry_points: [<main files>]
+  patterns: [<design patterns found>]
 files_examined: [<path1:line>, <path2:line>]
-recommendations: <optional>
+relevant_files:
+  - path: <file>
+    purpose: <what it does>
+    lines: <relevant line ranges>
+gaps: [<what's missing or unclear>]
+recommendations: [<suggested approach>]
 ```
+
+**scope_recommendation:** Based on complexity observed, suggest Quick (<1h), Medium (1-3h), or Large (>3h).

@@ -1,41 +1,84 @@
-# @runecraftai/familiar
+# @runecraft/familiar
 
-Pi multi-agent orchestration config — Herald, Forge, Scout, Sage, Arbiter, Ward.
+**Pi multi-agent orchestration** — Runecraft themed with Herald/Scout/Sage/Forge/Ward/Arbiter workflow
 
-## Setup
+---
+
+## Agents
+
+| Agent | Role | Model |
+|-------|------|-------|
+| **Herald** | Orchestrator — coordinates all agents | minimax-m2.7 |
+| **Scout** | Explorer — reads code, graph-first | deepseek-v4-flash |
+| **Sage** | Planner — spec-driven methodology | deepseek-v4-pro |
+| **Forge** | Executor — writes code | minimax-m2.7 |
+| **Ward** | Security auditor | deepseek-v4-flash |
+| **Arbiter** | Quality reviewer | deepseek-v4-flash |
+
+## Modes
+
+| Mode | Description |
+|------|-------------|
+| **NORMAL** | Orchestrator mode — delegate to agents |
+| **PLAN** | Spec-driven mode — Shift+Tab to toggle |
+
+## Extensions
+
+| Extension | Description |
+|-----------|-------------|
+| `agent-team` | Dispatch agents with live tmux widgets |
+| `agent-chain` | Sequential chains with $INPUT |
+| `mode-cycler` | Shift+Tab for NORMAL ↔ PLAN |
+| `subagent-widget` | Live status widgets |
+| `security-guard` | Blocks dangerous commands |
+| `theme-cycler` | Ctrl+X to cycle themes |
+
+## Chains
 
 ```bash
-# 1. Copy to ~/.pi
-cp -r agents agent BUILD_PLAN.md ~/.pi/
-
-# 2. Install extension dependencies
-cd ~/.pi/agent/extensions && npm install
-
-# 3. Create auth.json from template
-cp agent/auth.json.example ~/.pi/agent/auth.json
-# Then fill in your OAuth tokens (run `claude` CLI to authenticate)
+/chain plan-build-review   # scout → sage → forge → arbiter
+/chain investigate-fix      # scout → forge → arbiter
 ```
 
-## Structure
+## Installation
 
-```
-agents/              # Agent role definitions
-  herald.md          # Orchestrator
-  forge.md           # Developer
-  scout.md           # Explorer
-  sage.md            # Planner
-  arbiter.md         # Reviewer
-  ward.md            # Security auditor
-  subagents/         # Subagent specs (explore, review, verify)
-agent/
-  settings.json      # Default provider/model config
-  extensions/
-    anthropic-pro.ts # Claude Pro/Max OAuth provider (raw fetch, no SDK)
-    tmux-delegate/   # Multi-agent tmux session management
+```bash
+# Clone and install
+git clone https://github.com/ruizrica/agent-pi.git
+cd agent-pi
+./install.sh
+
+# Or use pi install
+pi install git:github.com/ruizrica/agent-pi
 ```
 
-## Notes
+## Usage
 
-- `anthropic-pro.ts` uses OAuth tokens from Claude CLI (`~/.claude/.credentials.json`)
-- No build step — extensions run via jiti (pi's TypeScript runtime)
-- `auth.json` contains secrets and is gitignored
+```bash
+# Load extensions
+pi -e extensions/agent-team.ts \
+   -e extensions/agent-chain.ts \
+   -e extensions/mode-cycler.ts
+
+# Dispatch an agent
+/delegate scout "Explore auth module"
+
+# Run a chain
+/chain plan-build-review
+
+# Toggle plan mode
+Shift+Tab
+```
+
+## Theme
+
+Runecraft-dark theme with purple accents:
+- Background: #1a1b26
+- Accent: #bb9af7 (purple)
+- Cyan: #7dcfff
+
+Apply with: `/theme runecraft-dark`
+
+---
+
+Built with ♥ for Runecraft

@@ -1,0 +1,150 @@
+# Chain definitions for @runecraft/familiar
+# Sequential workflows with $INPUT chaining
+
+plan-build-review:
+  description: "Plan, build, and review a feature"
+  steps:
+    - agent: scout
+      prompt: "Explore: $INPUT"
+    - agent: sage
+      prompt: "Plan the implementation:\n$INPUT"
+    - agent: forge
+      prompt: "Implement:\n$INPUT"
+    - agent: arbiter
+      prompt: "Review:\n$INPUT"
+
+investigate-fix:
+  description: "Find and fix a bug"
+  steps:
+    - agent: scout
+      prompt: "Investigate: $INPUT"
+    - agent: forge
+      prompt: "Fix:\n$INPUT"
+    - agent: arbiter
+      prompt: "Review fix:\n$INPUT"
+
+quick-fix:
+  description: "Quick single-file fix"
+  steps:
+    - agent: forge
+      prompt: "Fix: $INPUT"
+    - agent: arbiter
+      prompt: "Review:\n$INPUT"
+
+full-audit:
+  description: "Complete security and quality audit"
+  steps:
+    - agent: scout
+      prompt: "Audit scope: $INPUT"
+    - agent: ward
+      prompt: "Security audit:\n$INPUT"
+    - agent: arbiter
+      prompt: "Quality review:\n$INPUT"
+
+# Flow chains — used by /flow command with auto-scope detection and gates
+
+flow-quick:
+  description: "Flow: Quick fix with G1/G6 gates"
+  steps:
+    - agent: sage
+      prompt: |
+        Quick scope. Write minimal spec + tasks to .specs/features/<auto-slug>/
+        Keep it under 3 tasks. Be brief.
+        
+        After writing, emit:
+        GATE_G1: Approve Plan
+        <task summary>
+        (yes/no)
+        
+        Task: $INPUT
+    - agent: forge
+      prompt: |
+        Read .specs/features/<auto-slug>/tasks.md and implement.
+        Do NOT commit. Report when done.
+        
+        After implementing, emit:
+        GATE_G6: Approve Commit
+        <diff summary>
+        (yes/no)
+        
+        Plan: $INPUT
+
+flow-medium:
+  description: "Flow: Feature build with G1/G6 gates"
+  steps:
+    - agent: scout
+      prompt: |
+        Explore codebase for: $INPUT
+        Report: structure, patterns, files to modify.
+    - agent: sage
+      prompt: |
+        Write spec + tasks to .specs/features/<auto-slug>/
+        Use scout findings for context.
+        
+        After writing, emit:
+        GATE_G1: Approve Plan
+        <task summary>
+        (yes/no)
+        
+        Exploration: $INPUT
+        Original: $ORIGINAL
+    - agent: forge
+      prompt: |
+        Read .specs/features/<auto-slug>/tasks.md and implement.
+        Do NOT commit. Report when done.
+        
+        After implementing, emit:
+        GATE_G6: Approve Commit
+        <diff summary>
+        (yes/no)
+        
+        Plan: $INPUT
+    - agent: arbiter
+      prompt: |
+        Quick quality review of implementation.
+        
+        Implementation: $INPUT
+        Original: $ORIGINAL
+
+flow-large:
+  description: "Flow: Large feature with full reviews and G1/G6 gates"
+  steps:
+    - agent: scout
+      prompt: |
+        Deep exploration for: $INPUT
+        Report: architecture, dependencies, risks.
+    - agent: sage
+      prompt: |
+        Write comprehensive spec + design + tasks to .specs/features/<auto-slug>/
+        Include architecture decisions.
+        
+        After writing, emit:
+        GATE_G1: Approve Plan
+        <task summary>
+        (yes/no)
+        
+        Exploration: $INPUT
+        Original: $ORIGINAL
+    - agent: forge
+      prompt: |
+        Implement all tasks from .specs/features/<auto-slug>/tasks.md
+        Do NOT commit. Report when done.
+        
+        After implementing, emit:
+        GATE_G6: Approve Commit
+        <diff summary>
+        (yes/no)
+        
+        Plan: $INPUT
+    - agent: arbiter
+      prompt: |
+        Quality review of implementation.
+        
+        Implementation: $INPUT
+        Original: $ORIGINAL
+    - agent: ward
+      prompt: |
+        Security review of implementation.
+        
+        Implementation: $INPUT
+        Original: $ORIGINAL
