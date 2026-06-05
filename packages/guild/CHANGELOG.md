@@ -1,5 +1,18 @@
 # @runecraft/guild
 
+## 0.9.0
+
+### Minor Changes
+
+- refactor(guild): rename builtin agents to RPG class structure
+  feat(guild): add RPG skill roster
+  feat: add guild orchestration package
+  fix(guild): add default export to GuildPlugin
+  feat(guild): auto-create user config file with defaults on first run
+  fix(guild): improve exception handling across catch blocks
+  feat(guild): implement @runecraft/guild v1 opencode plugin
+  feat: set up changeset-publish workflow for monorepo versioning and npm publishing
+
 ## 0.4.0
 
 ### Minor Changes
