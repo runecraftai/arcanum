@@ -1,5 +1,6 @@
 import * as path from 'path'
 import * as os from 'os'
+import * as fs from 'fs'
 import type { LoadedSkill, SkillDiscoveryResult } from './types'
 import { fetchSkillsFromOpenCode } from './opencode-client'
 import { scanDirectory } from './discovery'
@@ -12,6 +13,31 @@ export interface LoadSkillsOptions {
   disabledSkills?: string[]
   /** Additional directories to scan for skills (from config `skill_directories`) */
   customDirs?: string[]
+}
+
+/**
+ * Resolve the package-local builtin skills directory.
+ * Uses import.meta.dir to find package root, then appends `skills/`.
+ * Tolerates missing directory (returns undefined).
+ */
+function resolveBuiltinSkillsDir(): string | undefined {
+  // import.meta.dir = <pkg-root>/dist/features/skill-loader/ (built) or <pkg-root>/src/features/skill-loader/ (dev)
+  const pkgRoot = path.resolve(import.meta.dir, '..', '..', '..')
+  const skillsDir = path.join(pkgRoot, 'skills')
+  if (fs.existsSync(skillsDir) && fs.statSync(skillsDir).isDirectory()) {
+    return skillsDir
+  }
+  return undefined
+}
+
+/**
+ * Scan package-local builtin skills from `packages/guild/skills/`.
+ * Returns empty array if the directory is missing.
+ */
+function scanBuiltinSkills(): LoadedSkill[] {
+  const dir = resolveBuiltinSkillsDir()
+  if (!dir) return []
+  return scanDirectory({ directory: dir, scope: 'builtin' })
 }
 
 /**
@@ -41,16 +67,19 @@ function scanFilesystemSkills(directory: string, customDirs?: string[]): LoadedS
 }
 
 /**
- * Merge API-sourced skills with filesystem-sourced skills.
- * API results take precedence when both sources provide the same skill name.
+ * Merge skills from multiple sources with the following precedence:
+ * api > filesystem (project/custom/user) > builtin
+ * Sources earlier in the args list win over later ones.
  */
-function mergeSkillSources(apiSkills: LoadedSkill[], fsSkills: LoadedSkill[]): LoadedSkill[] {
-  const seen = new Set(apiSkills.map((s) => s.name))
-  const merged = [...apiSkills]
-  for (const skill of fsSkills) {
-    if (!seen.has(skill.name)) {
-      merged.push(skill)
-      seen.add(skill.name)
+function mergeSkillSources(...sources: LoadedSkill[][]): LoadedSkill[] {
+  const seen = new Set<string>()
+  const merged: LoadedSkill[] = []
+  for (const source of sources) {
+    for (const skill of source) {
+      if (!seen.has(skill.name)) {
+        merged.push(skill)
+        seen.add(skill.name)
+      }
     }
   }
   return merged
@@ -65,12 +94,22 @@ export async function loadSkills(options: LoadSkillsOptions): Promise<SkillDisco
   // Fallback: scan filesystem for skills the API may not have returned
   const fsSkills = scanFilesystemSkills(directory, customDirs)
 
-  const skills = mergeSkillSources(apiSkills, fsSkills)
+  // Builtin: package-local skills with lowest precedence
+  const builtinSkills = scanBuiltinSkills()
+
+  const skills = mergeSkillSources(apiSkills, fsSkills, builtinSkills)
 
   if (apiSkills.length === 0 && fsSkills.length > 0) {
     debug('OpenCode API returned no skills — using filesystem fallback', {
       fsSkillCount: fsSkills.length,
       fsSkillNames: fsSkills.map((s) => s.name),
+    })
+  }
+
+  if (builtinSkills.length > 0) {
+    debug('Loaded builtin skills from package', {
+      builtinCount: builtinSkills.length,
+      builtinNames: builtinSkills.map((s) => s.name),
     })
   }
 

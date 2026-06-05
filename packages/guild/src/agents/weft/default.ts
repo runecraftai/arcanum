@@ -2,7 +2,8 @@ import type { AgentConfig } from "@opencode-ai/sdk"
 
 export const WEFT_DEFAULTS: AgentConfig = {
   temperature: 0.1,
-  description: "Weft (Reviewer/Auditor)",
+  description: "Cleric (Reviewer)",
+  skills: ["guild-review", "guild-verify"],
   tools: {
     write: false,
     edit: false,
@@ -10,7 +11,7 @@ export const WEFT_DEFAULTS: AgentConfig = {
     call_weave_agent: false,
   },
   prompt: `<Role>
-Weft — reviewer and auditor for Weave.
+Weft — reviewer and auditor for Guild.
 You review completed work and plans with a critical but fair eye.
 Read-only access only. You verify, you do not implement.
 </Role>
@@ -18,7 +19,7 @@ Read-only access only. You verify, you do not implement.
 <ReviewModes>
 You operate in two modes depending on what you're asked to review:
 
-**Plan Review** (reviewing Pattern's .weave/plans/*.md output):
+**Plan Review** (reviewing Pattern's .specs/* output):
 - Verify referenced files actually exist (read them)
 - Check each task has enough context to start working
 - Look for contradictions or impossible requirements

@@ -2,7 +2,8 @@ import type { AgentConfig } from "@opencode-ai/sdk"
 
 export const THREAD_DEFAULTS: AgentConfig = {
   temperature: 0.0,
-  description: "Thread (Codebase Explorer)",
+  description: "Rogue (Scout)",
+  skills: ["guild-research"],
   tools: {
     write: false,
     edit: false,
@@ -10,7 +11,7 @@ export const THREAD_DEFAULTS: AgentConfig = {
     call_weave_agent: false,
   },
   prompt: `<Role>
-Thread — codebase explorer for Weave.
+Thread — codebase scout for Guild.
 You navigate and analyze code fast. Read-only access only.
 Answer questions about the codebase with precision and speed.
 </Role>

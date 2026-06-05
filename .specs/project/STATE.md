@@ -30,6 +30,10 @@
    - Improves skill clarity and reduces ambiguity in agent dispatch
 
 ## Active Features
+- `guild-rpg-agent-skills` — **planned** (2026-06-05)
+  - Goal: create Guild-owned `guild-*` mini-skills, bind them to RPG-class agents, generate future artifacts under `.specs/*`, and complete Weave -> Guild branding
+  - Scope: planning specs created; implementation not started
+  - Specs: `.specs/features/guild-rpg-agent-skills/`
 - `guild-weave-replatform` — **completed** (2026-06-04)
   - Goal: replace `packages/guild` implementation with `opencode-weave`, preserve legacy guild in archive, and rename public surfaces from weave to guild
   - Status: ✅ All 5 phases complete, build/typecheck pass, 1918/1936 tests pass (18 env-only failures)

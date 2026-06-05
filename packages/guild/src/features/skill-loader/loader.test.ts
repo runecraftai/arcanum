@@ -119,7 +119,7 @@ describe("loadSkills", () => {
 
   it("scans both user and project skill directories", async () => {
     await loadSkills({ serverUrl: SERVER_URL, directory: DIRECTORY })
-    expect(scanDirectorySpy).toHaveBeenCalledTimes(2)
+    expect(scanDirectorySpy).toHaveBeenCalledTimes(3)
     // First call: user-level — use join() for cross-platform path comparison
     const userCall = scanDirectorySpy.mock.calls[0][0] as { directory: string; scope: string }
     expect(userCall.directory).toContain(join(".config", "opencode", "skills"))
@@ -128,6 +128,79 @@ describe("loadSkills", () => {
     const projectCall = scanDirectorySpy.mock.calls[1][0] as { directory: string; scope: string }
     expect(projectCall.directory).toContain(".opencode")
     expect(projectCall.scope).toBe("project")
+    // Third call: builtin package-local skills
+    const builtinCall = scanDirectorySpy.mock.calls[2][0] as { directory: string; scope: string }
+    expect(builtinCall.directory).toContain(join("packages", "guild", "skills"))
+    expect(builtinCall.scope).toBe("builtin")
+  })
+
+  it("returns builtin skills when the package-local catalog exists", async () => {
+    const builtinSkill: LoadedSkill = {
+      name: "guild-load",
+      description: "Load Guild context",
+      content: "Load project state before planning.",
+      scope: "builtin",
+      path: "/workspace/packages/guild/skills/guild-load/SKILL.md",
+    }
+    scanDirectorySpy.mockImplementation((opts: { directory: string; scope: string }) => {
+      if (opts.scope === "builtin") return [builtinSkill]
+      return []
+    })
+
+    const result = await loadSkills({ serverUrl: SERVER_URL, directory: DIRECTORY })
+    expect(result.skills).toHaveLength(1)
+    expect(result.skills[0].name).toBe("guild-load")
+    expect(result.skills[0].scope).toBe("builtin")
+  })
+
+  it("lets filesystem skills override builtin skills with the same name", async () => {
+    mockFetch.mockImplementationOnce(async () => ({ ok: true, status: 200, json: async () => [] }))
+    const builtinSkill: LoadedSkill = {
+      name: "guild-plan",
+      description: "Builtin plan",
+      content: "Builtin content",
+      scope: "builtin",
+      path: "/workspace/packages/guild/skills/guild-plan/SKILL.md",
+    }
+    const projectSkill: LoadedSkill = {
+      name: "guild-plan",
+      description: "Project plan",
+      content: "Project content",
+      scope: "project",
+      path: "/some/project/.opencode/skills/guild-plan/SKILL.md",
+    }
+    scanDirectorySpy.mockImplementation((opts: { directory: string; scope: string }) => {
+      if (opts.scope === "builtin") return [builtinSkill]
+      if (opts.scope === "project") return [projectSkill]
+      return []
+    })
+
+    const result = await loadSkills({ serverUrl: SERVER_URL, directory: DIRECTORY })
+    expect(result.skills).toHaveLength(1)
+    expect(result.skills[0].description).toBe("Project plan")
+    expect(result.skills[0].content).toBe("Project content")
+  })
+
+  it("filters disabled builtin skills", async () => {
+    mockFetch.mockImplementationOnce(async () => ({ ok: true, status: 200, json: async () => [] }))
+    const builtinSkill: LoadedSkill = {
+      name: "guild-security",
+      description: "Builtin security guidance",
+      content: "Review for trust boundaries.",
+      scope: "builtin",
+      path: "/workspace/packages/guild/skills/guild-security/SKILL.md",
+    }
+    scanDirectorySpy.mockImplementation((opts: { directory: string; scope: string }) => {
+      if (opts.scope === "builtin") return [builtinSkill]
+      return []
+    })
+
+    const result = await loadSkills({
+      serverUrl: SERVER_URL,
+      directory: DIRECTORY,
+      disabledSkills: ["guild-security"],
+    })
+    expect(result.skills).toHaveLength(0)
   })
 
   it("returns filesystem skills when API returns nothing", async () => {
@@ -278,8 +351,8 @@ describe("loadSkills", () => {
       directory: DIRECTORY,
       customDirs: ["custom/skills"],
     })
-    // project + custom + user = 3 calls
-    expect(scanDirectorySpy).toHaveBeenCalledTimes(3)
+    // project + custom + user + builtin = 4 calls
+    expect(scanDirectorySpy).toHaveBeenCalledTimes(4)
     const calls = scanDirectorySpy.mock.calls.map((c) => (c[0] as { directory: string; scope: string }))
     expect(calls.some((c) => c.directory === expectedDir && c.scope === "project")).toBe(true)
   })
@@ -328,13 +401,13 @@ describe("loadSkills", () => {
 
   it("works with empty customDirs array (same behavior as no customDirs)", async () => {
     await loadSkills({ serverUrl: SERVER_URL, directory: DIRECTORY, customDirs: [] })
-    // Still just project + user = 2 calls
-    expect(scanDirectorySpy).toHaveBeenCalledTimes(2)
+    // Still just project + user + builtin = 3 calls
+    expect(scanDirectorySpy).toHaveBeenCalledTimes(3)
   })
 
   it("existing behavior unchanged when customDirs not provided", async () => {
     await loadSkills({ serverUrl: SERVER_URL, directory: DIRECTORY })
-    expect(scanDirectorySpy).toHaveBeenCalledTimes(2)
+    expect(scanDirectorySpy).toHaveBeenCalledTimes(3)
   })
 
   it("rejects absolute paths in customDirs (path traversal protection)", async () => {
@@ -364,7 +437,7 @@ describe("loadSkills", () => {
       directory: DIRECTORY,
       customDirs: ["../../../etc"],
     })
-    // Only project + user = 2 calls (the custom dir is rejected, not scanned)
-    expect(scanDirectorySpy).toHaveBeenCalledTimes(2)
+    // Only project + user + builtin = 3 calls (the custom dir is rejected, not scanned)
+    expect(scanDirectorySpy).toHaveBeenCalledTimes(3)
   })
 })

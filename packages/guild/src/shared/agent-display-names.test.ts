@@ -10,13 +10,14 @@ import {
 
 describe("getAgentDisplayName", () => {
   it("returns display name for known config keys", () => {
-    expect(getAgentDisplayName("loom")).toBe("Loom (Main Orchestrator)")
-    expect(getAgentDisplayName("tapestry")).toBe("Tapestry (Execution Orchestrator)")
-    // Subagents use simple lowercase keys as display names so OpenCode's Task tool can find them
-    expect(getAgentDisplayName("shuttle")).toBe("shuttle")
-    expect(getAgentDisplayName("pattern")).toBe("pattern")
-    expect(getAgentDisplayName("thread")).toBe("thread")
-    expect(getAgentDisplayName("spindle")).toBe("spindle")
+    expect(getAgentDisplayName("loom")).toBe("Bard (Guildmaster)")
+    expect(getAgentDisplayName("tapestry")).toBe("Fighter (Execution Lead)")
+    expect(getAgentDisplayName("shuttle")).toBe("Ranger (Specialist)")
+    expect(getAgentDisplayName("pattern")).toBe("Wizard (Planner)")
+    expect(getAgentDisplayName("thread")).toBe("Rogue (Scout)")
+    expect(getAgentDisplayName("spindle")).toBe("Warlock (Researcher)")
+    expect(getAgentDisplayName("weft")).toBe("Cleric (Reviewer)")
+    expect(getAgentDisplayName("warp")).toBe("Paladin (Security)")
   })
 
   it("returns original key for unknown agents", () => {
@@ -25,22 +26,22 @@ describe("getAgentDisplayName", () => {
   })
 
   it("performs case-insensitive lookup", () => {
-    expect(getAgentDisplayName("LOOM")).toBe("Loom (Main Orchestrator)")
-    expect(getAgentDisplayName("Loom")).toBe("Loom (Main Orchestrator)")
-    // Subagents map to simple lowercase keys
-    expect(getAgentDisplayName("Thread")).toBe("thread")
+    expect(getAgentDisplayName("LOOM")).toBe("Bard (Guildmaster)")
+    expect(getAgentDisplayName("Loom")).toBe("Bard (Guildmaster)")
+    expect(getAgentDisplayName("Thread")).toBe("Rogue (Scout)")
   })
 })
 
 describe("getAgentConfigKey", () => {
   it("resolves display names back to config keys", () => {
-    expect(getAgentConfigKey("Loom (Main Orchestrator)")).toBe("loom")
-    expect(getAgentConfigKey("Tapestry (Execution Orchestrator)")).toBe("tapestry")
-    // Subagent display names are already their config keys
-    expect(getAgentConfigKey("thread")).toBe("thread")
-    expect(getAgentConfigKey("pattern")).toBe("pattern")
-    expect(getAgentConfigKey("shuttle")).toBe("shuttle")
-    expect(getAgentConfigKey("spindle")).toBe("spindle")
+    expect(getAgentConfigKey("Bard (Guildmaster)")).toBe("loom")
+    expect(getAgentConfigKey("Fighter (Execution Lead)")).toBe("tapestry")
+    expect(getAgentConfigKey("Wizard (Planner)")).toBe("pattern")
+    expect(getAgentConfigKey("Rogue (Scout)")).toBe("thread")
+    expect(getAgentConfigKey("Warlock (Researcher)")).toBe("spindle")
+    expect(getAgentConfigKey("Ranger (Specialist)")).toBe("shuttle")
+    expect(getAgentConfigKey("Cleric (Reviewer)")).toBe("weft")
+    expect(getAgentConfigKey("Paladin (Security)")).toBe("warp")
   })
 
   it("passes through config keys unchanged", () => {
@@ -103,13 +104,13 @@ describe("registerAgentDisplayName", () => {
 
   it("throws when display name collides with a builtin agent's display name", () => {
     expect(() =>
-      registerAgentDisplayName("custom-test-agent", "Loom (Main Orchestrator)"),
+      registerAgentDisplayName("custom-test-agent", "Bard (Guildmaster)"),
     ).toThrow(/reserved for built-in agent/)
   })
 
   it("throws on case-insensitive collision with builtin display name", () => {
     expect(() =>
-      registerAgentDisplayName("custom-test-agent", "loom (main orchestrator)"),
+      registerAgentDisplayName("custom-test-agent", "bard (guildmaster)"),
     ).toThrow(/reserved for built-in agent/)
   })
 
@@ -138,7 +139,7 @@ describe("updateBuiltinDisplayName", () => {
   it("old display name no longer resolves after update (cache invalidated)", () => {
     updateBuiltinDisplayName("loom", "My Loom")
     // The old name should not reverse-resolve to "loom" anymore
-    expect(getAgentConfigKey("Loom (Main Orchestrator)")).not.toBe("loom")
+    expect(getAgentConfigKey("Bard (Guildmaster)")).not.toBe("loom")
   })
 
   it("multiple updates to same key use last value", () => {
@@ -161,10 +162,10 @@ describe("updateBuiltinDisplayName", () => {
   it("after override, old builtin display name is still reserved for registerAgentDisplayName", () => {
     // Override loom to "My Loom"
     updateBuiltinDisplayName("loom", "My Loom")
-    // The original name "Loom (Main Orchestrator)" must still be reserved
+    // The original name "Bard (Guildmaster)" must still be reserved
     // (INITIAL_BUILTIN_DISPLAY_NAMES prevents it from being claimed)
     expect(() =>
-      registerAgentDisplayName("custom-test-agent", "Loom (Main Orchestrator)"),
+      registerAgentDisplayName("custom-test-agent", "Bard (Guildmaster)"),
     ).toThrow(/reserved for built-in agent/)
   })
 

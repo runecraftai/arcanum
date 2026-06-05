@@ -70,6 +70,41 @@ describe("createBuiltinAgents", () => {
     })
   })
 
+  it("binds approved guild skills to builtin agents", () => {
+    const agents = createBuiltinAgents()
+
+    expect(agents.loom?.skills).toEqual([
+      "guild-init",
+      "guild-load",
+      "guild-scope",
+      "guild-spec",
+      "guild-plan",
+      "guild-handoff",
+      "guild-ship",
+    ])
+    expect(agents.tapestry?.skills).toEqual([
+      "guild-load",
+      "guild-execute",
+      "guild-verify",
+      "guild-handoff",
+    ])
+    expect(agents.pattern?.skills).toEqual(["guild-load", "guild-scope", "guild-spec", "guild-plan"])
+    expect(agents.thread?.skills).toEqual(["guild-research"])
+    expect(agents.spindle?.skills).toEqual(["guild-research"])
+    expect(agents.shuttle?.skills).toEqual(["guild-execute"])
+    expect(agents.weft?.skills).toEqual(["guild-review", "guild-verify"])
+    expect(agents.warp?.skills).toEqual(["guild-security"])
+  })
+
+  it("prepends resolved builtin skills to builtin prompts", () => {
+    const agents = createBuiltinAgents({
+      resolveSkills: (skillNames) => `SKILLS:${skillNames.join(",")}`,
+    })
+
+    expect(agents.loom?.prompt).toContain("SKILLS:guild-init,guild-load,guild-scope,guild-spec,guild-plan,guild-handoff,guild-ship")
+    expect(agents.pattern?.prompt).toContain("SKILLS:guild-load,guild-scope,guild-spec,guild-plan")
+  })
+
   it("generates visible review model variants from review_models", () => {
     const agents = createBuiltinAgents({
       agentOverrides: {
@@ -143,7 +178,7 @@ describe("createBuiltinAgents", () => {
     })
     const prompt = agents["pattern"]?.prompt ?? ""
     const skillIndex = prompt.indexOf("SKILL_CONTENT")
-    const baseIndex = prompt.indexOf("Pattern — strategic planner for Weave.")
+    const baseIndex = prompt.indexOf("Pattern — strategic planner for Guild.")
     expect(skillIndex).toBeGreaterThanOrEqual(0)
     expect(baseIndex).toBeGreaterThan(skillIndex)
   })
@@ -156,11 +191,13 @@ describe("createBuiltinAgents", () => {
     const prompt = agents["pattern"]?.prompt ?? ""
     expect(prompt.startsWith("SKILL_CONTENT")).toBe(true)
     expect(prompt.endsWith("APPENDED")).toBe(true)
-    expect(prompt.indexOf("Pattern — strategic planner for Weave.")).toBeGreaterThan(0)
+    expect(prompt.indexOf("Pattern — strategic planner for Guild.")).toBeGreaterThan(0)
   })
 
-  it("empty skills array does not affect the prompt", () => {
-    const defaultAgents = createBuiltinAgents()
+  it("empty skills array does not suppress builtin skill content", () => {
+    const defaultAgents = createBuiltinAgents({
+      resolveSkills: () => "SKILL_CONTENT",
+    })
     const overrideAgents = createBuiltinAgents({
       agentOverrides: { pattern: { skills: [] } },
       resolveSkills: () => "SKILL_CONTENT",

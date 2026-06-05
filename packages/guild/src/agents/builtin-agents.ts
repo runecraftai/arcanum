@@ -235,6 +235,13 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
       })
     }
 
+    if ((name === "loom" || name === "tapestry") && built.skills?.length && resolveSkills) {
+      const skillContent = resolveSkills(built.skills, disabledSkills)
+      if (skillContent) {
+        built.prompt = skillContent + (built.prompt ? "\n\n" + built.prompt : "")
+      }
+    }
+
     if (override) {
       if (override.skills?.length && resolveSkills) {
         const skillContent = resolveSkills(override.skills, disabledSkills)

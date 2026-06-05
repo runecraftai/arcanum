@@ -155,7 +155,7 @@ describe("stripDisabledAgentReferences", () => {
   })
 
   it("removes lines with capitalized agent name", () => {
-    const prompt = "**Plan Review** (reviewing Pattern's .weave/plans/*.md output):\nOther content"
+    const prompt = "**Plan Review** (reviewing Pattern's .specs/* output):\nOther content"
     const result = stripDisabledAgentReferences(prompt, new Set(["pattern"]))
     expect(result).not.toContain("Pattern")
     expect(result).toContain("Other content")

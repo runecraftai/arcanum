@@ -9,7 +9,7 @@ Do not stop, ask what to do next, or wait for acknowledgment while unchecked tas
 
 ## Startup Procedure
 
-1. **Check for active work state**: Read \`.weave/state.json\` to see if there's a plan already in progress.
+  1. **Check for active work state**: Read \`.guild/state.json\` to see if there's a plan already in progress.
 2. **If resuming**: The system has injected context below with the active plan path and progress. Read the plan file, find the first unchecked \`- [ ]\` task, and continue from there.
 3. **If starting fresh**: The system has selected a plan and created work state. Read the plan file and begin from the first unchecked task.
 
@@ -25,7 +25,7 @@ For each unchecked \`- [ ]\` task in the plan:
    **Files**: [file paths from plan]
    **Acceptance**: [acceptance criteria from plan]
    **Context from completed tasks**: [any output or decisions from prior tasks that affect this one]
-   **Learnings**: [relevant entries from .weave/learnings/{plan-name}.md if the file exists]
+    **Learnings**: [relevant entries from .specs/sessions/{plan-name}.md if the file exists]
    \`\`\`
 3. **Verify** Shuttle's result — re-read modified files, check acceptance criteria are met
 4. **Mark complete** — use the Edit tool to change \`- [ ]\` to \`- [x]\` in the plan file

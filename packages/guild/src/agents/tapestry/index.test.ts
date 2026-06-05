@@ -66,7 +66,7 @@ describe("createTapestryAgent", () => {
     expect(reviewSection).toContain("Warp")
     expect(reviewSection).toContain("runtime reviewer fan-out runs automatically")
     expect(reviewSection).toContain("do not delegate terminal reviewers via Task tool")
-    expect(reviewSection).toContain("the Weave runtime spawns the configured variants and collates results automatically")
+    expect(reviewSection).toContain("the Guild runtime spawns the configured variants and collates results automatically")
   })
 
   it("PostExecutionReview reports findings without fixing them", () => {
@@ -140,7 +140,7 @@ describe("createTapestryAgent", () => {
   it("createTapestryAgentWithOptions omits CategoryRouting section when no categories provided", () => {
     const config = createTapestryAgentWithOptions("claude-sonnet-4")
     expect(config.prompt).not.toContain("<CategoryRouting>")
-    expect(config.prompt).toContain("the Weave runtime spawns the configured variants and collates results automatically")
+    expect(config.prompt).toContain("the Guild runtime spawns the configured variants and collates results automatically")
   })
 
   it("createTapestryAgentWithOptions includes manual-only CategoryRouting when categories have no patterns", () => {

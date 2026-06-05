@@ -11,7 +11,7 @@ import type { ResolvedContinuationConfig } from "../../config/continuation"
 import type { CategoriesConfig } from "../../config/schema"
 import type { ReviewModelVariant } from "../review-model-variants"
 
-const REVIEW_MODELS_AUTOMATION_ADVISORY = "When `review_models` are configured for Weft or Warp, the Weave runtime spawns the configured variants and collates results automatically — do not issue extra Task calls for them."
+const REVIEW_MODELS_AUTOMATION_ADVISORY = "When `review_models` are configured for Weft or Warp, the Guild runtime spawns the configured variants and collates results automatically — do not issue extra Task calls for them."
 const REVIEWERS_RUNTIME_OWNED_ADVISORY = "When Weft and/or Warp reviewers are enabled, runtime reviewer fan-out runs automatically after plan completion — do not delegate terminal reviewers via Task tool."
 
 export interface TapestryPromptOptions {
@@ -27,7 +27,7 @@ export interface TapestryPromptOptions {
 
 export function buildTapestryRoleSection(): string {
   return `<Role>
-Tapestry — coordination orchestrator for Weave.
+Fighter — coordination orchestrator for Guild.
 You coordinate multi-step plans by delegating each task to Shuttle agents, tracking progress, and verifying results.
 You do NOT implement work directly. Your responsibilities are: read the plan, analyse dependencies, delegate tasks to Shuttle via the Task tool, verify Shuttle's output, and mark tasks complete.
 </Role>`
@@ -153,12 +153,12 @@ Task [N/M]: [Task Title]
 **Acceptance**: [acceptance criteria from plan]
 
 **Context from completed tasks**: [any output or decisions from prior tasks that affect this one]
-**Learnings**: [relevant entries from .weave/learnings/{plan-name}.md if the file exists]
+**Learnings**: [relevant entries from .specs/sessions/{plan-name}.md if the file exists]
 \`\`\`
 
 RULES:
 - Always include task number, What, Files, and Acceptance in every delegation prompt
-- Read .weave/learnings/{plan-name}.md before delegating — include relevant entries
+- Read .specs/sessions/{plan-name}.md before delegating — include relevant entries
 - Include context from completed tasks only when it directly affects the current task
 - Use ${subagentType}
 - Do NOT implement the work yourself — delegate everything to Shuttle
@@ -247,7 +247,7 @@ When Shuttle returns an error or incomplete result:
 1. **First failure**: Retry once — re-delegate the same task with the error output appended:
    "Previous attempt failed with: [error details]. Please address this and try again."
 
-2. **Retry failure**: Mark the task blocked in the plan, log the reason to .weave/learnings/{plan-name}.md, and continue to the next unchecked task.
+2. **Retry failure**: Mark the task blocked in the plan, log the reason to .specs/sessions/{plan-name}.md, and continue to the next unchecked task.
 
 3. **Build/test failure after Shuttle completes**: Re-delegate with the failure output included:
    "Shuttle completed but verification failed: [build/test output]. Please fix and re-run."
@@ -311,7 +311,7 @@ export function buildTapestryContinuationHintSection(
   }
 
   return `<Continuation>
-- If Weave injects a recovery or continuation prompt, resume from persisted plan/workflow state instead of restarting from scratch.
+- If Guild injects a recovery or continuation prompt, resume from persisted plan/workflow state instead of restarting from scratch.
 </Continuation>`
 }
 
@@ -334,7 +334,7 @@ After Shuttle completes a task — BEFORE marking \`- [ ]\` → \`- [x]\`:
      - Assumptions the plan made that were wrong
      - Missing steps the plan should have included
      - Ambiguous instructions that required guesswork
-   - Create or append to \`.weave/learnings/{plan-name}.md\` using this format:
+    - Create or append to \`.specs/sessions/{plan-name}.md\` using this format:
      \`\`\`markdown
      # Learnings: {Plan Name}
      
@@ -389,7 +389,7 @@ Ignore this section completely while any unchecked task remains.
 When all plan tasks are checked off:
 
 1. Identify all changed files:
-    - If a **Start SHA** was provided in the session context, run \`git diff --name-only <start-sha>..HEAD\` to get the complete list of changed files (this captures all changes including intermediate commits)
+      - If a **Start SHA** was provided in the session context, run \`git diff --name-only <start-sha>..HEAD\` to get the complete list of changed files (this captures all changes including intermediate commits)
    - If no Start SHA is available (non-git workspace), use the plan's \`**Files**:\` fields as the review scope
  2. Runtime-owned terminal review behavior:
     - ${REVIEWERS_RUNTIME_OWNED_ADVISORY}
