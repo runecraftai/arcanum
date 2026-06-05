@@ -1,6 +1,6 @@
 # Project Initialization — `/init` Command
 
-Initialize a new project with `.specs/project/` structure (PROJECT.md, ROADMAP.md, STATE.md).
+Initialize a new project with `.specs/project/` structure (PROJECT.md, ROADMAP.md, STATE.md, HANDOFF.md).
 
 ---
 
@@ -70,6 +70,10 @@ Create `.specs/project/ROADMAP.md` with empty milestone structure (template belo
 ### Step 5: Generate STATE.md
 
 Create `.specs/project/STATE.md` with empty sections (template below).
+
+### Step 6: Generate HANDOFF.md
+
+Create `.specs/project/HANDOFF.md` with an initialized checkpoint (template below). This file is overwritten on pause/resume checkpoints.
 
 ---
 
@@ -292,6 +296,45 @@ For detailed schema and examples, see `state-global.md` in the skill references.
 
 ---
 
+## Template: HANDOFF.md
+
+```markdown
+# Handoff
+
+**Date:** {{YYYY-MM-DDTHH:mm:ssZ}}
+**Feature:** none
+**Phase:** INIT
+**Task:** none
+**Branch:** {{current branch if applicable}}
+
+## Completed
+
+- Project planning scaffold initialized.
+
+## In Progress
+
+- No active feature.
+
+## Pending
+
+- Run `/map` for existing codebases.
+- Run `/spec <feature>` to start feature planning.
+
+## Blockers
+
+- None.
+
+## Uncommitted Changes
+
+- None recorded by init.
+
+## Context
+
+- Project memory starts in `.specs/project/PROJECT.md`, `ROADMAP.md`, and `STATE.md`.
+```
+
+---
+
 ## Post-Init Recommendations
 
 After `/init` completes, guide the user:
@@ -311,8 +354,8 @@ After `/init` completes, guide the user:
 If user runs `/init --force`:
 
 1. Check if `.specs/project/` exists
-2. If yes, warn: "This will overwrite existing PROJECT.md, ROADMAP.md, STATE.md. Continue? (yes/no)"
-3. If yes, delete the 3 files and re-run initialization from Step 2 (gather info)
+2. If yes, warn: "This will overwrite existing PROJECT.md, ROADMAP.md, STATE.md, and HANDOFF.md. Continue? (yes/no)"
+3. If yes, delete the 4 files and re-run initialization from Step 2 (gather info)
 4. Confirm success and re-display recommendations
 
 ---
@@ -343,6 +386,7 @@ Created:
   - .specs/project/PROJECT.md
   - .specs/project/ROADMAP.md
   - .specs/project/STATE.md
+  - .specs/project/HANDOFF.md
 
 Next steps:
 1. Run `/map` to document existing codebase

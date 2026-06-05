@@ -229,5 +229,5 @@ Before shipping, check that prior features still work:
 ## See Also
 
 - `phase-test.md` — TEST phase; includes UAT as sub-step
-- `test-driven.md` — How to write testable code alongside implementation
+- `prove-it-pattern.md` — How to write testable code alongside implementation
 - `scope-detection.md` — Scope scoring (determines UAT effort)

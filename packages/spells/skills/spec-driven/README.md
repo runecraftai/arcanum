@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Skill-spec--driven-blue?style=for-the-badge" alt="skill badge" />
   <img src="https://img.shields.io/badge/Stack-Agnostic-green?style=for-the-badge" alt="stack agnostic" />
-  <img src="https://img.shields.io/badge/Version-4.0.0-purple?style=for-the-badge" alt="version" />
+  <img src="https://img.shields.io/badge/Version-4.1.0-purple?style=for-the-badge" alt="version" />
 </p>
 
 <h1 align="center">🎯 spec-driven</h1>
@@ -14,17 +14,13 @@
 
 ## ✨ What Is This Skill?
 
-**spec-driven** is a meta-skill that orchestrates the complete software development lifecycle through **8 adaptive phases**. It auto-sizes based on complexity — applying full rigor for complex features, skipping ceremony for simple ones.
+**spec-driven** is a meta-skill that orchestrates the complete software development lifecycle through adaptive workflow surfaces. It auto-sizes based on complexity — applying full rigor for complex features, using quick mode for simple changes, and preserving pause/resume memory across sessions.
 
 ```
-LOAD → DISPATCH → phase handler → LEARN
+LOAD → DISPATCH → phase handler → LEARN → optional learning offer
 
 Phases (skipped when not needed):
-┌─────┐  ┌──────┐  ┌───────┐  ┌────────┐  ┌──────┐  ┌────────┐  ┌──────────┐  ┌──────┐
-│ MAP │→ │ INIT │→ │ SPEC  │→ │ PLAN   │→ │ BUILD│→ │ TEST   │→ │ REVIEW   │→ │ SHIP │
-└─────┘  └──────┘  └───────┘  └────────┘  └──────┘  └────────┘  └──────────┘  └──────┘
-  ↑ brownfield      optional*    always    optional* optional*   optional*     required
-  bootstrap         for Quick
+INIT | MAP | QUICK | SPEC | PLAN | BUILD | TEST | VALIDATE | REVIEW | SIMPLIFY | SHIP | PAUSE/RESUME
 ```
 
 | Scope | Effort | Artifacts |
@@ -71,6 +67,7 @@ cp node_modules/@runecraft/spells/skills/spec-driven/SKILL.md <your-agent-skills
 | Plan and break into tasks | `/plan` or `plan this` or `vamos planejar` |
 | Implement a task | `/build` or `implement` or `vamos construir` |
 | Run tests | `/test` or `test this` or `vamos testar` |
+| Validate or run UAT | `/validate`, `UAT`, or `walk me through it` |
 | Code review | `/review` or `code review` or `revisa isso` |
 | Refactor | `/simplify` or `refactor` or `simplifica` |
 | Release | `/ship` or `release` or `vamos fazer release` |
@@ -279,6 +276,7 @@ The skill manages a **160k token budget**, loading context in tiers:
 | **mermaid-studio** | During PLAN phase | Delegates architecture diagram generation |
 | **codenavi** | During SPEC/PLAN | Deep codebase navigation for context gathering |
 | **graphify** | After each phase | Updates knowledge graph with learnings |
+| **learning-opportunities** | After meaningful non-urgent work | Offers optional short learning exercises |
 
 Detected automatically. Gracefully falls back if not installed.
 
@@ -286,24 +284,29 @@ Detected automatically. Gracefully falls back if not installed.
 
 ## 📚 Reference Files
 
-35 supporting files organized in 4 categories:
+39 supporting files organized in 4 categories:
 
-### Phase Files (8)
+### Phase Files (9)
 | File | Purpose |
 |------|---------|
 | `phase-map.md` | Brownfield codebase analysis framework |
-| `phase-init.md` | Project bootstrap checklist |
 | `phase-spec.md` | Requirement writing discipline |
 | `phase-plan.md` | Architecture & task decomposition |
 | `phase-build.md` | Atomic commit & implementation cycle |
 | `phase-test.md` | Verification, UAT, quality gates |
+| `validate.md` | Validation and interactive UAT guidance |
 | `phase-review.md` | Code review axes & quality framework |
+| `phase-simplify.md` | Refactoring and simplification framework |
 | `phase-ship.md` | Release, changelog, artifact management |
 
-### Templates & Structures (10)
+### Templates & Structures (13)
 | File | Purpose |
 |------|---------|
-| `project-init.md` | PROJECT.md, ROADMAP.md, STATE.md templates |
+| `project-init.md` | PROJECT.md, ROADMAP.md, STATE.md, HANDOFF.md templates |
+| `quick-mode.md` | Quick task workflow and guardrails |
+| `session-handoff.md` | Pause/resume checkpoint via `.specs/project/HANDOFF.md` |
+| `state-global.md` | Global STATE.md schema and rules |
+| `state-template.md` | Feature STATE.md template |
 | `spec-template.md` | Spec.md structure with examples |
 | `design-template.md` | Design.md with architecture sections |
 | `task-template.md` | Single task format & checklist item |
@@ -313,7 +316,7 @@ Detected automatically. Gracefully falls back if not installed.
 | `brownfield-mapping.md` | Codebase analysis patterns |
 | `concerns.md` | Risk & technical debt framework |
 
-### Discipline & Patterns (9)
+### Discipline & Patterns (10)
 | File | Purpose |
 |------|---------|
 | `knowledge-chain.md` | Context verification chain (codebase → docs → Context7 → web) |
@@ -322,11 +325,12 @@ Detected automatically. Gracefully falls back if not installed.
 | `test-uat.md` | User acceptance test patterns |
 | `vertical-slicing.md` | Task decomposition into thin vertical slices |
 | `build-cycle.md` | Single-task build flow: edit → test → commit → mark |
+| `learning-opportunities.md` | Optional learner-facing exercises after meaningful work |
 | `prove-it-pattern.md` | "Prove it works" validation checklist |
 | `review-axes.md` | Code review evaluation criteria |
 | `simplification-patterns.md` | Refactoring & complexity reduction patterns |
 
-### Utilities (8)
+### Utilities (7)
 | File | Purpose |
 |------|---------|
 | `scope-detection.md` | Weighted scoring matrix for Quick/Medium/Large/Complex |
@@ -389,10 +393,10 @@ A: Run `/map` first. It creates 7 documents analyzing your existing codebase —
 A: Each requirement gets a traceable ID (e.g., `AUTH-01`) in `spec.md`. Tasks reference these IDs. Validation checks which requirements are covered. You get a clear trail: spec → plan → task → commit.
 
 **Q: What are atomic commits?**  
-A: Each task produces exactly one commit following [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/). One task = one commit. Clean history, easy bisect, simple rollbacks.
+A: Each task should produce exactly one commit when commits are approved, following [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/). Agents must ask for explicit approval before committing.
 
 **Q: Can I use this for small tasks or quick fixes?**  
-A: Yes. Use `quick fix: <description>` for bug fixes, config changes, or tweaks in ≤3 files. You get verify + commit without planning overhead.
+A: Yes. Use `quick fix: <description>` for bug fixes, config changes, or tweaks in ≤3 files. You get verification and optional approved commit guidance without planning overhead.
 
 **Q: What if I close my session mid-task?**  
 A: Say `/spec pause` before ending. Next session, say `/spec resume` to continue exactly where you left off.
@@ -406,7 +410,7 @@ A: Yes. Completely stack-agnostic. Works with any language, framework, or archit
 **Q: Will the agent fabricate APIs or patterns?**  
 A: No. The skill enforces a Knowledge Verification Chain: codebase → project docs → Context7 MCP → web search → flag as uncertain. It never guesses. If documentation can't be found, it says so.
 
-**Q: What are the 35 reference files?**  
+**Q: What are the 39 reference files?**  
 A: They're phase-specific documentation loaded on-demand. You never interact with them directly — the agent loads what it needs when it needs it, within the 160k token budget.
 
 ---

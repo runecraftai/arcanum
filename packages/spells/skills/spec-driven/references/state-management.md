@@ -1,6 +1,6 @@
 # State Management
 
-State management tracks the progress of feature execution across sessions. The spec-driven skill maintains two levels of STATE.
+State management tracks project memory and feature progress across sessions. The spec-driven skill maintains two levels of STATE plus one current handoff checkpoint.
 
 ## Dual-Level STATE
 
@@ -21,6 +21,8 @@ State management tracks the progress of feature execution across sessions. The s
 ## State File Location
 
 Feature state is stored in `.specs/features/<name>/STATE.md` (optional, created as needed).
+
+Project handoff state is stored in `.specs/project/HANDOFF.md`. It is overwritten on pause and read on resume. Use `HANDOFF.md` for the current checkpoint; use `.specs/project/STATE.md` for durable decisions, blockers, lessons, todos, and deferred ideas.
 
 ## State Frontmatter
 
@@ -69,10 +71,12 @@ blocked-by:
 
 When user says `/spec resume`:
 
-1. Load most recent STATE.md with `status: in-progress`
-2. Extract `phase` and `checkpoint`
-3. Offer to continue from that point
-4. Jump directly to the checkpoint task
+1. Load `.specs/project/HANDOFF.md` if present
+2. Load `.specs/project/STATE.md` for durable project context
+3. Load most recent feature STATE.md with `status: in-progress` if the handoff is missing or incomplete
+4. Extract `phase` and `checkpoint`
+5. Offer to continue from that point
+6. Jump directly to the checkpoint task after confirmation
 
 Example:
 ```
@@ -87,12 +91,14 @@ Resume from here? (yes / no)
 
 When user says `/spec pause`:
 
-1. Create or update STATE.md
-2. Set `status: in-progress`
-3. Set `checkpoint` to current task
-4. Record `last-updated` timestamp
-5. Run LEARN phase
-6. Report: "Work paused at [checkpoint]. Resume with `/spec resume`."
+1. Create or update `.specs/project/HANDOFF.md`
+2. Create or update feature STATE.md when pausing inside a feature
+3. Set feature `status: in-progress`
+4. Set feature `checkpoint` to current task
+5. Record `last-updated` timestamp
+6. Append durable project-level memory to `.specs/project/STATE.md` only when needed
+7. Run LEARN phase
+8. Report: "Work paused at [checkpoint]. Resume with `/spec resume`."
 
 ## State Transitions
 
@@ -108,3 +114,4 @@ After feature is shipped:
 - Update status to `archived`
 - Move feature directory to `.specs/archive/YYYY-MM-DD-<name>/`
 - Keep STATE.md for historical reference
+- Do not load archived feature state by default during normal resume or context loading

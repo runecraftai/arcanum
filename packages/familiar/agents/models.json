@@ -1,0 +1,32 @@
+{
+  "default": {
+    "provider": "opencode-go",
+    "model": "deepseek-v4-flash"
+  },
+  "agents": {
+    "herald": {
+      "provider": "opencode-go",
+      "model": "minimax-m2.7"
+    },
+    "scout": {
+      "provider": "opencode-go",
+      "model": "deepseek-v4-flash"
+    },
+    "sage": {
+      "provider": "opencode-go",
+      "model": "deepseek-v4-pro"
+    },
+    "forge": {
+      "provider": "opencode-go",
+      "model": "minimax-m2.7"
+    },
+    "ward": {
+      "provider": "opencode-go",
+      "model": "deepseek-v4-flash"
+    },
+    "arbiter": {
+      "provider": "opencode-go",
+      "model": "deepseek-v4-flash"
+    }
+  }
+}

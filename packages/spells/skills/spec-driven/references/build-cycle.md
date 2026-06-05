@@ -20,12 +20,15 @@ The incremental build cycle executes one task at a time, verifies it, and moves 
 
 ## Atomic Commit Policy
 
-Each task in `tasks.md` should result in exactly one atomic commit.
+Each task in `tasks.md` should result in exactly one atomic commit when commits are requested or approved.
+
+Agents must not create commits automatically. Preserve one-task-one-commit discipline, but run `git commit` only after explicit user approval.
 
 **Rules:**
 - **One concern per commit.** Never mix feature code + refactoring + formatting in the same commit.
 - **Independently revertable.** Each commit must leave the build in a passing state.
 - **Size limit.** If a task produces >300 lines changed, consider splitting into sub-commits by logical boundary.
+- **Approval gate.** Before committing, summarize staged/intended files and ask for explicit approval.
 
 **Commit message format:** `type(scope): description`
 

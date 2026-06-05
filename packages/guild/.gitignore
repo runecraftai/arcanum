@@ -1,3 +1,16 @@
 dist/
+coverage/
 node_modules/
-*.tsbuildinfo
+.DS_Store
+/tmp/
+*.log
+bun.lockb
+reference/
+
+# npm auth (never commit tokens)
+.npmrc.local
+
+# Weave runtime state (execution state, not plans)
+.weave/*
+!.weave/plans/
+!.weave/designs/

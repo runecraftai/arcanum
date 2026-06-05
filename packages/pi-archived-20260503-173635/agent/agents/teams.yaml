@@ -1,0 +1,24 @@
+# Team definitions for @runecraft/familiar
+# Groups agents for dispatch workflows
+
+plan-build:
+  - scout
+  - sage
+  - forge
+  - arbiter
+
+full:
+  - scout
+  - sage
+  - forge
+  - ward
+  - arbiter
+
+quick:
+  - forge
+  - arbiter
+
+audit:
+  - scout
+  - ward
+  - arbiter

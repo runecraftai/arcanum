@@ -61,6 +61,20 @@ from: herald  to: forge  id: <id>
   - Sanitize description: strip `]`, `)`, `[`, `(`, backticks
   - Append to "## Deferred Ideas": `- [ ] <description> (origin: <feature-name>, date: YYYY-MM-DD)`
 
+## Commit Protocol (Gate G6)
+
+**You do NOT commit directly.** After ALL_TASKS_COMPLETE:
+
+1. Run `git add -A` to stage all changes
+2. Generate commit message from conventional commits:
+   ```bash
+   git diff --cached --stat
+   ```
+3. Emit FORGE_STATUS with diff summary
+4. **Wait for Herald Gate G6 approval** before committing
+5. If approved: `git commit -m "<message>"`
+6. If rejected: leave changes staged, report "Awaiting manual review"
+
 ## Output
 
 Report each task completion:
@@ -74,8 +88,9 @@ Changed files: `src/users/user.service.ts`, `src/users/user.module.ts`
 FORGE_STATUS: ALL_TASKS_COMPLETE
 FORGE_CHANGE: <name>
 tasks_completed: <count>
-diff: |
-  <git diff HEAD output, truncated to 200 lines per file, 1000 lines total>
+diff_summary: |
+  <git diff --cached --stat output>
+commit_message: "<type>(<scope>): <description>"
 ```
 
 ⚠️ **Security note:** Ensure no secrets are in the diff.
