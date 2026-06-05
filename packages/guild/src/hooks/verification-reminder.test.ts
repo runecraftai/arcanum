@@ -27,9 +27,9 @@ describe("buildVerificationReminder", () => {
     expect(result.verificationPrompt).not.toContain("**Plan**")
   })
 
-  it("prompt mentions weft agent", () => {
+  it("prompt mentions cleric agent", () => {
     const result = buildVerificationReminder({})
-    expect(result.verificationPrompt).toContain("weft")
+    expect(result.verificationPrompt).toContain("cleric")
   })
 
   it("prompt mentions git diff", () => {
@@ -37,13 +37,13 @@ describe("buildVerificationReminder", () => {
     expect(result.verificationPrompt).toContain("git diff")
   })
 
-  it("prompt uses mandatory language for warp delegation", () => {
+  it("prompt uses mandatory language for paladin delegation", () => {
     const result = buildVerificationReminder({})
     expect(result.verificationPrompt).toContain("MUST delegate")
     expect(result.verificationPrompt).toContain("NOT optional")
   })
 
-  it("prompt contains all security trigger keywords for warp", () => {
+  it("prompt contains all security trigger keywords for paladin", () => {
     const result = buildVerificationReminder({})
     const triggers = ["auth", "crypto", "certificates", "tokens", "signatures", "input validation"]
     for (const trigger of triggers) {

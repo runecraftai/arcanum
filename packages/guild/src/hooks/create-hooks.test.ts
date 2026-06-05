@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach } from "bun:test"
 import { createHooks } from "./create-hooks"
 import { clearAll } from "./first-message-variant"
-import type { WeaveConfig } from "../config/schema"
+import type { GuildConfig } from "../config/schema"
 import { DEFAULT_CONTINUATION_CONFIG } from "../config/continuation"
 
-const baseConfig: WeaveConfig = {}
+const baseConfig: GuildConfig = {}
 
 function allEnabled(_hookName: string): boolean {
   return true
@@ -36,7 +36,7 @@ describe("createHooks", () => {
     expect(hooks).toHaveProperty("rulesInjectorEnabled")
     expect(hooks).toHaveProperty("firstMessageVariant")
     expect(hooks).toHaveProperty("processMessageForKeywords")
-    expect(hooks).toHaveProperty("patternMdOnlyEnabled")
+    expect(hooks).toHaveProperty("rangerMdOnlyEnabled")
     expect(hooks).toHaveProperty("verificationReminderEnabled")
     expect(hooks).toHaveProperty("compactionTodoPreserverEnabled")
     expect(hooks).toHaveProperty("todoContinuationEnforcerEnabled")
@@ -78,7 +78,7 @@ describe("createHooks", () => {
     expect(hooks.rulesInjectorEnabled).toBe(true)
     expect(hooks.firstMessageVariant).not.toBeNull()
     expect(hooks.processMessageForKeywords).not.toBeNull()
-    expect(hooks.patternMdOnlyEnabled).toBe(true)
+    expect(hooks.rangerMdOnlyEnabled).toBe(true)
   })
 
   it("writeGuard is null when write-existing-file-guard disabled", () => {
@@ -105,7 +105,7 @@ describe("createHooks", () => {
     expect(hooks.rulesInjectorEnabled).toBe(false)
     expect(hooks.firstMessageVariant).toBeNull()
     expect(hooks.processMessageForKeywords).toBeNull()
-    expect(hooks.patternMdOnlyEnabled).toBe(false)
+    expect(hooks.rangerMdOnlyEnabled).toBe(false)
   })
 
   it("firstMessageVariant is null when first-message-variant disabled", () => {
@@ -154,7 +154,7 @@ describe("createHooks", () => {
   })
 
   it("custom context_window_warning_threshold is applied from config", () => {
-    const configWithCustomThresholds: WeaveConfig = {
+    const configWithCustomThresholds: GuildConfig = {
       experimental: {
         context_window_warning_threshold: 0.6,
         context_window_critical_threshold: 0.9,
@@ -188,7 +188,7 @@ describe("createHooks", () => {
   })
 
   it("custom critical threshold triggers recover action", () => {
-    const configWithCustomThresholds: WeaveConfig = {
+    const configWithCustomThresholds: GuildConfig = {
       experimental: {
         context_window_warning_threshold: 0.6,
         context_window_critical_threshold: 0.9,
@@ -261,7 +261,7 @@ describe("createHooks", () => {
   })
 
   describe("policy enablement metadata", () => {
-    it("patternMdOnlyEnabled is true when enabled", () => {
+    it("rangerMdOnlyEnabled is true when enabled", () => {
       const hooks = createHooks({
         pluginConfig: baseConfig,
         continuation: DEFAULT_CONTINUATION_CONFIG,
@@ -269,7 +269,7 @@ describe("createHooks", () => {
         directory: "",
       })
 
-      expect(hooks.patternMdOnlyEnabled).toBe(true)
+      expect(hooks.rangerMdOnlyEnabled).toBe(true)
     })
 
     it("verificationReminderEnabled follows hook enablement", () => {

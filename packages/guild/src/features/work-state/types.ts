@@ -7,7 +7,7 @@ export type SessionRuntimeMode = "ad_hoc" | "plan" | "workflow"
 export type SessionRuntimeStatus = "running" | "paused" | "awaiting_user" | "idle"
 
 /**
- * Repo-scoped runtime execution lease stored at .weave/runtime/active-execution.json.
+ * Repo-scoped runtime execution lease stored at .guild/runtime/active-execution.json.
  */
 export interface ExecutionLeaseState {
   owner_kind: ExecutionOwnerKind
@@ -20,7 +20,7 @@ export interface ExecutionLeaseState {
 }
 
 /**
- * Session-scoped runtime state stored at .weave/runtime/sessions/{sessionId}.json.
+ * Session-scoped runtime state stored at .guild/runtime/sessions/{sessionId}.json.
  */
 export interface SessionRuntimeState {
   session_id: string
@@ -33,7 +33,7 @@ export interface SessionRuntimeState {
 
 /**
  * Tracks the active plan being executed via /start-work.
- * Stored at .weave/state.json in the project root.
+ * Stored at .guild/state.json in the project root.
  */
 export interface WorkState {
   /** Absolute path to the active plan file */
@@ -44,7 +44,7 @@ export interface WorkState {
   session_ids: string[]
   /** Plan name derived from filename (without .md) */
   plan_name: string
-  /** Agent type to use when resuming (e.g., "tapestry") */
+  /** Agent type to use when resuming (e.g., "fighter") */
   agent?: string
   /** Git HEAD SHA at the time work started (absent if not a git repo) */
   start_sha?: string

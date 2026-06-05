@@ -1,6 +1,5 @@
 import type { PluginInput } from "@opencode-ai/plugin"
-import type { WeaveConfig } from "./config/schema"
-import type { WeaveManagers } from "./create-managers"
+import type { GuildConfig } from "./config/schema"
 import type { ToolsRecord } from "./plugin/types"
 import type { LoadedSkill } from "./features/skill-loader/types"
 import type { ResolveSkillsFn } from "./agents/agent-builder"
@@ -14,8 +13,7 @@ export interface ToolsResult {
 
 export async function createTools(options: {
   ctx: PluginInput
-  pluginConfig: WeaveConfig
-  managers?: WeaveManagers
+  pluginConfig: GuildConfig
 }): Promise<ToolsResult> {
   const { ctx, pluginConfig } = options
 
@@ -28,7 +26,7 @@ export async function createTools(options: {
 
   const resolveSkillsFn = createSkillResolver(skillResult)
 
-  // Tools come from OpenCode's tool system — Weave registers an empty record
+  // Tools come from OpenCode's tool system — Guild registers an empty record
   // and relies on the config pipeline (ConfigHandler) to apply tool permissions
   const tools: ToolsRecord = {}
 

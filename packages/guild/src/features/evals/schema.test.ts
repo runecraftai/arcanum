@@ -14,10 +14,10 @@ import {
 describe("eval schemas", () => {
   it("validates a phase1 prompt-render case", () => {
     const result = EvalCaseSchema.safeParse({
-      id: "loom-default-contract",
-      title: "Loom default",
+      id: "bard-default-contract",
+      title: "Bard default",
       phase: "prompt",
-      target: { kind: "builtin-agent-prompt", agent: "loom" },
+      target: { kind: "builtin-agent-prompt", agent: "bard" },
       executor: { kind: "prompt-render" },
       evaluators: [{ kind: "contains-all", patterns: ["<Role>"] }],
     })
@@ -26,14 +26,14 @@ describe("eval schemas", () => {
 
   it("validates builtin Tapestry target variants with categories", () => {
     const result = EvalCaseSchema.safeParse({
-      id: "tapestry-categories-contract",
-      title: "Tapestry categories variant",
+      id: "fighter-categories-contract",
+      title: "Fighter categories variant",
       phase: "prompt",
       target: {
         kind: "builtin-agent-prompt",
-        agent: "tapestry",
+        agent: "fighter",
         variant: {
-          disabledAgents: ["pattern"],
+          disabledAgents: ["wizard"],
           categories: {
             frontend: {
               patterns: ["src/**/*.tsx"],
@@ -49,9 +49,9 @@ describe("eval schemas", () => {
 
     expect(result.data.target).toEqual({
       kind: "builtin-agent-prompt",
-      agent: "tapestry",
+      agent: "fighter",
       variant: {
-        disabledAgents: ["pattern"],
+        disabledAgents: ["wizard"],
         categories: {
           frontend: {
             patterns: ["src/**/*.tsx"],
@@ -63,15 +63,15 @@ describe("eval schemas", () => {
 
   it("validates builtin target variants with agentOverrides", () => {
     const result = EvalCaseSchema.safeParse({
-      id: "loom-agent-overrides-contract",
-      title: "Loom agent overrides variant",
+      id: "bard-agent-overrides-contract",
+      title: "Bard agent overrides variant",
       phase: "prompt",
       target: {
         kind: "builtin-agent-prompt",
-        agent: "loom",
+        agent: "bard",
         variant: {
           agentOverrides: {
-            weft: {
+            cleric: {
               review_models: ["anthropic/claude-sonnet-4"],
             },
           },
@@ -86,10 +86,10 @@ describe("eval schemas", () => {
 
     expect(result.data.target).toEqual({
       kind: "builtin-agent-prompt",
-      agent: "loom",
+      agent: "bard",
       variant: {
         agentOverrides: {
-          weft: {
+          cleric: {
             review_models: ["anthropic/claude-sonnet-4"],
           },
         },
@@ -99,16 +99,16 @@ describe("eval schemas", () => {
 
   it("validates builtin Loom target variants with agentOverrides", () => {
     const result = EvalCaseSchema.safeParse({
-      id: "loom-agent-overrides-contract",
-      title: "Loom agentOverrides variant",
+      id: "bard-agent-overrides-contract",
+      title: "Bard agentOverrides variant",
       phase: "prompt",
       target: {
         kind: "builtin-agent-prompt",
-        agent: "loom",
+        agent: "bard",
         variant: {
           agentOverrides: {
-            loom: { model: "openrouter/openai/gpt-5" },
-            weft: { review_models: ["anthropic/claude-sonnet-4"] },
+            bard: { model: "openrouter/openai/gpt-5" },
+            cleric: { review_models: ["anthropic/claude-sonnet-4"] },
           },
         },
       },
@@ -121,11 +121,11 @@ describe("eval schemas", () => {
 
     expect(result.data.target).toEqual({
       kind: "builtin-agent-prompt",
-      agent: "loom",
+      agent: "bard",
       variant: {
         agentOverrides: {
-          loom: { model: "openrouter/openai/gpt-5" },
-          weft: { review_models: ["anthropic/claude-sonnet-4"] },
+          bard: { model: "openrouter/openai/gpt-5" },
+          cleric: { review_models: ["anthropic/claude-sonnet-4"] },
         },
       },
     })
@@ -133,15 +133,15 @@ describe("eval schemas", () => {
 
   it("rejects malformed builtin target agentOverrides", () => {
     const result = EvalCaseSchema.safeParse({
-      id: "loom-agent-overrides-invalid",
+      id: "bard-agent-overrides-invalid",
       title: "Invalid agentOverrides variant",
       phase: "prompt",
       target: {
         kind: "builtin-agent-prompt",
-        agent: "loom",
+        agent: "bard",
         variant: {
           agentOverrides: {
-            weft: { review_models: ["claude-sonnet-4"] },
+            cleric: { review_models: ["claude-sonnet-4"] },
           },
         },
       },
@@ -154,12 +154,12 @@ describe("eval schemas", () => {
 
   it("rejects malformed builtin Tapestry target categories", () => {
     const result = EvalCaseSchema.safeParse({
-      id: "tapestry-categories-invalid",
-      title: "Invalid Tapestry categories variant",
+      id: "fighter-categories-invalid",
+      title: "Invalid Fighter categories variant",
       phase: "prompt",
       target: {
         kind: "builtin-agent-prompt",
-        agent: "tapestry",
+        agent: "fighter",
         variant: {
           categories: {
             frontend: {
@@ -177,15 +177,15 @@ describe("eval schemas", () => {
 
   it("rejects malformed builtin target agentOverrides", () => {
     const result = EvalCaseSchema.safeParse({
-      id: "loom-agent-overrides-invalid",
-      title: "Invalid Loom agent overrides variant",
+      id: "bard-agent-overrides-invalid",
+      title: "Invalid Bard agent overrides variant",
       phase: "prompt",
       target: {
         kind: "builtin-agent-prompt",
-        agent: "loom",
+        agent: "bard",
         variant: {
           agentOverrides: {
-            weft: {
+            cleric: {
               review_models: ["claude-sonnet-4"],
             },
           },
@@ -203,7 +203,7 @@ describe("eval schemas", () => {
       id: "bad",
       title: "Bad",
       phase: "prompt",
-      target: { kind: "not-real", agent: "loom" },
+      target: { kind: "not-real", agent: "bard" },
       executor: { kind: "prompt-render" },
       evaluators: [{ kind: "contains-all", patterns: ["x"] }],
     })
@@ -215,7 +215,7 @@ describe("eval schemas", () => {
       id: "prompt-contracts",
       title: "Prompt contracts",
       phase: "prompt",
-      caseFiles: ["evals/cases/loom/default-contract.jsonc"],
+      caseFiles: ["evals/cases/bard/default-contract.jsonc"],
     })
     expect(result.success).toBe(true)
   })
@@ -230,10 +230,10 @@ describe("eval schemas", () => {
 
   it("validates suite metadata with optional family and view labels", () => {
     const result = EvalSuiteMetadataSchema.safeParse({
-      title: "Loom Routing Identity",
+      title: "Bard Routing Identity",
       routingKind: "identity",
-      familyId: "loom-routing",
-      familyTitle: "Loom Routing",
+      familyId: "bard-routing",
+      familyTitle: "Bard Routing",
       viewId: "identity",
       viewTitle: "Identity",
     })
@@ -242,12 +242,12 @@ describe("eval schemas", () => {
 
   it("validates section-contains-all evaluator", () => {
     const result = EvalCaseSchema.safeParse({
-      id: "loom-role-scope",
-      title: "Loom role scoped contains",
+      id: "bard-role-scope",
+      title: "Bard role scoped contains",
       phase: "prompt",
-      target: { kind: "builtin-agent-prompt", agent: "loom" },
+      target: { kind: "builtin-agent-prompt", agent: "bard" },
       executor: { kind: "prompt-render" },
-      evaluators: [{ kind: "section-contains-all", section: "Role", patterns: ["Loom"] }],
+      evaluators: [{ kind: "section-contains-all", section: "Role", patterns: ["Bard"] }],
     })
     expect(result.success).toBe(true)
   })
@@ -257,12 +257,12 @@ describe("eval schemas", () => {
       id: "routing-judge-test",
       title: "Routing judge validation",
       phase: "routing",
-      target: { kind: "builtin-agent-prompt", agent: "loom" },
+      target: { kind: "builtin-agent-prompt", agent: "bard" },
       executor: { kind: "model-response", provider: "github-models", model: "gpt-5", input: "test" },
       evaluators: [
         {
           kind: "llm-judge",
-          rubricRef: "evals/rubrics/loom-routing-rubric.md",
+          rubricRef: "evals/rubrics/bard-routing-rubric.md",
           expectedContains: ["delegate"],
         },
       ],
@@ -275,12 +275,12 @@ describe("eval schemas", () => {
       id: "routing-judge-anyof-test",
       title: "Routing judge any-of validation",
       phase: "routing",
-      target: { kind: "builtin-agent-prompt", agent: "loom" },
+      target: { kind: "builtin-agent-prompt", agent: "bard" },
       executor: { kind: "model-response", provider: "github-models", model: "gpt-5", input: "test" },
       evaluators: [
         {
           kind: "llm-judge",
-          expectedAnyOf: ["delegate to pattern", "ask Pattern to plan"],
+          expectedAnyOf: ["delegate to wizard", "ask Wizard to plan"],
         },
       ],
     })
@@ -292,14 +292,14 @@ describe("eval schemas", () => {
       id: "routing-openrouter-test",
       title: "Routing with OpenRouter",
       phase: "routing",
-      target: { kind: "builtin-agent-prompt", agent: "loom" },
+      target: { kind: "builtin-agent-prompt", agent: "bard" },
       executor: {
         kind: "model-response",
         provider: "openrouter",
         model: "anthropic/claude-3.5-sonnet",
         input: "test",
       },
-      evaluators: [{ kind: "llm-judge", expectedContains: ["thread"] }],
+      evaluators: [{ kind: "llm-judge", expectedContains: ["rogue"] }],
     })
     expect(result.success).toBe(true)
   })
@@ -309,7 +309,7 @@ describe("eval schemas", () => {
       id: "routing-invalid-executor",
       title: "Invalid model-response executor",
       phase: "routing",
-      target: { kind: "builtin-agent-prompt", agent: "loom" },
+      target: { kind: "builtin-agent-prompt", agent: "bard" },
       executor: { kind: "model-response", model: "gpt-5", input: "test" },
       evaluators: [{ kind: "llm-judge" }],
     })
@@ -321,7 +321,7 @@ describe("eval schemas", () => {
       id: "routing-invalid-provider",
       title: "Invalid provider",
       phase: "routing",
-      target: { kind: "builtin-agent-prompt", agent: "loom" },
+      target: { kind: "builtin-agent-prompt", agent: "bard" },
       executor: { kind: "model-response", provider: "openai", model: "gpt-5", input: "test" },
       evaluators: [{ kind: "llm-judge" }],
     })
@@ -338,7 +338,7 @@ describe("eval schemas", () => {
       suiteMetadata: {
         title: "Agent Routing Identity",
         routingKind: "identity",
-        familyId: "loom-routing",
+        familyId: "bard-routing",
         familyTitle: "Loom Routing",
         viewId: "identity",
         viewTitle: "Identity",
@@ -348,7 +348,7 @@ describe("eval schemas", () => {
         model: "anthropic/claude-3.5-sonnet",
         modelKey: "openrouter/anthropic/claude-3.5-sonnet",
         source: "workflow_dispatch",
-        repo: "pgermishuys/weave",
+        repo: "pgermishuys/guild",
         branch: "main",
         commitSha: "abc123",
         runGroup: "commit:abc123",
@@ -408,10 +408,10 @@ describe("eval schemas", () => {
       const result = TrajectoryTurnSchema.safeParse({
         turn: 2,
         role: "assistant",
-        agent: "loom",
-        content: "Delegating to pattern",
-        mockResponse: "Let me delegate to Pattern for planning.",
-        expectedDelegation: "pattern",
+        agent: "bard",
+        content: "Delegating to wizard",
+        mockResponse: "Let me delegate to Wizard for planning.",
+        expectedDelegation: "wizard",
       })
       expect(result.success).toBe(true)
     })
@@ -447,10 +447,10 @@ describe("eval schemas", () => {
         id: "test-scenario",
         title: "Test Scenario",
         description: "A test scenario",
-        agents: ["loom", "pattern"],
+        agents: ["bard", "wizard"],
         turns: [
           { turn: 1, role: "user", content: "Build a feature" },
-          { turn: 2, role: "assistant", agent: "loom", content: "Delegating", mockResponse: "mock" },
+          { turn: 2, role: "assistant", agent: "bard", content: "Delegating", mockResponse: "mock" },
         ],
       })
       expect(result.success).toBe(true)
@@ -471,7 +471,7 @@ describe("eval schemas", () => {
 
     it("validates trajectory traces with delegation targets", () => {
       const result = TrajectoryTraceSchema.safeParse({
-        scenarioId: "loom-delegates-to-pattern",
+        scenarioId: "bard-delegates-to-wizard",
         turns: [
           {
             turn: 1,
@@ -482,16 +482,16 @@ describe("eval schemas", () => {
           },
           {
             turn: 2,
-            agent: "loom",
+            agent: "bard",
             role: "assistant",
-            response: "Delegating to pattern",
-            expectedDelegation: "pattern",
-            observedDelegation: "pattern",
+            response: "Delegating to wizard",
+            expectedDelegation: "wizard",
+            observedDelegation: "wizard",
             durationMs: 2,
           },
         ],
-        delegationSequence: ["loom", "pattern", "loom"],
-        delegationTargets: ["pattern"],
+        delegationSequence: ["bard", "wizard", "bard"],
+        delegationTargets: ["wizard"],
         totalTurns: 4,
         completedTurns: 2,
       })
@@ -509,19 +509,19 @@ describe("eval schemas", () => {
         durationMs: 5,
         artifacts: {
           trace: {
-            scenarioId: "loom-delegates-to-pattern",
+            scenarioId: "bard-delegates-to-wizard",
             turns: [
               {
                 turn: 1,
-                agent: "loom",
+                agent: "bard",
                 role: "assistant",
-                response: "Delegating to pattern",
-                observedDelegation: "pattern",
+                response: "Delegating to wizard",
+                observedDelegation: "wizard",
                 durationMs: 2,
               },
             ],
-            delegationSequence: ["loom", "pattern"],
-            delegationTargets: ["pattern", 42],
+            delegationSequence: ["bard", "wizard"],
+            delegationTargets: ["wizard", 42],
             totalTurns: 2,
             completedTurns: 1,
           },
@@ -537,7 +537,7 @@ describe("eval schemas", () => {
       const result = TrajectoryScenarioSchema.safeParse({
         id: "too-short",
         title: "Too Short",
-        agents: ["loom"],
+        agents: ["bard"],
         turns: [{ turn: 1, role: "user", content: "Hello" }],
       })
       expect(result.success).toBe(false)
@@ -546,7 +546,7 @@ describe("eval schemas", () => {
     it("rejects trajectory scenario with missing id", () => {
       const result = TrajectoryScenarioSchema.safeParse({
         title: "No ID",
-        agents: ["loom"],
+        agents: ["bard"],
         turns: [
           { turn: 1, role: "user", content: "Hello" },
           { turn: 2, role: "assistant", content: "Hi" },
@@ -558,12 +558,12 @@ describe("eval schemas", () => {
     it("validates trajectory-assertion evaluator with all optional fields", () => {
       const result = TrajectoryAssertionEvaluatorSchema.safeParse({
         kind: "trajectory-assertion",
-        expectedSequence: ["loom", "pattern", "loom"],
-        expectedDelegationTargets: ["shuttle", "shuttle-frontend"],
-        requiredAgents: ["pattern"],
-        requiredDelegationTargets: ["shuttle"],
-        forbiddenAgents: ["spindle"],
-        forbiddenDelegationTargets: ["shuttle-manual-only"],
+        expectedSequence: ["bard", "wizard", "bard"],
+        expectedDelegationTargets: ["ranger", "ranger-frontend"],
+        requiredAgents: ["wizard"],
+        requiredDelegationTargets: ["ranger"],
+        forbiddenAgents: ["warlock"],
+        forbiddenDelegationTargets: ["ranger-manual-only"],
         minTurns: 3,
         maxTurns: 10,
         weight: 2,
@@ -574,7 +574,7 @@ describe("eval schemas", () => {
     it("rejects trajectory-assertion with invalid delegation targets", () => {
       const result = TrajectoryAssertionEvaluatorSchema.safeParse({
         kind: "trajectory-assertion",
-        expectedDelegationTargets: ["shuttle", 42],
+        expectedDelegationTargets: ["ranger", 42],
       })
       expect(result.success).toBe(false)
     })
@@ -607,13 +607,13 @@ describe("eval schemas", () => {
         id: "trajectory-test",
         title: "Trajectory Test",
         phase: "trajectory",
-        target: { kind: "trajectory-agent", agent: "loom", scenarioRef: "evals/scenarios/test.jsonc" },
+        target: { kind: "trajectory-agent", agent: "bard", scenarioRef: "evals/scenarios/test.jsonc" },
         executor: { kind: "trajectory-run", scenarioRef: "evals/scenarios/test.jsonc" },
         evaluators: [
           {
             kind: "trajectory-assertion",
-            expectedSequence: ["loom", "pattern"],
-            requiredAgents: ["pattern"],
+            expectedSequence: ["bard", "wizard"],
+            requiredAgents: ["wizard"],
           },
         ],
       })

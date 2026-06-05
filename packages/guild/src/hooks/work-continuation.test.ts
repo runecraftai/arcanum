@@ -11,7 +11,7 @@ import { createExecutionLeaseState, createSessionRuntimeState } from "../domain/
 let testDir: string
 
 beforeEach(() => {
-  testDir = mkdtempSync(join(tmpdir(), "weave-cont-test-"))
+  testDir = mkdtempSync(join(tmpdir(), "guild-cont-test-"))
 })
 
 afterEach(() => {
@@ -48,17 +48,17 @@ describe("checkContinuation", () => {
 
   it("clears plan ownership when plan becomes complete", () => {
     const planPath = createPlanFile("done-runtime", "# Done\n- [x] Task 1\n- [x] Task 2\n")
-    writeWorkState(testDir, createWorkState(planPath, "sess_1", "tapestry"))
+    writeWorkState(testDir, createWorkState(planPath, "sess_1", "fighter"))
     executionLeaseRepository.writeExecutionLease(testDir, createExecutionLeaseState({
       ownerKind: "plan",
       ownerRef: planPath,
       status: "running",
       sessionId: "sess_1",
-      executorAgent: "tapestry",
+      executorAgent: "fighter",
     }))
     executionLeaseRepository.writeSessionRuntime(testDir, createSessionRuntimeState({
       sessionId: "sess_1",
-      foregroundAgent: "tapestry",
+      foregroundAgent: "fighter",
       mode: "plan",
       executionRef: planPath,
       status: "running",
@@ -69,7 +69,7 @@ describe("checkContinuation", () => {
     expect(result.continuationPrompt).toBeNull()
     expect(executionLeaseRepository.readExecutionLease(testDir)).toBeNull()
     expect(executionLeaseRepository.readSessionRuntime(testDir, "sess_1")).toMatchObject({
-      foreground_agent: "tapestry",
+      foreground_agent: "fighter",
       mode: "ad_hoc",
       status: "idle",
     })
@@ -89,7 +89,7 @@ describe("checkContinuation", () => {
 
     const result = checkContinuation({ sessionId: "sess_1", directory: testDir })
     expect(result.continuationPrompt).not.toBeNull()
-    expect(result.switchAgent).toBe("tapestry")
+    expect(result.switchAgent).toBe("fighter")
     expect(result.continuationPrompt).toContain("my-plan")
     expect(result.continuationPrompt).toContain("1/3 tasks completed")
     expect(result.continuationPrompt).toContain("2 remaining")

@@ -180,7 +180,7 @@ function buildWorkRecoveryPrompt(
   }
 
   const remaining = progress.total - progress.completed
-  const switchAgent = lease?.executor_agent ?? state.agent ?? "tapestry"
+  const switchAgent = lease?.executor_agent ?? state.agent ?? "fighter"
   if (!isKnownEnabledAgent(input, switchAgent)) {
     if (lease?.owner_kind === "plan") {
       clearInvalidPlanAgent(input, lease, sessionRuntime, switchAgent)

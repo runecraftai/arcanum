@@ -1,4 +1,4 @@
-import type { WeaveConfig } from "./schema"
+import type { GuildConfig } from "./schema"
 import type { DeepPartial } from "../shared/types"
 
 function deepMergeObjects(
@@ -37,9 +37,9 @@ function mergeStringArrays(
 }
 
 export function mergeConfigs(
-  user: DeepPartial<WeaveConfig>,
-  project: DeepPartial<WeaveConfig>,
-): DeepPartial<WeaveConfig> {
+  user: DeepPartial<GuildConfig>,
+  project: DeepPartial<GuildConfig>,
+): DeepPartial<GuildConfig> {
   return {
     ...user,
     ...project,
@@ -48,21 +48,21 @@ export function mergeConfigs(
         ? (deepMergeObjects(
             (user.agents ?? {}) as Record<string, unknown>,
             (project.agents ?? {}) as Record<string, unknown>,
-          ) as DeepPartial<WeaveConfig>["agents"])
+          ) as DeepPartial<GuildConfig>["agents"])
         : undefined,
     custom_agents:
       user.custom_agents || project.custom_agents
         ? (deepMergeObjects(
             (user.custom_agents ?? {}) as Record<string, unknown>,
             (project.custom_agents ?? {}) as Record<string, unknown>,
-          ) as DeepPartial<WeaveConfig>["custom_agents"])
+          ) as DeepPartial<GuildConfig>["custom_agents"])
         : undefined,
     categories:
       user.categories || project.categories
         ? (deepMergeObjects(
             (user.categories ?? {}) as Record<string, unknown>,
             (project.categories ?? {}) as Record<string, unknown>,
-          ) as DeepPartial<WeaveConfig>["categories"])
+          ) as DeepPartial<GuildConfig>["categories"])
         : undefined,
     disabled_hooks: mergeStringArrays(user.disabled_hooks, project.disabled_hooks),
     disabled_tools: mergeStringArrays(user.disabled_tools, project.disabled_tools),

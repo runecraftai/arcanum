@@ -106,7 +106,7 @@ export function checkContinuation(input: ContinuationInput): ContinuationResult 
 
   const remaining = progress.total - progress.completed
   return {
-    switchAgent: state.agent ?? "tapestry",
+    switchAgent: state.agent ?? "fighter",
     continuationPrompt: `${renderContinuationEnvelope({
       continuation: "work",
       sessionId: input.sessionId,

@@ -1,19 +1,19 @@
-import type { WeaveConfig } from "../../config/schema"
+import type { GuildConfig } from "../../config/schema"
 
-const BUILTIN_AGENT_NAMES = ["loom", "tapestry", "shuttle", "pattern", "thread", "spindle", "weft", "warp"] as const
+const BUILTIN_AGENT_NAMES = ["bard", "fighter", "ranger", "wizard", "rogue", "warlock", "cleric", "paladin"] as const
 
 /**
- * Derives the full set of enabled agent keys from a WeaveConfig.
+ * Derives the full set of enabled agent keys from a GuildConfig.
  *
  * Includes:
  * - Built-in agents that are not disabled
  * - Custom agents that are not disabled
- * - `shuttle-{category}` agents for all defined categories (patterns only affect
- *   routing hints in Tapestry's prompt, not agent existence),
- *   as long as the base `shuttle` agent is not disabled and the specific
- *   `shuttle-{category}` key is not disabled
+ * - `ranger-{category}` agents for all defined categories (patterns only affect
+ *   routing hints in Fighter's prompt, not agent existence),
+ *   as long as the base `ranger` agent is not disabled and the specific
+ *   `ranger-{category}` key is not disabled
  */
-export function buildEnabledAgentKeys(pluginConfig: WeaveConfig): Set<string> {
+export function buildEnabledAgentKeys(pluginConfig: GuildConfig): Set<string> {
   const disabled = new Set(pluginConfig.disabled_agents ?? [])
   const enabled = new Set<string>()
 
@@ -29,11 +29,11 @@ export function buildEnabledAgentKeys(pluginConfig: WeaveConfig): Set<string> {
     }
   }
 
-  // Add shuttle-{category} agents for all defined categories (patterns affect routing hints only, not existence)
-  const shuttleEnabled = !disabled.has("shuttle")
-  if (shuttleEnabled && pluginConfig.categories) {
+  // Add ranger-{category} agents for all defined categories (patterns affect routing hints only, not existence)
+  const rangerEnabled = !disabled.has("ranger")
+  if (rangerEnabled && pluginConfig.categories) {
     for (const categoryName of Object.keys(pluginConfig.categories)) {
-      const categoryAgentName = `shuttle-${categoryName}`
+      const categoryAgentName = `ranger-${categoryName}`
       if (!disabled.has(categoryAgentName)) {
         enabled.add(categoryAgentName)
       }

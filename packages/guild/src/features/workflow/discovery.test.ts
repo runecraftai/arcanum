@@ -17,7 +17,7 @@ const VALID_JSONC = `{
       "id": "gather",
       "name": "Gather",
       "type": "interactive",
-      "agent": "loom",
+      "agent": "bard",
       "prompt": "Gather info.",
       "completion": { "method": "user_confirm" }
     }
@@ -32,7 +32,7 @@ const ANOTHER_WORKFLOW_JSONC = `{
       "id": "do-it",
       "name": "Do It",
       "type": "autonomous",
-      "agent": "tapestry",
+      "agent": "fighter",
       "prompt": "Do the thing.",
       "completion": { "method": "agent_signal" }
     }
@@ -40,7 +40,7 @@ const ANOTHER_WORKFLOW_JSONC = `{
 }`
 
 beforeEach(() => {
-  testDir = mkdtempSync(join(tmpdir(), "weave-discovery-test-"))
+  testDir = mkdtempSync(join(tmpdir(), "guild-discovery-test-"))
 })
 
 afterEach(() => {
@@ -71,7 +71,7 @@ describe("loadWorkflowDefinition", () => {
         id: "step-one",
         name: "Step One",
         type: "autonomous",
-        agent: "loom",
+        agent: "bard",
         prompt: "Do it.",
         completion: { method: "agent_signal" },
       }],
@@ -107,7 +107,7 @@ describe("loadWorkflowDefinition", () => {
         "id": "step",
         "name": "Step",
         "type": "autonomous",
-        "agent": "loom",
+        "agent": "bard",
         "prompt": "Do it.",
         "completion": { "method": "agent_signal" }
       }]

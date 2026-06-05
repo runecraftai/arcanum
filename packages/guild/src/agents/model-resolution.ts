@@ -1,4 +1,4 @@
-import type { AgentMode, WeaveAgentName } from "./types"
+import type { AgentMode, GuildAgentName } from "./types"
 import { debug, warn } from "../shared/log"
 
 export type FallbackEntry = {
@@ -11,57 +11,57 @@ export type AgentModelRequirement = {
   fallbackChain: FallbackEntry[]
 }
 
-export const AGENT_MODEL_REQUIREMENTS: Record<WeaveAgentName, AgentModelRequirement> = {
-  loom: {
+export const AGENT_MODEL_REQUIREMENTS: Record<GuildAgentName, AgentModelRequirement> = {
+  bard: {
     fallbackChain: [
       { providers: ["github-copilot"], model: "claude-opus-4.6" },
       { providers: ["anthropic"], model: "claude-opus-4" },
       { providers: ["openai"], model: "gpt-5" },
     ],
   },
-  tapestry: {
+  fighter: {
     fallbackChain: [
       { providers: ["github-copilot"], model: "claude-sonnet-4.6" },
       { providers: ["anthropic"], model: "claude-sonnet-4" },
       { providers: ["openai"], model: "gpt-5" },
     ],
   },
-  shuttle: {
+  ranger: {
     fallbackChain: [
       { providers: ["github-copilot"], model: "claude-sonnet-4.6" },
       { providers: ["anthropic"], model: "claude-sonnet-4" },
       { providers: ["openai"], model: "gpt-5" },
     ],
   },
-  pattern: {
+  wizard: {
     fallbackChain: [
       { providers: ["github-copilot"], model: "claude-opus-4.6" },
       { providers: ["anthropic"], model: "claude-opus-4" },
       { providers: ["openai"], model: "gpt-5" },
     ],
   },
-  thread: {
+  rogue: {
     fallbackChain: [
       { providers: ["github-copilot"], model: "claude-haiku-4.5" },
       { providers: ["anthropic"], model: "claude-haiku-4" },
       { providers: ["google"], model: "gemini-3-flash" },
     ],
   },
-  spindle: {
+  warlock: {
     fallbackChain: [
       { providers: ["github-copilot"], model: "claude-haiku-4.5" },
       { providers: ["anthropic"], model: "claude-haiku-4" },
       { providers: ["google"], model: "gemini-3-flash" },
     ],
   },
-  weft: {
+  cleric: {
     fallbackChain: [
       { providers: ["github-copilot"], model: "claude-sonnet-4.6" },
       { providers: ["anthropic"], model: "claude-sonnet-4" },
       { providers: ["openai"], model: "gpt-5" },
     ],
   },
-  warp: {
+  paladin: {
     fallbackChain: [
       { providers: ["github-copilot"], model: "claude-opus-4.6" },
       { providers: ["anthropic"], model: "claude-opus-4" },
@@ -89,7 +89,7 @@ export type ResolveAgentModelOptions = {
  */
 export function resolveAgentModel(agentName: string, options: ResolveAgentModelOptions): string {
   const { availableModels, agentMode, uiSelectedModel, categoryModel, overrideModel, systemDefaultModel, customFallbackChain } = options
-  const requirement = AGENT_MODEL_REQUIREMENTS[agentName as WeaveAgentName] as AgentModelRequirement | undefined
+  const requirement = AGENT_MODEL_REQUIREMENTS[agentName as GuildAgentName] as AgentModelRequirement | undefined
 
   // 1. Explicit override always wins
   if (overrideModel) {

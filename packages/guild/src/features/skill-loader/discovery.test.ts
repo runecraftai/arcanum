@@ -87,7 +87,7 @@ describe("scanDirectory", () => {
 
   it("returns empty array for non-existent directory", () => {
     const result = scanDirectory({
-      directory: path.join(os.tmpdir(), "weave-test-nonexistent-" + Date.now()),
+      directory: path.join(os.tmpdir(), "guild-test-nonexistent-" + Date.now()),
       scope: "project",
     })
 
@@ -95,7 +95,7 @@ describe("scanDirectory", () => {
   })
 
   it("discovers SKILL.md in root of directory", () => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "weave-scan-root-"))
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "guild-scan-root-"))
 
     fs.writeFileSync(
       path.join(tmpDir, "SKILL.md"),
@@ -115,7 +115,7 @@ Root skill content.`,
   })
 
   it("discovers SKILL.md inside subdirectory", () => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "weave-scan-sub-"))
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "guild-scan-sub-"))
 
     const skillDir = path.join(tmpDir, "my-skill")
     fs.mkdirSync(skillDir)
@@ -137,7 +137,7 @@ Skill content here.`,
   })
 
   it("skips SKILL.md files missing a name in frontmatter", () => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "weave-scan-noname-"))
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "guild-scan-noname-"))
 
     fs.writeFileSync(
       path.join(tmpDir, "SKILL.md"),

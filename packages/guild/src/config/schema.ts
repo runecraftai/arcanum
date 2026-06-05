@@ -60,7 +60,7 @@ export const CategoryConfigSchema = z.object({
   tools: z.record(z.string(), z.boolean()).optional(),
   prompt_append: z.string().optional(),
   disable: z.boolean().optional(),
-  /** Glob patterns for file-based task routing to this category's Shuttle agent */
+   /** Glob patterns for file-based task routing to this category's Ranger agent */
   patterns: z.array(z.string()).optional(),
 })
 
@@ -121,7 +121,7 @@ export const CustomAgentConfigSchema = z.object({
   tools: z.record(z.string(), z.boolean()).optional(),
   /** Skills to load for this agent */
   skills: z.array(z.string()).optional(),
-  /** Delegation triggers for Loom prompt integration */
+  /** Delegation triggers for Bard prompt integration */
   triggers: z.array(DelegationTriggerSchema).optional(),
   /** Description shown alongside the agent name */
   description: z.string().optional(),
@@ -141,7 +141,7 @@ export const AnalyticsConfigSchema = z.object({
 })
 
 export const ContinuationRecoveryConfigSchema = z.object({
-  /** Whether Weave should inject a resume prompt after session compaction/context restoration. */
+  /** Whether Guild should inject a resume prompt after session compaction/context restoration. */
   compaction: z.boolean().optional(),
 })
 
@@ -167,7 +167,7 @@ export const WorkflowConfigSchema = z.object({
   directories: z.array(SafeRelativePathSchema).optional(),
 })
 
-export const WeaveConfigSchema = z.object({
+export const GuildConfigSchema = z.object({
   $schema: z.string().optional(),
   agents: AgentOverridesSchema.optional(),
   custom_agents: CustomAgentsConfigSchema.optional(),
@@ -202,4 +202,4 @@ export type ContinuationConfig = z.infer<typeof ContinuationConfigSchema>
 export type TmuxConfig = z.infer<typeof TmuxConfigSchema>
 export type ExperimentalConfig = z.infer<typeof ExperimentalConfigSchema>
 export type WorkflowConfig = z.infer<typeof WorkflowConfigSchema>
-export type WeaveConfig = z.infer<typeof WeaveConfigSchema>
+export type GuildConfig = z.infer<typeof GuildConfigSchema>

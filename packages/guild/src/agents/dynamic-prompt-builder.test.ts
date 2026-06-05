@@ -3,10 +3,10 @@ import {
   categorizeTools,
   buildKeyTriggersSection,
   buildToolSelectionTable,
-  buildThreadSection,
-  buildSpindleSection,
-  buildWeftSection,
-  buildWarpSection,
+  buildRogueSection,
+  buildWarlockSection,
+  buildClericSection,
+  buildPaladinSection,
   buildDelegationTable,
   buildCategorySkillsDelegationGuide,
   buildProjectContextSection,
@@ -46,12 +46,12 @@ describe("categorizeTools", () => {
 
 describe("buildKeyTriggersSection", () => {
   it("returns empty string when no agents have keyTrigger", () => {
-    const agents = [makeAgent("loom"), makeAgent("tapestry")]
+    const agents = [makeAgent("bard"), makeAgent("fighter")]
     expect(buildKeyTriggersSection(agents)).toBe("")
   })
 
   it("includes keyTrigger lines for agents that have them", () => {
-    const agents = [makeAgent("loom", { keyTrigger: "**'ultrawork'** → Deep execution mode" })]
+    const agents = [makeAgent("bard", { keyTrigger: "**'ultrawork'** → Deep execution mode" })]
     const result = buildKeyTriggersSection(agents)
     expect(result).toContain("**'ultrawork'**")
     expect(result).toContain("Key Triggers")
@@ -75,16 +75,16 @@ describe("buildToolSelectionTable", () => {
 
   it("excludes utility category agents", () => {
     const agents = [
-      makeAgent("shuttle", { category: "utility" }),
-      makeAgent("pattern", { cost: "EXPENSIVE", category: "specialist" }),
+      makeAgent("ranger", { category: "utility" }),
+      makeAgent("wizard", { cost: "EXPENSIVE", category: "specialist" }),
     ]
     const result = buildToolSelectionTable(agents)
-    expect(result).not.toContain("shuttle")
-    expect(result).toContain("pattern")
+    expect(result).not.toContain("ranger")
+    expect(result).toContain("wizard")
   })
 
   it("includes tool names in FREE section when tools provided", () => {
-    const agents = [makeAgent("loom")]
+    const agents = [makeAgent("bard")]
     const tools = categorizeTools(["grep", "glob"])
     const result = buildToolSelectionTable(agents, tools)
     expect(result).toContain("`grep`")
@@ -92,41 +92,41 @@ describe("buildToolSelectionTable", () => {
   })
 
   it("always ends with default flow line", () => {
-    const result = buildToolSelectionTable([makeAgent("loom")])
+    const result = buildToolSelectionTable([makeAgent("bard")])
     expect(result).toContain("Default flow")
   })
 })
 
-describe("buildThreadSection", () => {
-  it("returns empty string when no thread agent", () => {
-    const agents = [makeAgent("loom")]
-    expect(buildThreadSection(agents)).toBe("")
+describe("buildRogueSection", () => {
+  it("returns empty string when no rogue agent", () => {
+    const agents = [makeAgent("bard")]
+    expect(buildRogueSection(agents)).toBe("")
   })
 
-  it("returns thread section when thread agent present", () => {
-    const agents = [makeAgent("thread", {
-      useWhen: ["Pattern unknown", "Multi-file search needed"],
+  it("returns rogue section when rogue agent present", () => {
+    const agents = [makeAgent("rogue", {
+      useWhen: ["Wizard unknown", "Multi-file search needed"],
       avoidWhen: ["File path known", "Single file only"],
     })]
-    const result = buildThreadSection(agents)
-    expect(result).toContain("Thread Agent")
-    expect(result).toContain("Pattern unknown")
+    const result = buildRogueSection(agents)
+    expect(result).toContain("Rogue Agent")
+    expect(result).toContain("Wizard unknown")
     expect(result).toContain("File path known")
   })
 })
 
-describe("buildSpindleSection", () => {
-  it("returns empty string when no spindle agent", () => {
-    const agents = [makeAgent("loom")]
-    expect(buildSpindleSection(agents)).toBe("")
+describe("buildWarlockSection", () => {
+  it("returns empty string when no warlock agent", () => {
+    const agents = [makeAgent("bard")]
+    expect(buildWarlockSection(agents)).toBe("")
   })
 
-  it("returns spindle section when spindle agent present", () => {
-    const agents = [makeAgent("spindle", {
+  it("returns warlock section when warlock agent present", () => {
+    const agents = [makeAgent("warlock", {
       useWhen: ["official docs", "external library"],
     })]
-    const result = buildSpindleSection(agents)
-    expect(result).toContain("Spindle Agent")
+    const result = buildWarlockSection(agents)
+    expect(result).toContain("Warlock Agent")
     expect(result).toContain('"official docs"')
   })
 })
@@ -134,73 +134,73 @@ describe("buildSpindleSection", () => {
 describe("buildDelegationTable", () => {
   it("includes all agents with their triggers", () => {
     const agents = [
-      makeAgent("loom", { triggers: [{ domain: "Orchestration", trigger: "Main tasks" }] }),
-      makeAgent("pattern", { triggers: [{ domain: "Planning", trigger: "Complex plans" }] }),
+      makeAgent("bard", { triggers: [{ domain: "Orchestration", trigger: "Main tasks" }] }),
+      makeAgent("wizard", { triggers: [{ domain: "Planning", trigger: "Complex plans" }] }),
     ]
     const result = buildDelegationTable(agents)
     expect(result).toContain("**Orchestration**")
-    expect(result).toContain("`loom`")
+    expect(result).toContain("`bard`")
     expect(result).toContain("**Planning**")
-    expect(result).toContain("`pattern`")
+    expect(result).toContain("`wizard`")
   })
 
   it("handles agents with no triggers", () => {
-    const agents = [makeAgent("loom", { triggers: [] })]
+    const agents = [makeAgent("bard", { triggers: [] })]
     const result = buildDelegationTable(agents)
     expect(result).toContain("### Delegation Table:")
   })
 })
 
-describe("buildWeftSection", () => {
-  it("returns empty string when no weft agent present", () => {
-    const agents = [makeAgent("loom")]
-    expect(buildWeftSection(agents)).toBe("")
+describe("buildClericSection", () => {
+  it("returns empty string when no cleric agent present", () => {
+    const agents = [makeAgent("bard")]
+    expect(buildClericSection(agents)).toBe("")
   })
 
-  it("returns section with useWhen and avoidWhen when weft agent present", () => {
-    const agents = [makeAgent("weft", {
+  it("returns section with useWhen and avoidWhen when cleric agent present", () => {
+    const agents = [makeAgent("cleric", {
       useWhen: ["After completing a multi-file implementation", "Before executing a complex plan"],
       avoidWhen: ["Simple single-file changes", "Trivial fixes"],
     })]
-    const result = buildWeftSection(agents)
+    const result = buildClericSection(agents)
     expect(result).toContain("After completing a multi-file implementation")
     expect(result).toContain("Simple single-file changes")
   })
 
   it("section contains Weft Agent and Quality Gate", () => {
-    const agents = [makeAgent("weft", {
+    const agents = [makeAgent("cleric", {
       useWhen: ["After completing work"],
       avoidWhen: ["Trivial changes"],
     })]
-    const result = buildWeftSection(agents)
-    expect(result).toContain("Weft Agent")
+    const result = buildClericSection(agents)
+    expect(result).toContain("Cleric Agent")
     expect(result).toContain("Quality Gate")
   })
 })
 
-describe("buildWarpSection", () => {
-  it("returns empty string when no warp agent present", () => {
-    const agents = [makeAgent("loom")]
-    expect(buildWarpSection(agents)).toBe("")
+describe("buildPaladinSection", () => {
+  it("returns empty string when no paladin agent present", () => {
+    const agents = [makeAgent("bard")]
+    expect(buildPaladinSection(agents)).toBe("")
   })
 
-  it("returns section with useWhen and avoidWhen when warp agent present", () => {
-    const agents = [makeAgent("warp", {
+  it("returns section with useWhen and avoidWhen when paladin agent present", () => {
+    const agents = [makeAgent("paladin", {
       useWhen: ["After implementing authentication or authorization logic", "When implementing OAuth2, OIDC, WebAuthn"],
       avoidWhen: ["Pure documentation or README changes", "CSS/styling-only changes"],
     })]
-    const result = buildWarpSection(agents)
+    const result = buildPaladinSection(agents)
     expect(result).toContain("After implementing authentication or authorization logic")
     expect(result).toContain("Pure documentation or README changes")
   })
 
   it("section contains Warp Agent and Security Gate", () => {
-    const agents = [makeAgent("warp", {
+    const agents = [makeAgent("paladin", {
       useWhen: ["After adding auth logic"],
       avoidWhen: ["Documentation only"],
     })]
-    const result = buildWarpSection(agents)
-    expect(result).toContain("Warp Agent")
+    const result = buildPaladinSection(agents)
+    expect(result).toContain("Paladin Agent")
     expect(result).toContain("Security Gate")
   })
 })

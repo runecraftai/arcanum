@@ -21,7 +21,7 @@ describe("execution coordinator", () => {
   let directory: string
 
   beforeEach(() => {
-    directory = mkdtempSync(join(tmpdir(), "weave-exec-coordinator-"))
+    directory = mkdtempSync(join(tmpdir(), "guild-exec-coordinator-"))
   })
 
   afterEach(() => {
@@ -33,7 +33,7 @@ describe("execution coordinator", () => {
     mkdirSync(plansDir, { recursive: true })
     const planPath = join(plansDir, "plan.md")
     writeFileSync(planPath, "# Plan\n- [ ] Task\n", "utf-8")
-    planRepository.writeWorkState(directory, planRepository.createWorkState(planPath, "sess-plan", "tapestry", directory))
+    planRepository.writeWorkState(directory, planRepository.createWorkState(planPath, "sess-plan", "fighter", directory))
 
     executionLeaseRepository.writeExecutionLease(
       directory,
@@ -42,7 +42,7 @@ describe("execution coordinator", () => {
         ownerRef: planPath,
         status: "running",
         sessionId: "sess-plan",
-        executorAgent: "tapestry",
+        executorAgent: "fighter",
       }),
     )
 
@@ -56,7 +56,7 @@ describe("execution coordinator", () => {
         ownerRef: planPath,
         status: "paused",
         sessionId: "sess-plan",
-        executorAgent: "tapestry",
+        executorAgent: "fighter",
       }),
     )
 
@@ -71,7 +71,7 @@ describe("execution coordinator", () => {
         ownerRef: "wf_123/build",
         status: "running",
         sessionId: "sess-wf",
-        executorAgent: "warp",
+        executorAgent: "paladin",
       }),
     )
 
@@ -94,7 +94,7 @@ describe("execution coordinator", () => {
         ownerRef: "wf_123/build",
         status: "paused",
         sessionId: "sess-wf",
-        executorAgent: "warp",
+        executorAgent: "paladin",
       }),
     )
 
@@ -137,7 +137,7 @@ describe("execution coordinator", () => {
         ownerRef: "wf_123/review",
         status: "paused",
         sessionId: "sess-wf",
-        executorAgent: "weft",
+        executorAgent: "cleric",
       }),
     )
 
@@ -158,7 +158,7 @@ describe("execution coordinator", () => {
         ownerRef: "wf_123/build",
         status: "running",
         sessionId: "sess-wf",
-        executorAgent: "warp",
+        executorAgent: "paladin",
       }),
     )
 
@@ -167,7 +167,7 @@ describe("execution coordinator", () => {
       ownerRef: "wf_123/build",
       status: "running",
       sessionId: "sess-wf",
-      executorAgent: "warp",
+      executorAgent: "paladin",
       hasActivePlan: false,
       hasActiveWorkflow: false,
       activePlanPaused: false,

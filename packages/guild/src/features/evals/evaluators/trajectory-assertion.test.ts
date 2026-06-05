@@ -6,8 +6,8 @@ function makeTrace(overrides: Partial<TrajectoryTrace> = {}): TrajectoryTrace {
   return {
     scenarioId: "test",
     turns: [],
-    delegationSequence: ["loom", "pattern", "loom"],
-    delegationTargets: ["pattern"],
+    delegationSequence: ["bard", "wizard", "bard"],
+    delegationTargets: ["wizard"],
     totalTurns: 4,
     completedTurns: 4,
     ...overrides,
@@ -25,7 +25,7 @@ describe("runTrajectoryAssertionEvaluator", () => {
     it("passes when sequence matches exactly", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
-        expectedSequence: ["loom", "pattern", "loom"],
+        expectedSequence: ["bard", "wizard", "bard"],
       }
       const results = runTrajectoryAssertionEvaluator(spec, makeArtifacts(makeTrace()))
       expect(results).toHaveLength(1)
@@ -36,7 +36,7 @@ describe("runTrajectoryAssertionEvaluator", () => {
     it("fails when sequence does not match", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
-        expectedSequence: ["loom", "thread", "loom"],
+        expectedSequence: ["bard", "rogue", "bard"],
       }
       const results = runTrajectoryAssertionEvaluator(spec, makeArtifacts(makeTrace()))
       expect(results).toHaveLength(1)
@@ -47,7 +47,7 @@ describe("runTrajectoryAssertionEvaluator", () => {
     it("fails when sequence length differs", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
-        expectedSequence: ["loom", "pattern"],
+        expectedSequence: ["bard", "wizard"],
       }
       const results = runTrajectoryAssertionEvaluator(spec, makeArtifacts(makeTrace()))
       expect(results).toHaveLength(1)
@@ -59,7 +59,7 @@ describe("runTrajectoryAssertionEvaluator", () => {
     it("passes when delegation target sequence matches exactly", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
-        expectedDelegationTargets: ["pattern"],
+        expectedDelegationTargets: ["wizard"],
       }
       const results = runTrajectoryAssertionEvaluator(spec, makeArtifacts(makeTrace()))
       expect(results).toHaveLength(1)
@@ -70,8 +70,8 @@ describe("runTrajectoryAssertionEvaluator", () => {
     it("fails when delegation targets do not match even if acting-agent sequence matches", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
-        expectedSequence: ["loom", "pattern", "loom"],
-        expectedDelegationTargets: ["shuttle"],
+        expectedSequence: ["bard", "wizard", "bard"],
+        expectedDelegationTargets: ["ranger"],
       }
       const results = runTrajectoryAssertionEvaluator(spec, makeArtifacts(makeTrace()))
       expect(results).toHaveLength(2)
@@ -98,7 +98,7 @@ describe("runTrajectoryAssertionEvaluator", () => {
     it("passes when all required agents are present", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
-        requiredAgents: ["pattern"],
+        requiredAgents: ["wizard"],
       }
       const results = runTrajectoryAssertionEvaluator(spec, makeArtifacts(makeTrace()))
       expect(results).toHaveLength(1)
@@ -108,7 +108,7 @@ describe("runTrajectoryAssertionEvaluator", () => {
     it("fails when a required agent is missing", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
-        requiredAgents: ["thread"],
+        requiredAgents: ["rogue"],
       }
       const results = runTrajectoryAssertionEvaluator(spec, makeArtifacts(makeTrace()))
       expect(results).toHaveLength(1)
@@ -119,13 +119,13 @@ describe("runTrajectoryAssertionEvaluator", () => {
     it("produces one result per required agent", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
-        requiredAgents: ["loom", "pattern", "thread"],
+        requiredAgents: ["bard", "wizard", "rogue"],
       }
       const results = runTrajectoryAssertionEvaluator(spec, makeArtifacts(makeTrace()))
       expect(results).toHaveLength(3)
-      expect(results[0].passed).toBe(true)  // loom
-      expect(results[1].passed).toBe(true)  // pattern
-      expect(results[2].passed).toBe(false) // thread
+      expect(results[0].passed).toBe(true)  // bard
+      expect(results[1].passed).toBe(true)  // wizard
+      expect(results[2].passed).toBe(false) // rogue
     })
   })
 
@@ -133,7 +133,7 @@ describe("runTrajectoryAssertionEvaluator", () => {
     it("passes when forbidden agents are absent", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
-        forbiddenAgents: ["spindle", "weft"],
+        forbiddenAgents: ["warlock", "cleric"],
       }
       const results = runTrajectoryAssertionEvaluator(spec, makeArtifacts(makeTrace()))
       expect(results).toHaveLength(2)
@@ -143,7 +143,7 @@ describe("runTrajectoryAssertionEvaluator", () => {
     it("fails when a forbidden agent is present", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
-        forbiddenAgents: ["pattern"],
+        forbiddenAgents: ["wizard"],
       }
       const results = runTrajectoryAssertionEvaluator(spec, makeArtifacts(makeTrace()))
       expect(results).toHaveLength(1)
@@ -256,7 +256,7 @@ describe("runTrajectoryAssertionEvaluator", () => {
     it("returns failing assertion when trace is missing", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
-        expectedSequence: ["loom"],
+        expectedSequence: ["bard"],
       }
       const results = runTrajectoryAssertionEvaluator(spec, { trace: undefined })
       expect(results).toHaveLength(1)
@@ -267,7 +267,7 @@ describe("runTrajectoryAssertionEvaluator", () => {
     it("returns failing assertion when trace is not a TrajectoryTrace", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
-        expectedSequence: ["loom"],
+        expectedSequence: ["bard"],
       }
       const results = runTrajectoryAssertionEvaluator(spec, { trace: { notATrace: true } })
       expect(results).toHaveLength(1)
@@ -292,8 +292,8 @@ describe("runTrajectoryAssertionEvaluator", () => {
       const spec: TrajectoryAssertionEvaluator = {
         kind: "trajectory-assertion",
         weight: 2,
-        expectedSequence: ["loom", "pattern", "loom"],
-        expectedDelegationTargets: ["pattern"],
+        expectedSequence: ["bard", "wizard", "bard"],
+        expectedDelegationTargets: ["wizard"],
         minTurns: 4,
       }
       const results = runTrajectoryAssertionEvaluator(spec, makeArtifacts(makeTrace()))

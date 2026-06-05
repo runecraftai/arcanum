@@ -47,7 +47,7 @@ function createPlanFile(dir: string, content: string): string {
 }
 
 beforeEach(() => {
-  tempDir = mkdtempSync(join(tmpdir(), "weave-gen-metrics-test-"))
+  tempDir = mkdtempSync(join(tmpdir(), "guild-gen-metrics-test-"))
 })
 
 afterEach(() => {

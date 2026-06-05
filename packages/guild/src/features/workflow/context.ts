@@ -85,7 +85,7 @@ export function buildContextHeader(
 /**
  * Build the full context-threaded prompt for a step.
  * Combines: (1) workflow context header, (2) delegation instruction if step
- * targets a non-loom agent, (3) resolved step prompt.
+ * targets a non-bard agent, (3) resolved step prompt.
  */
 export function composeStepPrompt(
   stepDef: WorkflowStepDefinition,
@@ -96,7 +96,7 @@ export function composeStepPrompt(
   const resolvedPrompt = resolveTemplate(stepDef.prompt, instance, definition)
 
   // If the step targets a specific agent, add a delegation instruction.
-  // Loom stays as the coordinator and delegates to the step's agent.
+  // Bard stays as the coordinator and delegates to the step's agent.
   const delegationInstruction = buildDelegationInstruction(stepDef)
 
   return `${contextHeader}---
@@ -111,14 +111,14 @@ ${resolvedPrompt}`
  */
 function buildDelegationInstruction(stepDef: WorkflowStepDefinition): string {
   // No delegation needed — Loom handles it directly
-  if (!stepDef.agent || stepDef.agent === "loom") return "\n"
+  if (!stepDef.agent || stepDef.agent === "bard") return "\n"
 
   const agentName = stepDef.agent
   const stepType = stepDef.type
 
   if (stepType === "interactive") {
-    return `
-**Delegation**: This is an interactive step. Delegate to **${agentName}** using the Task tool. The ${agentName} agent should present questions to the user, then STOP and return the questions. You (Loom) will relay them to the user and pass answers back. After the work is done, present the result and ask the user to confirm (e.g., "Does this look good?"). The workflow engine auto-advances when the user replies with a confirmation keyword (confirmed, approved, looks good, lgtm, done, continue).
+      return `
+**Delegation**: This is an interactive step. Delegate to **${agentName}** using the Task tool. The ${agentName} agent should present questions to the user, then STOP and return the questions. You (Bard) will relay them to the user and pass answers back. After the work is done, present the result and ask the user to confirm (e.g., "Does this look good?"). The workflow engine auto-advances when the user replies with a confirmation keyword (confirmed, approved, looks good, lgtm, done, continue).
 
 `
   }

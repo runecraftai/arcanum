@@ -4,14 +4,15 @@ import {
   reviewVariantsFor,
   type ReviewModelVariant,
 } from "./review-model-variants"
+import type { GuildAgentName } from "./types"
 
-export type ReviewBaseAgent = "weft" | "warp"
+export type ReviewBaseAgent = Extract<GuildAgentName, "cleric" | "paladin">
 
 type ReviewScope = "direct" | "post-execution"
 
 type ReviewerPrimary = {
   agentName: ReviewBaseAgent
-  label: "Weft" | "Warp"
+  label: "Cleric" | "Paladin"
   model: string
 }
 
@@ -67,7 +68,7 @@ export function resolveReviewers(input: {
 
   const primary = {
     agentName: baseAgent,
-    label: baseAgent === "weft" ? "Weft" : "Warp",
+    label: baseAgent === "cleric" ? "Cleric" : "Paladin",
     model: primaryModel,
   } as const
 

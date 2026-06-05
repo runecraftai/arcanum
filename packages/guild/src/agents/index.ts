@@ -16,6 +16,8 @@ export type {
   AgentCost,
   DelegationTrigger,
   AgentPromptMetadata,
-  WeaveAgentName,
+  GuildAgentIdentity,
+  GUILD_AGENT_IDENTITIES,
+  GuildAgentName,
 } from "./types"
 export { isFactory, isGptModel } from "./types"

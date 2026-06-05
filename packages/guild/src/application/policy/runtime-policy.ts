@@ -6,7 +6,7 @@ import type { TrustedInjectedPromptKind } from "../../runtime/opencode/trusted-m
 export interface RuntimePolicyFlags {
   contextWindowThresholds: { warningPct: number; criticalPct: number } | null
   rulesInjectorEnabled: boolean
-  patternMdOnlyEnabled: boolean
+  rangerMdOnlyEnabled: boolean
   verificationReminderEnabled: boolean
   todoDescriptionOverrideEnabled: boolean
   todoContinuationEnforcerEnabled: boolean

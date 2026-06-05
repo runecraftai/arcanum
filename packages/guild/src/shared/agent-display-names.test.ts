@@ -10,14 +10,14 @@ import {
 
 describe("getAgentDisplayName", () => {
   it("returns display name for known config keys", () => {
-    expect(getAgentDisplayName("loom")).toBe("Bard (Guildmaster)")
-    expect(getAgentDisplayName("tapestry")).toBe("Fighter (Execution Lead)")
-    expect(getAgentDisplayName("shuttle")).toBe("Ranger (Specialist)")
-    expect(getAgentDisplayName("pattern")).toBe("Wizard (Planner)")
-    expect(getAgentDisplayName("thread")).toBe("Rogue (Scout)")
-    expect(getAgentDisplayName("spindle")).toBe("Warlock (Researcher)")
-    expect(getAgentDisplayName("weft")).toBe("Cleric (Reviewer)")
-    expect(getAgentDisplayName("warp")).toBe("Paladin (Security)")
+    expect(getAgentDisplayName("bard")).toBe("Bard (Guildmaster)")
+    expect(getAgentDisplayName("fighter")).toBe("Fighter (Execution Lead)")
+    expect(getAgentDisplayName("ranger")).toBe("Ranger (Specialist)")
+    expect(getAgentDisplayName("wizard")).toBe("Wizard (Planner)")
+    expect(getAgentDisplayName("rogue")).toBe("Rogue (Scout)")
+    expect(getAgentDisplayName("warlock")).toBe("Warlock (Researcher)")
+    expect(getAgentDisplayName("cleric")).toBe("Cleric (Reviewer)")
+    expect(getAgentDisplayName("paladin")).toBe("Paladin (Security)")
   })
 
   it("returns original key for unknown agents", () => {
@@ -34,19 +34,19 @@ describe("getAgentDisplayName", () => {
 
 describe("getAgentConfigKey", () => {
   it("resolves display names back to config keys", () => {
-    expect(getAgentConfigKey("Bard (Guildmaster)")).toBe("loom")
-    expect(getAgentConfigKey("Fighter (Execution Lead)")).toBe("tapestry")
-    expect(getAgentConfigKey("Wizard (Planner)")).toBe("pattern")
-    expect(getAgentConfigKey("Rogue (Scout)")).toBe("thread")
-    expect(getAgentConfigKey("Warlock (Researcher)")).toBe("spindle")
-    expect(getAgentConfigKey("Ranger (Specialist)")).toBe("shuttle")
-    expect(getAgentConfigKey("Cleric (Reviewer)")).toBe("weft")
-    expect(getAgentConfigKey("Paladin (Security)")).toBe("warp")
+    expect(getAgentConfigKey("Bard (Guildmaster)")).toBe("bard")
+    expect(getAgentConfigKey("Fighter (Execution Lead)")).toBe("fighter")
+    expect(getAgentConfigKey("Wizard (Planner)")).toBe("wizard")
+    expect(getAgentConfigKey("Rogue (Scout)")).toBe("rogue")
+    expect(getAgentConfigKey("Warlock (Researcher)")).toBe("warlock")
+    expect(getAgentConfigKey("Ranger (Specialist)")).toBe("ranger")
+    expect(getAgentConfigKey("Cleric (Reviewer)")).toBe("cleric")
+    expect(getAgentConfigKey("Paladin (Security)")).toBe("paladin")
   })
 
   it("passes through config keys unchanged", () => {
-    expect(getAgentConfigKey("loom")).toBe("loom")
-    expect(getAgentConfigKey("thread")).toBe("thread")
+    expect(getAgentConfigKey("bard")).toBe("bard")
+    expect(getAgentConfigKey("rogue")).toBe("rogue")
   })
 
   it("returns lowercase for unknown agents", () => {
@@ -56,7 +56,7 @@ describe("getAgentConfigKey", () => {
 
 describe("AGENT_DISPLAY_NAMES", () => {
   it("has entries for all 8 built-in agents with display names", () => {
-    const expectedKeys = ["loom", "tapestry", "shuttle", "pattern", "thread", "spindle", "warp", "weft"]
+    const expectedKeys = ["bard", "fighter", "ranger", "wizard", "rogue", "warlock", "paladin", "cleric"]
     for (const key of expectedKeys) {
       expect(AGENT_DISPLAY_NAMES[key]).toBeDefined()
     }
@@ -94,10 +94,10 @@ describe("registerAgentDisplayName", () => {
   })
 
   it("throws when trying to register a builtin config key", () => {
-    expect(() => registerAgentDisplayName("loom", "My Loom")).toThrow(
+    expect(() => registerAgentDisplayName("bard", "My Loom")).toThrow(
       /built-in agent name/,
     )
-    expect(() => registerAgentDisplayName("warp", "My Warp")).toThrow(
+    expect(() => registerAgentDisplayName("paladin", "My Warp")).toThrow(
       /built-in agent name/,
     )
   })
@@ -127,25 +127,25 @@ describe("updateBuiltinDisplayName", () => {
   })
 
   it("updates display name for a known builtin", () => {
-    updateBuiltinDisplayName("loom", "My Loom")
-    expect(getAgentDisplayName("loom")).toBe("My Loom")
+    updateBuiltinDisplayName("bard", "My Loom")
+    expect(getAgentDisplayName("bard")).toBe("My Loom")
   })
 
   it("reverse lookup returns config key after update", () => {
-    updateBuiltinDisplayName("loom", "My Loom")
-    expect(getAgentConfigKey("My Loom")).toBe("loom")
+    updateBuiltinDisplayName("bard", "My Loom")
+    expect(getAgentConfigKey("My Loom")).toBe("bard")
   })
 
   it("old display name no longer resolves after update (cache invalidated)", () => {
-    updateBuiltinDisplayName("loom", "My Loom")
-    // The old name should not reverse-resolve to "loom" anymore
-    expect(getAgentConfigKey("Bard (Guildmaster)")).not.toBe("loom")
+    updateBuiltinDisplayName("bard", "My Loom")
+    // The old name should not reverse-resolve to "bard" anymore
+    expect(getAgentConfigKey("Bard (Guildmaster)")).not.toBe("bard")
   })
 
   it("multiple updates to same key use last value", () => {
-    updateBuiltinDisplayName("loom", "First Name")
-    updateBuiltinDisplayName("loom", "Second Name")
-    expect(getAgentDisplayName("loom")).toBe("Second Name")
+    updateBuiltinDisplayName("bard", "First Name")
+    updateBuiltinDisplayName("bard", "Second Name")
+    expect(getAgentDisplayName("bard")).toBe("Second Name")
   })
 
   it("throws for non-builtin keys", () => {
@@ -155,13 +155,13 @@ describe("updateBuiltinDisplayName", () => {
   })
 
   it("accepts unicode / CJK display names", () => {
-    updateBuiltinDisplayName("thread", "糸")
-    expect(getAgentDisplayName("thread")).toBe("糸")
+    updateBuiltinDisplayName("rogue", "糸")
+    expect(getAgentDisplayName("rogue")).toBe("糸")
   })
 
   it("after override, old builtin display name is still reserved for registerAgentDisplayName", () => {
-    // Override loom to "My Loom"
-    updateBuiltinDisplayName("loom", "My Loom")
+    // Override bard to "My Loom"
+    updateBuiltinDisplayName("bard", "My Loom")
     // The original name "Bard (Guildmaster)" must still be reserved
     // (INITIAL_BUILTIN_DISPLAY_NAMES prevents it from being claimed)
     expect(() =>
@@ -170,7 +170,7 @@ describe("updateBuiltinDisplayName", () => {
   })
 
   it("after override, the new display name is also reserved for registerAgentDisplayName", () => {
-    updateBuiltinDisplayName("loom", "My Loom")
+    updateBuiltinDisplayName("bard", "My Loom")
     // The current (overridden) name should also be blocked
     expect(() =>
       registerAgentDisplayName("custom-test-agent", "My Loom"),

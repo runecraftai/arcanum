@@ -2,9 +2,9 @@ import type { AgentConfig } from "@opencode-ai/sdk"
 
 /**
  * Agent mode determines UI model selection behavior:
- * - "primary": Respects user's UI-selected model (loom, tapestry)
- * - "subagent": Uses own fallback chain, ignores UI selection (pattern, thread, spindle)
- * - "all": Available in both contexts (shuttle)
+ * - "primary": Respects user's UI-selected model (bard, fighter)
+ * - "subagent": Uses own fallback chain, ignores UI selection (wizard, rogue, warlock, cleric, paladin)
+ * - "all": Available in both contexts (ranger)
  */
 export type AgentMode = "primary" | "subagent" | "all"
 
@@ -22,7 +22,7 @@ export type AgentFactory = ((model: string) => AgentConfig) & {
 export type AgentSource = AgentFactory | AgentConfig
 
 /**
- * Agent category for grouping in Loom prompt sections
+ * Agent category for grouping in Guild prompt sections
  */
 export type AgentCategory = "exploration" | "specialist" | "advisor" | "utility"
 
@@ -32,7 +32,73 @@ export type AgentCategory = "exploration" | "specialist" | "advisor" | "utility"
 export type AgentCost = "FREE" | "CHEAP" | "EXPENSIVE"
 
 /**
- * Delegation trigger for Loom prompt's Delegation Table
+ * Primary RPG class names used by source structure and runtime config.
+ */
+export type GuildAgentName =
+  | "bard"
+  | "fighter"
+  | "ranger"
+  | "wizard"
+  | "rogue"
+  | "warlock"
+  | "cleric"
+  | "paladin"
+
+export interface GuildAgentIdentity {
+  classKey: GuildAgentName
+  displayName: string
+  directoryName: GuildAgentName
+}
+
+export const GUILD_AGENT_IDENTITIES: Record<GuildAgentName, GuildAgentIdentity> = {
+  bard: {
+    classKey: "bard",
+    displayName: "Bard (Guildmaster)",
+    directoryName: "bard",
+  },
+  fighter: {
+    classKey: "fighter",
+    displayName: "Fighter (Execution Lead)",
+    directoryName: "fighter",
+  },
+  ranger: {
+    classKey: "ranger",
+    displayName: "Ranger (Specialist)",
+    directoryName: "ranger",
+  },
+  wizard: {
+    classKey: "wizard",
+    displayName: "Wizard (Planner)",
+    directoryName: "wizard",
+  },
+  rogue: {
+    classKey: "rogue",
+    displayName: "Rogue (Scout)",
+    directoryName: "rogue",
+  },
+  warlock: {
+    classKey: "warlock",
+    displayName: "Warlock (Researcher)",
+    directoryName: "warlock",
+  },
+  cleric: {
+    classKey: "cleric",
+    displayName: "Cleric (Reviewer)",
+    directoryName: "cleric",
+  },
+  paladin: {
+    classKey: "paladin",
+    displayName: "Paladin (Security)",
+    directoryName: "paladin",
+  },
+}
+
+export function getGuildIdentityByClassKey(key: GuildAgentName): GuildAgentIdentity {
+  return GUILD_AGENT_IDENTITIES[key]
+}
+
+/**
+ * Delegation trigger for Guild prompt's delegation table
  */
 export interface DelegationTrigger {
   /** Domain of work (e.g., "Frontend UI/UX") */
@@ -42,8 +108,8 @@ export interface DelegationTrigger {
 }
 
 /**
- * Metadata for generating Loom prompt sections dynamically.
- * Allows adding/removing agents without manually updating the Loom prompt.
+ * Metadata for generating Guild prompt sections dynamically.
+ * Allows adding/removing agents without manually updating the prompt.
  */
 export interface AgentPromptMetadata {
   /** Category for grouping in prompt sections */
@@ -64,7 +130,7 @@ export interface AgentPromptMetadata {
   /** Optional dedicated prompt section (markdown) */
   dedicatedSection?: string
 
-  /** Nickname/alias used in prompt (e.g., "Pattern" instead of "pattern") */
+  /** Nickname/alias used in prompt (e.g., "Wizard" instead of "wizard") */
   promptAlias?: string
 
   /** Key trigger that should appear in Phase 0 quick checks */
@@ -73,18 +139,8 @@ export interface AgentPromptMetadata {
 }
 
 /**
- * The 8 built-in Weave agent names
+ * The 8 built-in Guild agent names.
  */
-export type WeaveAgentName =
-  | "loom"
-  | "tapestry"
-  | "shuttle"
-  | "pattern"
-  | "thread"
-  | "spindle"
-  | "weft"
-  | "warp"
-
 /**
  * Override config for a single agent — all fields optional
  */
@@ -97,7 +153,7 @@ export type AgentOverrideConfig = Partial<AgentConfig> & {
 /**
  * Map of agent name to override config
  */
-export type AgentOverrides = Partial<Record<WeaveAgentName, AgentOverrideConfig>>
+export type GuildAgentOverrides = Partial<Record<GuildAgentName, AgentOverrideConfig>>
 
 function extractModelName(model: string): string {
   return model.includes("/") ? (model.split("/").pop() ?? model) : model

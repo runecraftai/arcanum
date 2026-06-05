@@ -18,7 +18,7 @@ let testDir: string
 const ExecutionLeaseRepository = createExecutionLeaseFsStore()
 
 beforeEach(() => {
-  testDir = mkdtempSync(join(tmpdir(), "weave-sw-test-"))
+  testDir = mkdtempSync(join(tmpdir(), "guild-sw-test-"))
 })
 
 afterEach(() => {
@@ -73,13 +73,13 @@ describe("handleStartWork", () => {
     expect(result.switchAgent).toBeNull()
   })
 
-  it("always sets switchAgent to tapestry for commands", () => {
+  it("always sets switchAgent to fighter for commands", () => {
     const result = handleStartWork({
       promptText: makePrompt(),
       sessionId: "sess_1",
       directory: testDir,
     })
-    expect(result.switchAgent).toBe("tapestry")
+    expect(result.switchAgent).toBe("fighter")
   })
 
   describe("no plans", () => {
@@ -90,7 +90,7 @@ describe("handleStartWork", () => {
         directory: testDir,
       })
       expect(result.contextInjection).toContain("No Plans Found")
-      expect(result.contextInjection).toContain("Pattern")
+      expect(result.contextInjection).toContain("Wizard")
     })
   })
 
@@ -116,9 +116,9 @@ describe("handleStartWork", () => {
       const state = readWorkState(testDir)
       expect(state).not.toBeNull()
       expect(state!.plan_name).toBe("my-feature")
-      expect(state!.agent).toBe("tapestry")
+      expect(state!.agent).toBe("fighter")
       expect(ExecutionLeaseRepository.readExecutionLease(testDir)?.owner_kind).toBe("plan")
-      expect(ExecutionLeaseRepository.readSessionRuntime(testDir, "sess_1")?.foreground_agent).toBe("tapestry")
+      expect(ExecutionLeaseRepository.readSessionRuntime(testDir, "sess_1")?.foreground_agent).toBe("fighter")
     })
 
     it("does not include Start SHA for non-git directory", () => {
@@ -158,7 +158,7 @@ describe("handleStartWork", () => {
       expect(result.contextInjection).toContain("Starting Plan: bad-plan")
       expect(result.contextInjection).toContain("Validation Warnings")
       expect(result.contextInjection).toContain("TODOs")
-      expect(result.switchAgent).toBe("tapestry")
+      expect(result.switchAgent).toBe("fighter")
 
       // Work state IS created since validation passes
       expect(readWorkState(testDir)).not.toBeNull()
@@ -291,7 +291,7 @@ describe("handleStartWork", () => {
           "- [x] 1. Done\n  **What**: Done\n  **Files**: src/a.ts (new)\n  **Acceptance**: OK\n- [ ] 2. Todo\n  **What**: Todo\n  **Files**: src/b.ts (new)\n  **Acceptance**: OK"
         )
       )
-      const state = createWorkState(planPath, "sess_old", "tapestry")
+      const state = createWorkState(planPath, "sess_old", "fighter")
       writeWorkState(testDir, state)
 
       const result = handleStartWork({
@@ -314,7 +314,7 @@ describe("handleStartWork", () => {
         "corrupt-plan2",
         "- [ ] Raw task\n## TL;DR\n> **Summary**: Broken.\n> **Estimated Effort**: Quick\n\n## Verification\n- [ ] Done\n"
       )
-      const state = createWorkState(planPath2, "sess_old", "tapestry")
+      const state = createWorkState(planPath2, "sess_old", "fighter")
       writeWorkState(testDir, state)
 
       const result = handleStartWork({
@@ -326,14 +326,14 @@ describe("handleStartWork", () => {
       // Missing ## TODOs is a warning, not an error — plan resumes
       expect(result.contextInjection).toContain("Resuming Plan: corrupt-plan2")
       expect(result.contextInjection).toContain("Validation Warnings")
-      expect(result.switchAgent).toBe("tapestry")
+      expect(result.switchAgent).toBe("fighter")
       // Work state should still exist
       expect(readWorkState(testDir)).not.toBeNull()
     })
 
     it("discovers new plans when existing plan is complete", () => {
       const donePlan = createPlanFile("old-plan", "# Old\n- [x] Done\n")
-      writeWorkState(testDir, createWorkState(donePlan, "sess_old", "tapestry"))
+      writeWorkState(testDir, createWorkState(donePlan, "sess_old", "fighter"))
 
       createPlanFile(
         "new-plan",
@@ -414,7 +414,7 @@ const THREE_STEP_DEF: WorkflowDefinition = {
       id: "step-1",
       name: "Step One",
       type: "interactive",
-      agent: "loom",
+      agent: "bard",
       prompt: "Do step 1: {{instance.goal}}",
       completion: { method: "user_confirm" },
     },
@@ -422,7 +422,7 @@ const THREE_STEP_DEF: WorkflowDefinition = {
       id: "step-2",
       name: "Step Two",
       type: "autonomous",
-      agent: "tapestry",
+      agent: "fighter",
       prompt: "Do step 2: {{instance.goal}}",
       completion: { method: "agent_signal" },
     },
@@ -430,7 +430,7 @@ const THREE_STEP_DEF: WorkflowDefinition = {
       id: "step-3",
       name: "Step Three",
       type: "interactive",
-      agent: "loom",
+      agent: "bard",
       prompt: "Do step 3: {{instance.goal}}",
       completion: { method: "user_confirm" },
     },

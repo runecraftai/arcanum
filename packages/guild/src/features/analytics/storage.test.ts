@@ -12,7 +12,7 @@ import {
 } from "./storage"
 import { ANALYTICS_DIR, SESSION_SUMMARIES_FILE, FINGERPRINT_FILE } from "./types"
 import type { SessionSummary, ProjectFingerprint } from "./types"
-import { getWeaveVersion } from "../../shared/version"
+import { getGuildVersion } from "../../shared/version"
 
 let tempDir: string
 
@@ -37,13 +37,13 @@ function makeFingerprint(overrides?: Partial<ProjectFingerprint>): ProjectFinger
     isMonorepo: false,
     packageManager: "bun",
     primaryLanguage: "typescript",
-    weaveVersion: getWeaveVersion(),
+    guildVersion: getGuildVersion(),
     ...overrides,
   }
 }
 
 beforeEach(() => {
-  tempDir = mkdtempSync(join(tmpdir(), "weave-analytics-test-"))
+  tempDir = mkdtempSync(join(tmpdir(), "guild-analytics-test-"))
 })
 
 afterEach(() => {

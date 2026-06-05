@@ -4,7 +4,7 @@ import type { PlanProgress, WorkState } from "./types"
 const Repository = createPlanFsRepository()
 
 /**
- * Read work state from .weave/state.json.
+ * Read work state from .guild/state.json.
  * Returns null if file is missing, unparseable, or invalid.
  */
 export function readWorkState(directory: string): WorkState | null {
@@ -12,15 +12,15 @@ export function readWorkState(directory: string): WorkState | null {
 }
 
 /**
- * Write work state to .weave/state.json.
- * Creates .weave/ directory if needed.
+ * Write work state to .guild/state.json.
+ * Creates .guild/ directory if needed.
  */
 export function writeWorkState(directory: string, state: WorkState): boolean {
   return Repository.writeWorkState(directory, state)
 }
 
 /**
- * Clear work state by deleting .weave/state.json.
+ * Clear work state by deleting .guild/state.json.
  */
 export function clearWorkState(directory: string): boolean {
   return Repository.clearWorkState(directory)
@@ -50,7 +50,7 @@ export function getHeadSha(directory: string): string | undefined {
 }
 
 /**
- * Find all plan files in .weave/plans/, sorted by modification time (newest first).
+ * Find all plan files in .guild/plans/, sorted by modification time (newest first).
  * Returns absolute paths.
  */
 export function findPlans(directory: string): string[] {

@@ -6,7 +6,7 @@ import { loadGuildConfig } from "./loader"
 import { resolveContinuationConfig } from "./continuation"
 
 function createTmpDir(): string {
-  return mkdtempSync(join(tmpdir(), "weave-loader-test-"))
+  return mkdtempSync(join(tmpdir(), "guild-loader-test-"))
 }
 
 describe("loadGuildConfig", () => {
@@ -94,10 +94,10 @@ describe("loadGuildConfig", () => {
     mkdirSync(opencodeDir, { recursive: true })
     writeFileSync(
       join(opencodeDir, "guild-opencode.json"),
-      JSON.stringify({ agents: { loom: { model: "claude-opus-4" } } }),
+      JSON.stringify({ agents: { bard: { model: "claude-opus-4" } } }),
     )
     const config = loadGuildConfig(testDir)
-    expect(config.agents?.loom?.model).toBe("claude-opus-4")
+    expect(config.agents?.bard?.model).toBe("claude-opus-4")
   })
 
   it("loads project config from .opencode/guild-opencode.jsonc (prefers .jsonc over .json)", () => {
@@ -106,14 +106,14 @@ describe("loadGuildConfig", () => {
     // Both exist — .jsonc should win
     writeFileSync(
       join(opencodeDir, "guild-opencode.jsonc"),
-      `{ // weave config\n"agents": { "loom": { "model": "claude-sonnet-4" } } }`,
+      `{ // guild config\n"agents": { "bard": { "model": "claude-sonnet-4" } } }`,
     )
     writeFileSync(
       join(opencodeDir, "guild-opencode.json"),
-      JSON.stringify({ agents: { loom: { model: "wrong-model" } } }),
+      JSON.stringify({ agents: { bard: { model: "wrong-model" } } }),
     )
     const config = loadGuildConfig(testDir)
-    expect(config.agents?.loom?.model).toBe("claude-sonnet-4")
+    expect(config.agents?.bard?.model).toBe("claude-sonnet-4")
   })
 
   it("parses JSONC with comments without error", () => {
@@ -137,7 +137,7 @@ describe("loadGuildConfig", () => {
     // Invalid Zod content — temperature out of range
     writeFileSync(
       join(opencodeDir, "guild-opencode.json"),
-      JSON.stringify({ agents: { loom: { temperature: 99 } } }),
+      JSON.stringify({ agents: { bard: { temperature: 99 } } }),
     )
     // Should not throw — should log and return defaults
     const config = loadGuildConfig(testDir)
@@ -153,7 +153,7 @@ describe("loadGuildConfig", () => {
     writeFileSync(
       join(opencodeDir, "guild-opencode.json"),
       JSON.stringify({
-        agents: { loom: { model: "my-custom-model" } },
+        agents: { bard: { model: "my-custom-model" } },
         custom_agents: {
           "my-agent": { mode: "INVALID_MODE_VALUE" },
         },
@@ -161,7 +161,7 @@ describe("loadGuildConfig", () => {
     )
     const config = loadGuildConfig(testDir)
     // The valid agents section should be preserved (not reset to defaults)
-    expect(config.agents?.loom?.model).toBe("my-custom-model")
+    expect(config.agents?.bard?.model).toBe("my-custom-model")
     // The invalid custom_agents section should be dropped
     expect(config.custom_agents).toBeUndefined()
   })
@@ -172,14 +172,14 @@ describe("loadGuildConfig", () => {
     writeFileSync(
       join(opencodeDir, "guild-opencode.json"),
       JSON.stringify({
-        disabled_agents: ["warp"],
+        disabled_agents: ["paladin"],
         custom_agents: {
           "bad-agent": { category: "NOT_A_VALID_CATEGORY" },
         },
       }),
     )
     const config = loadGuildConfig(testDir)
-    expect(config.disabled_agents).toContain("warp")
+    expect(config.disabled_agents).toContain("paladin")
     expect(config.custom_agents).toBeUndefined()
   })
 
@@ -189,7 +189,7 @@ describe("loadGuildConfig", () => {
     writeFileSync(
       join(opencodeDir, "guild-opencode.json"),
       JSON.stringify({
-        agents: { loom: { model: "my-model" } },
+        agents: { bard: { model: "my-model" } },
         custom_agents: {
           "my-reviewer": {
             prompt: "You are a code reviewer.",
@@ -202,7 +202,7 @@ describe("loadGuildConfig", () => {
     )
     const config = loadGuildConfig(testDir)
     // Both sections should be preserved
-    expect(config.agents?.loom?.model).toBe("my-model")
+    expect(config.agents?.bard?.model).toBe("my-model")
     expect(config.custom_agents?.["my-reviewer"]).toBeDefined()
     expect(config.custom_agents?.["my-reviewer"]?.prompt).toBe("You are a code reviewer.")
     expect(config.custom_agents?.["my-reviewer"]?.mode).toBe("subagent")
@@ -214,7 +214,7 @@ describe("loadGuildConfig", () => {
     writeFileSync(
       join(opencodeDir, "guild-opencode.json"),
       JSON.stringify({
-        agents: { loom: { model: "preserved-model" } },
+        agents: { bard: { model: "preserved-model" } },
         disabled_hooks: ["context-window-monitor"],
         tmux: { enabled: true },
         custom_agents: {
@@ -224,7 +224,7 @@ describe("loadGuildConfig", () => {
     )
     const config = loadGuildConfig(testDir)
     // All valid sections should be preserved
-    expect(config.agents?.loom?.model).toBe("preserved-model")
+    expect(config.agents?.bard?.model).toBe("preserved-model")
     expect(config.disabled_hooks).toContain("context-window-monitor")
     expect(config.tmux?.enabled).toBe(true)
     // Only custom_agents should be dropped

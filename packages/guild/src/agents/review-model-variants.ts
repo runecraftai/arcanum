@@ -1,7 +1,8 @@
 import type { AgentConfig } from "@opencode-ai/sdk"
 import type { AgentOverrideConfig } from "../config/schema"
+import type { GuildAgentName } from "./types"
 
-export type ReviewBaseAgent = "weft" | "warp"
+export type ReviewBaseAgent = Extract<GuildAgentName, "cleric" | "paladin">
 
 export interface ReviewModelVariant {
   baseAgent: ReviewBaseAgent
@@ -14,14 +15,14 @@ type AgentConfigWithOptions = AgentConfig & {
   options?: Record<string, unknown>
 }
 
-const REVIEW_BASE_AGENTS = ["weft", "warp"] as const
+const REVIEW_BASE_AGENTS = ["cleric", "paladin"] as const
 
 /**
- * Build visible subagent variants from agents.weft/warp.review_models.
+ * Build visible subagent variants from agents.cleric/paladin.review_models.
  *
  * Example:
- *   agents.weft.review_models = ["opencode-go/kimi-k2.6"]
- *   -> subagent_type "weft-review-opencode-go-kimi-k2-6"
+ *   agents.cleric.review_models = ["opencode-go/kimi-k2.6"]
+ *   -> subagent_type "cleric-review-opencode-go-kimi-k2-6"
  */
 export function buildReviewModelVariants(
   agentOverrides: Record<string, AgentOverrideConfig> | undefined,
@@ -64,13 +65,13 @@ export function buildReviewModelVariantAgent(
   variant: ReviewModelVariant,
 ): AgentConfig {
   const { options: _baseModelOptions, ...baseWithoutOptions } = baseConfig as AgentConfigWithOptions
-  const boundary = variant.baseAgent === "weft"
-    ? "You are a Weft code-quality/plan reviewer, not Warp. Do NOT label your work as a security audit. Security audits must use Warp or a warp-review-* variant."
-    : "You are a Warp security reviewer, not Weft. Focus on security/specification concerns and self-triage as Warp normally does."
+  const boundary = variant.baseAgent === "cleric"
+    ? "You are a Cleric code-quality/plan reviewer, not Paladin. Do NOT label your work as a security audit. Security audits must use Paladin or a paladin-review-* variant."
+    : "You are a Paladin security reviewer, not Cleric. Focus on security/specification concerns and self-triage as Paladin normally does."
   const prompt = [
     baseWithoutOptions.prompt,
     `<ReviewVariant>
-You are ${variant.label}, a visible independent ${variant.baseAgent.toUpperCase()} review variant.
+    You are ${variant.label}, a visible independent ${variant.baseAgent.toUpperCase()} review variant.
 Review the same input independently using model ${variant.model}.
 Return a complete standalone review with your own APPROVE or REJECT verdict.
 ${boundary}

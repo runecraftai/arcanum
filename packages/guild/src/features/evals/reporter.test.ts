@@ -43,9 +43,9 @@ describe("formatJobSummaryMarkdown", () => {
       normalizedScore: 0,
       maxScore: 1,
       durationMs: 50,
-      artifacts: { renderedPrompt: "", agentMetadata: { agent: "loom", description: "test", sourceKind: "composer" }, toolPolicy: {}, promptLength: 0 },
+      artifacts: { renderedPrompt: "", agentMetadata: { agent: "bard", description: "test", sourceKind: "composer" }, toolPolicy: {}, promptLength: 0 },
       assertionResults: [
-        { evaluatorKind: "contains-all", passed: false, score: 0, maxScore: 1, message: "Missing required pattern: shuttle" },
+        { evaluatorKind: "contains-all", passed: false, score: 0, maxScore: 1, message: "Missing required wizard: ranger" },
       ],
       errors: [],
     }
@@ -67,7 +67,7 @@ describe("formatJobSummaryMarkdown", () => {
     expect(md).toContain("1/2 (50.0%)")
     expect(md).toContain("| failing-case | ❌ Fail | 0.00 |")
     expect(md).toContain("Failed Case Details")
-    expect(md).toContain("Missing required pattern: shuttle")
+    expect(md).toContain("Missing required wizard: ranger")
   })
 
   it("renders error cases with the error icon", () => {
@@ -78,7 +78,7 @@ describe("formatJobSummaryMarkdown", () => {
       normalizedScore: 0,
       maxScore: 1,
       durationMs: 100,
-      artifacts: { renderedPrompt: "", agentMetadata: { agent: "loom", description: "test", sourceKind: "composer" }, toolPolicy: {}, promptLength: 0 },
+      artifacts: { renderedPrompt: "", agentMetadata: { agent: "bard", description: "test", sourceKind: "composer" }, toolPolicy: {}, promptLength: 0 },
       assertionResults: [],
       errors: ["API timeout after 30s"],
     }

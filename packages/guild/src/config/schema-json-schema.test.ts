@@ -2,7 +2,7 @@ import { readFile } from "fs/promises"
 
 import { describe, expect, it } from "bun:test"
 
-import { getWeaveVersion } from "../shared/version"
+import { getGuildVersion } from "../shared/version"
 import {
   generateGuildConfigJsonSchema,
   getGuildConfigJsonSchemaArtifactPath,
@@ -21,7 +21,7 @@ const EXPECTED_PUBLIC_SCHEMA_ID =
 type JsonSchemaObject = Record<string, unknown>
 
 function getGeneratedSchema() {
-  return generateGuildConfigJsonSchema({ version: getWeaveVersion() })
+  return generateGuildConfigJsonSchema({ version: getGuildVersion() })
 }
 
 function getRootSchema() {
@@ -49,7 +49,7 @@ describe("generateGuildConfigJsonSchema", () => {
     expect(schema.$id).toBe(EXPECTED_PUBLIC_SCHEMA_ID)
     expect(schema.title).toBe(GUILD_CONFIG_JSON_SCHEMA_TITLE)
     expect(schema.description).toBe(GUILD_CONFIG_JSON_SCHEMA_DESCRIPTION)
-    expect(schema["x-guild-version"]).toBe(getWeaveVersion())
+    expect(schema["x-guild-version"]).toBe(getGuildVersion())
     expect(schema.$ref).toBe(`#/$defs/${GUILD_CONFIG_JSON_SCHEMA_ROOT_NAME}`)
   })
 

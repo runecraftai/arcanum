@@ -91,7 +91,16 @@ function checkPlanCreated(context: CompletionContext): CompletionCheckResult {
     return { complete: false, reason: "plan_created requires plan_name in completion config" }
   }
 
-  // Check if a plan file matching the name exists
+  const specArtifact = resolveSpecArtifactPath(directory, planName)
+  if (specArtifact) {
+    return {
+      complete: true,
+      artifacts: { plan_path: specArtifact },
+      summary: `Plan created at \`${specArtifact}\``,
+    }
+  }
+
+  // Check if a legacy plan file matching the name exists
   const plans = findPlans(directory)
   const matchingPlan = plans.find((p) => p.includes(planName))
 
@@ -123,9 +132,9 @@ function checkPlanComplete(context: CompletionContext): CompletionCheckResult {
     return { complete: false, reason: "plan_complete requires plan_name in completion config" }
   }
 
-  const planPath = join(directory, PLANS_DIR, `${planName}.md`)
-  if (!existsSync(planPath)) {
-    return { complete: false, reason: `Plan file not found: \`${planPath}\`` }
+  const planPath = resolvePlanArtifactPath(directory, planName)
+  if (!planPath) {
+    return { complete: false, reason: `Plan file not found for \`${planName}\`` }
   }
 
   const progress = getPlanProgress(planPath)
@@ -140,6 +149,32 @@ function checkPlanComplete(context: CompletionContext): CompletionCheckResult {
     complete: false,
     reason: `Plan in progress: ${progress.completed}/${progress.total} tasks done`,
   }
+}
+
+function resolveSpecArtifactPath(directory: string, planName: string): string | null {
+  const candidates = [
+    join(directory, ".specs", "features", planName, "tasks.md"),
+    join(directory, ".specs", "features", planName, "spec.md"),
+    join(directory, ".specs", "features", planName, "design.md"),
+    join(directory, ".specs", "quick", planName, "TASK.md"),
+    join(directory, ".specs", "project", `${planName}.md`),
+  ]
+
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) {
+      return candidate
+    }
+  }
+
+  return null
+}
+
+function resolvePlanArtifactPath(directory: string, planName: string): string | null {
+  return resolveSpecArtifactPath(directory, planName)
+    ?? (() => {
+      const planPath = join(directory, PLANS_DIR, `${planName}.md`)
+      return existsSync(planPath) ? planPath : null
+    })()
 }
 
 function checkReviewVerdict(context: CompletionContext): CompletionCheckResult {

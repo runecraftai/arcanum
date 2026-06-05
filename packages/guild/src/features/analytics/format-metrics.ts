@@ -193,18 +193,18 @@ export function formatMetricsMarkdown(
   // No data at all
   if (reports.length === 0 && summaries.length === 0) {
     return [
-      "## Weave Metrics Dashboard",
+      "## Guild Metrics Dashboard",
       "",
       "No metrics data yet.",
       "",
       "To generate metrics:",
-      "1. Enable analytics in `weave.json`: `{ \"analytics\": { \"enabled\": true } }`",
-      "2. Create and complete a plan using Pattern and `/start-work`",
+      "1. Enable analytics in `guild.json`: `{ \"analytics\": { \"enabled\": true } }`",
+      "2. Create and complete a plan using Wizard and `/start-work`",
       "3. Metrics are generated automatically when a plan completes",
     ].join("\n")
   }
 
-  const lines: string[] = ["## Weave Metrics Dashboard"]
+  const lines: string[] = ["## Guild Metrics Dashboard"]
 
   // Filter reports based on args
   let filteredReports = reports

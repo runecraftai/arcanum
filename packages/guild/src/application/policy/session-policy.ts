@@ -1,6 +1,6 @@
 import { clearTokenSession } from "../../hooks"
 import { createPolicyResult, type PolicyResult } from "../../domain/policy/policy-result"
-import type { ReviewerPlan } from "../../agents/review-resolver"
+import type { ReviewBaseAgent, ReviewerPlan } from "../../agents/review-resolver"
 import type { RuntimeEffect } from "../../runtime/opencode/effects"
 import { runIdleCycle } from "../orchestration/idle-cycle-service"
 import { createExecutionLeaseFsStore } from "../../infrastructure/fs/execution-lease-fs-store"
@@ -28,7 +28,7 @@ export interface SessionPolicy {
 
 export function createHookBackedSessionPolicy(args?: {
   reviewerResolver?: {
-    forBaseAgent(baseAgent: "weft" | "warp", scope: "direct" | "post-execution"): ReviewerPlan
+    forBaseAgent(baseAgent: ReviewBaseAgent, scope: "direct" | "post-execution"): ReviewerPlan
   }
   todoContinuationEnforcer?: {
     checkAndFinalize: (sessionId: string) => Promise<void>

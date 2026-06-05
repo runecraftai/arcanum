@@ -22,7 +22,7 @@ function makeHooks(overrides?: Partial<CreatedHooks>): CreatedHooks {
     writeGuard: null,
     firstMessageVariant: null,
     processMessageForKeywords: null,
-    patternMdOnlyEnabled: false,
+    rangerMdOnlyEnabled: false,
     startWork: null,
     workContinuation: null,
     workflowStart: null,
@@ -205,13 +205,13 @@ describe("createHookBackedSessionPolicy", () => {
   })
 
   it("injects a verification reminder once when a plan completes", async () => {
-    const directory = mkdtempSync(join(tmpdir(), "weave-verify-policy-"))
+    const directory = mkdtempSync(join(tmpdir(), "guild-verify-policy-"))
     const plansDir = join(directory, PLANS_DIR)
     mkdirSync(plansDir, { recursive: true })
     const planPath = join(plansDir, "verify-plan.md")
     writeFileSync(planPath, "# Plan\n- [x] Task\n- [x] Verify\n", "utf-8")
     writeWorkState(directory, {
-      ...createWorkState(planPath, "sess-verify", "tapestry", directory),
+      ...createWorkState(planPath, "sess-verify", "fighter", directory),
       session_ids: ["sess-verify"],
     })
     createExecutionLeaseFsStore().writeExecutionLease(directory, createExecutionLeaseState({
@@ -219,7 +219,7 @@ describe("createHookBackedSessionPolicy", () => {
       ownerRef: planPath,
       status: "running",
       sessionId: "sess-verify",
-      executorAgent: "tapestry",
+      executorAgent: "fighter",
     }))
 
     try {

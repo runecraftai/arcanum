@@ -1,11 +1,11 @@
 import type { AgentConfig } from "@opencode-ai/sdk"
-import type { WeaveConfig } from "../config/schema"
+import type { GuildConfig } from "../config/schema"
 import { getAgentDisplayName } from "../shared/agent-display-names"
 import { BUILTIN_COMMANDS } from "../features/builtin-commands"
 
 /** Input to the config pipeline */
 export interface ConfigPipelineInput {
-  pluginConfig: WeaveConfig
+  pluginConfig: GuildConfig
   /** Available agents from createBuiltinAgents (or empty for testing) */
   agents?: Record<string, AgentConfig>
   /** Available tool names */
@@ -29,9 +29,9 @@ export interface ConfigPipelineOutput {
  * Phase 3 filters disabled tools.
  */
 export class ConfigHandler {
-  private readonly pluginConfig: WeaveConfig
+  private readonly pluginConfig: GuildConfig
 
-  constructor(options: { pluginConfig: WeaveConfig }) {
+  constructor(options: { pluginConfig: GuildConfig }) {
     this.pluginConfig = options.pluginConfig
   }
 
@@ -57,7 +57,7 @@ export class ConfigHandler {
     // Phase 6: applySkillConfig — no-op for v1
     this.applySkillConfig()
 
-    // Determine default agent display name (loom is default primary agent)
+    // Determine default agent display name (bard is default primary agent)
     const defaultAgent = this.resolveDefaultAgent(resolvedAgents)
 
     return {
@@ -77,11 +77,11 @@ export class ConfigHandler {
   /**
    * Phase 2: Merge agent overrides from pluginConfig.agents.
    * Exclude agents listed in pluginConfig.disabled_agents.
-   * Remap keys from config keys (e.g., "loom") to display names (e.g., "Loom (Main Orchestrator)").
+   * Remap keys from config keys (e.g., "bard") to display names (e.g., "Bard (Guildmaster)").
    */
   private applyAgentConfig(
     agents: Record<string, AgentConfig>,
-    pluginConfig: WeaveConfig,
+    pluginConfig: GuildConfig,
   ): Record<string, AgentConfig> {
     const disabledSet = new Set(pluginConfig.disabled_agents ?? [])
     const overrides = pluginConfig.agents ?? {}
@@ -106,18 +106,18 @@ export class ConfigHandler {
 
   /**
    * Resolve the default agent display name.
-   * Returns the display name of "loom" if present in resolved agents, otherwise first primary agent.
-   */
+   * Returns the display name of "bard" if present in resolved agents, otherwise first primary agent.
+ */
   private resolveDefaultAgent(agents: Record<string, AgentConfig>): string | undefined {
-    const loomDisplayName = getAgentDisplayName("loom")
-    if (agents[loomDisplayName]) return loomDisplayName
+    const bardDisplayName = getAgentDisplayName("bard")
+    if (agents[bardDisplayName]) return bardDisplayName
     // Fallback: first agent in the map
     const firstKey = Object.keys(agents)[0]
     return firstKey
   }
 
   /** Phase 3: Filter tools by disabled_tools */
-  private applyToolConfig(availableTools: string[], pluginConfig: WeaveConfig): string[] {
+  private applyToolConfig(availableTools: string[], pluginConfig: GuildConfig): string[] {
     const disabledSet = new Set(pluginConfig.disabled_tools ?? [])
     return availableTools.filter((tool) => !disabledSet.has(tool))
   }

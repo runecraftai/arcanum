@@ -36,7 +36,7 @@ const TWO_STEP_DEF: WorkflowDefinition = {
       id: "gather",
       name: "Gather Requirements",
       type: "interactive",
-      agent: "loom",
+      agent: "bard",
       prompt: "Gather info for: {{instance.goal}}",
       completion: { method: "user_confirm" },
     },
@@ -44,7 +44,7 @@ const TWO_STEP_DEF: WorkflowDefinition = {
       id: "build",
       name: "Build Feature",
       type: "autonomous",
-      agent: "tapestry",
+      agent: "fighter",
       prompt: "Build: {{instance.goal}}",
       completion: { method: "agent_signal" },
     },
@@ -184,13 +184,13 @@ describe("handleRunWorkflow", () => {
     })
     expect(result.contextInjection).not.toBeNull()
     expect(result.contextInjection).toContain("Add OAuth2 login")
-    expect(result.switchAgent).toBe("loom")
+    expect(result.switchAgent).toBe("bard")
 
     const instance = getActiveWorkflowInstance(testDir)
     expect(instance).not.toBeNull()
     expect(instance!.goal).toBe("Add OAuth2 login")
     expect(ExecutionLeaseRepository.readExecutionLease(testDir)?.owner_kind).toBe("workflow")
-    expect(ExecutionLeaseRepository.readSessionRuntime(testDir, "sess-1")?.foreground_agent).toBe("loom")
+    expect(ExecutionLeaseRepository.readSessionRuntime(testDir, "sess-1")?.foreground_agent).toBe("bard")
   })
 
   it("resumes active workflow when no args provided", () => {
@@ -292,8 +292,8 @@ describe("checkWorkflowContinuation", () => {
     })
     expect(result.continuationPrompt).not.toBeNull()
     expect(result.continuationPrompt).toContain(WORKFLOW_CONTINUATION_MARKER)
-    expect(result.switchAgent).toBe("tapestry")
-    expect(ExecutionLeaseRepository.readExecutionLease(testDir)?.executor_agent).toBe("tapestry")
+    expect(result.switchAgent).toBe("fighter")
+    expect(ExecutionLeaseRepository.readExecutionLease(testDir)?.executor_agent).toBe("fighter")
   })
 
   it("includes WORKFLOW_CONTINUATION_MARKER in all continuation prompts", () => {
@@ -352,7 +352,7 @@ describe("checkWorkflowContinuation", () => {
       owner_ref: `${instance.instance_id}/${instance.current_step_id}`,
       status: "running",
       session_id: "sess-2",
-      executor_agent: "loom",
+      executor_agent: "bard",
       started_at: instance.started_at,
       updated_at: instance.started_at,
     })
@@ -442,7 +442,7 @@ describe("handleRunWorkflow with active work-state plan", () => {
       directory: testDir,
     })
 
-    expect(result.switchAgent).toBe("loom")
+    expect(result.switchAgent).toBe("bard")
   })
 
   it("returns the current step agent when resuming a paused workflow", () => {
@@ -464,7 +464,7 @@ describe("handleRunWorkflow with active work-state plan", () => {
       directory: testDir,
     })
 
-    expect(result.switchAgent).toBe("loom")
+    expect(result.switchAgent).toBe("bard")
   })
 
   it("blocks resume from a non-owning session when workflow is paused", () => {

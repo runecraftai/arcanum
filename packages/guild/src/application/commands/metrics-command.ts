@@ -10,7 +10,7 @@ export function executeMetricsCommand(input: {
   if (!input.analyticsEnabled) {
     return [{
       type: "appendCommandOutput",
-      text: "Analytics is not enabled. To enable it, set `\"analytics\": { \"enabled\": true }` in your `weave.json`.",
+      text: "Analytics is not enabled. To enable it, set `\"analytics\": { \"enabled\": true }` in your `guild.json`.",
     }]
   }
 

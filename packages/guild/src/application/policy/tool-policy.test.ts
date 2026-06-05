@@ -10,7 +10,7 @@ function makeHooks(overrides?: Partial<CreatedHooks>): CreatedHooks {
     writeGuard: null,
     firstMessageVariant: null,
     processMessageForKeywords: null,
-    patternMdOnlyEnabled: false,
+    rangerMdOnlyEnabled: false,
     startWork: null,
     workContinuation: null,
     workflowStart: null,
@@ -51,7 +51,7 @@ describe("createHookBackedToolPolicy", () => {
     expect(tracked).toEqual(["/tmp/file.ts"])
   })
 
-  it("blocks non-markdown Pattern writes through the pattern policy unit", () => {
+  it("blocks non-markdown Wizard writes through the ranger policy unit", () => {
     const policy = createHookBackedToolPolicy()
 
     expect(() => policy.beforeTool({
@@ -59,10 +59,10 @@ describe("createHookBackedToolPolicy", () => {
       sessionId: "sess-tool",
       tool: "write",
       callId: "call-1",
-      hooks: makeHooks({ patternMdOnlyEnabled: true }),
-      agent: "pattern",
+      hooks: makeHooks({ rangerMdOnlyEnabled: true }),
+      agent: "ranger",
       toolArgs: { file_path: "/tmp/file.ts" },
-    })).toThrow("Pattern agent can only write to .guild/ directory")
+    })).toThrow("Ranger agent can only write to .guild/ directory")
   })
 
   it("invokes the rules policy unit for configured tools", () => {

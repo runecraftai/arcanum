@@ -46,7 +46,7 @@ const SECURE_FEATURE_DEF: WorkflowDefinition = {
       id: "gather",
       name: "Gather Requirements",
       type: "interactive",
-      agent: "loom",
+      agent: "bard",
       prompt: "Gather requirements for: {{instance.goal}}",
       completion: { method: "user_confirm" },
     },
@@ -54,7 +54,7 @@ const SECURE_FEATURE_DEF: WorkflowDefinition = {
       id: "plan",
       name: "Create Plan",
       type: "autonomous",
-      agent: "pattern",
+      agent: "wizard",
       prompt: "Create a plan for: {{instance.goal}}\nBased on: {{artifacts.requirements}}",
       completion: { method: "agent_signal" },
     },
@@ -62,7 +62,7 @@ const SECURE_FEATURE_DEF: WorkflowDefinition = {
       id: "review",
       name: "Plan Review",
       type: "gate",
-      agent: "weft",
+      agent: "cleric",
       prompt: "Review the plan for: {{instance.goal}}",
       completion: { method: "review_verdict" },
       on_reject: "pause",
@@ -71,7 +71,7 @@ const SECURE_FEATURE_DEF: WorkflowDefinition = {
       id: "build",
       name: "Build Feature",
       type: "autonomous",
-      agent: "tapestry",
+      agent: "fighter",
       prompt: "Build the feature: {{instance.goal}}",
       completion: { method: "agent_signal" },
     },
@@ -123,7 +123,7 @@ describe("Workflow Engine E2E: Full lifecycle", () => {
     })
 
     expect(startAction.type).toBe("inject_prompt")
-    expect(startAction.agent).toBe("loom")
+    expect(startAction.agent).toBe("bard")
     expect(startAction.prompt).toContain("Add OAuth2 login with Google and GitHub providers")
 
     let instance = getActiveWorkflowInstance(testDir)
@@ -145,7 +145,7 @@ describe("Workflow Engine E2E: Full lifecycle", () => {
     })
 
     expect(gatherComplete.type).toBe("inject_prompt")
-    expect(gatherComplete.agent).toBe("pattern")
+    expect(gatherComplete.agent).toBe("wizard")
 
     instance = getActiveWorkflowInstance(testDir)
     expect(instance!.current_step_id).toBe("plan")
@@ -164,7 +164,7 @@ describe("Workflow Engine E2E: Full lifecycle", () => {
     })
 
     expect(planComplete.type).toBe("inject_prompt")
-    expect(planComplete.agent).toBe("weft")
+    expect(planComplete.agent).toBe("cleric")
 
     instance = getActiveWorkflowInstance(testDir)
     expect(instance!.current_step_id).toBe("review")
@@ -183,7 +183,7 @@ describe("Workflow Engine E2E: Full lifecycle", () => {
     })
 
     expect(reviewComplete.type).toBe("inject_prompt")
-    expect(reviewComplete.agent).toBe("tapestry")
+    expect(reviewComplete.agent).toBe("fighter")
 
     instance = getActiveWorkflowInstance(testDir)
     expect(instance!.current_step_id).toBe("build")
@@ -299,7 +299,7 @@ describe("Workflow Engine E2E: Pause/resume", () => {
     // Resume
     const resumeAction = resumeWorkflow(testDir)
     expect(resumeAction.type).toBe("inject_prompt")
-    expect(resumeAction.agent).toBe("pattern")
+    expect(resumeAction.agent).toBe("wizard")
 
     instance = getActiveWorkflowInstance(testDir)
     expect(instance!.status).toBe("running")
@@ -321,7 +321,7 @@ describe("Workflow Engine E2E: Skip step", () => {
 
     const skipAction = skipStep(testDir)
     expect(skipAction.type).toBe("inject_prompt")
-    expect(skipAction.agent).toBe("pattern")
+    expect(skipAction.agent).toBe("wizard")
 
     const instance = getActiveWorkflowInstance(testDir)
     expect(instance!.current_step_id).toBe("plan")
@@ -365,7 +365,7 @@ describe("Workflow Engine E2E: Hook integration", () => {
 
     expect(result.contextInjection).not.toBeNull()
     expect(result.contextInjection).toContain("Add OAuth2")
-    expect(result.switchAgent).toBe("loom")
+    expect(result.switchAgent).toBe("bard")
 
     const instance = getActiveWorkflowInstance(testDir)
     expect(instance).not.toBeNull()
@@ -389,7 +389,7 @@ describe("Workflow Engine E2E: Hook integration", () => {
 
     expect(result.continuationPrompt).not.toBeNull()
     expect(result.continuationPrompt).toContain(WORKFLOW_CONTINUATION_MARKER)
-    expect(result.switchAgent).toBe("pattern")
+    expect(result.switchAgent).toBe("wizard")
   })
 
   it("continuation prompts always contain WORKFLOW_CONTINUATION_MARKER", () => {
@@ -509,6 +509,6 @@ describe("Workflow Engine E2E: Session resume", () => {
       },
     })
     expect(result.type).toBe("inject_prompt")
-    expect(result.agent).toBe("weft")
+    expect(result.agent).toBe("cleric")
   })
 })

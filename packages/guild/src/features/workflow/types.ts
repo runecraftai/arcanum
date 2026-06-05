@@ -147,7 +147,7 @@ export interface WorkflowInstance {
 
 /**
  * Pointer file content — tracks which instance is currently active.
- * Stored at .weave/workflows/active-instance.json.
+ * Stored at .guild/workflows/active-instance.json.
  */
 export interface ActiveInstancePointer {
   instance_id: string

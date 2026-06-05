@@ -22,7 +22,7 @@ const KNOWN_TOOL_NAMES = new Set([
   "grep",
   "read",
   "task",
-  "call_weave_agent",
+  "call_guild_agent",
   "webfetch",
   "todowrite",
   "skill",

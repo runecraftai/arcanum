@@ -7,7 +7,7 @@ import { isTrajectoryTrace } from "./types"
 
 describe("runEvalSuite", () => {
   it("runs the committed prompt-contracts suite from copied eval assets", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-runner-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-runner-"))
     try {
       cpSync(join(process.cwd(), "evals"), join(dir, "evals"), { recursive: true })
       const output = await runEvalSuite({ directory: dir, suite: "prompt-contracts" })
@@ -26,7 +26,7 @@ describe("runEvalSuite", () => {
   })
 
   it("agent-routing errors without OPENROUTER_API_KEY (live-only)", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-runner-routing-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-runner-routing-"))
     const savedKey = process.env.OPENROUTER_API_KEY
     try {
       delete process.env.OPENROUTER_API_KEY
@@ -35,7 +35,7 @@ describe("runEvalSuite", () => {
       const output = await runEvalSuite({
         directory: dir,
         suite: "agent-routing",
-        filters: { caseIds: ["route-to-thread-exploration"] },
+        filters: { caseIds: ["route-to-rogue-exploration"] },
       })
 
       // Should produce an error case, not crash
@@ -53,7 +53,7 @@ describe("runEvalSuite", () => {
   })
 
   it("agent-routing errors without OPENROUTER_API_KEY when provider override is openrouter", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-runner-openrouter-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-runner-openrouter-"))
     const savedKey = process.env.OPENROUTER_API_KEY
     try {
       delete process.env.OPENROUTER_API_KEY
@@ -62,7 +62,7 @@ describe("runEvalSuite", () => {
       const output = await runEvalSuite({
         directory: dir,
         suite: "agent-routing",
-        filters: { caseIds: ["route-to-thread-exploration"] },
+        filters: { caseIds: ["route-to-rogue-exploration"] },
         providerOverride: "openrouter",
         modelOverride: "anthropic/claude-3.5-sonnet",
       })
@@ -81,7 +81,7 @@ describe("runEvalSuite", () => {
   })
 
   it("adds run metadata for provider and model overrides", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-runner-metadata-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-runner-metadata-"))
     const savedKey = process.env.OPENROUTER_API_KEY
     try {
       delete process.env.OPENROUTER_API_KEY
@@ -90,7 +90,7 @@ describe("runEvalSuite", () => {
       const output = await runEvalSuite({
         directory: dir,
         suite: "agent-routing",
-        filters: { caseIds: ["route-to-thread-exploration"] },
+        filters: { caseIds: ["route-to-rogue-exploration"] },
         providerOverride: "openrouter",
         modelOverride: "anthropic/claude-3.5-sonnet",
         runMetadata: {
@@ -115,7 +115,7 @@ describe("runEvalSuite", () => {
   })
 
   it("copies optional suite metadata into run results", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-runner-suite-meta-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-runner-suite-meta-"))
     try {
       cpSync(join(process.cwd(), "evals"), join(dir, "evals"), { recursive: true })
 
@@ -150,7 +150,7 @@ describe("runEvalSuite", () => {
 
   describe("trajectory eval", () => {
     it("runs the agent-trajectory suite end-to-end", async () => {
-      const dir = mkdtempSync(join(tmpdir(), "weave-evals-runner-trajectory-"))
+      const dir = mkdtempSync(join(tmpdir(), "guild-evals-runner-trajectory-"))
       try {
         cpSync(join(process.cwd(), "evals"), join(dir, "evals"), { recursive: true })
         const output = await runEvalSuite({ directory: dir, suite: "agent-trajectory" })
@@ -175,14 +175,14 @@ describe("runEvalSuite", () => {
       }
     })
 
-    it("produces correct delegation sequence for pattern delegation case", async () => {
-      const dir = mkdtempSync(join(tmpdir(), "weave-evals-runner-trajectory-detail-"))
+    it("produces correct delegation sequence for wizard delegation case", async () => {
+      const dir = mkdtempSync(join(tmpdir(), "guild-evals-runner-trajectory-detail-"))
       try {
         cpSync(join(process.cwd(), "evals"), join(dir, "evals"), { recursive: true })
         const output = await runEvalSuite({
           directory: dir,
           suite: "agent-trajectory",
-          filters: { caseIds: ["trajectory-loom-delegates-to-pattern"] },
+          filters: { caseIds: ["trajectory-bard-delegates-to-wizard"] },
         })
 
         expect(output.result.summary.totalCases).toBe(1)
@@ -197,9 +197,9 @@ describe("runEvalSuite", () => {
           delegationTargets?: string[]
           completedTurns: number
         }
-        expect(trace.scenarioId).toBe("loom-delegates-to-pattern")
-        expect(trace.delegationSequence).toEqual(["loom", "pattern", "loom"])
-        expect(trace.delegationTargets).toEqual(["pattern"])
+        expect(trace.scenarioId).toBe("bard-delegates-to-wizard")
+        expect(trace.delegationSequence).toEqual(["bard", "wizard", "bard"])
+        expect(trace.delegationTargets).toEqual(["wizard"])
         expect(trace.completedTurns).toBe(4)
       } finally {
         rmSync(dir, { recursive: true, force: true })
@@ -207,13 +207,13 @@ describe("runEvalSuite", () => {
     })
 
     it("produces correct delegation sequence for self-handle case", async () => {
-      const dir = mkdtempSync(join(tmpdir(), "weave-evals-runner-trajectory-self-"))
+      const dir = mkdtempSync(join(tmpdir(), "guild-evals-runner-trajectory-self-"))
       try {
         cpSync(join(process.cwd(), "evals"), join(dir, "evals"), { recursive: true })
         const output = await runEvalSuite({
           directory: dir,
           suite: "agent-trajectory",
-          filters: { caseIds: ["trajectory-loom-self-handle-simple"] },
+          filters: { caseIds: ["trajectory-bard-self-handle-simple"] },
         })
 
         expect(output.result.summary.totalCases).toBe(1)
@@ -226,8 +226,8 @@ describe("runEvalSuite", () => {
           delegationTargets?: string[]
           completedTurns: number
         }
-        expect(trace.scenarioId).toBe("loom-self-handle-simple")
-        expect(trace.delegationSequence).toEqual(["loom"])
+        expect(trace.scenarioId).toBe("bard-self-handle-simple")
+        expect(trace.delegationSequence).toEqual(["bard"])
         expect(trace.delegationTargets).toEqual([])
         expect(trace.completedTurns).toBe(2)
       } finally {
@@ -236,7 +236,7 @@ describe("runEvalSuite", () => {
     })
 
     it("does not break prompt-contracts when trajectory suite also runs", async () => {
-      const dir = mkdtempSync(join(tmpdir(), "weave-evals-runner-phase1-after-trajectory-"))
+      const dir = mkdtempSync(join(tmpdir(), "guild-evals-runner-phase1-after-trajectory-"))
       try {
         cpSync(join(process.cwd(), "evals"), join(dir, "evals"), { recursive: true })
 

@@ -5,10 +5,10 @@ import { dirname, join } from "path"
 let cachedVersion: string | undefined
 
 /**
- * Returns the current Weave package version from package.json.
+ * Returns the current Guild package version from package.json.
  * Cached after first read. Falls back to "0.0.0" if reading fails.
  */
-export function getWeaveVersion(): string {
+export function getGuildVersion(): string {
   if (cachedVersion !== undefined) return cachedVersion
   try {
     const thisDir = dirname(fileURLToPath(import.meta.url))

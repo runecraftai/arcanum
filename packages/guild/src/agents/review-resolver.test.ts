@@ -5,9 +5,9 @@ describe("resolveReviewers", () => {
   it("(a) direct + Weft + two review_models => fan-out with config-order variants and batch size 3", () => {
     const plan = resolveReviewers({
       scope: "direct",
-      baseAgent: "weft",
+      baseAgent: "cleric",
       agentOverrides: {
-        weft: {
+        cleric: {
           model: "openai/gpt-4o",
           review_models: ["anthropic/claude-sonnet-4", "openai/gpt-5"],
         },
@@ -20,18 +20,18 @@ describe("resolveReviewers", () => {
     if (plan.kind !== "fan-out") throw new Error("Expected fan-out")
 
     expect(plan.variants.map((v) => v.key)).toEqual([
-      "weft-review-anthropic-claude-sonnet-4",
-      "weft-review-openai-gpt-5",
+      "cleric-review-anthropic-claude-sonnet-4",
+      "cleric-review-openai-gpt-5",
     ])
     expect(plan.batch).toEqual({ mode: "parallel", size: 3 })
   })
 
-  it("(b) direct + Warp + one review_models => fan-out with only warp-* keys", () => {
+  it("(b) direct + Warp + one review_models => fan-out with only paladin-* keys", () => {
     const plan = resolveReviewers({
       scope: "direct",
-      baseAgent: "warp",
+      baseAgent: "paladin",
       agentOverrides: {
-        warp: {
+        paladin: {
           model: "openai/gpt-4o",
           review_models: ["anthropic/claude-sonnet-4"],
         },
@@ -44,28 +44,28 @@ describe("resolveReviewers", () => {
     if (plan.kind !== "fan-out") throw new Error("Expected fan-out")
 
     expect(plan.variants).toHaveLength(1)
-    expect(plan.variants.every((v) => v.key.startsWith("warp-"))).toBe(true)
-    expect(plan.variants.map((v) => v.key)).toEqual(["warp-review-anthropic-claude-sonnet-4"])
+    expect(plan.variants.every((v) => v.key.startsWith("paladin-"))).toBe(true)
+    expect(plan.variants.map((v) => v.key)).toEqual(["paladin-review-anthropic-claude-sonnet-4"])
   })
 
-  it("(c) direct + Weft + disabledAgents includes weft => disabled", () => {
+  it("(c) direct + Weft + disabledAgents includes cleric => disabled", () => {
     const plan = resolveReviewers({
       scope: "direct",
-      baseAgent: "weft",
+      baseAgent: "cleric",
       agentOverrides: {
-        weft: {
+        cleric: {
           model: "openai/gpt-4o",
           review_models: ["anthropic/claude-sonnet-4"],
         },
       },
-      disabledAgents: new Set(["weft"]),
+      disabledAgents: new Set(["cleric"]),
       primaryModel: "openai/gpt-4o",
     })
 
     expect(plan).toEqual({
       kind: "disabled",
       scope: "direct",
-      baseAgent: "weft",
+      baseAgent: "cleric",
       reason: "agent-disabled",
     })
   })
@@ -73,9 +73,9 @@ describe("resolveReviewers", () => {
   it("(d) direct + Weft + empty review_models => primary-only (no-variants)", () => {
     const plan = resolveReviewers({
       scope: "direct",
-      baseAgent: "weft",
+      baseAgent: "cleric",
       agentOverrides: {
-        weft: {
+        cleric: {
           model: "openai/gpt-4o",
           review_models: [],
         },
@@ -87,8 +87,8 @@ describe("resolveReviewers", () => {
     expect(plan).toEqual({
       kind: "primary-only",
       scope: "direct",
-      baseAgent: "weft",
-      primary: { agentName: "weft", label: "Weft", model: "openai/gpt-4o" },
+      baseAgent: "cleric",
+      primary: { agentName: "cleric", label: "Weft", model: "openai/gpt-4o" },
       reason: "no-variants",
     })
   })
@@ -96,22 +96,22 @@ describe("resolveReviewers", () => {
   it("(e) direct + Weft + one review_model disabled => primary-only (all-variants-disabled)", () => {
     const plan = resolveReviewers({
       scope: "direct",
-      baseAgent: "weft",
+      baseAgent: "cleric",
       agentOverrides: {
-        weft: {
+        cleric: {
           model: "openai/gpt-4o",
           review_models: ["opencode-go/x"],
         },
       },
-      disabledAgents: new Set(["weft-review-opencode-go-x"]),
+      disabledAgents: new Set(["cleric-review-opencode-go-x"]),
       primaryModel: "openai/gpt-4o",
     })
 
     expect(plan).toEqual({
       kind: "primary-only",
       scope: "direct",
-      baseAgent: "weft",
-      primary: { agentName: "weft", label: "Weft", model: "openai/gpt-4o" },
+      baseAgent: "cleric",
+      primary: { agentName: "cleric", label: "Weft", model: "openai/gpt-4o" },
       reason: "all-variants-disabled",
     })
   })
@@ -119,9 +119,9 @@ describe("resolveReviewers", () => {
   it("(f) review_models entry matching primary model is filtered; sole entry => primary-only (no-variants)", () => {
     const plan = resolveReviewers({
       scope: "direct",
-      baseAgent: "weft",
+      baseAgent: "cleric",
       agentOverrides: {
-        weft: {
+        cleric: {
           model: "openai/gpt-4o",
           review_models: ["openai/gpt-4o"],
         },
@@ -133,8 +133,8 @@ describe("resolveReviewers", () => {
     expect(plan).toEqual({
       kind: "primary-only",
       scope: "direct",
-      baseAgent: "weft",
-      primary: { agentName: "weft", label: "Weft", model: "openai/gpt-4o" },
+      baseAgent: "cleric",
+      primary: { agentName: "cleric", label: "Weft", model: "openai/gpt-4o" },
       reason: "no-variants",
     })
   })
@@ -142,9 +142,9 @@ describe("resolveReviewers", () => {
   it("filters review_models against resolved primaryModel when override model is absent", () => {
     const plan = resolveReviewers({
       scope: "post-execution",
-      baseAgent: "warp",
+      baseAgent: "paladin",
       agentOverrides: {
-        warp: {
+        paladin: {
           review_models: ["openai/gpt-5"],
         },
       },
@@ -155,8 +155,8 @@ describe("resolveReviewers", () => {
     expect(plan).toEqual({
       kind: "primary-only",
       scope: "post-execution",
-      baseAgent: "warp",
-      primary: { agentName: "warp", label: "Warp", model: "openai/gpt-5" },
+      baseAgent: "paladin",
+      primary: { agentName: "paladin", label: "Warp", model: "openai/gpt-5" },
       reason: "no-variants",
     })
   })
@@ -164,9 +164,9 @@ describe("resolveReviewers", () => {
   it("filters both override model and primary model and keeps only distinct variants", () => {
     const plan = resolveReviewers({
       scope: "direct",
-      baseAgent: "weft",
+      baseAgent: "cleric",
       agentOverrides: {
-        weft: {
+        cleric: {
           model: "openai/gpt-4o",
           review_models: ["openai/gpt-4o", "openai/gpt-5", "anthropic/claude-sonnet-4"],
         },
@@ -180,16 +180,16 @@ describe("resolveReviewers", () => {
     expect(plan.variants.map((v) => v.model)).toEqual(["anthropic/claude-sonnet-4"])
   })
 
-  it("(g) Weft plan never contains warp-* variants even when agents.warp.review_models is set", () => {
+  it("(g) Weft plan never contains paladin-* variants even when agents.paladin.review_models is set", () => {
     const plan = resolveReviewers({
       scope: "direct",
-      baseAgent: "weft",
+      baseAgent: "cleric",
       agentOverrides: {
-        weft: {
+        cleric: {
           model: "openai/gpt-4o",
           review_models: ["anthropic/claude-sonnet-4"],
         },
-        warp: {
+        paladin: {
           model: "openai/gpt-4o",
           review_models: ["google/gemini-2.5-pro"],
         },
@@ -201,15 +201,15 @@ describe("resolveReviewers", () => {
     expect(plan.kind).toBe("fan-out")
     if (plan.kind !== "fan-out") throw new Error("Expected fan-out")
 
-    expect(plan.variants.map((v) => v.key)).toEqual(["weft-review-anthropic-claude-sonnet-4"])
-    expect(plan.variants.some((v) => v.key.startsWith("warp-"))).toBe(false)
+    expect(plan.variants.map((v) => v.key)).toEqual(["cleric-review-anthropic-claude-sonnet-4"])
+    expect(plan.variants.some((v) => v.key.startsWith("paladin-"))).toBe(false)
   })
 
   it("(h) post-execution and direct are structurally identical for same inputs except scope", () => {
     const shared = {
-      baseAgent: "weft" as const,
+      baseAgent: "cleric" as const,
       agentOverrides: {
-        weft: {
+        cleric: {
           model: "openai/gpt-4o",
           review_models: ["anthropic/claude-sonnet-4", "openai/gpt-5"],
         },

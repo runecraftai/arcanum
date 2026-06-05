@@ -27,7 +27,7 @@ describe("openrouter-api", () => {
       fetch: async () =>
         new Response(
           JSON.stringify({
-            choices: [{ message: { content: "I will delegate to thread." } }],
+            choices: [{ message: { content: "I will delegate to rogue." } }],
           }),
           { status: 200, headers: { "Content-Type": "application/json" } },
         ),
@@ -35,7 +35,7 @@ describe("openrouter-api", () => {
 
     try {
       const result = await callOpenRouter("system prompt", "user message", "openai/gpt-4o-mini", "test-key")
-      expect(result.content).toBe("I will delegate to thread.")
+      expect(result.content).toBe("I will delegate to rogue.")
       expect(result.durationMs).toBeGreaterThanOrEqual(0)
     } finally {
       globalThis.fetch = originalFetch
@@ -94,7 +94,7 @@ describe("openrouter-api", () => {
       })
       expect(capturedHeaders["Authorization"]).toBe("Bearer or-key")
       expect(capturedHeaders["Content-Type"]).toBe("application/json")
-      expect(capturedHeaders["X-OpenRouter-Title"]).toBe("Weave Agent Evals")
+      expect(capturedHeaders["X-OpenRouter-Title"]).toBe("Guild Agent Evals")
     } finally {
       globalThis.fetch = originalFetch
     }

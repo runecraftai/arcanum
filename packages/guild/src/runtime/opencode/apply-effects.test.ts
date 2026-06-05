@@ -6,11 +6,11 @@ function fanOutPlan(scope: "direct" | "post-execution"): ReviewerPlan {
   return {
     kind: "fan-out",
     scope,
-    baseAgent: "weft",
-    primary: { agentName: "weft", label: "Weft", model: "openai/gpt-4o" },
+    baseAgent: "cleric",
+    primary: { agentName: "cleric", label: "Weft", model: "openai/gpt-4o" },
     variants: [
-      { baseAgent: "weft", key: "weft.reviewer.1", model: "anthropic/claude-sonnet-4", label: "weft @ anthropic/claude-sonnet-4" },
-      { baseAgent: "weft", key: "weft.reviewer.2", model: "google/gemini-2.5-pro", label: "weft @ google/gemini-2.5-pro" },
+      { baseAgent: "cleric", key: "cleric.reviewer.1", model: "anthropic/claude-sonnet-4", label: "cleric @ anthropic/claude-sonnet-4" },
+      { baseAgent: "cleric", key: "cleric.reviewer.2", model: "google/gemini-2.5-pro", label: "cleric @ google/gemini-2.5-pro" },
     ],
     batch: { mode: "parallel", size: 3 },
   }
@@ -20,8 +20,8 @@ function primaryOnlyPlan(scope: "direct" | "post-execution"): ReviewerPlan {
   return {
     kind: "primary-only",
     scope,
-    baseAgent: "weft",
-    primary: { agentName: "weft", label: "Weft", model: "openai/gpt-4o" },
+    baseAgent: "cleric",
+    primary: { agentName: "cleric", label: "Weft", model: "openai/gpt-4o" },
     reason: "no-variants",
   }
 }
@@ -67,7 +67,7 @@ describe("applyRuntimeEffects", () => {
 
     await applyRuntimeEffects({
       effects: [
-        { type: "switchAgent", agent: "tapestry" },
+        { type: "switchAgent", agent: "fighter" },
         { type: "appendPromptText", text: "## Injected" },
       ],
       output,
@@ -105,7 +105,7 @@ describe("applyRuntimeEffects", () => {
     }
 
     await applyRuntimeEffects({
-      effects: [{ type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "loom" }],
+      effects: [{ type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" }],
       client: client as never,
     })
 
@@ -124,7 +124,7 @@ describe("applyRuntimeEffects", () => {
     }
 
     await applyRuntimeEffects({
-      effects: [{ type: "restoreAgent", sessionId: "s2", agent: "loom" }],
+      effects: [{ type: "restoreAgent", sessionId: "s2", agent: "bard" }],
       client: client as never,
     })
 

@@ -17,7 +17,7 @@ function makeHooks(overrides?: Partial<CreatedHooks>): CreatedHooks {
     writeGuard: null,
     firstMessageVariant: null,
     processMessageForKeywords: null,
-    patternMdOnlyEnabled: false,
+    rangerMdOnlyEnabled: false,
     startWork: null,
     workContinuation: null,
     workflowStart: null,
@@ -34,7 +34,7 @@ function makeHooks(overrides?: Partial<CreatedHooks>): CreatedHooks {
   }
 }
 
-function makePlan(baseAgent: "weft" | "warp", kind: ReviewerPlan["kind"] = "fan-out"): ReviewerPlan {
+function makePlan(baseAgent: "cleric" | "paladin", kind: ReviewerPlan["kind"] = "fan-out"): ReviewerPlan {
   if (kind === "disabled") {
     return { kind: "disabled", scope: "post-execution", baseAgent, reason: "agent-disabled" }
   }
@@ -44,7 +44,7 @@ function makePlan(baseAgent: "weft" | "warp", kind: ReviewerPlan["kind"] = "fan-
       kind: "primary-only",
       scope: "post-execution",
       baseAgent,
-      primary: { agentName: baseAgent, label: baseAgent === "weft" ? "Weft" : "Warp", model: "primary" },
+      primary: { agentName: baseAgent, label: baseAgent === "cleric" ? "Cleric" : "Paladin", model: "primary" },
       reason: "no-variants",
     }
   }
@@ -53,7 +53,7 @@ function makePlan(baseAgent: "weft" | "warp", kind: ReviewerPlan["kind"] = "fan-
     kind: "fan-out",
     scope: "post-execution",
     baseAgent,
-    primary: { agentName: baseAgent, label: baseAgent === "weft" ? "Weft" : "Warp", model: "primary" },
+    primary: { agentName: baseAgent, label: baseAgent === "cleric" ? "Cleric" : "Paladin", model: "primary" },
     variants: [{ baseAgent, key: `${baseAgent}-review-v1`, model: "variant-1", label: `${baseAgent} @ variant-1` }],
     batch: { mode: "parallel", size: 2 },
   }
@@ -64,18 +64,18 @@ describe("createPostExecutionReviewerFanOutSessionPolicy", () => {
     const policy = createPostExecutionReviewerFanOutSessionPolicy({
       reviewerResolver: {
         forBaseAgent(baseAgent) {
-          return baseAgent === "weft" ? makePlan("weft", "fan-out") : makePlan("warp", "disabled")
+          return baseAgent === "cleric" ? makePlan("cleric", "fan-out") : makePlan("paladin", "disabled")
         },
       },
     })
 
-    const directory = mkdtempSync(join(tmpdir(), "weave-postexec-reviewers-"))
+    const directory = mkdtempSync(join(tmpdir(), "guild-postexec-reviewers-"))
     const plansDir = join(directory, PLANS_DIR)
     mkdirSync(plansDir, { recursive: true })
     const planPath = join(plansDir, "done.md")
     writeFileSync(planPath, "# Plan\n- [x] Done\n", "utf-8")
     writeWorkState(directory, {
-      ...createWorkState(planPath, "sess-a", "tapestry", directory),
+      ...createWorkState(planPath, "sess-a", "bard", directory),
       session_ids: ["sess-a"],
     })
 
@@ -101,7 +101,7 @@ describe("createPostExecutionReviewerFanOutSessionPolicy", () => {
       const idempotencyKey = (result.effects[0] as { idempotencyKey?: unknown }).idempotencyKey
       expect(typeof idempotencyKey).toBe("string")
       expect(String(idempotencyKey)).toContain("sess-a:")
-      expect(String(idempotencyKey)).toContain(":weft")
+      expect(String(idempotencyKey)).toContain(":cleric")
     } finally {
       rmSync(directory, { recursive: true, force: true })
     }
@@ -116,13 +116,13 @@ describe("createPostExecutionReviewerFanOutSessionPolicy", () => {
       },
     })
 
-    const directory = mkdtempSync(join(tmpdir(), "weave-postexec-idempotent-"))
+    const directory = mkdtempSync(join(tmpdir(), "guild-postexec-idempotent-"))
     const plansDir = join(directory, PLANS_DIR)
     mkdirSync(plansDir, { recursive: true })
     const planPath = join(plansDir, "done.md")
     writeFileSync(planPath, "# Plan\n- [x] Done\n", "utf-8")
     writeWorkState(directory, {
-      ...createWorkState(planPath, "sess-b", "tapestry", directory),
+      ...createWorkState(planPath, "sess-b", "bard", directory),
       session_ids: ["sess-b"],
     })
 
@@ -147,13 +147,13 @@ describe("createPostExecutionReviewerFanOutSessionPolicy", () => {
       },
     })
 
-    const directory = mkdtempSync(join(tmpdir(), "weave-postexec-order-"))
+    const directory = mkdtempSync(join(tmpdir(), "guild-postexec-order-"))
     const plansDir = join(directory, PLANS_DIR)
     mkdirSync(plansDir, { recursive: true })
     const planPath = join(plansDir, "done.md")
     writeFileSync(planPath, "# Plan\n- [x] Done\n", "utf-8")
     writeWorkState(directory, {
-      ...createWorkState(planPath, "sess-c", "tapestry", directory),
+      ...createWorkState(planPath, "sess-c", "bard", directory),
       session_ids: ["sess-c"],
     })
 

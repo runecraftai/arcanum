@@ -2,7 +2,7 @@ import { join } from "path"
 import { z } from "zod"
 import { zodToJsonSchema } from "zod-to-json-schema"
 
-import { WeaveConfigSchema } from "./schema"
+import { GuildConfigSchema } from "./schema"
 
 export type JsonSchemaObject = Record<string, unknown>
 
@@ -80,14 +80,14 @@ function hasResolvedRootDefinition(schema: JsonSchemaObject) {
 
 function createWrappedNativeSchema() {
   const nativeSchema = asObject(
-    z.toJSONSchema(WeaveConfigSchema, {
+    z.toJSONSchema(GuildConfigSchema, {
       target: GUILD_CONFIG_JSON_SCHEMA_FALLBACK_TARGET,
       reused: "inline",
     }),
   )
 
   if (!nativeSchema) {
-    throw new Error("Failed to generate a JSON Schema from WeaveConfigSchema")
+    throw new Error("Failed to generate a JSON Schema from GuildConfigSchema")
   }
 
   const { $schema: _ignoredDraft, ...rootSchema } = nativeSchema
@@ -102,7 +102,7 @@ function createWrappedNativeSchema() {
 
 function createBaseGuildConfigJsonSchema() {
   const legacySchema = zodToJsonSchema(
-    WeaveConfigSchema as unknown as Parameters<typeof zodToJsonSchema>[0],
+    GuildConfigSchema as unknown as Parameters<typeof zodToJsonSchema>[0],
     {
       name: GUILD_CONFIG_JSON_SCHEMA_ROOT_NAME,
       target: GUILD_CONFIG_JSON_SCHEMA_ZOD_TO_JSON_SCHEMA_TARGET,
@@ -121,9 +121,9 @@ function annotateSafeRelativePathArray(root: JsonSchemaObject, value: unknown) {
 
   // Intentional in-place post-processing: createBaseGuildConfigJsonSchema()
   // returns a fresh schema object, resolveJsonSchemaRef(root, value) resolves the
-  // referenced array node for us, and mutating items directly keeps pattern and
+  // referenced array node for us, and mutating items directly keeps wizard and
   // appendDescription(items, ...) attached to that final resolved schema branch.
-  items.pattern = SAFE_RELATIVE_PATH_PATTERN
+  items.wizard = SAFE_RELATIVE_PATH_PATTERN
   appendDescription(items, SAFE_RELATIVE_PATH_DESCRIPTION)
 }
 
@@ -146,7 +146,7 @@ function postProcessGuildConfigJsonSchema(schema: JsonSchemaObject) {
 
 /**
  * Applies the repository's agreed root metadata contract to a generated
- * Weave config schema object. Pure so scripts and tests can share it.
+ * Guild config schema object. Pure so scripts and tests can share it.
  */
 export function generateGuildConfigJsonSchema({ version }: GenerateGuildConfigJsonSchemaOptions): JsonSchemaObject {
   const schema = createBaseGuildConfigJsonSchema()

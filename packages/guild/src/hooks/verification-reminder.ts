@@ -1,6 +1,6 @@
 /**
  * Verification reminder hook: builds a prompt that reminds the orchestrator
- * to verify completed work, optionally delegating to Weft for review.
+ * to verify completed work, optionally delegating to Cleric for review.
  */
 
 export interface VerificationInput {
@@ -36,11 +36,11 @@ Before marking this task complete, verify the work:
 3. **Validate behavior**: Does the code actually do what was requested?
 4. **Gate decision**: Can you explain what every changed line does?
 
-If uncertain about quality, use the Task tool to delegate to \`weft\` for a formal review:
-\`Task(subagent_type="weft", prompt="Review the changes for [task description]")\`
+If uncertain about quality, use the Task tool to delegate to \`cleric\` for a formal review:
+\`Task(subagent_type="cleric", prompt="Review the changes for [task description]")\`
 
-MANDATORY: If changes touch auth, crypto, certificates, tokens, signatures, or input validation, you MUST delegate to \`warp\` using the Task tool for a security audit — this is NOT optional:
-\`Task(subagent_type="warp", prompt="Security audit the changes for [task description]")\`
+MANDATORY: If changes touch auth, crypto, certificates, tokens, signatures, or input validation, you MUST delegate to \`paladin\` using the Task tool for a security audit — this is NOT optional:
+\`Task(subagent_type="paladin", prompt="Security audit the changes for [task description]")\`
 
 Only mark complete when ALL checks pass.`,
   }

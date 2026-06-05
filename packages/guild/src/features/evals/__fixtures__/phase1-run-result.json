@@ -24,7 +24,7 @@
       "artifacts": {
         "renderedPrompt": "<Role>fixture</Role>",
         "agentMetadata": {
-          "agent": "loom",
+          "agent": "bard",
           "description": "Fixture",
           "sourceKind": "composer"
         },
@@ -37,7 +37,7 @@
           "passed": true,
           "score": 1,
           "maxScore": 1,
-          "message": "Found required pattern: fixture"
+          "message": "Found required wizard: fixture"
         }
       ],
       "errors": []

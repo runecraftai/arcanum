@@ -1,6 +1,6 @@
 import type { PluginInterface, ToolsRecord } from "./types"
 import type { AgentConfig } from "@opencode-ai/sdk"
-import type { WeaveConfig } from "../config/schema"
+import type { GuildConfig } from "../config/schema"
 import type { ConfigHandler } from "../managers/config-handler"
 import type { CreatedHooks } from "../hooks/create-hooks"
 import type { PluginContext } from "./types"
@@ -8,7 +8,7 @@ import type { SessionTracker } from "../features/analytics"
 import { createPluginAdapter } from "../runtime/opencode/plugin-adapter"
 
 export function createPluginInterface(args: {
-  pluginConfig: WeaveConfig
+  pluginConfig: GuildConfig
   hooks: CreatedHooks
   tools: ToolsRecord
   configHandler: ConfigHandler

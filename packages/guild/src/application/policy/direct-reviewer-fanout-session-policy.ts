@@ -1,5 +1,5 @@
 import { createPolicyResult, type PolicyResult } from "../../domain/policy/policy-result"
-import type { ReviewerPlan } from "../../agents/review-resolver"
+import type { ReviewBaseAgent, ReviewerPlan } from "../../agents/review-resolver"
 import type { RuntimeEffect } from "../../runtime/opencode/effects"
 import { getAgentConfigKey } from "../../shared/agent-display-names"
 import type {
@@ -13,7 +13,7 @@ import type { SessionPolicy } from "./session-policy"
 
 export function createDirectReviewerFanOutSessionPolicy(args: {
   reviewerResolver: {
-    forBaseAgent(baseAgent: "weft" | "warp", scope: "direct" | "post-execution"): ReviewerPlan
+    forBaseAgent(baseAgent: ReviewBaseAgent, scope: "direct" | "post-execution"): ReviewerPlan
   }
 }): SessionPolicy {
   return {
@@ -86,29 +86,29 @@ export function createDirectReviewerFanOutSessionPolicy(args: {
 function resolveDirectReviewBaseAgent(input: {
   foregroundAgent?: string | null
   originalPromptText: string
-}): "weft" | "warp" | null {
+}): ReviewBaseAgent | null {
   const configuredForeground = input.foregroundAgent ? getAgentConfigKey(input.foregroundAgent) : null
-  if (configuredForeground === "weft" || configuredForeground === "warp") {
+  if (configuredForeground === "cleric" || configuredForeground === "paladin") {
     return configuredForeground
   }
 
   return resolveExplicitMentionBaseAgent(input.originalPromptText)
 }
 
-function resolveExplicitMentionBaseAgent(promptText: string): "weft" | "warp" | null {
-  const hasWeftMention = /(^|[^\w])@weft\b/i.test(promptText)
-  const hasWarpMention = /(^|[^\w])@warp\b/i.test(promptText)
+function resolveExplicitMentionBaseAgent(promptText: string): ReviewBaseAgent | null {
+  const hasClericMention = /(^|[^\w])@cleric\b/i.test(promptText)
+  const hasPaladinMention = /(^|[^\w])@paladin\b/i.test(promptText)
 
-  if (hasWeftMention && hasWarpMention) {
+  if (hasClericMention && hasPaladinMention) {
     return null
   }
 
-  if (hasWeftMention) {
-    return "weft"
+  if (hasClericMention) {
+    return "cleric"
   }
 
-  if (hasWarpMention) {
-    return "warp"
+  if (hasPaladinMention) {
+    return "paladin"
   }
 
   return null

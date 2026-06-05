@@ -23,7 +23,7 @@ function makeHooks(overrides?: Partial<CreatedHooks>): CreatedHooks {
     writeGuard: null,
     firstMessageVariant: null,
     processMessageForKeywords: null,
-    patternMdOnlyEnabled: false,
+    rangerMdOnlyEnabled: false,
     startWork: null,
     workContinuation: null,
     workflowStart: null,
@@ -50,7 +50,7 @@ describe("createPolicyEngine", () => {
     })
 
     const hooks = makeHooks({
-      startWork: () => ({ contextInjection: "plan context", switchAgent: "tapestry" }),
+      startWork: () => ({ contextInjection: "plan context", switchAgent: "fighter" }),
     })
 
     const effects = await engine.onChatMessage({
@@ -69,14 +69,14 @@ describe("createPolicyEngine", () => {
     })
 
     expect(effects).toEqual([
-      { type: "switchAgent", agent: "tapestry" },
-      { type: "restoreAgent", sessionId: "sess-1", agent: "tapestry" },
+      { type: "switchAgent", agent: "fighter" },
+      { type: "restoreAgent", sessionId: "sess-1", agent: "fighter" },
       { type: "appendPromptText", text: "plan context" },
     ])
   })
 
   it("routes plan auto-pause through the chat policy engine", async () => {
-    const directory = mkdtempSync(join(tmpdir(), "weave-policy-engine-"))
+    const directory = mkdtempSync(join(tmpdir(), "guild-policy-engine-"))
     mkdirSync(join(directory, ".guild"), { recursive: true })
     writeWorkState(directory, createWorkState("plan.md", "2026-01-01T00:00:00.000Z"))
     createExecutionLeaseFsStore().writeExecutionLease(directory, createExecutionLeaseState({
@@ -84,7 +84,7 @@ describe("createPolicyEngine", () => {
       ownerRef: "plan.md",
       status: "running",
       sessionId: "sess-plan",
-      executorAgent: "tapestry",
+      executorAgent: "fighter",
     }))
 
     try {
@@ -271,18 +271,18 @@ describe("createPolicyEngine", () => {
   })
 
   it("clears per-session runtime state through session deletion policy", async () => {
-    const directory = mkdtempSync(join(tmpdir(), "weave-policy-delete-"))
+    const directory = mkdtempSync(join(tmpdir(), "guild-policy-delete-"))
     const executionLease = createExecutionLeaseFsStore()
     executionLease.writeExecutionLease(directory, createExecutionLeaseState({
       ownerKind: "workflow",
       ownerRef: "wf_1/review",
       status: "running",
       sessionId: "sess-delete",
-      executorAgent: "weft",
+      executorAgent: "cleric",
     }))
     executionLease.writeSessionRuntime(directory, createSessionRuntimeState({
       sessionId: "sess-delete",
-      foregroundAgent: "weft",
+      foregroundAgent: "cleric",
       mode: "workflow",
       executionRef: "wf_1/review",
       status: "running",
@@ -337,7 +337,7 @@ describe("createPolicyEngine", () => {
           },
           compactionRecovery: () => {
             calls.push("recover")
-            return { continuationPrompt: "resume after compaction", switchAgent: "loom" }
+            return { continuationPrompt: "resume after compaction", switchAgent: "bard" }
           },
         }),
       },
@@ -345,8 +345,8 @@ describe("createPolicyEngine", () => {
 
     expect(calls).toEqual(["restore:sess-compact-route", "recover"])
     expect(effects).toEqual([
-      { type: "restoreAgent", sessionId: "sess-compact-route", agent: "loom" },
-      { type: "injectPromptAsync", sessionId: "sess-compact-route", text: "resume after compaction", agent: "loom" },
+      { type: "restoreAgent", sessionId: "sess-compact-route", agent: "bard" },
+      { type: "injectPromptAsync", sessionId: "sess-compact-route", text: "resume after compaction", agent: "bard" },
     ])
   })
 })

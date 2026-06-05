@@ -1,15 +1,15 @@
 import type { AgentConfig } from "@opencode-ai/sdk"
-import { createLoomAgent, createLoomAgentWithOptions } from "./loom"
-import { createTapestryAgent, createTapestryAgentWithOptions } from "./tapestry"
-import { createShuttleAgent } from "./shuttle"
-import { createPatternAgent } from "./pattern"
-import { createThreadAgent } from "./thread"
-import { createSpindleAgent } from "./spindle"
-import { createWeftAgent } from "./weft"
-import { createWarpAgent } from "./warp"
+import { createBardAgent, createBardAgentWithOptions } from "./bard"
+import { createFighterAgent, createFighterAgentWithOptions } from "./fighter"
+import { createRangerAgent } from "./ranger"
+import { createWizardAgent } from "./wizard"
+import { createRogueAgent } from "./rogue"
+import { createWarlockAgent } from "./warlock"
+import { createClericAgent } from "./cleric"
+import { createPaladinAgent } from "./paladin"
 import { resolveAgentModel } from "./model-resolution"
 import { buildAgent } from "./agent-builder"
-import type { AgentFactory, AgentPromptMetadata, WeaveAgentName } from "./types"
+import type { AgentFactory, AgentPromptMetadata, GuildAgentName } from "./types"
 import type { CategoriesConfig, AgentOverrideConfig } from "../config/schema"
 import type { ResolvedContinuationConfig } from "../config/continuation"
 import type { ResolveSkillsFn } from "./agent-builder"
@@ -33,25 +33,25 @@ export interface CreateBuiltinAgentsOptions {
   resolveSkills?: ResolveSkillsFn
   /** Project fingerprint for injecting project context into agent prompts */
   fingerprint?: ProjectFingerprint | null
-  /** Custom agent metadata for Loom's dynamic delegation prompt */
+  /** Custom agent metadata for Bard's dynamic delegation prompt */
   customAgentMetadata?: AvailableAgent[]
   /** Resolved continuation config for prompt-aware agents */
   continuation?: ResolvedContinuationConfig
 }
 
-const AGENT_FACTORIES: Record<WeaveAgentName, AgentFactory> = {
-  loom: createLoomAgent,
-  tapestry: createTapestryAgent,
-  shuttle: createShuttleAgent,
-  pattern: createPatternAgent,
-  thread: createThreadAgent,
-  spindle: createSpindleAgent,
-  weft: createWeftAgent,
-  warp: createWarpAgent,
+const AGENT_FACTORIES: Record<GuildAgentName, AgentFactory> = {
+  bard: createBardAgent,
+  fighter: createFighterAgent,
+  ranger: createRangerAgent,
+  wizard: createWizardAgent,
+  rogue: createRogueAgent,
+  warlock: createWarlockAgent,
+  cleric: createClericAgent,
+  paladin: createPaladinAgent,
 }
 
-export const AGENT_METADATA: Record<WeaveAgentName, AgentPromptMetadata> = {
-  loom: {
+export const AGENT_METADATA: Record<GuildAgentName, AgentPromptMetadata> = {
+  bard: {
     category: "specialist",
     cost: "EXPENSIVE",
     triggers: [
@@ -60,7 +60,7 @@ export const AGENT_METADATA: Record<WeaveAgentName, AgentPromptMetadata> = {
     ],
     keyTrigger: "**'ultrawork'** → Maximum effort, parallel agents, deep execution",
   },
-  tapestry: {
+  fighter: {
     category: "specialist",
     cost: "EXPENSIVE",
     triggers: [
@@ -68,14 +68,14 @@ export const AGENT_METADATA: Record<WeaveAgentName, AgentPromptMetadata> = {
       { domain: "Integration", trigger: "Wiring multiple systems or modules together" },
     ],
   },
-  shuttle: {
+  ranger: {
     category: "specialist",
     cost: "CHEAP",
     triggers: [
       { domain: "Category Work", trigger: "Domain-specific tasks dispatched via category system" },
     ],
   },
-  pattern: {
+  wizard: {
     category: "advisor",
     cost: "EXPENSIVE",
     triggers: [
@@ -83,7 +83,7 @@ export const AGENT_METADATA: Record<WeaveAgentName, AgentPromptMetadata> = {
       { domain: "Strategy", trigger: "Approach selection for complex technical problems" },
     ],
   },
-  thread: {
+  rogue: {
     category: "exploration",
     cost: "FREE",
     triggers: [
@@ -91,7 +91,7 @@ export const AGENT_METADATA: Record<WeaveAgentName, AgentPromptMetadata> = {
       { domain: "Context Gathering", trigger: "Understanding how existing code works" },
     ],
     useWhen: [
-      "Pattern/usage is unknown — need to discover it",
+      "Wizard/usage is unknown — need to discover it",
       "Multi-file search required",
       "Need to understand code structure before editing",
     ],
@@ -101,7 +101,7 @@ export const AGENT_METADATA: Record<WeaveAgentName, AgentPromptMetadata> = {
       "Simple grep would suffice",
     ],
   },
-  spindle: {
+  warlock: {
     category: "exploration",
     cost: "FREE",
     triggers: [
@@ -115,7 +115,7 @@ export const AGENT_METADATA: Record<WeaveAgentName, AgentPromptMetadata> = {
       "best practice for",
     ],
   },
-  weft: {
+  cleric: {
     category: "advisor",
     cost: "EXPENSIVE",
     triggers: [
@@ -134,7 +134,7 @@ export const AGENT_METADATA: Record<WeaveAgentName, AgentPromptMetadata> = {
       "When user explicitly wants to skip review",
     ],
   },
-  warp: {
+  paladin: {
     category: "advisor",
     cost: "EXPENSIVE",
     triggers: [
@@ -164,7 +164,7 @@ const CUSTOM_AGENT_METADATA: Record<string, AgentPromptMetadata> = {}
 
 /**
  * Register metadata for a custom agent. Used by create-managers.ts
- * to integrate custom agents into Loom's dynamic prompt builder.
+  * to integrate custom agents into Bard's dynamic prompt builder.
  */
 export function registerCustomAgentMetadata(name: string, metadata: AgentPromptMetadata): void {
   CUSTOM_AGENT_METADATA[name] = metadata
@@ -198,7 +198,7 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
 
   const result: Record<string, AgentConfig> = {}
 
-  for (const [name, factory] of Object.entries(AGENT_FACTORIES) as [WeaveAgentName, AgentFactory][]) {
+  for (const [name, factory] of Object.entries(AGENT_FACTORIES) as [GuildAgentName, AgentFactory][]) {
     if (disabledSet.has(name)) {
       debug(`Builtin agent "${name}" is disabled — skipping`)
       continue
@@ -219,13 +219,13 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
       debug(`Builtin agent "${name}" model overridden via config`, { model: resolvedModel })
     }
 
-    // Use prompt-composer-aware constructors for loom and tapestry
+    // Use prompt-composer-aware constructors for Bard and Fighter
     // so their prompts conditionally omit references to disabled agents
     let built: AgentConfigWithOptions
-    if (name === "loom") {
-      built = createLoomAgentWithOptions(resolvedModel, disabledSet, fingerprint, customAgentMetadata, categories, reviewModelVariants)
-    } else if (name === "tapestry") {
-      built = createTapestryAgentWithOptions(resolvedModel, disabledSet, continuation, categories, reviewModelVariants)
+    if (name === "bard") {
+      built = createBardAgentWithOptions(resolvedModel, disabledSet, fingerprint, customAgentMetadata, categories, reviewModelVariants)
+    } else if (name === "fighter") {
+      built = createFighterAgentWithOptions(resolvedModel, disabledSet, continuation, categories, reviewModelVariants)
     } else {
       built = buildAgent(factory, resolvedModel, {
         categories,
@@ -235,8 +235,9 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
       })
     }
 
-    if ((name === "loom" || name === "tapestry") && built.skills?.length && resolveSkills) {
-      const skillContent = resolveSkills(built.skills, disabledSkills)
+    const builtinSkills = Array.isArray(built.skills) ? built.skills : undefined
+    if ((name === "bard" || name === "fighter") && builtinSkills?.length && resolveSkills) {
+      const skillContent = resolveSkills(builtinSkills, disabledSkills)
       if (skillContent) {
         built.prompt = skillContent + (built.prompt ? "\n\n" + built.prompt : "")
       }
@@ -263,15 +264,15 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
     result[name] = built
   }
 
-  // Register category-specific Shuttle agents for all configured categories.
-  // Patterns affect Tapestry's routing hints, not whether the agent exists.
-  // The base `shuttle` agent remains as the generic fallback.
-  if (categories && result["shuttle"]) {
-    const baseShuttle = result["shuttle"]
+  // Register category-specific Ranger agents for all configured categories.
+  // Patterns affect Fighter's routing hints, not whether the agent exists.
+  // The base `ranger` agent remains as the generic fallback.
+  if (categories && result["ranger"]) {
+    const baseRanger = result["ranger"]
     for (const [categoryName, categoryConfig] of Object.entries(categories)) {
-      const categoryAgentName = `shuttle-${categoryName}`
+      const categoryAgentName = `ranger-${categoryName}`
       if (disabledSet.has(categoryAgentName)) {
-        debug(`Category shuttle agent "${categoryAgentName}" is disabled — skipping`)
+        debug(`Category ranger agent "${categoryAgentName}" is disabled — skipping`)
         continue
       }
 
@@ -283,29 +284,29 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
             systemDefaultModel,
             overrideModel: categoryConfig.model,
           })
-        : baseShuttle.model
+        : baseRanger.model
 
-      let categoryPrompt = baseShuttle.prompt as string | undefined
+      let categoryPrompt = baseRanger.prompt as string | undefined
       if (categoryConfig.prompt_append) {
         categoryPrompt = (categoryPrompt ? categoryPrompt + "\n\n" : "") + categoryConfig.prompt_append
       }
 
       const categoryToolOverrides = categoryConfig.tools
-      const categoryShuttle: AgentConfig = {
-        ...baseShuttle,
-        description: `Shuttle (${categoryName} specialist) — handles ${categoryName} domain tasks dispatched by Tapestry`,
+      const categoryRanger: AgentConfig = {
+        ...baseRanger,
+        description: `Ranger (${categoryName} specialist) — handles ${categoryName} domain tasks dispatched by Fighter`,
         model: categoryModel,
         prompt: categoryPrompt,
         mode: "subagent",
         ...(categoryConfig.temperature !== undefined && { temperature: categoryConfig.temperature }),
-        // Categories always inherit Shuttle's base tool policy. When `tools` is present,
+        // Categories always inherit Ranger's base tool policy. When `tools` is present,
         // even as `{}`, treat it as "merge no overrides" rather than "clear all tools" so
         // the category agent keeps the base permissions unless explicit boolean overrides are set.
-        ...(categoryToolOverrides !== undefined && { tools: { ...baseShuttle.tools, ...categoryToolOverrides } }),
+        ...(categoryToolOverrides !== undefined && { tools: { ...baseRanger.tools, ...categoryToolOverrides } }),
       }
 
-      result[categoryAgentName] = categoryShuttle
-      debug(`Registered category shuttle agent "${categoryAgentName}"`, {
+        result[categoryAgentName] = categoryRanger
+      debug(`Registered category ranger agent "${categoryAgentName}"`, {
         model: categoryModel,
         patterns: categoryConfig.patterns,
       })

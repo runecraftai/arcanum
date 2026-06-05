@@ -31,7 +31,7 @@ export const BuiltinAgentPromptVariantSchema = z.object({
 
 export const BuiltinAgentPromptTargetSchema = z.object({
   kind: z.literal("builtin-agent-prompt"),
-  agent: z.enum(["loom", "tapestry", "shuttle", "pattern", "thread", "spindle", "weft", "warp"]),
+  agent: z.enum(["bard", "fighter", "ranger", "wizard", "rogue", "warlock", "cleric", "paladin"]),
   variant: BuiltinAgentPromptVariantSchema.optional(),
 })
 

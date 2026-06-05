@@ -13,7 +13,7 @@ export type {
 } from "../policy/runtime-policy"
 import type { CreatedHooks } from "../../hooks/create-hooks"
 import type { PluginContext } from "../../plugin/types"
-import type { ReviewerPlan } from "../../agents/review-resolver"
+import type { ReviewBaseAgent, ReviewerPlan } from "../../agents/review-resolver"
 import { createCompactionTodoPreserver } from "../../hooks/compaction-todo-preserver"
 import { createTodoContinuationEnforcer } from "../../hooks/todo-continuation-enforcer"
 import { createPolicyEngine } from "../policy/policy-engine"
@@ -27,7 +27,7 @@ export function createRuntimeLifecyclePolicySurface(args: {
   hooks: CreatedHooks
   client?: PluginContext["client"]
   reviewerResolver?: {
-    forBaseAgent(baseAgent: "weft" | "warp", scope: "direct" | "post-execution"): ReviewerPlan
+    forBaseAgent(baseAgent: ReviewBaseAgent, scope: "direct" | "post-execution"): ReviewerPlan
   }
 }
 ): import("../policy/runtime-policy").RuntimeLifecyclePolicySurface {

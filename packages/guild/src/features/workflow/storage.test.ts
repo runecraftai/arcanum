@@ -29,7 +29,7 @@ const SAMPLE_DEFINITION: WorkflowDefinition = {
       id: "gather",
       name: "Gather",
       type: "interactive",
-      agent: "loom",
+      agent: "bard",
       prompt: "Gather info for: {{instance.goal}}",
       completion: { method: "user_confirm" },
     },
@@ -37,7 +37,7 @@ const SAMPLE_DEFINITION: WorkflowDefinition = {
       id: "build",
       name: "Build",
       type: "autonomous",
-      agent: "tapestry",
+      agent: "fighter",
       prompt: "Build it.",
       completion: { method: "agent_signal" },
     },
@@ -45,7 +45,7 @@ const SAMPLE_DEFINITION: WorkflowDefinition = {
 }
 
 beforeEach(() => {
-  testDir = mkdtempSync(join(tmpdir(), "weave-workflow-test-"))
+  testDir = mkdtempSync(join(tmpdir(), "guild-workflow-test-"))
 })
 
 afterEach(() => {

@@ -45,13 +45,13 @@ describe("formatMetricsMarkdown", () => {
   it("returns no-data message when both reports and summaries are empty", () => {
     const result = formatMetricsMarkdown([], [])
     expect(result).toContain("No metrics data yet")
-    expect(result).toContain("weave.json")
+    expect(result).toContain("guild.json")
     expect(result).toContain("analytics")
   })
 
   it("formats a single report with adherence scores", () => {
     const result = formatMetricsMarkdown([makeReport()], [])
-    expect(result).toContain("## Weave Metrics Dashboard")
+    expect(result).toContain("## Guild Metrics Dashboard")
     expect(result).toContain("test-plan")
     expect(result).toContain("85%")
     expect(result).toContain("92%")

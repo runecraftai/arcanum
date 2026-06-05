@@ -6,10 +6,10 @@ import { getAgentDisplayName } from "../shared/agent-display-names"
 import { BUILTIN_COMMANDS } from "../features/builtin-commands"
 
 const makeAgents = (): Record<string, AgentConfig> => ({
-  loom: { model: "claude-opus-4", instructions: "main orchestrator" },
-  tapestry: { model: "claude-sonnet-4", instructions: "specialist" },
-  pattern: { model: "gpt-4o", instructions: "fast exploration" },
-  thread: { model: "gemini-pro", instructions: "advisor" },
+  bard: { model: "claude-opus-4", instructions: "main orchestrator" },
+  fighter: { model: "claude-sonnet-4", instructions: "specialist" },
+  wizard: { model: "gpt-4o", instructions: "fast exploration" },
+  rogue: { model: "gemini-pro", instructions: "advisor" },
 })
 
 describe("ConfigHandler", () => {
@@ -45,19 +45,19 @@ describe("ConfigHandler", () => {
     })
 
     // Keys should be display names, not config keys
-    expect(result.agents[getAgentDisplayName("loom")]).toBeDefined()
-    expect(result.agents[getAgentDisplayName("tapestry")]).toBeDefined()
-    expect(result.agents[getAgentDisplayName("pattern")]).toBeDefined()
-    expect(result.agents[getAgentDisplayName("thread")]).toBeDefined()
+    expect(result.agents[getAgentDisplayName("bard")]).toBeDefined()
+    expect(result.agents[getAgentDisplayName("fighter")]).toBeDefined()
+    expect(result.agents[getAgentDisplayName("wizard")]).toBeDefined()
+    expect(result.agents[getAgentDisplayName("rogue")]).toBeDefined()
     // Primary agent original lowercase keys should not exist (they get remapped to display names)
-    expect(result.agents["loom"]).toBeUndefined()
-    expect(result.agents["tapestry"]).toBeUndefined()
+    expect(result.agents["bard"]).toBeUndefined()
+    expect(result.agents["fighter"]).toBeUndefined()
     // Subagent keys stay as-is (display name === config key)
-    expect(result.agents["pattern"]).toBeDefined()
-    expect(result.agents["thread"]).toBeDefined()
+    expect(result.agents["wizard"]).toBeDefined()
+    expect(result.agents["rogue"]).toBeDefined()
   })
 
-  it("sets defaultAgent to loom display name", async () => {
+  it("sets defaultAgent to bard display name", async () => {
     const handler = new ConfigHandler({ pluginConfig: {} })
 
     const result = await handler.handle({
@@ -66,14 +66,14 @@ describe("ConfigHandler", () => {
       availableTools: [],
     })
 
-    expect(result.defaultAgent).toBe(getAgentDisplayName("loom"))
+    expect(result.defaultAgent).toBe(getAgentDisplayName("bard"))
   })
 
   it("merges agent overrides from pluginConfig.agents", async () => {
     const handler = new ConfigHandler({
       pluginConfig: {
         agents: {
-          loom: { model: "gpt-5" },
+          bard: { model: "gpt-5" },
         },
       },
     })
@@ -81,7 +81,7 @@ describe("ConfigHandler", () => {
     const input: ConfigPipelineInput = {
       pluginConfig: {
         agents: {
-          loom: { model: "gpt-5" },
+          bard: { model: "gpt-5" },
         },
       },
       agents: makeAgents(),
@@ -90,34 +90,34 @@ describe("ConfigHandler", () => {
 
     const result: ConfigPipelineOutput = await handler.handle(input)
 
-    const loomKey = getAgentDisplayName("loom")
+    const loomKey = getAgentDisplayName("bard")
     expect(result.agents[loomKey]?.model).toBe("gpt-5")
     // Other fields from the builtin agent are preserved
     expect(result.agents[loomKey]?.instructions).toBe("main orchestrator")
     // Agents without overrides are unchanged
-    const tapestryKey = getAgentDisplayName("tapestry")
+    const tapestryKey = getAgentDisplayName("fighter")
     expect(result.agents[tapestryKey]?.model).toBe("claude-sonnet-4")
   })
 
   it("excludes disabled agents from output", async () => {
     const handler = new ConfigHandler({
       pluginConfig: {
-        disabled_agents: ["pattern", "thread"],
+        disabled_agents: ["wizard", "rogue"],
       },
     })
 
     const result = await handler.handle({
       pluginConfig: {
-        disabled_agents: ["pattern", "thread"],
+        disabled_agents: ["wizard", "rogue"],
       },
       agents: makeAgents(),
       availableTools: [],
     })
 
-    expect(result.agents[getAgentDisplayName("loom")]).toBeDefined()
-    expect(result.agents[getAgentDisplayName("tapestry")]).toBeDefined()
-    expect(result.agents[getAgentDisplayName("pattern")]).toBeUndefined()
-    expect(result.agents[getAgentDisplayName("thread")]).toBeUndefined()
+    expect(result.agents[getAgentDisplayName("bard")]).toBeDefined()
+    expect(result.agents[getAgentDisplayName("fighter")]).toBeDefined()
+    expect(result.agents[getAgentDisplayName("wizard")]).toBeUndefined()
+    expect(result.agents[getAgentDisplayName("rogue")]).toBeUndefined()
   })
 
   it("excludes disabled tools from output tools", async () => {
@@ -166,10 +166,10 @@ describe("ConfigHandler", () => {
     })
 
     const cmds = result.commands as Record<string, Record<string, unknown>>
-    // The start-work command has agent: "tapestry" in BUILTIN_COMMANDS,
+    // The start-work command has agent: "fighter" in BUILTIN_COMMANDS,
     // which should be remapped to the Tapestry display name
-    expect(cmds["start-work"].agent).toBe(getAgentDisplayName("tapestry"))
-    expect(cmds["start-work"].agent).not.toBe("tapestry")
+    expect(cmds["start-work"].agent).toBe(getAgentDisplayName("fighter"))
+    expect(cmds["start-work"].agent).not.toBe("fighter")
   })
 
   it("does not mutate the original BUILTIN_COMMANDS when remapping agent fields", async () => {
@@ -178,7 +178,7 @@ describe("ConfigHandler", () => {
     await handler.handle({ pluginConfig: {}, agents: makeAgents(), availableTools: [] })
 
     // Original BUILTIN_COMMANDS should still have the config key
-    expect(BUILTIN_COMMANDS["start-work"].agent).toBe("tapestry")
+    expect(BUILTIN_COMMANDS["start-work"].agent).toBe("fighter")
   })
 
   it("returns empty MCPs and builtin commands", async () => {

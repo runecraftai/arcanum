@@ -1,4 +1,4 @@
-import type { WeaveConfig } from "../config/schema"
+import type { GuildConfig } from "../config/schema"
 import type { ResolvedContinuationConfig } from "../config/continuation"
 import type { ContextWindowThresholds } from "./context-window-monitor"
 import { createWriteGuardState, createWriteGuard } from "./write-existing-file-guard"
@@ -13,7 +13,7 @@ import { handleWorkflowCommand } from "../features/workflow"
 export type CreatedHooks = ReturnType<typeof createHooks>
 
 export function createHooks(args: {
-  pluginConfig: WeaveConfig
+  pluginConfig: GuildConfig
   continuation: ResolvedContinuationConfig
   isHookEnabled: (hookName: string) => boolean
   directory: string
@@ -48,7 +48,7 @@ export function createHooks(args: {
       ? processMessageForKeywords
       : null,
 
-    patternMdOnlyEnabled: isHookEnabled("pattern-md-only"),
+    rangerMdOnlyEnabled: isHookEnabled("ranger-md-only"),
 
     startWork: isHookEnabled("start-work")
       ? (promptText: string, sessionId: string) =>

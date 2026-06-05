@@ -39,7 +39,7 @@ function makeReport(overrides?: Partial<MetricsReport>): MetricsReport {
 }
 
 beforeEach(() => {
-  tempDir = mkdtempSync(join(tmpdir(), "weave-metrics-storage-test-"))
+  tempDir = mkdtempSync(join(tmpdir(), "guild-metrics-storage-test-"))
 })
 
 afterEach(() => {

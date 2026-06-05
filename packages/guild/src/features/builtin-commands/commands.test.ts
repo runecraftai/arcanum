@@ -7,8 +7,8 @@ describe("BUILTIN_COMMANDS", () => {
     expect(BUILTIN_COMMANDS["start-work"]).toBeDefined()
   })
 
-  it("start-work targets tapestry agent", () => {
-    expect(BUILTIN_COMMANDS["start-work"].agent).toBe("tapestry")
+  it("start-work targets fighter agent", () => {
+    expect(BUILTIN_COMMANDS["start-work"].agent).toBe("fighter")
   })
 
   it("start-work has a description", () => {
@@ -58,8 +58,8 @@ describe("BUILTIN_COMMANDS", () => {
     expect(BUILTIN_COMMANDS["guild-health"]).toBeDefined()
   })
 
-  it("guild-health targets loom agent", () => {
-    expect(BUILTIN_COMMANDS["guild-health"].agent).toBe("loom")
+  it("guild-health targets bard agent", () => {
+    expect(BUILTIN_COMMANDS["guild-health"].agent).toBe("bard")
   })
 
   it("guild-health has a description", () => {
