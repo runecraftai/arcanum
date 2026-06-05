@@ -3,7 +3,7 @@ import { BackgroundManager } from "./background-manager"
 import type { SpawnOptions, TaskRecord } from "./background-manager"
 
 const defaultOptions: SpawnOptions = {
-  agentName: "loom",
+  agentName: "bard",
   prompt: "Do something useful",
 }
 
@@ -30,7 +30,7 @@ describe("BackgroundManager", () => {
 
     it("stores the supplied options on the task record", () => {
       const options: SpawnOptions = {
-        agentName: "shuttle",
+        agentName: "ranger",
         prompt: "Analyse logs",
         category: "analysis",
         skills: ["log-reader"],
@@ -64,15 +64,15 @@ describe("BackgroundManager", () => {
 
     it("throws when concurrency limit is reached", () => {
       const mgr = new BackgroundManager({ maxConcurrent: 2 })
-      const id1 = mgr.spawn({ agentName: "loom", prompt: "task 1" })
-      const id2 = mgr.spawn({ agentName: "loom", prompt: "task 2" })
+      const id1 = mgr.spawn({ agentName: "bard", prompt: "task 1" })
+      const id2 = mgr.spawn({ agentName: "bard", prompt: "task 2" })
       // Manually set both to "running" status (Map stores object references, direct mutation works)
       const task1 = mgr.getTask(id1) as TaskRecord
       const task2 = mgr.getTask(id2) as TaskRecord
       task1.status = "running"
       task2.status = "running"
       // Now spawning a 3rd task should throw
-      expect(() => mgr.spawn({ agentName: "loom", prompt: "task 3" })).toThrow("Concurrency limit reached")
+      expect(() => mgr.spawn({ agentName: "bard", prompt: "task 3" })).toThrow("Concurrency limit reached")
     })
   })
 

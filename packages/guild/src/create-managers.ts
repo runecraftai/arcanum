@@ -1,6 +1,6 @@
 import type { PluginInput } from "@opencode-ai/plugin"
 import type { AgentConfig } from "@opencode-ai/sdk"
-import type { WeaveConfig } from "./config/schema"
+import type { GuildConfig } from "./config/schema"
 import type { ResolvedContinuationConfig } from "./config/continuation"
 import type { ResolveSkillsFn } from "./agents/agent-builder"
 import type { ProjectFingerprint } from "./features/analytics/types"
@@ -14,21 +14,24 @@ import { updateBuiltinDisplayName } from "./shared/agent-display-names"
 import { addBuiltinNameVariant } from "./agents/agent-builder"
 import { debug } from "./shared/log"
 
-export interface WeaveManagers {
+export interface GuildManagers {
   configHandler: ConfigHandler
   backgroundManager: BackgroundManager
   skillMcpManager: SkillMcpManager
   agents: Record<string, AgentConfig>
 }
 
+/** @deprecated Use `GuildManagers`. */
+export type WeaveManagers = GuildManagers
+
 export function createManagers(options: {
   ctx: PluginInput
-  pluginConfig: WeaveConfig
+  pluginConfig: GuildConfig
   continuation: ResolvedContinuationConfig
   resolveSkills?: ResolveSkillsFn
   fingerprint?: ProjectFingerprint | null
   configDir?: string
-}): WeaveManagers {
+}): GuildManagers {
   const { pluginConfig, continuation, resolveSkills, fingerprint, configDir } = options
 
   // Step 1: Build custom agent metadata FIRST so Loom's prompt can include triggers

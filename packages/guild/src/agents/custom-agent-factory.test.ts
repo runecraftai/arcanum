@@ -136,7 +136,7 @@ describe("buildCustomAgent", () => {
     const config: CustomAgentConfig = {
       prompt: "Test.",
       model: "test-model/v1",
-      tools: { write: true, edit: true, bash: true, glob: true, grep: true, read: true, task: true, call_weave_agent: true, webfetch: true, todowrite: true, skill: true },
+      tools: { write: true, edit: true, bash: true, glob: true, grep: true, read: true, task: true, call_guild_agent: true, webfetch: true, todowrite: true, skill: true },
     }
     expect(() => buildCustomAgent("test-agent", config)).not.toThrow()
   })

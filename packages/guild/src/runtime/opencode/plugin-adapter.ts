@@ -1,5 +1,5 @@
 import type { AgentConfig } from "@opencode-ai/sdk"
-import type { WeaveConfig } from "../../config/schema"
+import type { GuildConfig } from "../../config/schema"
 import type { ConfigHandler } from "../../managers/config-handler"
 import type { CreatedHooks } from "../../hooks/create-hooks"
 import type { PluginContext, ToolsRecord } from "../../plugin/types"
@@ -23,7 +23,7 @@ import { buildEnabledAgentKeys } from "./enabled-agent-keys"
 import type { TrustedInjectedPromptKind } from "./trusted-message-state"
 
 export function createPluginAdapter(args: {
-  pluginConfig: WeaveConfig
+  pluginConfig: GuildConfig
   hooks: CreatedHooks
   tools: ToolsRecord
   configHandler: ConfigHandler
@@ -38,7 +38,7 @@ export function createPluginAdapter(args: {
   const enabledAgents = buildEnabledAgentKeys(pluginConfig)
   const disabledSet = new Set((pluginConfig.disabled_agents ?? []).filter((agentKey) => !enabledAgents.has(agentKey)))
   const reviewerResolver = {
-    forBaseAgent(baseAgent: "weft" | "warp", scope: "direct" | "post-execution") {
+    forBaseAgent(baseAgent: "cleric" | "paladin", scope: "direct" | "post-execution") {
       const overrides = pluginConfig.agents
       const primaryModel = overrides?.[baseAgent]?.model
         ?? (typeof agents[baseAgent]?.model === "string" ? agents[baseAgent].model : "")
@@ -62,7 +62,7 @@ export function createPluginAdapter(args: {
   const policyFlags: RuntimePolicyFlags = {
     contextWindowThresholds: hooks.contextWindowThresholds,
     rulesInjectorEnabled: hooks.rulesInjectorEnabled,
-    patternMdOnlyEnabled: hooks.patternMdOnlyEnabled,
+    rangerMdOnlyEnabled: hooks.rangerMdOnlyEnabled,
     verificationReminderEnabled: hooks.verificationReminderEnabled,
     todoDescriptionOverrideEnabled: hooks.todoDescriptionOverrideEnabled,
     todoContinuationEnforcerEnabled: hooks.todoContinuationEnforcerEnabled,
@@ -80,14 +80,14 @@ export function createPluginAdapter(args: {
       })
       const existingAgents = (config.agent ?? {}) as Record<string, unknown>
       if (Object.keys(existingAgents).length > 0) {
-        debug("[config] Merging Weave agents over existing agents", {
+        debug("[config] Merging Guild agents over existing agents", {
           existingCount: Object.keys(existingAgents).length,
-          weaveCount: Object.keys(result.agents).length,
+          guildCount: Object.keys(result.agents).length,
           existingKeys: Object.keys(existingAgents),
         })
         const collisions = Object.keys(result.agents).filter(key => key in existingAgents)
         if (collisions.length > 0) {
-          info("[config] Weave agents overriding user-defined agents with same name", {
+          info("[config] Guild agents overriding user-defined agents with same name", {
             overriddenKeys: collisions,
           })
         }

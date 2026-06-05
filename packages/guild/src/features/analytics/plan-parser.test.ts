@@ -5,7 +5,7 @@ import { tmpdir } from "os"
 import { extractPlannedFiles } from "./plan-parser"
 
 function createTempPlan(content: string): string {
-  const dir = mkdtempSync(join(tmpdir(), "weave-plan-parser-test-"))
+  const dir = mkdtempSync(join(tmpdir(), "guild-plan-parser-test-"))
   const planPath = join(dir, "test-plan.md")
   writeFileSync(planPath, content, "utf-8")
   return planPath

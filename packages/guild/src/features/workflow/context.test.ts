@@ -10,7 +10,7 @@ const SAMPLE_DEFINITION: WorkflowDefinition = {
       id: "gather",
       name: "Gather Requirements",
       type: "interactive",
-      agent: "loom",
+      agent: "bard",
       prompt: "Gather requirements for: {{instance.goal}}",
       completion: { method: "user_confirm" },
     },
@@ -18,15 +18,15 @@ const SAMPLE_DEFINITION: WorkflowDefinition = {
       id: "plan",
       name: "Create Plan",
       type: "autonomous",
-      agent: "pattern",
-      prompt: "Create a plan at .guild/plans/{{instance.slug}}.md based on {{artifacts.spec}}",
+      agent: "wizard",
+      prompt: "Create a plan at .specs/features/{{instance.slug}}/tasks.md based on {{artifacts.spec}}",
       completion: { method: "plan_created", plan_name: "{{instance.slug}}" },
     },
     {
       id: "review",
       name: "Plan Review",
       type: "gate",
-      agent: "weft",
+      agent: "cleric",
       prompt: "Review the plan at {{artifacts.plan_path}}.",
       completion: { method: "review_verdict" },
       on_reject: "pause",
@@ -167,7 +167,7 @@ describe("buildContextHeader", () => {
       current_step_id: "review",
       artifacts: {
         spec: "Users need OAuth2 login",
-        plan_path: ".guild/plans/add-oauth2.md",
+        plan_path: ".specs/features/add-oauth2/tasks.md",
       },
     })
     const header = buildContextHeader(instance, SAMPLE_DEFINITION)
@@ -222,13 +222,13 @@ describe("composeStepPrompt", () => {
         plan: {
           id: "plan",
           status: "completed",
-          summary: "Plan saved to .guild/plans/add-oauth2.md",
+          summary: "Plan saved to .specs/features/add-oauth2/tasks.md",
         },
         review: { id: "review", status: "active" },
       },
       artifacts: {
         spec: "Users need OAuth2 login",
-        plan_path: ".guild/plans/add-oauth2.md",
+        plan_path: ".specs/features/add-oauth2/tasks.md",
       },
     })
     const stepDef = SAMPLE_DEFINITION.steps[2]
@@ -238,7 +238,7 @@ describe("composeStepPrompt", () => {
     expect(prompt).toContain("[✓] **Gather Requirements**")
     expect(prompt).toContain("[✓] **Create Plan**")
     // Should have resolved artifact
-    expect(prompt).toContain("Review the plan at .guild/plans/add-oauth2.md")
+    expect(prompt).toContain("Review the plan at .specs/features/add-oauth2/tasks.md")
     // Should show step 3 of 3
     expect(prompt).toContain("step 3 of 3")
   })
@@ -260,7 +260,7 @@ describe("composeStepPrompt", () => {
     expect(prompt).toContain("OAuth2 requirements")
   })
 
-  it("includes delegation instruction for non-loom agents", () => {
+  it("includes delegation instruction for non-bard agents", () => {
     const instance = makeInstance({
       current_step_id: "plan",
       steps: {
@@ -269,17 +269,17 @@ describe("composeStepPrompt", () => {
         review: { id: "review", status: "pending" },
       },
     })
-    const stepDef = SAMPLE_DEFINITION.steps[1] // agent: "pattern", type: "autonomous"
+    const stepDef = SAMPLE_DEFINITION.steps[1] // agent: "wizard", type: "autonomous"
     const prompt = composeStepPrompt(stepDef, instance, SAMPLE_DEFINITION)
 
     expect(prompt).toContain("**Delegation**")
-    expect(prompt).toContain("**pattern**")
+    expect(prompt).toContain("**wizard**")
     expect(prompt).toContain("Task tool")
   })
 
-  it("omits delegation instruction for loom agent", () => {
+  it("omits delegation instruction for bard agent", () => {
     const instance = makeInstance()
-    const stepDef = SAMPLE_DEFINITION.steps[0] // agent: "loom"
+    const stepDef = SAMPLE_DEFINITION.steps[0] // agent: "bard"
     const prompt = composeStepPrompt(stepDef, instance, SAMPLE_DEFINITION)
 
     expect(prompt).not.toContain("**Delegation**")
@@ -293,7 +293,7 @@ describe("composeStepPrompt", () => {
         id: "ask",
         name: "Ask",
         type: "interactive",
-        agent: "shuttle",
+        agent: "ranger",
         prompt: "Ask the user questions",
         completion: { method: "user_confirm" },
       }],
@@ -316,7 +316,7 @@ describe("composeStepPrompt", () => {
 
     expect(prompt).toContain("**Delegation**")
     expect(prompt).toContain("interactive step")
-    expect(prompt).toContain("**shuttle**")
+    expect(prompt).toContain("**ranger**")
   })
 
   it("includes gate delegation instruction for gate steps", () => {
@@ -328,11 +328,11 @@ describe("composeStepPrompt", () => {
         review: { id: "review", status: "active" },
       },
     })
-    const stepDef = SAMPLE_DEFINITION.steps[2] // agent: "weft", type: "gate"
+    const stepDef = SAMPLE_DEFINITION.steps[2] // agent: "cleric", type: "gate"
     const prompt = composeStepPrompt(stepDef, instance, SAMPLE_DEFINITION)
 
     expect(prompt).toContain("**Delegation**")
-    expect(prompt).toContain("**weft**")
+    expect(prompt).toContain("**cleric**")
     expect(prompt).toContain("[APPROVE]")
     expect(prompt).toContain("[REJECT]")
   })

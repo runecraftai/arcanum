@@ -37,7 +37,7 @@ export async function routeRuntimeEvent(input: {
   const policyFlags: RuntimePolicyFlags = {
     contextWindowThresholds: hooks.contextWindowThresholds,
     rulesInjectorEnabled: hooks.rulesInjectorEnabled,
-    patternMdOnlyEnabled: hooks.patternMdOnlyEnabled,
+    rangerMdOnlyEnabled: hooks.rangerMdOnlyEnabled,
     verificationReminderEnabled: hooks.verificationReminderEnabled,
     todoDescriptionOverrideEnabled: hooks.todoDescriptionOverrideEnabled,
     todoContinuationEnforcerEnabled: hooks.todoContinuationEnforcerEnabled,

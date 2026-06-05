@@ -3,7 +3,7 @@ import { resolveAgentModel, AGENT_MODEL_REQUIREMENTS } from "./model-resolution"
 
 describe("AGENT_MODEL_REQUIREMENTS", () => {
   it("has entries for all 6 agents", () => {
-    const agents = ["loom", "tapestry", "shuttle", "pattern", "thread", "spindle", "weft"] as const
+    const agents = ["bard", "fighter", "ranger", "wizard", "rogue", "warlock", "cleric"] as const
     for (const a of agents) {
       expect(AGENT_MODEL_REQUIREMENTS[a]).toBeDefined()
       expect(AGENT_MODEL_REQUIREMENTS[a].fallbackChain.length).toBeGreaterThan(0)
@@ -31,7 +31,7 @@ describe("resolveAgentModel", () => {
   ])
 
   it("explicit override takes precedence over everything", () => {
-    const result = resolveAgentModel("loom", {
+    const result = resolveAgentModel("bard", {
       availableModels: available,
       agentMode: "primary",
       uiSelectedModel: "openai/gpt-5",
@@ -41,7 +41,7 @@ describe("resolveAgentModel", () => {
   })
 
   it("UI-selected model applies for primary agents", () => {
-    const result = resolveAgentModel("loom", {
+    const result = resolveAgentModel("bard", {
       availableModels: new Set(),
       agentMode: "primary",
       uiSelectedModel: "openai/gpt-5",
@@ -50,7 +50,7 @@ describe("resolveAgentModel", () => {
   })
 
   it("UI-selected model applies for 'all' mode agents", () => {
-    const result = resolveAgentModel("shuttle", {
+    const result = resolveAgentModel("ranger", {
       availableModels: new Set(),
       agentMode: "all",
       uiSelectedModel: "openai/gpt-5",
@@ -59,17 +59,17 @@ describe("resolveAgentModel", () => {
   })
 
   it("subagent ignores UI-selected model", () => {
-    const result = resolveAgentModel("pattern", {
+    const result = resolveAgentModel("wizard", {
       availableModels: available,
       agentMode: "subagent",
       uiSelectedModel: "openai/gpt-5",
     })
-    // Should use fallback chain, not the UI model — pattern's first is github-copilot/claude-opus-4.6
+    // Should use fallback chain, not the UI model — wizard's first is github-copilot/claude-opus-4.6
     expect(result).toBe("github-copilot/claude-opus-4.6")
   })
 
   it("category model applies when available and no higher priority", () => {
-    const result = resolveAgentModel("thread", {
+    const result = resolveAgentModel("rogue", {
       availableModels: new Set(["anthropic/claude-sonnet-4"]),
       agentMode: "subagent",
       categoryModel: "anthropic/claude-sonnet-4",
@@ -78,7 +78,7 @@ describe("resolveAgentModel", () => {
   })
 
   it("category model is skipped when not in availableModels", () => {
-    const result = resolveAgentModel("loom", {
+    const result = resolveAgentModel("bard", {
       availableModels: available,
       agentMode: "subagent",
       categoryModel: "some/unavailable-model",
@@ -88,7 +88,7 @@ describe("resolveAgentModel", () => {
   })
 
   it("falls through fallback chain to first available", () => {
-    const result = resolveAgentModel("loom", {
+    const result = resolveAgentModel("bard", {
       availableModels: new Set(["anthropic/claude-opus-4"]),
       agentMode: "subagent",
     })
@@ -96,7 +96,7 @@ describe("resolveAgentModel", () => {
   })
 
   it("uses system default when nothing else available", () => {
-    const result = resolveAgentModel("loom", {
+    const result = resolveAgentModel("bard", {
       availableModels: new Set(),
       agentMode: "subagent",
       systemDefaultModel: "openai/gpt-4o",
@@ -105,16 +105,16 @@ describe("resolveAgentModel", () => {
   })
 
   it("returns best-guess offline model when availableModels empty and no systemDefault", () => {
-    const result = resolveAgentModel("loom", {
+    const result = resolveAgentModel("bard", {
       availableModels: new Set(),
       agentMode: "subagent",
     })
-    // Should be the first in loom's fallback chain
+    // Should be the first in bard's fallback chain
     expect(result).toBe("github-copilot/claude-opus-4.6")
   })
 
   it("override beats UI model for primary agent", () => {
-    const result = resolveAgentModel("tapestry", {
+    const result = resolveAgentModel("fighter", {
       availableModels: new Set(),
       agentMode: "primary",
       uiSelectedModel: "google/gemini-3-pro",

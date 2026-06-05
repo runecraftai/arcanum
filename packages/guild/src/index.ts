@@ -63,5 +63,8 @@ const GuildPlugin: Plugin = async (ctx) => {
 }
 
 export default GuildPlugin
-export type { WeaveConfig as GuildConfig } from "./config/schema"
-export type { WeaveAgentName as GuildAgentName } from "./agents/types"
+export type { GuildConfig } from "./config/schema"
+export type {
+  GuildAgentName,
+  GuildAgentIdentity,
+} from "./agents/types"

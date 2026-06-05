@@ -7,8 +7,8 @@ import { renderBuiltinCommandEnvelope } from "../../runtime/opencode/protocol"
 export const BUILTIN_COMMANDS: Record<BuiltinCommandName, BuiltinCommand> = {
   "start-work": {
     name: "start-work",
-    description: "Start executing a Guild plan created by Pattern",
-    agent: "tapestry",
+    description: "Start executing a Guild plan created by Wizard",
+    agent: "fighter",
     template: `<command-instruction>
 ${START_WORK_TEMPLATE}
 </command-instruction>
@@ -25,7 +25,7 @@ ${renderBuiltinCommandEnvelope({
   "token-report": {
     name: "token-report",
     description: "Show token usage and cost report across sessions",
-    agent: "loom",
+    agent: "bard",
     template: `<command-instruction>
 Display the token usage report that has been injected below. Present it clearly to the user.
 </command-instruction>
@@ -38,7 +38,7 @@ ${renderBuiltinCommandEnvelope({
   "metrics": {
     name: "metrics",
     description: "Show Guild analytics and plan metrics reports",
-    agent: "loom",
+    agent: "bard",
     template: `<command-instruction>
 ${METRICS_TEMPLATE}
 </command-instruction>
@@ -52,7 +52,7 @@ ${renderBuiltinCommandEnvelope({
   "run-workflow": {
     name: "run-workflow",
     description: "Run a multi-step workflow",
-    agent: "loom",
+    agent: "bard",
     template: `<command-instruction>
 ${RUN_WORKFLOW_TEMPLATE}
 </command-instruction>
@@ -69,7 +69,7 @@ ${renderBuiltinCommandEnvelope({
   "guild-health": {
     name: "guild-health",
     description: "Show Guild config health and any validation issues",
-    agent: "loom",
+    agent: "bard",
     template: `<command-instruction>
 Display the Guild health report below to the user. Present warnings and errors prominently.
 If there are no issues, confirm that Guild config is healthy.

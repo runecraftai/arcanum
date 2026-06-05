@@ -6,10 +6,10 @@ describe("runLlmJudgeEvaluator", () => {
     const results = runLlmJudgeEvaluator(
       {
         kind: "llm-judge",
-        expectedContains: ["delegate to thread"],
+        expectedContains: ["delegate to rogue"],
         forbiddenContains: ["implement directly"],
       },
-      { modelOutput: "I will delegate to thread for exploration." },
+      { modelOutput: "I will delegate to rogue for exploration." },
     )
 
     expect(results.every((result) => result.passed)).toBe(true)
@@ -19,7 +19,7 @@ describe("runLlmJudgeEvaluator", () => {
     const results = runLlmJudgeEvaluator(
       {
         kind: "llm-judge",
-        expectedContains: ["delegate to pattern"],
+        expectedContains: ["delegate to wizard"],
       },
       { modelOutput: "I will do this directly." },
     )
@@ -31,7 +31,7 @@ describe("runLlmJudgeEvaluator", () => {
     const results = runLlmJudgeEvaluator(
       {
         kind: "llm-judge",
-        rubricRef: "evals/rubrics/loom-routing-rubric.md",
+        rubricRef: "evals/rubrics/bard-routing-rubric.md",
       },
       { modelOutput: "non-empty" },
     )
@@ -44,7 +44,7 @@ describe("runLlmJudgeEvaluator", () => {
     const results = runLlmJudgeEvaluator(
       {
         kind: "llm-judge",
-        expectedContains: ["thread"],
+        expectedContains: ["rogue"],
       },
       { modelOutput: "I will delegate to Thread for exploration." },
     )
@@ -70,9 +70,9 @@ describe("runLlmJudgeEvaluator", () => {
     const results = runLlmJudgeEvaluator(
       {
         kind: "llm-judge",
-        expectedAnyOf: ["delegate to pattern", "ask Pattern to plan"],
+        expectedAnyOf: ["delegate to wizard", "ask Wizard to plan"],
       },
-      { modelOutput: "I will ask Pattern to plan this work." },
+      { modelOutput: "I will ask Wizard to plan this work." },
     )
 
     expect(results.length).toBe(1)
@@ -83,7 +83,7 @@ describe("runLlmJudgeEvaluator", () => {
     const results = runLlmJudgeEvaluator(
       {
         kind: "llm-judge",
-        expectedAnyOf: ["delegate to pattern", "ask Pattern to plan"],
+        expectedAnyOf: ["delegate to wizard", "ask Wizard to plan"],
       },
       { modelOutput: "I will implement this directly." },
     )
@@ -98,10 +98,10 @@ describe("runLlmJudgeEvaluator", () => {
         kind: "llm-judge",
         weight: 3,
         expectedContains: ["delegate"],
-        expectedAnyOf: ["Pattern", "Shuttle"],
+        expectedAnyOf: ["Wizard", "Shuttle"],
         forbiddenContains: ["implement directly"],
       },
-      { modelOutput: "I will delegate to Pattern for this task." },
+      { modelOutput: "I will delegate to Wizard for this task." },
     )
 
     expect(results).toHaveLength(3)

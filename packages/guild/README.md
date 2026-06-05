@@ -32,18 +32,18 @@ Runtime config supports JSONC comments and trailing commas even though the publi
 
 | Agent | Role | Mode | Description |
 | :--- | :--- | :--- | :--- |
-| **Loom** | main orchestrator | primary | The central team lead that plans tasks, coordinates work, and delegates to specialized agents. |
-| **Tapestry** | execution orchestrator | primary | Manages todo-list driven execution of multi-step plans, focusing on sequential implementation without subagent spawning. |
-| **Shuttle** | category worker | all | Domain-specific specialist worker with full tool access, dispatched dynamically via the category system. |
-| **Pattern** | strategic planner | subagent | Analyzes requirements and produces detailed implementation plans with research and dependency mapping. |
-| **Thread** | codebase explorer | subagent | Fast, read-only codebase navigation and analysis using grep, glob, and read tools. |
-| **Spindle** | external researcher | subagent | Performs external documentation lookups and reference searches, providing synthesized answers with source citations. |
-| **Weft** | reviewer/auditor | subagent | Reviews completed work and plans with a critical but fair eye, rejecting only for true blocking issues. |
-| **Warp** | security auditor | subagent | Audits code changes for security vulnerabilities and specification compliance with a skeptical bias. |
+| **Bard (Guildmaster)** | main orchestrator | primary | The central team lead that plans tasks, coordinates work, and delegates to specialized agents. |
+| **Fighter (Execution Lead)** | execution orchestrator | primary | Manages todo-list driven execution of multi-step plans, focusing on sequential implementation without subagent spawning. |
+| **Ranger (Specialist)** | category worker | all | Domain-specific specialist worker with full tool access, dispatched dynamically via the category system. |
+| **Wizard (Planner)** | strategic planner | subagent | Analyzes requirements and produces detailed implementation plans with research and dependency mapping. |
+| **Rogue (Scout)** | codebase explorer | subagent | Fast, read-only codebase navigation and analysis using grep, glob, and read tools. |
+| **Warlock (Researcher)** | external researcher | subagent | Performs external documentation lookups and reference searches, providing synthesized answers with source citations. |
+| **Cleric (Reviewer)** | reviewer/auditor | subagent | Reviews completed work and plans with a critical but fair eye, rejecting only for true blocking issues. |
+| **Paladin (Security)** | security auditor | subagent | Audits code changes for security vulnerabilities and specification compliance with a skeptical bias. |
 
 ## Installation
 
-This package is published on [npm](https://www.npmjs.com/package/@opencode_weave/weave).
+This package is published on [npm](https://www.npmjs.com/package/@runecraft/guild).
 
 ### Prerequisites
 
@@ -115,7 +115,7 @@ rm -f ~/.config/opencode/guild-opencode.jsonc ~/.config/opencode/guild-opencode.
 
 ## Acknowledgments
 
-Guild's technical foundation is based on [opencode-weave](https://github.com/pgermishuys/opencode-weave) by [@pgermishuys](https://github.com/pgermishuys). The agent architecture, skill system, and workflow engine were adapted from Weave's implementation.
+Guild's technical foundation is based on [opencode-guild](https://github.com/pgermishuys/opencode-guild) by [@pgermishuys](https://github.com/pgermishuys). The agent architecture, skill system, and workflow engine were adapted from Guild's implementation.
 
 ## License
 

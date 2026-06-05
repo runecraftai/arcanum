@@ -24,7 +24,7 @@ export interface ToolUsageEntry {
 
 /** A delegation to a sub-agent recorded during a session */
 export interface DelegationEntry {
-  /** Sub-agent type (e.g., "thread", "pattern", "weft") */
+  /** Sub-agent type (e.g., "rogue", "ranger", "cleric") */
   agent: string
   /** Tool call ID that started this delegation */
   toolCallId: string
@@ -66,7 +66,7 @@ export interface SessionSummary {
   totalToolCalls: number
   /** Total number of delegations */
   totalDelegations: number
-  /** Display name of the agent that ran this session (e.g., "Loom (Main Orchestrator)") */
+  /** Display name of the agent that ran this session (e.g., "Bard (Main Orchestrator)") */
   agentName?: string
   /** Model ID used in this session (e.g., "claude-sonnet-4-20250514") */
   model?: string
@@ -104,8 +104,8 @@ export interface ProjectFingerprint {
   os?: string
   /** CPU architecture (e.g., "arm64", "x64") */
   arch?: string
-  /** Weave version that generated this fingerprint (e.g., "0.6.3") */
-  weaveVersion?: string
+  /** Guild version that generated this fingerprint (e.g., "0.6.3") */
+  guildVersion?: string
 }
 
 

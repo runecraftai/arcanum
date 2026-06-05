@@ -59,7 +59,7 @@ describe("generateHealthReport", () => {
     }
     const agents = {
       "Loom (Main Orchestrator)": {},
-      "shuttle": {},
+      "ranger": {},
       "my-reviewer": {},
     }
     const report = generateHealthReport(loadResult, agents)
@@ -75,24 +75,24 @@ describe("generateHealthReport", () => {
       diagnostics: [],
     }
     const agents = {
-      loom: {},
-      tapestry: {},
-      shuttle: {},
-      pattern: {},
-      thread: {},
-      spindle: {},
-      warp: {},
-      weft: {},
+      bard: {},
+      fighter: {},
+      ranger: {},
+      wizard: {},
+      rogue: {},
+      warlock: {},
+      paladin: {},
+      cleric: {},
     }
 
     const report = generateHealthReport(loadResult, agents)
-    expect(report).toContain("Builtin: 8/8 (loom, tapestry, shuttle, pattern, thread, spindle, warp, weft)")
+    expect(report).toContain("Builtin: 8/8 (bard, fighter, ranger, wizard, rogue, warlock, paladin, cleric)")
     expect(report).toContain("Custom: 0")
   })
 
   it("classifies builtins correctly when display names are overridden", () => {
-    updateBuiltinDisplayName("loom", "My Loom")
-    updateBuiltinDisplayName("thread", "Codebase explorer (thread)")
+    updateBuiltinDisplayName("bard", "My Loom")
+    updateBuiltinDisplayName("rogue", "Codebase explorer (rogue)")
 
     const loadResult: ConfigLoadResult = {
       config: {},
@@ -100,9 +100,9 @@ describe("generateHealthReport", () => {
       diagnostics: [],
     }
     const agents = {
-      loom: {},
-      thread: {},
-      [getAgentDisplayName("tapestry")]: {},
+      bard: {},
+      rogue: {},
+      [getAgentDisplayName("fighter")]: {},
     }
 
     const report = generateHealthReport(loadResult, agents)
@@ -112,14 +112,14 @@ describe("generateHealthReport", () => {
 
   it("shows disabled agents", () => {
     const loadResult: ConfigLoadResult = {
-      config: { disabled_agents: ["warp", "weft"] },
+      config: { disabled_agents: ["paladin", "cleric"] },
       loadedFiles: [],
       diagnostics: [],
     }
     const report = generateHealthReport(loadResult, {})
     expect(report).toContain("Disabled Agents")
-    expect(report).toContain("warp")
-    expect(report).toContain("weft")
+    expect(report).toContain("paladin")
+    expect(report).toContain("cleric")
   })
 
   it("reports split continuation defaults and manual resume guidance", () => {

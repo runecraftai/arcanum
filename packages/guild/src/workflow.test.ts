@@ -1,8 +1,8 @@
 /**
- * End-to-end workflow tests for the full Weave orchestration lifecycle.
+ * End-to-end workflow tests for the full Guild orchestration lifecycle.
  *
  * Exercises the complete pipeline:
- *   Pattern (plan) → /start-work → Tapestry (execute) → Idle/Resume → Weft (review)
+ *   Wizard (plan) → /start-work → Tapestry (execute) → Idle/Resume → Weft (review)
  *
  * Uses real hook functions and real file I/O in isolated temp directories.
  * No mocking of internals.
@@ -15,7 +15,7 @@ import { tmpdir } from "os"
 
 import { handleStartWork } from "./hooks/start-work-hook"
 import { checkContinuation } from "./hooks/work-continuation"
-import { checkPatternWrite } from "./hooks/pattern-md-only"
+import { checkRangerWrite } from "./hooks/ranger-md-only"
 import { buildVerificationReminder } from "./hooks/verification-reminder"
 import { createHooks } from "./hooks/create-hooks"
 import { DEFAULT_CONTINUATION_CONFIG } from "./config/continuation"
@@ -29,10 +29,10 @@ import {
 } from "./features/work-state/storage"
 import { PLANS_DIR } from "./features/work-state/constants"
 
-import { createWeftAgent } from "./agents/weft"
-import { createWarpAgent } from "./agents/warp"
-import { createLoomAgent } from "./agents/loom"
-import { createTapestryAgent } from "./agents/tapestry"
+import { createClericAgent } from "./agents/cleric"
+import { createPaladinAgent } from "./agents/paladin"
+import { createBardAgent } from "./agents/bard"
+import { createFighterAgent } from "./agents/fighter"
 import { createToolPermissions } from "./tools/permissions"
 
 // ---------------------------------------------------------------------------
@@ -42,7 +42,7 @@ import { createToolPermissions } from "./tools/permissions"
 let testDir: string
 
 beforeEach(() => {
-  testDir = mkdtempSync(join(tmpdir(), "weave-e2e-"))
+  testDir = mkdtempSync(join(tmpdir(), "guild-e2e-"))
 })
 
 afterEach(() => {
@@ -101,7 +101,7 @@ function markTaskComplete(planPath: string, taskIndex: number): void {
 // ---------------------------------------------------------------------------
 
 describe("Phase 1: Plan to Execution", () => {
-  it("full flow: create plan → /start-work → switches to tapestry and creates state", () => {
+  it("full flow: create plan → /start-work → switches to fighter and creates state", () => {
     createPlanFile(
       "auth-feature",
       makeValidPlanContent("- [ ] Task 1\n- [ ] Task 2\n- [ ] Task 3"),
@@ -113,7 +113,7 @@ describe("Phase 1: Plan to Execution", () => {
       directory: testDir,
     })
 
-    expect(result.switchAgent).toBe("tapestry")
+    expect(result.switchAgent).toBe("fighter")
     expect(result.contextInjection).toContain("Starting Plan: auth-feature")
     expect(result.contextInjection).toContain("0/4 tasks completed")
 
@@ -121,7 +121,7 @@ describe("Phase 1: Plan to Execution", () => {
     expect(state).not.toBeNull()
     expect(state!.plan_name).toBe("auth-feature")
     expect(state!.session_ids).toEqual(["sess_1"])
-    expect(state!.agent).toBe("tapestry")
+    expect(state!.agent).toBe("fighter")
     expect(state!.active_plan).toContain("auth-feature.md")
   })
 
@@ -142,7 +142,7 @@ describe("Phase 1: Plan to Execution", () => {
     expect(state!.active_plan).not.toContain("alpha")
   })
 
-  it("no plans → instructs to use Pattern agent", () => {
+  it("no plans → instructs to use Wizard agent", () => {
     const result = handleStartWork({
       promptText: makeStartWorkPrompt(),
       sessionId: "sess_1",
@@ -150,8 +150,8 @@ describe("Phase 1: Plan to Execution", () => {
     })
 
     expect(result.contextInjection).toContain("No Plans Found")
-    expect(result.contextInjection).toContain("Pattern")
-    expect(result.switchAgent).toBe("tapestry")
+    expect(result.contextInjection).toContain("Wizard")
+    expect(result.switchAgent).toBe("fighter")
     expect(readWorkState(testDir)).toBeNull()
   })
 })
@@ -185,7 +185,7 @@ describe("Phase 2: Work Progress Tracking", () => {
     expect(getPlanProgress(planPath)).toMatchObject({ total: 4, completed: 4, isComplete: true })
   })
 
-  it("verification reminder includes progress context and references weft", () => {
+  it("verification reminder includes progress context and references cleric", () => {
     const result = buildVerificationReminder({
       planName: "my-plan",
       progress: { total: 5, completed: 2 },
@@ -194,7 +194,7 @@ describe("Phase 2: Work Progress Tracking", () => {
     expect(result.verificationPrompt).not.toBeNull()
     expect(result.verificationPrompt).toContain("my-plan")
     expect(result.verificationPrompt).toContain("2/5")
-    expect(result.verificationPrompt!.toLowerCase()).toContain("weft")
+    expect(result.verificationPrompt!.toLowerCase()).toContain("cleric")
   })
 })
 
@@ -272,7 +272,7 @@ describe("Phase 4: Session Resume", () => {
 
   it("resume detects completed plan and discovers new incomplete plan", () => {
     const donePlan = createPlanFile("old-plan", "# Old\n- [x] Task 1\n- [x] Task 2\n")
-    writeWorkState(testDir, createWorkState(donePlan, "sess_old", "tapestry"))
+    writeWorkState(testDir, createWorkState(donePlan, "sess_old", "fighter"))
 
     // Ensure new plan has a different mtime
     createPlanFile("new-plan", makeValidPlanContent("- [ ] Task 1\n- [ ] Task 2\n- [ ] Task 3"))
@@ -333,7 +333,7 @@ describe("Phase 5: Plan Completion", () => {
 
   it("completed active plan with new incomplete plan → auto-selects new plan", () => {
     const donePlan = createPlanFile("done", "# Done\n- [x] Task 1\n")
-    writeWorkState(testDir, createWorkState(donePlan, "sess_old", "tapestry"))
+    writeWorkState(testDir, createWorkState(donePlan, "sess_old", "fighter"))
 
     createPlanFile("todo", makeValidPlanContent("- [ ] Task 1"))
 
@@ -351,32 +351,32 @@ describe("Phase 5: Plan Completion", () => {
 })
 
 // ---------------------------------------------------------------------------
-// Guard: Pattern MD-Only Write Restriction
+// Guard: Ranger MD-Only Write Restriction
 // ---------------------------------------------------------------------------
 
-describe("Guard: Pattern MD-Only Write Restriction", () => {
-  it("pattern agent blocked from writing .ts source files", () => {
-    const result = checkPatternWrite("pattern", "write", join(testDir, "src", "component.ts"))
+describe("Guard: Ranger MD-Only Write Restriction", () => {
+  it("ranger agent blocked from writing .ts source files", () => {
+    const result = checkRangerWrite("ranger", "write", join(testDir, "src", "component.ts"))
     expect(result.allowed).toBe(false)
     expect(result.reason).toContain(".guild/")
   })
 
-  it("pattern agent allowed to write .md inside .guild/plans/", () => {
-    const result = checkPatternWrite(
-      "pattern",
+  it("ranger agent allowed to write .md inside .guild/plans/", () => {
+    const result = checkRangerWrite(
+      "ranger",
       "write",
       join(testDir, ".guild", "plans", "my-plan.md"),
     )
     expect(result.allowed).toBe(true)
   })
 
-  it("tapestry agent not restricted by pattern guard", () => {
-    const result = checkPatternWrite("tapestry", "write", join(testDir, "src", "component.ts"))
+  it("fighter agent not restricted by ranger guard", () => {
+    const result = checkRangerWrite("fighter", "write", join(testDir, "src", "component.ts"))
     expect(result.allowed).toBe(true)
   })
 
-  it("pattern blocked from writing .json inside .guild/", () => {
-    const result = checkPatternWrite("pattern", "write", join(testDir, ".guild", "state.json"))
+  it("ranger blocked from writing .json inside .guild/", () => {
+    const result = checkRangerWrite("ranger", "write", join(testDir, ".guild", "state.json"))
     expect(result.allowed).toBe(false)
     expect(result.reason).toContain(".md")
   })
@@ -386,19 +386,19 @@ describe("Guard: Pattern MD-Only Write Restriction", () => {
 // Phase 6: Weft Review Gate
 // ---------------------------------------------------------------------------
 
-describe("Phase 6: Weft Review Gate", () => {
-  it("Weft agent config enforces read-only access", () => {
-    const config = createWeftAgent("test-model")
+describe("Phase 6: Cleric Review Gate", () => {
+  it("Cleric agent config enforces read-only access", () => {
+    const config = createClericAgent("test-model")
 
     expect(config.tools?.write).toBe(false)
     expect(config.tools?.edit).toBe(false)
     expect(config.tools?.task).toBe(false)
-    expect(config.tools?.call_weave_agent).toBe(false)
+    expect(config.tools?.call_guild_agent).toBe(false)
     expect(config.temperature).toBe(0.1)
   })
 
-  it("Weft agent prompt contains review guidelines", () => {
-    const config = createWeftAgent("test-model")
+  it("Cleric agent prompt contains review guidelines", () => {
+    const config = createClericAgent("test-model")
     const prompt = config.prompt as string
 
     expect(prompt).toContain("blocking issues")
@@ -410,42 +410,42 @@ describe("Phase 6: Weft Review Gate", () => {
     expect(prompt).toContain("APPROVE by default")
   })
 
-  it("tool permission system blocks Weft from writing", () => {
+  it("tool permission system blocks Cleric from writing", () => {
     const permissions = createToolPermissions({
-      weft: { write: false, edit: false, task: false, call_weave_agent: false },
+      cleric: { write: false, edit: false, task: false, call_guild_agent: false },
     })
 
-    expect(permissions.isToolAllowed("weft", "write")).toBe(false)
-    expect(permissions.isToolAllowed("weft", "edit")).toBe(false)
-    expect(permissions.isToolAllowed("weft", "task")).toBe(false)
-    expect(permissions.isToolAllowed("weft", "call_weave_agent")).toBe(false)
+    expect(permissions.isToolAllowed("cleric", "write")).toBe(false)
+    expect(permissions.isToolAllowed("cleric", "edit")).toBe(false)
+    expect(permissions.isToolAllowed("cleric", "task")).toBe(false)
+    expect(permissions.isToolAllowed("cleric", "call_guild_agent")).toBe(false)
     // Read tools are not restricted → allowed
-    expect(permissions.isToolAllowed("weft", "read")).toBe(true)
-    expect(permissions.isToolAllowed("weft", "glob")).toBe(true)
+    expect(permissions.isToolAllowed("cleric", "read")).toBe(true)
+    expect(permissions.isToolAllowed("cleric", "glob")).toBe(true)
     // Other agents unaffected
-    expect(permissions.isToolAllowed("tapestry", "write")).toBe(true)
+    expect(permissions.isToolAllowed("fighter", "write")).toBe(true)
   })
 
-  it("verification reminder generates correct Weft review prompt after plan completion", () => {
+  it("verification reminder generates correct Cleric review prompt after plan completion", () => {
     const result = buildVerificationReminder({
       planName: "my-feature",
       progress: { total: 3, completed: 3 },
     })
 
     expect(result.verificationPrompt).not.toBeNull()
-    expect(result.verificationPrompt!.toLowerCase()).toContain("weft")
+    expect(result.verificationPrompt!.toLowerCase()).toContain("cleric")
     expect(result.verificationPrompt).toContain("git diff")
     expect(result.verificationPrompt).toContain("my-feature")
     expect(result.verificationPrompt).toContain("3/3")
   })
 
-  it("verification reminder mid-progress still references Weft as review option", () => {
+  it("verification reminder mid-progress still references Cleric as review option", () => {
     const result = buildVerificationReminder({
       planName: "partial",
       progress: { total: 5, completed: 2 },
     })
 
-    expect(result.verificationPrompt!.toLowerCase()).toContain("weft")
+    expect(result.verificationPrompt!.toLowerCase()).toContain("cleric")
     expect(result.verificationPrompt).toContain("2/5")
   })
 })
@@ -454,19 +454,19 @@ describe("Phase 6: Weft Review Gate", () => {
 // Phase 7: Warp Security Gate
 // ---------------------------------------------------------------------------
 
-describe("Phase 7: Warp Security Gate", () => {
-  it("Warp agent config enforces read-only access", () => {
-    const config = createWarpAgent("test-model")
+describe("Phase 7: Paladin Security Gate", () => {
+  it("Paladin agent config enforces read-only access", () => {
+    const config = createPaladinAgent("test-model")
 
     expect(config.tools?.write).toBe(false)
     expect(config.tools?.edit).toBe(false)
     expect(config.tools?.task).toBe(false)
-    expect(config.tools?.call_weave_agent).toBe(false)
+    expect(config.tools?.call_guild_agent).toBe(false)
     expect(config.temperature).toBe(0.1)
   })
 
-  it("Warp agent prompt contains security audit guidelines", () => {
-    const config = createWarpAgent("test-model")
+  it("Paladin agent prompt contains security audit guidelines", () => {
+    const config = createPaladinAgent("test-model")
     const prompt = config.prompt as string
 
     expect(prompt).toContain("blocking issues")
@@ -478,8 +478,8 @@ describe("Phase 7: Warp Security Gate", () => {
     expect(prompt).toContain("REJECT by default")
   })
 
-  it("Warp agent prompt contains spec reference table", () => {
-    const config = createWarpAgent("test-model")
+  it("Paladin agent prompt contains spec reference table", () => {
+    const config = createPaladinAgent("test-model")
     const prompt = config.prompt as string
 
     expect(prompt).toContain("RFC 6749")
@@ -489,32 +489,32 @@ describe("Phase 7: Warp Security Gate", () => {
     expect(prompt).toContain("WebAuthn")
   })
 
-  it("tool permission system blocks Warp from writing", () => {
+  it("tool permission system blocks Paladin from writing", () => {
     const permissions = createToolPermissions({
-      warp: { write: false, edit: false, task: false, call_weave_agent: false },
+      paladin: { write: false, edit: false, task: false, call_guild_agent: false },
     })
 
-    expect(permissions.isToolAllowed("warp", "write")).toBe(false)
-    expect(permissions.isToolAllowed("warp", "edit")).toBe(false)
-    expect(permissions.isToolAllowed("warp", "task")).toBe(false)
-    expect(permissions.isToolAllowed("warp", "call_weave_agent")).toBe(false)
+    expect(permissions.isToolAllowed("paladin", "write")).toBe(false)
+    expect(permissions.isToolAllowed("paladin", "edit")).toBe(false)
+    expect(permissions.isToolAllowed("paladin", "task")).toBe(false)
+    expect(permissions.isToolAllowed("paladin", "call_guild_agent")).toBe(false)
     // Read tools are not restricted
-    expect(permissions.isToolAllowed("warp", "read")).toBe(true)
-    expect(permissions.isToolAllowed("warp", "glob")).toBe(true)
+    expect(permissions.isToolAllowed("paladin", "read")).toBe(true)
+    expect(permissions.isToolAllowed("paladin", "glob")).toBe(true)
   })
 
-  it("verification reminder references both weft and warp", () => {
+  it("verification reminder references both cleric and paladin", () => {
     const result = buildVerificationReminder({
       planName: "auth-feature",
       progress: { total: 3, completed: 3 },
     })
 
     expect(result.verificationPrompt).not.toBeNull()
-    expect(result.verificationPrompt!.toLowerCase()).toContain("weft")
-    expect(result.verificationPrompt!.toLowerCase()).toContain("warp")
+    expect(result.verificationPrompt!.toLowerCase()).toContain("cleric")
+    expect(result.verificationPrompt!.toLowerCase()).toContain("paladin")
   })
 
-  it("verification reminder uses mandatory language for warp invocation", () => {
+  it("verification reminder uses mandatory language for paladin invocation", () => {
     const result = buildVerificationReminder({
       planName: "security-feature",
       progress: { total: 3, completed: 3 },
@@ -542,7 +542,7 @@ describe("Integration: createHooks wired workflow", () => {
 
     // Start work
     const startResult = hooks.startWork!(makeStartWorkPrompt(), "sess_1")
-    expect(startResult.switchAgent).toBe("tapestry")
+    expect(startResult.switchAgent).toBe("fighter")
     expect(startResult.contextInjection).toContain("Starting Plan")
 
     // Mark task 0 complete, check continuation
@@ -573,7 +573,7 @@ describe("Integration: createHooks wired workflow", () => {
 
     expect(hooks.verificationReminderEnabled).toBe(true)
     expect(result.verificationPrompt).not.toBeNull()
-    expect(result.verificationPrompt!.toLowerCase()).toContain("weft")
+    expect(result.verificationPrompt!.toLowerCase()).toContain("cleric")
     expect(result.verificationPrompt).toContain("test-plan")
   })
 
@@ -585,12 +585,12 @@ describe("Integration: createHooks wired workflow", () => {
       directory: testDir,
     })
 
-    const blocked = checkPatternWrite("pattern", "write", join(testDir, "src", "foo.ts"))
+    const blocked = checkRangerWrite("ranger", "write", join(testDir, "src", "foo.ts"))
     expect(blocked.allowed).toBe(false)
 
-    const allowed = checkPatternWrite("pattern", "write", join(testDir, ".guild", "plans", "plan.md"))
+    const allowed = checkRangerWrite("ranger", "write", join(testDir, ".guild", "plans", "plan.md"))
     expect(allowed.allowed).toBe(true)
-    expect(hooks.patternMdOnlyEnabled).toBe(true)
+    expect(hooks.rangerMdOnlyEnabled).toBe(true)
   })
 
   it("disabled hooks return null via createHooks", () => {
@@ -606,17 +606,17 @@ describe("Integration: createHooks wired workflow", () => {
     expect(hooks.workContinuation).toBeNull()
     expect(hooks.verificationReminderEnabled).toBe(false)
     // Others should still be active
-    expect(hooks.patternMdOnlyEnabled).toBe(true)
+    expect(hooks.rangerMdOnlyEnabled).toBe(true)
   })
 })
 
 // ---------------------------------------------------------------------------
-// Full Lifecycle: Pattern → /start-work → Execute → Idle → Resume → Complete → Weft Review
+// Full Lifecycle: Wizard → /start-work → Execute → Idle → Resume → Complete → Weft Review
 // ---------------------------------------------------------------------------
 
-describe("Full Lifecycle: Pattern → /start-work → Execute → Idle → Resume → Complete → Weft Review", () => {
+describe("Full Lifecycle: Wizard → /start-work → Execute → Idle → Resume → Complete → Weft Review", () => {
   it("complete workflow lifecycle from plan creation through Weft review", () => {
-    // 1. Pattern creates a plan
+    // 1. Wizard creates a plan
     const planPath = createPlanFile(
       "e2e-feature",
       makeValidPlanContent(
@@ -624,12 +624,12 @@ describe("Full Lifecycle: Pattern → /start-work → Execute → Idle → Resum
       ),
     )
 
-    // 2. Pattern guard: allowed to write .md in .guild/
-    const guardAllowed = checkPatternWrite("pattern", "write", planPath)
+    // 2. Wizard guard: allowed to write .md in .guild/
+    const guardAllowed = checkRangerWrite("ranger", "write", planPath)
     expect(guardAllowed.allowed).toBe(true)
 
-    // 3. Pattern guard: blocked from writing source code
-    const guardBlocked = checkPatternWrite("pattern", "write", join(testDir, "src", "app.ts"))
+    // 3. Wizard guard: blocked from writing source code
+    const guardBlocked = checkRangerWrite("ranger", "write", join(testDir, "src", "app.ts"))
     expect(guardBlocked.allowed).toBe(false)
 
     // 4. Session 1 starts work
@@ -638,7 +638,7 @@ describe("Full Lifecycle: Pattern → /start-work → Execute → Idle → Resum
       sessionId: "sess_1",
       directory: testDir,
     })
-    expect(startResult.switchAgent).toBe("tapestry")
+    expect(startResult.switchAgent).toBe("fighter")
     expect(startResult.contextInjection).toContain("Starting Plan: e2e-feature")
     expect(startResult.contextInjection).toContain("0/4 tasks completed")
 
@@ -654,7 +654,7 @@ describe("Full Lifecycle: Pattern → /start-work → Execute → Idle → Resum
       planName: "e2e-feature",
       progress: { total: 4, completed: 1 },
     })
-    expect(reminder1.verificationPrompt!.toLowerCase()).toContain("weft")
+    expect(reminder1.verificationPrompt!.toLowerCase()).toContain("cleric")
 
     // 8. Session goes idle → continuation prompt
     const cont1 = checkContinuation({ sessionId: "sess_1", directory: testDir })
@@ -696,21 +696,21 @@ describe("Full Lifecycle: Pattern → /start-work → Execute → Idle → Resum
       planName: "e2e-feature",
       progress: { total: 4, completed: 4 },
     })
-    expect(reminder2.verificationPrompt!.toLowerCase()).toContain("weft")
+    expect(reminder2.verificationPrompt!.toLowerCase()).toContain("cleric")
     expect(reminder2.verificationPrompt).toContain("git diff")
     expect(reminder2.verificationPrompt).toContain("e2e-feature")
     expect(reminder2.verificationPrompt).toContain("4/4")
 
-    // 16. Weft agent is read-only
-    const weftConfig = createWeftAgent("test-model")
-    expect(weftConfig.tools?.write).toBe(false)
-    expect(weftConfig.tools?.edit).toBe(false)
+    // 16. Cleric agent is read-only
+    const clericConfig = createClericAgent("test-model")
+    expect(clericConfig.tools?.write).toBe(false)
+    expect(clericConfig.tools?.edit).toBe(false)
 
-    // 17. Weft prompt enforces review protocol
-    const weftPrompt = weftConfig.prompt as string
-    expect(weftPrompt).toContain("[APPROVE]")
-    expect(weftPrompt).toContain("[REJECT]")
-    expect(weftPrompt).toContain("blocking issues")
+    // 17. Cleric prompt enforces review protocol
+    const clericPrompt = clericConfig.prompt as string
+    expect(clericPrompt).toContain("[APPROVE]")
+    expect(clericPrompt).toContain("[REJECT]")
+    expect(clericPrompt).toContain("blocking issues")
 
     // 18. Subsequent /start-work with no new plans → all complete
     const finalResult = handleStartWork({
@@ -720,26 +720,26 @@ describe("Full Lifecycle: Pattern → /start-work → Execute → Idle → Resum
     })
     expect(finalResult.contextInjection).toContain("All Plans Complete")
 
-    // 19. Loom's PlanWorkflow notes Tapestry handles execution
-    const loomConfig = createLoomAgent("claude-opus-4")
-    const loomPrompt = loomConfig.prompt as string
-    const planWorkflow = loomPrompt.slice(
-      loomPrompt.indexOf("<PlanWorkflow>"),
-      loomPrompt.indexOf("</PlanWorkflow>"),
+    // 19. Bard's PlanWorkflow notes Fighter handles execution
+    const bardConfig = createBardAgent("claude-opus-4")
+    const bardPrompt = bardConfig.prompt as string
+    const planWorkflow = bardPrompt.slice(
+      bardPrompt.indexOf("<PlanWorkflow>"),
+      bardPrompt.indexOf("</PlanWorkflow>"),
     )
-    expect(planWorkflow).toContain("Tapestry handles execution")
+    expect(planWorkflow).toContain("Fighter handles execution")
 
-    // 20. Tapestry invokes Weft and Warp directly via PostExecutionReview
-    const tapestryConfig = createTapestryAgent("claude-sonnet-4")
-    const tapestryPrompt = tapestryConfig.prompt as string
-    expect(tapestryPrompt).toContain("<PostExecutionReview>")
-    expect(tapestryPrompt).toContain("Weft")
-    expect(tapestryPrompt).toContain("Warp")
+    // 20. Fighter invokes Cleric and Paladin directly via PostExecutionReview
+    const fighterConfig = createFighterAgent("claude-sonnet-4")
+    const fighterPrompt = fighterConfig.prompt as string
+    expect(fighterPrompt).toContain("<PostExecutionReview>")
+    expect(fighterPrompt).toContain("Cleric")
+    expect(fighterPrompt).toContain("Paladin")
 
-    // 21. Warp self-triages — always safe to invoke
-    const warpConfig = createWarpAgent("test-model")
-    const warpPrompt = warpConfig.prompt as string
-    expect(warpPrompt).toContain("<Triage>")
-    expect(warpPrompt).toContain("FAST EXIT")
+    // 21. Paladin self-triages — always safe to invoke
+    const paladinConfig = createPaladinAgent("test-model")
+    const paladinPrompt = paladinConfig.prompt as string
+    expect(paladinPrompt).toContain("<Triage>")
+    expect(paladinPrompt).toContain("FAST EXIT")
   })
 })

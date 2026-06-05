@@ -112,12 +112,12 @@ describe("buildAgent", () => {
   it("disabledAgents strips lines referencing disabled agents from prompt", () => {
     const factory: AgentFactory = (model: string) => ({
       model,
-      prompt: "Line 1\n- Use thread (codebase explorer) for broad searches\n- Use spindle (external researcher) for library/API docs\nLine 4",
+      prompt: "Line 1\n- Use rogue (codebase explorer) for broad searches\n- Use warlock (external researcher) for library/API docs\nLine 4",
     })
     factory.mode = "subagent"
-    const result = buildAgent(factory, "model", { disabledAgents: new Set(["thread"]) })
-    expect(result.prompt).not.toContain("thread")
-    expect(result.prompt).toContain("spindle")
+    const result = buildAgent(factory, "model", { disabledAgents: new Set(["rogue"]) })
+    expect(result.prompt).not.toContain("rogue")
+    expect(result.prompt).toContain("warlock")
     expect(result.prompt).toContain("Line 1")
     expect(result.prompt).toContain("Line 4")
   })
@@ -125,70 +125,70 @@ describe("buildAgent", () => {
   it("disabledAgents with empty set does not modify prompt", () => {
     const factory: AgentFactory = (model: string) => ({
       model,
-      prompt: "- Use thread for searches",
+      prompt: "- Use rogue for searches",
     })
     factory.mode = "subagent"
     const result = buildAgent(factory, "model", { disabledAgents: new Set() })
-    expect(result.prompt).toBe("- Use thread for searches")
+    expect(result.prompt).toBe("- Use rogue for searches")
   })
 
   it("disabledAgents does not modify prompt when agent has no prompt", () => {
     const factory: AgentFactory = (model: string) => ({ model })
     factory.mode = "subagent"
-    const result = buildAgent(factory, "model", { disabledAgents: new Set(["thread"]) })
+    const result = buildAgent(factory, "model", { disabledAgents: new Set(["rogue"]) })
     expect(result.prompt).toBeUndefined()
   })
 })
 
 describe("stripDisabledAgentReferences", () => {
   it("returns prompt unchanged when disabled set is empty", () => {
-    const prompt = "Use thread for searches\nUse spindle for docs"
+    const prompt = "Use rogue for searches\nUse warlock for docs"
     expect(stripDisabledAgentReferences(prompt, new Set())).toBe(prompt)
   })
 
   it("removes lines mentioning a disabled agent", () => {
-    const prompt = "Line 1\n- Use thread (codebase explorer) for broad searches\nLine 3"
-    const result = stripDisabledAgentReferences(prompt, new Set(["thread"]))
-    expect(result).not.toContain("thread")
+    const prompt = "Line 1\n- Use rogue (codebase explorer) for broad searches\nLine 3"
+    const result = stripDisabledAgentReferences(prompt, new Set(["rogue"]))
+    expect(result).not.toContain("rogue")
     expect(result).toContain("Line 1")
     expect(result).toContain("Line 3")
   })
 
   it("removes lines with capitalized agent name", () => {
-    const prompt = "**Plan Review** (reviewing Pattern's .specs/* output):\nOther content"
-    const result = stripDisabledAgentReferences(prompt, new Set(["pattern"]))
-    expect(result).not.toContain("Pattern")
+    const prompt = "**Plan Review** (reviewing Wizard's .specs/* output):\nOther content"
+    const result = stripDisabledAgentReferences(prompt, new Set(["wizard"]))
+    expect(result).not.toContain("Wizard")
     expect(result).toContain("Other content")
   })
 
   it("handles multiple disabled agents", () => {
-    const prompt = "Use thread for searches\nUse spindle for docs\nUse weft for review\nKeep this"
-    const result = stripDisabledAgentReferences(prompt, new Set(["thread", "spindle"]))
-    expect(result).not.toContain("thread")
-    expect(result).not.toContain("spindle")
-    expect(result).toContain("weft")
+    const prompt = "Use rogue for searches\nUse warlock for docs\nUse cleric for review\nKeep this"
+    const result = stripDisabledAgentReferences(prompt, new Set(["rogue", "warlock"]))
+    expect(result).not.toContain("rogue")
+    expect(result).not.toContain("warlock")
+    expect(result).toContain("cleric")
     expect(result).toContain("Keep this")
   })
 
   it("uses word boundaries to avoid false positives", () => {
-    const prompt = "threading is a pattern for concurrency\nUse thread for searches"
-    const result = stripDisabledAgentReferences(prompt, new Set(["thread"]))
-    // "threading" contains "thread" but the negative lookahead (?!\w) prevents
-    // matching because "thread" is immediately followed by "i" (a word character).
-    // Only standalone "thread" (not part of a larger word) is matched and stripped.
-    expect(result).toContain("threading is a pattern for concurrency")
-    expect(result).not.toContain("Use thread for searches")
+    const prompt = "threading is a wizard for concurrency\nUse rogue for searches"
+    const result = stripDisabledAgentReferences(prompt, new Set(["rogue"]))
+    // "threading" contains "rogue" but the negative lookahead (?!\w) prevents
+    // matching because "rogue" is immediately followed by "i" (a word character).
+    // Only standalone "rogue" (not part of a larger word) is matched and stripped.
+    expect(result).toContain("threading is a wizard for concurrency")
+    expect(result).not.toContain("Use rogue for searches")
   })
 
   it("returns prompt unchanged for unknown agent names", () => {
-    const prompt = "Use thread for searches"
+    const prompt = "Use rogue for searches"
     const result = stripDisabledAgentReferences(prompt, new Set(["unknown-agent"]))
     expect(result).toBe(prompt)
   })
 
   it("preserves empty lines", () => {
     const prompt = "Line 1\n\nLine 3"
-    const result = stripDisabledAgentReferences(prompt, new Set(["thread"]))
+    const result = stripDisabledAgentReferences(prompt, new Set(["rogue"]))
     expect(result).toBe("Line 1\n\nLine 3")
   })
 })
@@ -213,29 +213,29 @@ describe("registerAgentNameVariants", () => {
   })
 
   it("does not override builtin agent variants", () => {
-    registerAgentNameVariants("thread", ["custom-thread"])
+    registerAgentNameVariants("rogue", ["custom-rogue"])
     // The builtin "Thread" variant should still work
     const prompt = "Use Thread for exploration"
-    const result = stripDisabledAgentReferences(prompt, new Set(["thread"]))
+    const result = stripDisabledAgentReferences(prompt, new Set(["rogue"]))
     expect(result).not.toContain("Thread")
   })
 })
 
 describe("addBuiltinNameVariant", () => {
   it("adds a new variant to an existing builtin", () => {
-    addBuiltinNameVariant("thread", "糸")
+    addBuiltinNameVariant("rogue", "糸")
     const prompt = "Use 糸 for codebase exploration\nKeep this"
-    const result = stripDisabledAgentReferences(prompt, new Set(["thread"]))
+    const result = stripDisabledAgentReferences(prompt, new Set(["rogue"]))
     expect(result).not.toContain("糸")
     expect(result).toContain("Keep this")
   })
 
   it("does not add duplicate variants", () => {
-    addBuiltinNameVariant("spindle", "MySpindle")
-    addBuiltinNameVariant("spindle", "MySpindle")
+    addBuiltinNameVariant("warlock", "MySpindle")
+    addBuiltinNameVariant("warlock", "MySpindle")
     // A duplicate would cause a doubled regex alternation — just verify stripping still works
     const prompt = "Use MySpindle for research\nKeep this"
-    const result = stripDisabledAgentReferences(prompt, new Set(["spindle"]))
+    const result = stripDisabledAgentReferences(prompt, new Set(["warlock"]))
     expect(result).not.toContain("MySpindle")
     expect(result).toContain("Keep this")
   })
@@ -250,11 +250,11 @@ describe("addBuiltinNameVariant", () => {
   })
 
   it("custom display name is stripped when builtin agent is disabled", () => {
-    addBuiltinNameVariant("pattern", "設計")
-    const prompt = "- Use 設計 for planning\n- Use thread for exploration\nKeep this"
-    const result = stripDisabledAgentReferences(prompt, new Set(["pattern"]))
+    addBuiltinNameVariant("wizard", "設計")
+    const prompt = "- Use 設計 for planning\n- Use rogue for exploration\nKeep this"
+    const result = stripDisabledAgentReferences(prompt, new Set(["wizard"]))
     expect(result).not.toContain("設計")
-    expect(result).toContain("thread")
+    expect(result).toContain("rogue")
     expect(result).toContain("Keep this")
   })
 })

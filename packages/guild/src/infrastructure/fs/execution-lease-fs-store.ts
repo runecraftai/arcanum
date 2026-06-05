@@ -89,7 +89,7 @@ function deriveLegacyExecutionLease(directory: string): ExecutionLeaseState | nu
       ownerRef: workState.active_plan,
       status: "running",
       sessionId: workState.session_ids.at(-1) ?? null,
-      executorAgent: workState.agent ?? "tapestry",
+      executorAgent: workState.agent ?? "fighter",
       startedAt: workState.started_at,
       updatedAt: workState.started_at,
     })
@@ -120,7 +120,7 @@ export function deriveLegacySessionRuntime(directory: string, sessionId: string)
   ) {
     return createSessionRuntimeState({
       sessionId,
-      foregroundAgent: workState.agent ?? "tapestry",
+      foregroundAgent: workState.agent ?? "fighter",
       mode: "plan",
       executionRef: workState.active_plan,
       status: workState.paused ? "paused" : "running",

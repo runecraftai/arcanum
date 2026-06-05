@@ -27,14 +27,14 @@ type AgentConfigExtended = AgentConfig & {
  * must restore original arrays in afterEach to avoid state pollution.
  */
 export const AGENT_NAME_VARIANTS: Record<string, string[]> = {
-  thread: ["thread", "Thread"],
-  spindle: ["spindle", "Spindle"],
-  weft: ["weft", "Weft"],
-  warp: ["warp", "Warp"],
-  pattern: ["pattern", "Pattern"],
-  shuttle: ["shuttle", "Shuttle"],
-  loom: ["loom", "Loom"],
-  tapestry: ["tapestry", "Tapestry"],
+  rogue: ["rogue", "Rogue"],
+  warlock: ["warlock", "Warlock"],
+  cleric: ["cleric", "Cleric"],
+  paladin: ["paladin", "Paladin"],
+  ranger: ["ranger", "Ranger"],
+  wizard: ["wizard", "Wizard"],
+  bard: ["bard", "Bard"],
+  fighter: ["fighter", "Fighter"],
 }
 
 /** Frozen snapshot of initial builtin name variants at module load time. */
@@ -85,7 +85,7 @@ export function addBuiltinNameVariant(configKey: string, variant: string): void 
 /**
  * Remove lines from a prompt that reference disabled agents.
  * Only strips lines where an agent name appears as a standalone concept
- * (e.g. "Use thread (codebase explorer)"), not incidental word matches.
+ * (e.g. "Use rogue (codebase explorer)"), not incidental word matches.
  * Uses word-boundary matching to avoid false positives.
  */
 export function stripDisabledAgentReferences(prompt: string, disabled: Set<string>): string {
@@ -103,7 +103,7 @@ export function stripDisabledAgentReferences(prompt: string, disabled: Set<strin
 
   // Build a regex that matches any line containing a disabled agent name.
   // Uses (?<!\w) and (?!\w) instead of \b to support Unicode/CJK display names
-  // while still avoiding false positives like "pattern" matching "patterns".
+  // while still avoiding false positives like "wizard" matching "patterns".
   const pattern = new RegExp(
     `(?<!\\w)(${disabledVariants.map((v) => v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})(?!\\w)`,
   )

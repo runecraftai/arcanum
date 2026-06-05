@@ -1,8 +1,8 @@
 import { describe, it, expect } from "bun:test"
 import { buildEnabledAgentKeys } from "./enabled-agent-keys"
-import type { WeaveConfig } from "../../config/schema"
+import type { GuildConfig } from "../../config/schema"
 
-const BUILTINS = ["loom", "tapestry", "shuttle", "pattern", "thread", "spindle", "weft", "warp"]
+const BUILTINS = ["bard", "fighter", "ranger", "wizard", "rogue", "warlock", "cleric", "paladin"]
 
 describe("buildEnabledAgentKeys", () => {
   it("includes all builtins by default", () => {
@@ -13,14 +13,14 @@ describe("buildEnabledAgentKeys", () => {
   })
 
   it("excludes disabled builtins", () => {
-    const result = buildEnabledAgentKeys({ disabled_agents: ["loom", "warp"] })
-    expect(result.has("loom")).toBe(false)
-    expect(result.has("warp")).toBe(false)
-    expect(result.has("tapestry")).toBe(true)
+    const result = buildEnabledAgentKeys({ disabled_agents: ["bard", "paladin"] })
+    expect(result.has("bard")).toBe(false)
+    expect(result.has("paladin")).toBe(false)
+    expect(result.has("fighter")).toBe(true)
   })
 
   it("includes custom agents not in disabled list", () => {
-    const config: WeaveConfig = {
+    const config: GuildConfig = {
       custom_agents: {
         "my-agent": { model: "claude-3-haiku" },
         "other-agent": { model: "gpt-4o" },
@@ -32,7 +32,7 @@ describe("buildEnabledAgentKeys", () => {
   })
 
   it("excludes disabled custom agents", () => {
-    const config: WeaveConfig = {
+    const config: GuildConfig = {
       custom_agents: {
         "my-agent": { model: "claude-3-haiku" },
         "other-agent": { model: "gpt-4o" },
@@ -44,63 +44,63 @@ describe("buildEnabledAgentKeys", () => {
     expect(result.has("other-agent")).toBe(true)
   })
 
-  it("includes shuttle-{category} when category has patterns and shuttle is enabled", () => {
-    const config: WeaveConfig = {
+  it("includes ranger-{category} when category has patterns and ranger is enabled", () => {
+    const config: GuildConfig = {
       categories: {
         frontend: { patterns: ["**/*.tsx", "**/*.css"] },
       },
     }
     const result = buildEnabledAgentKeys(config)
-    expect(result.has("shuttle-frontend")).toBe(true)
+    expect(result.has("ranger-frontend")).toBe(true)
   })
 
-  it("includes shuttle-{category} even when category has no patterns", () => {
-    const config: WeaveConfig = {
+  it("includes ranger-{category} even when category has no patterns", () => {
+    const config: GuildConfig = {
       categories: {
         frontend: { description: "Frontend work" },
       },
     }
     const result = buildEnabledAgentKeys(config)
-    expect(result.has("shuttle-frontend")).toBe(true)
+    expect(result.has("ranger-frontend")).toBe(true)
   })
 
-  it("includes shuttle-{category} even when category has empty patterns array", () => {
-    const config: WeaveConfig = {
+  it("includes ranger-{category} even when category has empty patterns array", () => {
+    const config: GuildConfig = {
       categories: {
         frontend: { patterns: [] },
       },
     }
     const result = buildEnabledAgentKeys(config)
-    expect(result.has("shuttle-frontend")).toBe(true)
+    expect(result.has("ranger-frontend")).toBe(true)
   })
 
-  it("excludes shuttle-{category} when base shuttle is disabled", () => {
-    const config: WeaveConfig = {
-      disabled_agents: ["shuttle"],
+  it("excludes ranger-{category} when base ranger is disabled", () => {
+    const config: GuildConfig = {
+      disabled_agents: ["ranger"],
       categories: {
         frontend: { patterns: ["**/*.tsx"] },
       },
     }
     const result = buildEnabledAgentKeys(config)
-    expect(result.has("shuttle")).toBe(false)
-    expect(result.has("shuttle-frontend")).toBe(false)
+    expect(result.has("ranger")).toBe(false)
+    expect(result.has("ranger-frontend")).toBe(false)
   })
 
-  it("excludes shuttle-{category} when the specific category agent is disabled", () => {
-    const config: WeaveConfig = {
-      disabled_agents: ["shuttle-frontend"],
+  it("excludes ranger-{category} when the specific category agent is disabled", () => {
+    const config: GuildConfig = {
+      disabled_agents: ["ranger-frontend"],
       categories: {
         frontend: { patterns: ["**/*.tsx"] },
         backend: { patterns: ["**/*.ts"] },
       },
     }
     const result = buildEnabledAgentKeys(config)
-    expect(result.has("shuttle-frontend")).toBe(false)
-    expect(result.has("shuttle-backend")).toBe(true)
+    expect(result.has("ranger-frontend")).toBe(false)
+    expect(result.has("ranger-backend")).toBe(true)
   })
 
   it("handles multiple categories with mixed patterns", () => {
-    const config: WeaveConfig = {
+    const config: GuildConfig = {
       categories: {
         frontend: { patterns: ["**/*.tsx"] },
         backend: { description: "No patterns here" },
@@ -108,14 +108,14 @@ describe("buildEnabledAgentKeys", () => {
       },
     }
     const result = buildEnabledAgentKeys(config)
-    expect(result.has("shuttle-frontend")).toBe(true)
-    expect(result.has("shuttle-backend")).toBe(true)
-    expect(result.has("shuttle-infra")).toBe(true)
+    expect(result.has("ranger-frontend")).toBe(true)
+    expect(result.has("ranger-backend")).toBe(true)
+    expect(result.has("ranger-infra")).toBe(true)
   })
 
   it("returns empty categories set when no categories defined", () => {
     const result = buildEnabledAgentKeys({})
-    const categoryShuttles = [...result].filter(k => k.startsWith("shuttle-"))
+    const categoryShuttles = [...result].filter(k => k.startsWith("ranger-"))
     expect(categoryShuttles).toHaveLength(0)
   })
 })

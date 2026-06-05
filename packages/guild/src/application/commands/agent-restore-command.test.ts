@@ -6,7 +6,7 @@ describe("agent restore command effects", () => {
   it("emits restoreAgent alongside switchAgent for /start-work", () => {
     const effects = executeStartWorkCommand({
       hooks: {
-        startWork: () => ({ contextInjection: "plan", switchAgent: "tapestry" }),
+        startWork: () => ({ contextInjection: "plan", switchAgent: "fighter" }),
       } as never,
       promptText: "/start-work",
       sessionId: "sess-start",
@@ -15,8 +15,8 @@ describe("agent restore command effects", () => {
     })
 
     expect(effects).toEqual([
-      { type: "switchAgent", agent: "tapestry" },
-      { type: "restoreAgent", sessionId: "sess-start", agent: "tapestry" },
+      { type: "switchAgent", agent: "fighter" },
+      { type: "restoreAgent", sessionId: "sess-start", agent: "fighter" },
       { type: "appendPromptText", text: "plan" },
     ])
   })
@@ -24,7 +24,7 @@ describe("agent restore command effects", () => {
   it("emits restoreAgent alongside switchAgent for /run-workflow", () => {
     const effects = executeRunWorkflowCommand({
       hooks: {
-        workflowStart: () => ({ contextInjection: "workflow", switchAgent: "weft" }),
+        workflowStart: () => ({ contextInjection: "workflow", switchAgent: "cleric" }),
       } as never,
       promptText: "/run-workflow",
       sessionId: "sess-wf",
@@ -33,8 +33,8 @@ describe("agent restore command effects", () => {
     })
 
     expect(effects).toEqual([
-      { type: "switchAgent", agent: "weft" },
-      { type: "restoreAgent", sessionId: "sess-wf", agent: "weft" },
+      { type: "switchAgent", agent: "cleric" },
+      { type: "restoreAgent", sessionId: "sess-wf", agent: "cleric" },
       { type: "appendPromptText", text: "workflow" },
     ])
   })

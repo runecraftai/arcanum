@@ -10,7 +10,7 @@ describe("plugin adapter runtime state", () => {
   let directory: string
 
   beforeEach(() => {
-    directory = mkdtempSync(join(tmpdir(), "weave-plugin-runtime-state-"))
+    directory = mkdtempSync(join(tmpdir(), "guild-plugin-runtime-state-"))
   })
 
   afterEach(() => {
@@ -39,7 +39,7 @@ describe("plugin adapter runtime state", () => {
     expect(sessionRuntime).not.toBeNull()
     expect(sessionRuntime).toEqual({
       session_id: "sess-ad-hoc",
-      foreground_agent: "loom",
+      foreground_agent: "bard",
       mode: "ad_hoc",
       execution_ref: null,
       status: "running",

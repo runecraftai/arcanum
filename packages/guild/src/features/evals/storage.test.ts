@@ -8,7 +8,7 @@ import type { EvalRunResult } from "./types"
 
 describe("eval storage", () => {
   it("creates storage directories", () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-storage-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-storage-"))
     try {
       const path = ensureEvalStorageDir(dir)
       expect(existsSync(path)).toBe(true)
@@ -18,11 +18,11 @@ describe("eval storage", () => {
   })
 
   it("writes run result and latest pointer copy", () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-storage-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-storage-"))
     try {
       const outputPath = writeEvalRunResult(dir, fixture as EvalRunResult)
       expect(existsSync(outputPath)).toBe(true)
-      expect(existsSync(join(dir, ".weave", "evals", "latest.json"))).toBe(true)
+      expect(existsSync(join(dir, ".guild", "evals", "latest.json"))).toBe(true)
       const saved = JSON.parse(readFileSync(outputPath, "utf-8"))
       expect(Object.keys(saved)).toEqual(Object.keys(fixture))
     } finally {
@@ -31,7 +31,7 @@ describe("eval storage", () => {
   })
 
   it("appends JSONL lines without overwriting", () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-jsonl-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-jsonl-"))
     try {
       const jsonlPath = join(dir, "results.jsonl")
       const result = fixture as EvalRunResult
@@ -52,7 +52,7 @@ describe("eval storage", () => {
   })
 
   it("uses default JSONL path based on suiteId", () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-jsonl-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-jsonl-"))
     try {
       const result = fixture as EvalRunResult
       const defaultPath = getDefaultJsonlPath(dir, result.suiteId)
@@ -69,7 +69,7 @@ describe("eval storage", () => {
   })
 
   it("persists run metadata in JSONL output", () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-jsonl-metadata-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-jsonl-metadata-"))
     try {
       const result = {
         ...(fixture as EvalRunResult),
@@ -97,7 +97,7 @@ describe("eval storage", () => {
   })
 
   it("persists optional suite metadata in JSONL output", () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-jsonl-suite-meta-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-jsonl-suite-meta-"))
     try {
       const result = {
         ...(fixture as EvalRunResult),

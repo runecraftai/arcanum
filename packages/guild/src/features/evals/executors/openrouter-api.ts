@@ -41,7 +41,7 @@ export async function callOpenRouter(
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
-      "X-OpenRouter-Title": "Weave Agent Evals",
+      "X-OpenRouter-Title": "Guild Agent Evals",
     },
     body: JSON.stringify({
       model,

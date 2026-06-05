@@ -30,10 +30,10 @@
    - Improves skill clarity and reduces ambiguity in agent dispatch
 
 ## Active Features
-- `guild-rpg-agent-skills` — **planned** (2026-06-05)
-  - Goal: create Guild-owned `guild-*` mini-skills, bind them to RPG-class agents, generate future artifacts under `.specs/*`, and complete Weave -> Guild branding
-  - Scope: planning specs created; implementation not started
-  - Specs: `.specs/features/guild-rpg-agent-skills/`
+- `guild-rpg-agent-structural-rename` — **planned** (2026-06-05)
+  - Goal: rename `packages/guild/src/agents/` directories and TypeScript symbols from legacy Weave agent names to RPG class names while preserving old config keys as compatibility keys
+  - Scope: spec/design/tasks created; implementation not started
+  - Specs: `.specs/features/guild-rpg-agent-structural-rename/`
 - `guild-weave-replatform` — **completed** (2026-06-04)
   - Goal: replace `packages/guild` implementation with `opencode-weave`, preserve legacy guild in archive, and rename public surfaces from weave to guild
   - Status: ✅ All 5 phases complete, build/typecheck pass, 1918/1936 tests pass (18 env-only failures)
@@ -68,11 +68,17 @@
 | `WeaveConfigSchema` zod schema | Same as above |
 | `GenerateWeaveConfigJsonSchemaOptions` type | Internal config generation
 
+### Rebrand verification notes (2026-06-05)
+- `bun run typecheck` passes in `packages/guild`
+- Targeted tests for builtin skills, workflow completion/context, version, validation, and builtin agent binding pass
+- Residual `Weave|weave|.weave` matches remain in compatibility aliases, legacy tool ids, and historical tests/fixtures; they are being reviewed as intentional exceptions rather than blindly renamed
+
 ## Completed & Archived Features
 - `npm-publish` → `.specs/archive/npm-publish/` (2026-04-26)
 - `summon-cli` → `.specs/archive/summon-cli/` (2026-04-26)
 - `summon-tui-revision` → `.specs/archive/summon-tui-revision/` (2026-04-26)
 - `guild-auto-create-user-config` → `.specs/archive/2026-05-01-guild-auto-create-user-config/` (2026-05-01)
+- `guild-rpg-agent-skills` → `.specs/archive/2026-06-05-guild-rpg-agent-skills/` (2026-06-05)
 
 ## Running Status
 - ✓ Spec-driven skill operational

@@ -5,7 +5,7 @@ describe("executePromptRender", () => {
   it("passes through rendered prompt artifacts", async () => {
     const artifacts = await executePromptRender(
       {
-        target: { kind: "builtin-agent-prompt", agent: "loom" },
+        target: { kind: "builtin-agent-prompt", agent: "bard" },
         artifacts: { renderedPrompt: "<Role>test</Role>", toolPolicy: {} },
       },
       { kind: "prompt-render" },

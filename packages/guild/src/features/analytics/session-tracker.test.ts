@@ -9,7 +9,7 @@ let tempDir: string
 let tracker: SessionTracker
 
 beforeEach(() => {
-  tempDir = mkdtempSync(join(tmpdir(), "weave-tracker-test-"))
+  tempDir = mkdtempSync(join(tmpdir(), "guild-tracker-test-"))
   tracker = createSessionTracker(tempDir)
 })
 
@@ -52,12 +52,12 @@ describe("SessionTracker", () => {
     })
 
     it("tracks in-flight calls", () => {
-      tracker.trackToolStart("s1", "task", "c1", "thread")
+      tracker.trackToolStart("s1", "task", "c1", "rogue")
 
       const session = tracker.getSession("s1")!
       expect(session.inFlight.c1).toBeDefined()
       expect(session.inFlight.c1.tool).toBe("task")
-      expect(session.inFlight.c1.agent).toBe("thread")
+      expect(session.inFlight.c1.agent).toBe("rogue")
     })
 
     it("lazily starts the session", () => {
@@ -77,18 +77,18 @@ describe("SessionTracker", () => {
     })
 
     it("records delegation for executed Thread, Weft, and Warp task tool calls", () => {
-      tracker.trackToolStart("s1", "task", "c1", "thread")
-      tracker.trackToolEnd("s1", "task", "c1", "thread")
-      tracker.trackToolStart("s1", "task", "c2", "weft")
-      tracker.trackToolEnd("s1", "task", "c2", "weft")
-      tracker.trackToolStart("s1", "task", "c3", "warp")
-      tracker.trackToolEnd("s1", "task", "c3", "warp")
+      tracker.trackToolStart("s1", "task", "c1", "rogue")
+      tracker.trackToolEnd("s1", "task", "c1", "rogue")
+      tracker.trackToolStart("s1", "task", "c2", "cleric")
+      tracker.trackToolEnd("s1", "task", "c2", "cleric")
+      tracker.trackToolStart("s1", "task", "c3", "paladin")
+      tracker.trackToolEnd("s1", "task", "c3", "paladin")
 
       const session = tracker.getSession("s1")!
       expect(session.delegations.map(({ agent, toolCallId }) => ({ agent, toolCallId }))).toEqual([
-        { agent: "thread", toolCallId: "c1" },
-        { agent: "weft", toolCallId: "c2" },
-        { agent: "warp", toolCallId: "c3" },
+        { agent: "rogue", toolCallId: "c1" },
+        { agent: "cleric", toolCallId: "c2" },
+        { agent: "paladin", toolCallId: "c3" },
       ])
       for (const delegation of session.delegations) {
         expect(delegation.durationMs).toBeDefined()
@@ -96,9 +96,9 @@ describe("SessionTracker", () => {
       }
     })
 
-    it("does not record delegation for call_weave_agent because runtime delegation evidence is task-only", () => {
-      tracker.trackToolStart("s1", "call_weave_agent", "c1", "weft")
-      tracker.trackToolEnd("s1", "call_weave_agent", "c1", "weft")
+    it("does not record delegation for call_guild_agent because runtime delegation evidence is task-only", () => {
+      tracker.trackToolStart("s1", "call_guild_agent", "c1", "cleric")
+      tracker.trackToolEnd("s1", "call_guild_agent", "c1", "cleric")
 
       const session = tracker.getSession("s1")!
       expect(session.delegations.length).toBe(0)
@@ -110,11 +110,11 @@ describe("SessionTracker", () => {
     })
 
     it("falls back to agent from inFlight if not provided on end", () => {
-      tracker.trackToolStart("s1", "task", "c1", "weft")
+      tracker.trackToolStart("s1", "task", "c1", "cleric")
       tracker.trackToolEnd("s1", "task", "c1")
 
       const session = tracker.getSession("s1")!
-      expect(session.delegations[0].agent).toBe("weft")
+      expect(session.delegations[0].agent).toBe("cleric")
     })
   })
 
@@ -202,8 +202,8 @@ describe("SessionTracker", () => {
       tracker.trackToolEnd("s1", "read", "c1")
       tracker.trackToolStart("s1", "write", "c2")
       tracker.trackToolEnd("s1", "write", "c2")
-      tracker.trackToolStart("s1", "task", "c3", "thread")
-      tracker.trackToolEnd("s1", "task", "c3", "thread")
+      tracker.trackToolStart("s1", "task", "c3", "rogue")
+      tracker.trackToolEnd("s1", "task", "c3", "rogue")
 
       const summary = tracker.endSession("s1")
       expect(summary).not.toBeNull()

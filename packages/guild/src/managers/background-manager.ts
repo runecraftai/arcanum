@@ -25,7 +25,7 @@ export interface TaskRecord {
 const TERMINAL_STATUSES: ReadonlySet<TaskStatus> = new Set(["completed", "failed", "cancelled"])
 
 /**
- * In-memory background task manager for the Weave OpenCode plugin.
+ * In-memory background task manager for the Guild OpenCode plugin.
  *
  * v1 tracks tasks in memory only — no real session spawning, polling, or
  * tmux integration.  Real concurrency control and SDK integration are

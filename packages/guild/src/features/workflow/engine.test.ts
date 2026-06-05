@@ -20,7 +20,7 @@ const TWO_STEP_DEF: WorkflowDefinition = {
       id: "gather",
       name: "Gather Requirements",
       type: "interactive",
-      agent: "loom",
+      agent: "bard",
       prompt: "Gather info for: {{instance.goal}}",
       completion: { method: "user_confirm" },
     },
@@ -28,7 +28,7 @@ const TWO_STEP_DEF: WorkflowDefinition = {
       id: "build",
       name: "Build Feature",
       type: "autonomous",
-      agent: "tapestry",
+      agent: "fighter",
       prompt: "Build: {{instance.goal}}",
       completion: { method: "agent_signal" },
     },
@@ -45,7 +45,7 @@ const THREE_STEP_GATE_DEF: WorkflowDefinition = {
       id: "plan",
       name: "Create Plan",
       type: "autonomous",
-      agent: "pattern",
+      agent: "wizard",
       prompt: "Create a plan for: {{instance.goal}}",
       completion: { method: "agent_signal" },
     },
@@ -53,7 +53,7 @@ const THREE_STEP_GATE_DEF: WorkflowDefinition = {
       id: "review",
       name: "Review Plan",
       type: "gate",
-      agent: "weft",
+      agent: "cleric",
       prompt: "Review the plan.",
       completion: { method: "review_verdict" },
       on_reject: "pause",
@@ -62,7 +62,7 @@ const THREE_STEP_GATE_DEF: WorkflowDefinition = {
       id: "execute",
       name: "Execute Plan",
       type: "autonomous",
-      agent: "tapestry",
+      agent: "fighter",
       prompt: "Execute the plan.",
       completion: { method: "agent_signal" },
     },
@@ -79,7 +79,7 @@ const GATE_FAIL_DEF: WorkflowDefinition = {
       id: "review",
       name: "Review",
       type: "gate",
-      agent: "weft",
+      agent: "cleric",
       prompt: "Review.",
       completion: { method: "review_verdict" },
       on_reject: "fail",
@@ -88,7 +88,7 @@ const GATE_FAIL_DEF: WorkflowDefinition = {
       id: "execute",
       name: "Execute",
       type: "autonomous",
-      agent: "tapestry",
+      agent: "fighter",
       prompt: "Execute.",
       completion: { method: "agent_signal" },
     },
@@ -103,7 +103,7 @@ function writeDefinitionFile(def: WorkflowDefinition): string {
 }
 
 beforeEach(() => {
-  testDir = mkdtempSync(join(tmpdir(), "weave-engine-test-"))
+  testDir = mkdtempSync(join(tmpdir(), "guild-engine-test-"))
 })
 
 afterEach(() => {
@@ -128,7 +128,7 @@ describe("startWorkflow", () => {
     })
 
     expect(action.type).toBe("inject_prompt")
-    expect(action.agent).toBe("loom")
+    expect(action.agent).toBe("bard")
     expect(action.prompt).toBeDefined()
     expect(action.prompt).toContain("Add OAuth2 login")
 
@@ -160,7 +160,7 @@ describe("startWorkflow", () => {
     expect(action.prompt).toContain("Gather info for: Build search feature")
   })
 
-  it("includes delegation instruction in the prompt for non-loom agents", () => {
+  it("includes delegation instruction in the prompt for non-bard agents", () => {
     const defPath = writeDefinitionFile(THREE_STEP_GATE_DEF)
     const action = startWorkflow({
       definition: THREE_STEP_GATE_DEF,
@@ -170,9 +170,9 @@ describe("startWorkflow", () => {
       directory: testDir,
     })
 
-    expect(action.agent).toBe("pattern")
+    expect(action.agent).toBe("wizard")
     expect(action.prompt).toContain("Delegation")
-    expect(action.prompt).toContain("pattern")
+    expect(action.prompt).toContain("wizard")
   })
 
   it("stores session ID in instance", () => {
@@ -270,7 +270,7 @@ describe("checkAndAdvance", () => {
     })
 
     expect(action.type).toBe("inject_prompt")
-    expect(action.agent).toBe("tapestry")
+    expect(action.agent).toBe("fighter")
     expect(action.prompt).toContain("Advance test")
 
     // Verify instance state
@@ -487,7 +487,7 @@ describe("gate step handling", () => {
     })
 
     expect(action.type).toBe("inject_prompt")
-    expect(action.agent).toBe("tapestry")
+    expect(action.agent).toBe("fighter")
 
     const instance = getActiveWorkflowInstance(testDir)
     expect(instance!.current_step_id).toBe("execute")
@@ -571,7 +571,7 @@ describe("resumeWorkflow", () => {
 
     const action = resumeWorkflow(testDir)
     expect(action.type).toBe("inject_prompt")
-    expect(action.agent).toBe("loom")
+    expect(action.agent).toBe("bard")
     expect(action.prompt).toContain("Resume test")
 
     const instance = getActiveWorkflowInstance(testDir)
@@ -624,7 +624,7 @@ describe("resumeWorkflow", () => {
 
     const action = resumeWorkflow(testDir)
     expect(action.type).toBe("inject_prompt")
-    expect(action.agent).toBe("tapestry")
+    expect(action.agent).toBe("fighter")
     expect(action.prompt).toContain("Mid-workflow resume test")
 
     const instance = getActiveWorkflowInstance(testDir)
@@ -661,7 +661,7 @@ describe("skipStep", () => {
 
     const action = skipStep(testDir)
     expect(action.type).toBe("inject_prompt")
-    expect(action.agent).toBe("tapestry")
+    expect(action.agent).toBe("fighter")
 
     const instance = getActiveWorkflowInstance(testDir)
     expect(instance!.current_step_id).toBe("build")
@@ -785,7 +785,7 @@ describe("full lifecycle", () => {
 
     // Step 1: autonomous (agent_signal)
     expect(action1.type).toBe("inject_prompt")
-    expect(action1.agent).toBe("pattern")
+    expect(action1.agent).toBe("wizard")
 
     const action2 = checkAndAdvance({
       directory: testDir,
@@ -799,7 +799,7 @@ describe("full lifecycle", () => {
 
     // Step 2: gate (review_verdict) — APPROVE
     expect(action2.type).toBe("inject_prompt")
-    expect(action2.agent).toBe("weft")
+    expect(action2.agent).toBe("cleric")
     expect(action2.prompt).toContain("Completed Steps")
 
     const action3 = checkAndAdvance({
@@ -814,7 +814,7 @@ describe("full lifecycle", () => {
 
     // Step 3: autonomous (agent_signal)
     expect(action3.type).toBe("inject_prompt")
-    expect(action3.agent).toBe("tapestry")
+    expect(action3.agent).toBe("fighter")
     expect(action3.prompt).toContain("Completed Steps")
 
     const action4 = checkAndAdvance({
@@ -874,6 +874,6 @@ describe("full lifecycle", () => {
       },
     })
     expect(advanced.type).toBe("inject_prompt")
-    expect(advanced.agent).toBe("tapestry")
+    expect(advanced.agent).toBe("fighter")
   })
 })

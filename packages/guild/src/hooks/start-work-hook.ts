@@ -22,7 +22,7 @@ export interface StartWorkInput {
 export interface StartWorkResult {
   /** Context to inject into the prompt (plan path, progress, instructions) */
   contextInjection: string | null
-  /** Agent to switch to (always "tapestry" when command is detected) */
+  /** Agent to switch to (always "fighter" when command is detected) */
   switchAgent: string | null
 }
 
@@ -63,7 +63,7 @@ export function handleStartWork(input: StartWorkInput): StartWorkResult {
       if (!validation.valid) {
         PlanService.clearExecution(directory)
         return {
-          switchAgent: "tapestry",
+          switchAgent: "fighter",
           contextInjection: `## Plan Validation Failed\nThe active plan "${existingState.plan_name}" has structural issues. Work state has been cleared.\n\n${formatValidationResults(validation)}\n\nTell the user to fix the plan file and run /start-work again.`,
         }
       }
@@ -71,12 +71,12 @@ export function handleStartWork(input: StartWorkInput): StartWorkResult {
       const resumeContext = buildResumeContext(resumedState.active_plan, resumedState.plan_name, progress, resumedState.start_sha, directory)
       if (validation.warnings.length > 0) {
         return {
-          switchAgent: "tapestry",
+          switchAgent: "fighter",
           contextInjection: `${resumeContext}\n\n### Validation Warnings\n${formatValidationResults(validation)}`,
         }
       }
       return {
-        switchAgent: "tapestry",
+        switchAgent: "fighter",
         contextInjection: resumeContext,
       }
     }
@@ -144,7 +144,7 @@ function handleExplicitPlan(
         ? incompletePlans.map((p) => `  - ${PlanService.getPlanName(p)}`).join("\n")
         : "  (none)"
     return {
-      switchAgent: "tapestry",
+      switchAgent: "fighter",
       contextInjection: `## Plan Not Found\nNo plan matching "${requestedName}" was found.\n\nAvailable incomplete plans:\n${listing}\n\nTell the user which plans are available and ask them to specify one.`,
     }
   }
@@ -152,8 +152,8 @@ function handleExplicitPlan(
   const progress = PlanService.getPlanProgress(matched)
   if (progress.isComplete) {
     return {
-      switchAgent: "tapestry",
-      contextInjection: `## Plan Already Complete\nThe plan "${PlanService.getPlanName(matched)}" has all ${progress.total} tasks completed.\nTell the user this plan is already done and suggest creating a new one with Pattern.`,
+      switchAgent: "fighter",
+      contextInjection: `## Plan Already Complete\nThe plan "${PlanService.getPlanName(matched)}" has all ${progress.total} tasks completed.\nTell the user this plan is already done and suggest creating a new one with Wizard.`,
     }
   }
 
@@ -161,22 +161,22 @@ function handleExplicitPlan(
   const validation = validatePlan(matched, directory)
   if (!validation.valid) {
     return {
-        switchAgent: "tapestry",
+        switchAgent: "fighter",
         contextInjection: `## Plan Validation Failed\nThe plan "${PlanService.getPlanName(matched)}" has structural issues that must be fixed before execution can begin.\n\n${formatValidationResults(validation)}\n\nTell the user to fix these issues in the plan file and try again.`,
       }
   }
 
-  const state = PlanService.createExecution(directory, matched, sessionId, "tapestry")
+  const state = PlanService.createExecution(directory, matched, sessionId, "fighter")
 
   const freshContext = buildFreshContext(matched, PlanService.getPlanName(matched), progress, state.start_sha, directory)
   if (validation.warnings.length > 0) {
     return {
-      switchAgent: "tapestry",
+      switchAgent: "fighter",
       contextInjection: `${freshContext}\n\n### Validation Warnings\n${formatValidationResults(validation)}`,
     }
   }
   return {
-    switchAgent: "tapestry",
+    switchAgent: "fighter",
     contextInjection: freshContext,
   }
 }
@@ -190,20 +190,20 @@ function handlePlanDiscovery(
   directory: string,
 ): StartWorkResult {
   if (allPlans.length === 0) {
-    return {
-      switchAgent: "tapestry",
-      contextInjection:
-        "## No Plans Found\nNo plan files found at `.weave/plans/`.\nTell the user to switch to Pattern agent to create a work plan first.",
-    }
+      return {
+        switchAgent: "fighter",
+        contextInjection:
+          "## No Plans Found\nNo plan files found at `.guild/plans/`.\nTell the user to switch to Wizard agent to create a work plan first.",
+      }
   }
 
   const incompletePlans = PlanService.findIncompletePlans(allPlans)
 
   if (incompletePlans.length === 0) {
     return {
-      switchAgent: "tapestry",
+      switchAgent: "fighter",
       contextInjection:
-        "## All Plans Complete\nAll existing plans have been completed.\nTell the user to switch to Pattern agent to create a new plan.",
+        "## All Plans Complete\nAll existing plans have been completed.\nTell the user to switch to Wizard agent to create a new plan.",
     }
   }
 
@@ -215,22 +215,22 @@ function handlePlanDiscovery(
     const validation = validatePlan(plan, directory)
     if (!validation.valid) {
       return {
-        switchAgent: "tapestry",
+        switchAgent: "fighter",
         contextInjection: `## Plan Validation Failed\nThe plan "${PlanService.getPlanName(plan)}" has structural issues that must be fixed before execution can begin.\n\n${formatValidationResults(validation)}\n\nTell the user to fix these issues in the plan file and try again.`,
       }
     }
 
-    const state = PlanService.createExecution(directory, plan, sessionId, "tapestry")
+    const state = PlanService.createExecution(directory, plan, sessionId, "fighter")
 
     const freshContext = buildFreshContext(plan, PlanService.getPlanName(plan), progress, state.start_sha, directory)
     if (validation.warnings.length > 0) {
       return {
-        switchAgent: "tapestry",
+        switchAgent: "fighter",
         contextInjection: `${freshContext}\n\n### Validation Warnings\n${formatValidationResults(validation)}`,
       }
     }
     return {
-      switchAgent: "tapestry",
+      switchAgent: "fighter",
       contextInjection: freshContext,
     }
   }
@@ -244,7 +244,7 @@ function handlePlanDiscovery(
     .join("\n")
 
   return {
-    switchAgent: "tapestry",
+    switchAgent: "fighter",
     contextInjection: `## Multiple Plans Found\nThere are ${incompletePlans.length} incomplete plans:\n${listing}\n\nAsk the user which plan to work on. They can run \`/start-work [plan-name]\` to select one.`,
   }
 }

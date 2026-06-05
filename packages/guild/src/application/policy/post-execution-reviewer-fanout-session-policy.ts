@@ -1,12 +1,12 @@
 import { getPlanProgress, readWorkState, writeWorkState } from "../../features/work-state"
 import { extractPlannedFiles } from "../../features/analytics/plan-parser"
 import { createPolicyResult, type PolicyResult } from "../../domain/policy/policy-result"
-import type { ReviewerPlan } from "../../agents/review-resolver"
+import type { ReviewBaseAgent, ReviewerPlan } from "../../agents/review-resolver"
 import type { RuntimeEffect } from "../../runtime/opencode/effects"
 import type { RuntimeSessionIdleInput } from "./runtime-policy"
 
 export interface PostExecutionReviewerResolver {
-  forBaseAgent(baseAgent: "weft" | "warp", scope: "direct" | "post-execution"): ReviewerPlan
+  forBaseAgent(baseAgent: ReviewBaseAgent, scope: "direct" | "post-execution"): ReviewerPlan
 }
 
 export interface PostExecutionReviewerFanOutSessionPolicy {
@@ -69,7 +69,7 @@ export function createPostExecutionReviewerFanOutSessionPolicy(args: {
       ].join("\n")
       const effects: RuntimeEffect[] = []
 
-      for (const baseAgent of ["weft", "warp"] as const) {
+      for (const baseAgent of ["cleric", "paladin"] as const) {
         const plan = args.reviewerResolver.forBaseAgent(baseAgent, "post-execution")
         if (plan.kind === "disabled") {
           continue

@@ -32,7 +32,7 @@ function makeCreateMock(...sessionIds: string[]) {
   return mock(async () => ({ data: { id: sessionIds[index++] ?? `session-${index}` } }))
 }
 
-function reviewerEntries(models: string[], agentName = "loom") {
+function reviewerEntries(models: string[], agentName = "bard") {
   return models.map((model) => ({ agentName, model }))
 }
 
@@ -82,8 +82,8 @@ describe("runAdditionalReviewers", () => {
 
     const results = await runAdditionalReviewers({
       reviewers: [
-        { agentName: "loom", model: "anthropic/claude-sonnet-4" },
-        { agentName: "warp", model: "google/gemini-2.5-pro" },
+        { agentName: "bard", model: "anthropic/claude-sonnet-4" },
+        { agentName: "paladin", model: "google/gemini-2.5-pro" },
       ],
       prompt: "Review this change",
       client,
@@ -97,8 +97,8 @@ describe("runAdditionalReviewers", () => {
     const firstPrompt = prompt.mock.calls[0]?.[0] as { body?: { agent?: string } }
     const secondPrompt = prompt.mock.calls[1]?.[0] as { body?: { agent?: string } }
 
-    expect(firstPrompt.body?.agent).toBe("loom")
-    expect(secondPrompt.body?.agent).toBe("warp")
+    expect(firstPrompt.body?.agent).toBe("bard")
+    expect(secondPrompt.body?.agent).toBe("paladin")
   })
 
   it("creates distinct session titles when reviewer entries use different agent names", async () => {
@@ -113,8 +113,8 @@ describe("runAdditionalReviewers", () => {
 
     await runAdditionalReviewers({
       reviewers: [
-        { agentName: "loom", model: "openai/gpt-4o" },
-        { agentName: "warp", model: "openai/gpt-4o" },
+        { agentName: "bard", model: "openai/gpt-4o" },
+        { agentName: "paladin", model: "openai/gpt-4o" },
       ],
       prompt: "Review this change",
       client,
@@ -125,8 +125,8 @@ describe("runAdditionalReviewers", () => {
     const firstTitle = create.mock.calls[0]?.[0]?.title
     const secondTitle = create.mock.calls[1]?.[0]?.title
 
-    expect(firstTitle).toBe("loom-review-openai-gpt-4o")
-    expect(secondTitle).toBe("warp-review-openai-gpt-4o")
+    expect(firstTitle).toBe("bard-review-openai-gpt-4o")
+    expect(secondTitle).toBe("paladin-review-openai-gpt-4o")
     expect(firstTitle).not.toBe(secondTitle)
   })
 
@@ -172,7 +172,7 @@ describe("runAdditionalReviewers", () => {
     ])
 
     const finalOutput = await finalizeReview({
-      agentName: "loom",
+      agentName: "bard",
       primaryModel: "openai/gpt-4o",
       primaryOutput: "Primary review",
       additionalResults,
@@ -233,7 +233,7 @@ describe("runAdditionalReviewers", () => {
     ])
 
     const finalOutput = await finalizeReview({
-      agentName: "loom",
+      agentName: "bard",
       primaryModel: "openai/gpt-4o",
       primaryOutput: "Primary review",
       additionalResults,
@@ -275,7 +275,7 @@ describe("runAdditionalReviewers", () => {
     ])
 
     const finalOutput = await finalizeReview({
-      agentName: "loom",
+      agentName: "bard",
       primaryModel: "openai/gpt-4o",
       primaryOutput: "Primary review only",
       additionalResults,
@@ -316,8 +316,8 @@ describe("runAdditionalReviewers", () => {
 
     await runAdditionalReviewers({
       reviewers: [
-        { agentName: "loom", model: "anthropic/claude-sonnet-4" },
-        { agentName: "weft", model: "google/gemini-2.5-pro" },
+        { agentName: "bard", model: "anthropic/claude-sonnet-4" },
+        { agentName: "cleric", model: "google/gemini-2.5-pro" },
       ],
       prompt: "Review this PR",
       client,
@@ -326,8 +326,8 @@ describe("runAdditionalReviewers", () => {
     const firstRequest = prompt.mock.calls[0]?.[0] as { body?: { agent?: string } }
     const secondRequest = prompt.mock.calls[1]?.[0] as { body?: { agent?: string } }
 
-    expect(firstRequest.body?.agent).toBe("loom")
-    expect(secondRequest.body?.agent).toBe("weft")
+    expect(firstRequest.body?.agent).toBe("bard")
+    expect(secondRequest.body?.agent).toBe("cleric")
   })
 
   it("creates distinct session titles when reviewers use different agent names", async () => {
@@ -337,8 +337,8 @@ describe("runAdditionalReviewers", () => {
 
     await runAdditionalReviewers({
       reviewers: [
-        { agentName: "loom", model: "anthropic/claude-sonnet-4" },
-        { agentName: "weft", model: "anthropic/claude-sonnet-4" },
+        { agentName: "bard", model: "anthropic/claude-sonnet-4" },
+        { agentName: "cleric", model: "anthropic/claude-sonnet-4" },
       ],
       prompt: "Review this PR",
       client,
@@ -347,8 +347,8 @@ describe("runAdditionalReviewers", () => {
     const firstCreate = create.mock.calls[0]?.[0] as { title?: string }
     const secondCreate = create.mock.calls[1]?.[0] as { title?: string }
 
-    expect(firstCreate.title).toBe("loom-review-anthropic-claude-sonnet-4")
-    expect(secondCreate.title).toBe("weft-review-anthropic-claude-sonnet-4")
+    expect(firstCreate.title).toBe("bard-review-anthropic-claude-sonnet-4")
+    expect(secondCreate.title).toBe("cleric-review-anthropic-claude-sonnet-4")
     expect(firstCreate.title).not.toBe(secondCreate.title)
   })
 
@@ -362,24 +362,24 @@ describe("runReviewerFanOut", () => {
     return {
       kind: "fan-out",
       scope,
-      baseAgent: "weft",
+      baseAgent: "cleric",
       primary: {
-        agentName: "weft",
+        agentName: "cleric",
         label: "Weft",
         model: "openai/gpt-4o",
       },
       variants: [
         {
-          baseAgent: "weft",
-          key: "weft-review-anthropic-claude-sonnet-4",
+          baseAgent: "cleric",
+          key: "cleric-review-anthropic-claude-sonnet-4",
           model: "anthropic/claude-sonnet-4",
-          label: "weft @ anthropic/claude-sonnet-4",
+          label: "cleric @ anthropic/claude-sonnet-4",
         },
         {
-          baseAgent: "weft",
-          key: "weft-review-google-gemini-2-5-pro",
+          baseAgent: "cleric",
+          key: "cleric-review-google-gemini-2-5-pro",
           model: "google/gemini-2.5-pro",
-          label: "weft @ google/gemini-2.5-pro",
+          label: "cleric @ google/gemini-2.5-pro",
         },
       ],
       batch: { mode: "parallel", size: 3 },
@@ -390,9 +390,9 @@ describe("runReviewerFanOut", () => {
     return {
       kind: "primary-only",
       scope,
-      baseAgent: "weft",
+      baseAgent: "cleric",
       primary: {
-        agentName: "weft",
+        agentName: "cleric",
         label: "Weft",
         model: "openai/gpt-4o",
       },
@@ -404,7 +404,7 @@ describe("runReviewerFanOut", () => {
     return {
       kind: "disabled",
       scope,
-      baseAgent: "weft",
+      baseAgent: "cleric",
       reason: "agent-disabled",
     }
   }
@@ -432,9 +432,9 @@ describe("runReviewerFanOut", () => {
       output: "Collated fan-out output",
       failureWarning: null,
       ran: [
-        "weft",
-        "weft-review-anthropic-claude-sonnet-4",
-        "weft-review-google-gemini-2-5-pro",
+        "cleric",
+        "cleric-review-anthropic-claude-sonnet-4",
+        "cleric-review-google-gemini-2-5-pro",
       ],
     })
     expect(create).toHaveBeenCalledTimes(3)
@@ -473,9 +473,9 @@ describe("runReviewerFanOut", () => {
     expect(result.output).toBe("Collated post-execution output")
     expect(result.failureWarning).toBeNull()
     expect(result.ran).toEqual([
-      "weft",
-      "weft-review-anthropic-claude-sonnet-4",
-      "weft-review-google-gemini-2-5-pro",
+      "cleric",
+      "cleric-review-anthropic-claude-sonnet-4",
+      "cleric-review-google-gemini-2-5-pro",
     ])
     expect(create).toHaveBeenCalledTimes(4)
     expect(prompt).toHaveBeenCalledTimes(4)
@@ -502,7 +502,7 @@ describe("runReviewerFanOut", () => {
     expect(result).toEqual({
       output: "Primary captured review",
       failureWarning: null,
-      ran: ["weft"],
+      ran: ["cleric"],
     })
     expect(client.session.create).toHaveBeenCalledTimes(0)
     expect(client.session.prompt).toHaveBeenCalledTimes(0)
@@ -523,7 +523,7 @@ describe("runReviewerFanOut", () => {
     expect(result).toEqual({
       output: "Primary output",
       failureWarning: null,
-      ran: ["weft"],
+      ran: ["cleric"],
     })
     expect(create).toHaveBeenCalledTimes(1)
     expect(prompt).toHaveBeenCalledTimes(1)
@@ -607,7 +607,7 @@ describe("runReviewerFanOut", () => {
       "⚠️ 1 of 2 additional review models did not respond. Results based on 2 models (including primary).\n\nFailed reviewers:\n- google/gemini-2.5-pro: variant failed",
     )
     expect(result.output).toContain("Collated surviving variant")
-    expect(result.ran).toEqual(["weft-review-anthropic-claude-sonnet-4"])
+    expect(result.ran).toEqual(["cleric-review-anthropic-claude-sonnet-4"])
     expect(create).toHaveBeenCalledTimes(4)
     expect(prompt).toHaveBeenCalledTimes(4)
 

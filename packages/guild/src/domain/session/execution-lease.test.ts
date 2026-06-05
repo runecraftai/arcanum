@@ -30,15 +30,15 @@ describe("execution lease state machine", () => {
   it("projects ad-hoc foreground observation without claiming execution ownership", () => {
     const projection = projectExecutionTransition({
       event: "observe_ad_hoc_agent",
-      sessionId: "sess-loom",
-      foregroundAgent: "loom",
+      sessionId: "sess-bard",
+      foregroundAgent: "bard",
     })
 
     expect(projection.lease).toBeNull()
     expect(projection.sessionRuntime).not.toBeNull()
     expect(projection.sessionRuntime).toEqual({
-      session_id: "sess-loom",
-      foreground_agent: "loom",
+      session_id: "sess-bard",
+      foreground_agent: "bard",
       mode: "ad_hoc",
       execution_ref: null,
       status: "running",
@@ -52,7 +52,7 @@ describe("execution lease state machine", () => {
       ownerRef: ".guild/plans/my-plan.md",
       status: "running",
       sessionId: "sess-plan",
-      executorAgent: "tapestry",
+      executorAgent: "fighter",
       startedAt: "2026-01-01T00:00:00.000Z",
       updatedAt: "2026-01-01T00:00:00.000Z",
     })
@@ -62,11 +62,11 @@ describe("execution lease state machine", () => {
       sessionId: "sess-wf",
       ownerRef: "wf_123/review",
       executionRef: "wf_123/review",
-      executorAgent: "weft",
+      executorAgent: "cleric",
       currentLease,
       currentSessionRuntime: createSessionRuntimeState({
         sessionId: "sess-wf",
-        foregroundAgent: "loom",
+        foregroundAgent: "bard",
         mode: "ad_hoc",
         status: "idle",
         updatedAt: "2026-01-01T00:00:01.000Z",
@@ -79,13 +79,13 @@ describe("execution lease state machine", () => {
       owner_ref: "wf_123/review",
       status: "running",
       session_id: "sess-wf",
-      executor_agent: "weft",
+      executor_agent: "cleric",
       started_at: "2026-01-01T00:00:00.000Z",
       updated_at: "2026-01-01T00:00:02.000Z",
     })
     expect(projection.sessionRuntime).toEqual({
       session_id: "sess-wf",
-      foreground_agent: "weft",
+      foreground_agent: "cleric",
       mode: "workflow",
       execution_ref: "wf_123/review",
       status: "running",
@@ -99,13 +99,13 @@ describe("execution lease state machine", () => {
       ownerRef: ".guild/plans/my-plan.md",
       status: "running",
       sessionId: "sess-plan",
-      executorAgent: "tapestry",
+      executorAgent: "fighter",
       startedAt: "2026-01-01T00:00:00.000Z",
       updatedAt: "2026-01-01T00:00:01.000Z",
     })
     const currentSessionRuntime = createSessionRuntimeState({
       sessionId: "sess-plan",
-      foregroundAgent: "tapestry",
+      foregroundAgent: "fighter",
       mode: "plan",
       executionRef: ".guild/plans/my-plan.md",
       status: "running",
@@ -121,7 +121,7 @@ describe("execution lease state machine", () => {
     })
     expect(paused.lease?.status).toBe("paused")
     expect(paused.sessionRuntime?.status).toBe("paused")
-    expect(paused.sessionRuntime?.foreground_agent).toBe("tapestry")
+    expect(paused.sessionRuntime?.foreground_agent).toBe("fighter")
 
     const completed = projectExecutionTransition({
       event: "complete_owner",
@@ -133,7 +133,7 @@ describe("execution lease state machine", () => {
     expect(completed.lease).toBeNull()
     expect(completed.sessionRuntime).toEqual({
       session_id: "sess-plan",
-      foreground_agent: "tapestry",
+      foreground_agent: "fighter",
       mode: "ad_hoc",
       execution_ref: ".guild/plans/my-plan.md",
       status: "idle",
@@ -147,7 +147,7 @@ describe("execution lease state machine", () => {
       ownerRef: "wf_1/build",
       status: "running",
       sessionId: "sess-owned",
-      executorAgent: "warp",
+      executorAgent: "paladin",
     })
 
     const ownedProjection = projectExecutionTransition({
@@ -156,7 +156,7 @@ describe("execution lease state machine", () => {
       currentLease: ownedLease,
       currentSessionRuntime: createSessionRuntimeState({
         sessionId: "sess-owned",
-        foregroundAgent: "warp",
+        foregroundAgent: "paladin",
         mode: "workflow",
         executionRef: "wf_1/build",
         status: "running",
@@ -171,7 +171,7 @@ describe("execution lease state machine", () => {
       ownerRef: "wf_2/build",
       status: "running",
       sessionId: "sess-other",
-      executorAgent: "warp",
+      executorAgent: "paladin",
     })
 
     const foreignProjection = projectExecutionTransition({
@@ -180,7 +180,7 @@ describe("execution lease state machine", () => {
       currentLease: foreignLease,
       currentSessionRuntime: createSessionRuntimeState({
         sessionId: "sess-owned",
-        foregroundAgent: "loom",
+        foregroundAgent: "bard",
         mode: "ad_hoc",
         status: "idle",
       }),
@@ -196,7 +196,7 @@ describe("execution lease state machine", () => {
       ownerRef: ".guild/plans/p.md",
       status: "running",
       sessionId: "sess-plan",
-      executorAgent: "tapestry",
+      executorAgent: "fighter",
       hasActivePlan: true,
       hasActiveWorkflow: false,
       activePlanPaused: false,

@@ -1,4 +1,4 @@
-import type { WeaveConfig } from "../config/schema"
+import type { GuildConfig } from "../config/schema"
 import type { ToolPermissions, ToolPermissionMap } from "./permissions"
 import { createToolPermissions } from "./permissions"
 
@@ -20,7 +20,7 @@ export interface ToolRegistryOptions {
   /** All available tool names (from OpenCode's tool system) */
   availableTools: string[]
   /** Config with disabled_tools list */
-  config: WeaveConfig
+  config: GuildConfig
   /** Per-agent tool restriction maps (from agent configs) */
   agentRestrictions: Record<string, ToolPermissionMap>
 }
@@ -29,7 +29,7 @@ export interface ToolRegistryOptions {
  * Create a tool registry that filters by disabled_tools and builds per-agent permissions.
  *
  * Tools are not reimplemented here — they come from OpenCode.
- * Weave only manages which tools are visible and which are denied per agent.
+ * Guild only manages which tools are visible and which are denied per agent.
  */
 export function createToolRegistry(options: ToolRegistryOptions): ToolRegistryResult {
   const { availableTools, config, agentRestrictions } = options

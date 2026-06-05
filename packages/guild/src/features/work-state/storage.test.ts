@@ -20,7 +20,7 @@ import { GUILD_DIR, PLANS_DIR } from "./constants"
 let testDir: string
 
 beforeEach(() => {
-  testDir = mkdtempSync(join(tmpdir(), "weave-test-"))
+  testDir = mkdtempSync(join(tmpdir(), "guild-test-"))
 })
 
 afterEach(() => {
@@ -136,24 +136,24 @@ describe("createWorkState", () => {
   })
 
   it("includes agent when provided", () => {
-    const state = createWorkState("/path/plan.md", "sess_1", "tapestry")
-    expect(state.agent).toBe("tapestry")
+    const state = createWorkState("/path/plan.md", "sess_1", "fighter")
+    expect(state.agent).toBe("fighter")
   })
 
   it("includes start_sha when directory is a git repo", () => {
-    // Use the actual weave repo root as the directory
-    const state = createWorkState("/path/plan.md", "sess_1", "tapestry", process.cwd())
+    // Use the actual guild repo root as the directory
+    const state = createWorkState("/path/plan.md", "sess_1", "fighter", process.cwd())
     expect(state.start_sha).toBeDefined()
     expect(state.start_sha!.length).toBe(40)
   })
 
   it("omits start_sha when directory is not provided", () => {
-    const state = createWorkState("/path/plan.md", "sess_1", "tapestry")
+    const state = createWorkState("/path/plan.md", "sess_1", "fighter")
     expect(state.start_sha).toBeUndefined()
   })
 
   it("omits start_sha when directory is not a git repo", () => {
-    const state = createWorkState("/path/plan.md", "sess_1", "tapestry", testDir)
+    const state = createWorkState("/path/plan.md", "sess_1", "fighter", testDir)
     expect(state.start_sha).toBeUndefined()
   })
 })
@@ -268,13 +268,13 @@ describe("pauseWork", () => {
   })
 
   it("preserves other state fields when pausing", () => {
-    const original = createWorkState("/path/plan.md", "sess_1", "tapestry")
+    const original = createWorkState("/path/plan.md", "sess_1", "fighter")
     writeWorkState(testDir, original)
     pauseWork(testDir)
     const state = readWorkState(testDir)
     expect(state!.active_plan).toBe("/path/plan.md")
     expect(state!.session_ids).toEqual(["sess_1"])
-    expect(state!.agent).toBe("tapestry")
+    expect(state!.agent).toBe("fighter")
     expect(state!.paused).toBe(true)
   })
 })

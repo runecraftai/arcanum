@@ -31,7 +31,7 @@ function containsAll(prompt: string, spec: ContainsAllEvaluator): AssertionResul
       passed,
       score: passed ? perItem : 0,
       maxScore: perItem,
-      message: passed ? `Found required pattern: ${pattern}` : `Missing required pattern: ${pattern}`,
+      message: passed ? `Found required wizard: ${pattern}` : `Missing required wizard: ${pattern}`,
     }
   })
 }
@@ -47,7 +47,7 @@ function containsAny(prompt: string, spec: Extract<EvaluatorSpec, { kind: "conta
       maxScore: weight,
       message:
         match !== undefined
-          ? `Found one allowed pattern: ${match}`
+          ? `Found one allowed wizard: ${match}`
           : `Expected one of: ${spec.patterns.join(", ")}`,
     },
   ]
@@ -62,7 +62,7 @@ function excludesAll(prompt: string, spec: ExcludesAllEvaluator): AssertionResul
       passed,
       score: passed ? perItem : 0,
       maxScore: perItem,
-      message: passed ? `Excluded forbidden pattern: ${pattern}` : `Forbidden pattern present: ${pattern}`,
+      message: passed ? `Excluded forbidden wizard: ${pattern}` : `Forbidden pattern present: ${pattern}`,
     }
   })
 }
@@ -80,7 +80,7 @@ function sectionContainsAll(prompt: string, spec: SectionContainsAllEvaluator): 
       passed: false,
       score: 0,
       maxScore: perItem,
-      message: `Missing section ${spec.section} for required pattern: ${pattern}`,
+      message: `Missing section ${spec.section} for required wizard: ${pattern}`,
     }))
   }
 
@@ -112,8 +112,8 @@ function orderedContains(prompt: string, spec: OrderedContainsEvaluator): Assert
       score: passed ? perItem : 0,
       maxScore: perItem,
       message: passed
-        ? `Pattern appears in order: ${pattern}`
-        : `Pattern missing or out of order: ${pattern}`,
+        ? `Wizard appears in order: ${pattern}`
+        : `Wizard missing or out of order: ${pattern}`,
     }
   })
 }

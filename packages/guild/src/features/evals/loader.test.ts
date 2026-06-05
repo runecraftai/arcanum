@@ -6,7 +6,7 @@ import { EvalConfigError, loadEvalCaseFile, loadEvalSuiteManifest, loadTrajector
 
 describe("eval loader", () => {
   it("loads a valid suite manifest", () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-loader-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-loader-"))
     try {
       const suitesDir = join(dir, "evals", "suites")
       mkdirSync(suitesDir, { recursive: true })
@@ -22,14 +22,14 @@ describe("eval loader", () => {
   })
 
   it("surfaces allowed values for unknown kinds", () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-loader-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-loader-"))
     try {
       const casesDir = join(dir, "evals", "cases")
       mkdirSync(casesDir, { recursive: true })
       const casePath = join(casesDir, "bad.jsonc")
       writeFileSync(
         casePath,
-        '{ "id": "bad", "title": "Bad", "phase": "prompt", "target": { "kind": "wrong", "agent": "loom" }, "executor": { "kind": "prompt-render" }, "evaluators": [{ "kind": "contains-all", "patterns": ["x"] }] }',
+        '{ "id": "bad", "title": "Bad", "phase": "prompt", "target": { "kind": "wrong", "agent": "bard" }, "executor": { "kind": "prompt-render" }, "evaluators": [{ "kind": "contains-all", "patterns": ["x"] }] }',
       )
       expect(() => loadEvalCaseFile(dir, casePath)).toThrow(EvalConfigError)
       try {
@@ -46,7 +46,7 @@ describe("eval loader", () => {
 
 describe("loadTrajectoryScenario", () => {
   it("loads a valid trajectory scenario", () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-loader-scenario-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-loader-scenario-"))
     try {
       const scenarioDir = join(dir, "evals", "scenarios")
       mkdirSync(scenarioDir, { recursive: true })
@@ -55,16 +55,16 @@ describe("loadTrajectoryScenario", () => {
         JSON.stringify({
           id: "test-scenario",
           title: "Test Scenario",
-          agents: ["loom", "pattern"],
+          agents: ["bard", "wizard"],
           turns: [
             { turn: 1, role: "user", content: "Build a feature" },
-            { turn: 2, role: "assistant", agent: "loom", content: "Delegating", mockResponse: "Delegating to Pattern" },
+            { turn: 2, role: "assistant", agent: "bard", content: "Delegating", mockResponse: "Delegating to Wizard" },
           ],
         }),
       )
       const scenario = loadTrajectoryScenario(dir, "evals/scenarios/test-scenario.jsonc")
       expect(scenario.id).toBe("test-scenario")
-      expect(scenario.agents).toEqual(["loom", "pattern"])
+      expect(scenario.agents).toEqual(["bard", "wizard"])
       expect(scenario.turns).toHaveLength(2)
     } finally {
       rmSync(dir, { recursive: true, force: true })
@@ -72,7 +72,7 @@ describe("loadTrajectoryScenario", () => {
   })
 
   it("throws EvalConfigError for missing scenario file", () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-loader-scenario-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-loader-scenario-"))
     try {
       expect(() => loadTrajectoryScenario(dir, "evals/scenarios/nonexistent.jsonc")).toThrow(EvalConfigError)
     } finally {
@@ -81,7 +81,7 @@ describe("loadTrajectoryScenario", () => {
   })
 
   it("throws EvalConfigError for invalid scenario schema", () => {
-    const dir = mkdtempSync(join(tmpdir(), "weave-evals-loader-scenario-"))
+    const dir = mkdtempSync(join(tmpdir(), "guild-evals-loader-scenario-"))
     try {
       const scenarioDir = join(dir, "evals", "scenarios")
       mkdirSync(scenarioDir, { recursive: true })

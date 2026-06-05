@@ -8,7 +8,7 @@ import { getChangedFiles } from "./git-diff"
 let tempDir: string
 
 beforeEach(() => {
-  tempDir = mkdtempSync(join(tmpdir(), "weave-git-diff-test-"))
+  tempDir = mkdtempSync(join(tmpdir(), "guild-git-diff-test-"))
 })
 
 afterEach(() => {

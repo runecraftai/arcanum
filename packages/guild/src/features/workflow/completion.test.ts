@@ -8,7 +8,7 @@ import type { CompletionContext } from "./completion"
 let testDir: string
 
 beforeEach(() => {
-  testDir = mkdtempSync(join(tmpdir(), "weave-completion-test-"))
+  testDir = mkdtempSync(join(tmpdir(), "guild-completion-test-"))
 })
 
 afterEach(() => {
@@ -101,14 +101,14 @@ describe("user_confirm", () => {
 
 describe("plan_created", () => {
   it("detects plan file by direct path", () => {
-    const planDir = join(testDir, ".guild", "plans")
+    const planDir = join(testDir, ".specs", "features", "my-plan")
     mkdirSync(planDir, { recursive: true })
-    writeFileSync(join(planDir, "my-plan.md"), "# Plan", "utf-8")
+    writeFileSync(join(planDir, "tasks.md"), "# Plan", "utf-8")
     const ctx = makeContext({ config: { method: "plan_created", plan_name: "my-plan" } })
     const result = checkStepCompletion("plan_created", ctx)
     expect(result.complete).toBe(true)
     expect(result.artifacts).toBeDefined()
-    expect(result.artifacts!.plan_path).toContain("my-plan.md")
+    expect(result.artifacts!.plan_path).toContain(".specs/features/my-plan/tasks.md")
   })
 
   it("returns false when plan doesn't exist", () => {
@@ -127,9 +127,9 @@ describe("plan_created", () => {
 
 describe("plan_complete", () => {
   it("detects completed plan", () => {
-    const planDir = join(testDir, ".guild", "plans")
+    const planDir = join(testDir, ".specs", "features", "my-plan")
     mkdirSync(planDir, { recursive: true })
-    writeFileSync(join(planDir, "my-plan.md"), "- [x] Done 1\n- [x] Done 2\n", "utf-8")
+    writeFileSync(join(planDir, "tasks.md"), "- [x] Done 1\n- [x] Done 2\n", "utf-8")
     const ctx = makeContext({ config: { method: "plan_complete", plan_name: "my-plan" } })
     const result = checkStepCompletion("plan_complete", ctx)
     expect(result.complete).toBe(true)
@@ -137,9 +137,9 @@ describe("plan_complete", () => {
   })
 
   it("returns false for incomplete plan", () => {
-    const planDir = join(testDir, ".guild", "plans")
+    const planDir = join(testDir, ".specs", "features", "my-plan")
     mkdirSync(planDir, { recursive: true })
-    writeFileSync(join(planDir, "my-plan.md"), "- [x] Done\n- [ ] Todo\n", "utf-8")
+    writeFileSync(join(planDir, "tasks.md"), "- [x] Done\n- [ ] Todo\n", "utf-8")
     const ctx = makeContext({ config: { method: "plan_complete", plan_name: "my-plan" } })
     const result = checkStepCompletion("plan_complete", ctx)
     expect(result.complete).toBe(false)

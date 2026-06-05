@@ -1,6 +1,6 @@
 import { describe, it, expect } from "bun:test"
 import type { AgentConfig } from "@opencode-ai/sdk"
-import { isGptModel, isFactory, type AgentFactory, type WeaveAgentName } from "./types"
+import { isGptModel, isFactory, type AgentFactory, type GuildAgentName } from "./types"
 
 describe("isGptModel", () => {
   it("returns true for openai/ prefix", () => {
@@ -49,16 +49,16 @@ describe("isFactory", () => {
   })
 })
 
-describe("WeaveAgentName", () => {
+describe("GuildAgentName", () => {
   it("includes all 7 agent names", () => {
-    const names: WeaveAgentName[] = [
-      "loom",
-      "tapestry",
-      "shuttle",
-      "pattern",
-      "thread",
-      "spindle",
-      "weft",
+    const names: GuildAgentName[] = [
+      "bard",
+      "fighter",
+      "ranger",
+      "wizard",
+      "rogue",
+      "warlock",
+      "cleric",
     ]
     expect(names.length).toBe(7)
   })

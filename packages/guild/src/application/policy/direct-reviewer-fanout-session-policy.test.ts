@@ -2,22 +2,22 @@ import { describe, expect, it } from "bun:test"
 import { createDirectReviewerFanOutSessionPolicy } from "./direct-reviewer-fanout-session-policy"
 import type { ReviewerPlan } from "../../agents/review-resolver"
 
-function makeFanOutPlan(baseAgent: "weft" | "warp"): ReviewerPlan {
+function makeFanOutPlan(baseAgent: "cleric" | "paladin"): ReviewerPlan {
   return {
     kind: "fan-out",
     scope: "direct",
     baseAgent,
     primary: {
       agentName: baseAgent,
-      label: baseAgent === "weft" ? "Weft" : "Warp",
+      label: baseAgent === "cleric" ? "Cleric" : "Paladin",
       model: "primary-model",
     },
-    variants: [
-      {
-        baseAgent,
-        key: `${baseAgent}-v1`,
-        model: "variant-model",
-        label: `${baseAgent} @ variant-model`,
+      variants: [
+        {
+          baseAgent,
+          key: `${baseAgent}-v1`,
+          model: "variant-model",
+          label: `${baseAgent} @ variant-model`,
       },
     ],
     batch: { mode: "parallel", size: 2 },
@@ -26,7 +26,7 @@ function makeFanOutPlan(baseAgent: "weft" | "warp"): ReviewerPlan {
 
 describe("createDirectReviewerFanOutSessionPolicy", () => {
   it("emits fan-out effect with original prompt and captured primary output", async () => {
-    const plan = makeFanOutPlan("weft")
+    const plan = makeFanOutPlan("cleric")
     const policy = createDirectReviewerFanOutSessionPolicy({
       reviewerResolver: {
         forBaseAgent: () => plan,
@@ -39,13 +39,13 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "weft",
+      foregroundAgent: "cleric",
       assistantText: "assistant verdict",
       originalPromptText: "user original request",
       messageId: "msg-1",
@@ -71,8 +71,8 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
         forBaseAgent: () => ({
           kind: "primary-only",
           scope: "direct",
-          baseAgent: "warp",
-          primary: { agentName: "warp", label: "Warp", model: "model" },
+          baseAgent: "paladin",
+          primary: { agentName: "paladin", label: "Paladin", model: "model" },
           reason: "no-variants",
         }),
       },
@@ -84,13 +84,13 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "warp",
+      foregroundAgent: "paladin",
       assistantText: "assistant verdict",
       originalPromptText: "user original request",
       messageId: "msg-2",
@@ -105,7 +105,7 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
         forBaseAgent: () => ({
           kind: "disabled",
           scope: "direct",
-          baseAgent: "weft",
+          baseAgent: "cleric",
           reason: "agent-disabled",
         }),
       },
@@ -117,13 +117,13 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "weft",
+      foregroundAgent: "cleric",
       assistantText: "assistant verdict",
       originalPromptText: "user original request",
       messageId: "msg-3",
@@ -135,7 +135,7 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
   it("emits zero effects when originalPromptText is missing", async () => {
     const policy = createDirectReviewerFanOutSessionPolicy({
       reviewerResolver: {
-        forBaseAgent: () => makeFanOutPlan("weft"),
+        forBaseAgent: () => makeFanOutPlan("cleric"),
       },
     })
 
@@ -145,13 +145,13 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "weft",
+      foregroundAgent: "cleric",
       assistantText: "assistant verdict",
       messageId: "msg-4",
     })
@@ -162,7 +162,7 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
   it("still emits fan-out when assistant text includes reviewer fan-out sentinel", async () => {
     const policy = createDirectReviewerFanOutSessionPolicy({
       reviewerResolver: {
-        forBaseAgent: () => makeFanOutPlan("weft"),
+        forBaseAgent: () => makeFanOutPlan("cleric"),
       },
     })
 
@@ -172,13 +172,13 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "weft",
+      foregroundAgent: "cleric",
       assistantText: "result <!-- guild:reviewer-fanout --> message",
       originalPromptText: "user original request",
       respondingToTrustedInjectedPromptKind: "generic",
@@ -196,7 +196,7 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
   it("emits zero effects when responding to trusted reviewer-fanout injected prompt", async () => {
     const policy = createDirectReviewerFanOutSessionPolicy({
       reviewerResolver: {
-        forBaseAgent: () => makeFanOutPlan("weft"),
+        forBaseAgent: () => makeFanOutPlan("cleric"),
       },
     })
 
@@ -206,13 +206,13 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "weft",
+      foregroundAgent: "cleric",
       assistantText: "assistant verdict",
       originalPromptText: "runtime injected prompt",
       respondingToTrustedInjectedPromptKind: "reviewer-fanout",
@@ -225,7 +225,7 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
   it("still emits fan-out when responding to trusted generic injected prompt", async () => {
     const policy = createDirectReviewerFanOutSessionPolicy({
       reviewerResolver: {
-        forBaseAgent: () => makeFanOutPlan("weft"),
+        forBaseAgent: () => makeFanOutPlan("cleric"),
       },
     })
 
@@ -235,13 +235,13 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "weft",
+      foregroundAgent: "cleric",
       assistantText: "assistant verdict",
       originalPromptText: "runtime injected generic prompt",
       respondingToTrustedInjectedPromptKind: "generic",
@@ -259,7 +259,7 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
   it("emits zero effects when messageId is missing", async () => {
     const policy = createDirectReviewerFanOutSessionPolicy({
       reviewerResolver: {
-        forBaseAgent: () => makeFanOutPlan("weft"),
+        forBaseAgent: () => makeFanOutPlan("cleric"),
       },
     })
 
@@ -269,13 +269,13 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "weft",
+      foregroundAgent: "cleric",
       assistantText: "assistant verdict",
       originalPromptText: "user original request",
       messageId: "",
@@ -287,7 +287,7 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
   it("emits zero effects for unknown foreground agent", async () => {
     const policy = createDirectReviewerFanOutSessionPolicy({
       reviewerResolver: {
-        forBaseAgent: () => makeFanOutPlan("weft"),
+        forBaseAgent: () => makeFanOutPlan("cleric"),
       },
     })
 
@@ -297,13 +297,13 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "thread",
+      foregroundAgent: "wizard",
       assistantText: "assistant verdict",
       originalPromptText: "user original request",
       messageId: "msg-6",
@@ -312,8 +312,8 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
     expect(result.effects).toEqual([])
   })
 
-  it("falls back to explicit @weft mention when foreground agent is loom", async () => {
-    const plan = makeFanOutPlan("weft")
+  it("falls back to explicit @cleric mention when foreground agent is bard", async () => {
+    const plan = makeFanOutPlan("cleric")
     const policy = createDirectReviewerFanOutSessionPolicy({
       reviewerResolver: {
         forBaseAgent: () => plan,
@@ -326,15 +326,15 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "loom",
+      foregroundAgent: "bard",
       assistantText: "assistant verdict",
-      originalPromptText: "Puedes probar con @weft el ultimo commit?",
+      originalPromptText: "Puedes probar con @cleric el ultimo commit?",
       messageId: "msg-10",
     })
 
@@ -347,8 +347,8 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
     })
   })
 
-  it("falls back to explicit @warp mention when foreground agent is loom", async () => {
-    const plan = makeFanOutPlan("warp")
+  it("falls back to explicit @paladin mention when foreground agent is bard", async () => {
+    const plan = makeFanOutPlan("paladin")
     const policy = createDirectReviewerFanOutSessionPolicy({
       reviewerResolver: {
         forBaseAgent: () => plan,
@@ -361,15 +361,15 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "loom",
+      foregroundAgent: "bard",
       assistantText: "assistant verdict",
-      originalPromptText: "Puedes probar con @warp el ultimo commit?",
+      originalPromptText: "Puedes probar con @paladin el ultimo commit?",
       messageId: "msg-11",
     })
 
@@ -382,10 +382,10 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
     })
   })
 
-  it("does not treat natural-language weft text as explicit fallback when foreground agent is loom", async () => {
+  it("does not treat natural-language cleric text as explicit fallback when foreground agent is bard", async () => {
     const policy = createDirectReviewerFanOutSessionPolicy({
       reviewerResolver: {
-        forBaseAgent: () => makeFanOutPlan("weft"),
+        forBaseAgent: () => makeFanOutPlan("cleric"),
       },
     })
 
@@ -395,25 +395,25 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "loom",
+      foregroundAgent: "bard",
       assistantText: "assistant verdict",
-      originalPromptText: "Puedes probar con weft el ultimo commit?",
+      originalPromptText: "Puedes probar con cleric el ultimo commit?",
       messageId: "msg-12",
     })
 
     expect(result.effects).toEqual([])
   })
 
-  it("does not fallback when both @weft and @warp mentions are present and foreground agent is not explicit reviewer", async () => {
+  it("does not fallback when both @cleric and @paladin mentions are present and foreground agent is not explicit reviewer", async () => {
     const policy = createDirectReviewerFanOutSessionPolicy({
       reviewerResolver: {
-        forBaseAgent: () => makeFanOutPlan("weft"),
+        forBaseAgent: () => makeFanOutPlan("cleric"),
       },
     })
 
@@ -423,15 +423,15 @@ describe("createDirectReviewerFanOutSessionPolicy", () => {
       hooks: {
         contextWindowThresholds: null,
         rulesInjectorEnabled: false,
-        patternMdOnlyEnabled: false,
+        rangerMdOnlyEnabled: false,
         verificationReminderEnabled: false,
         todoDescriptionOverrideEnabled: false,
         todoContinuationEnforcerEnabled: false,
       },
       inputTokens: 100,
-      foregroundAgent: "loom",
+      foregroundAgent: "bard",
       assistantText: "assistant verdict",
-      originalPromptText: "Compare @weft and @warp on this commit",
+      originalPromptText: "Compare @cleric and @paladin on this commit",
       messageId: "msg-13",
     })
 

@@ -50,7 +50,7 @@ function writePlan(name: string, content: string): string {
 }
 
 beforeEach(() => {
-  testDir = mkdtempSync(join(tmpdir(), "weave-val-"))
+  testDir = mkdtempSync(join(tmpdir(), "guild-val-"))
   plansDir = join(testDir, PLANS_DIR)
   mkdirSync(plansDir, { recursive: true })
 })
@@ -78,7 +78,7 @@ describe("non-existent plan file", () => {
 // ─── Path confinement ─────────────────────────────────────────────────────────
 
 describe("path confinement", () => {
-  it("rejects a planPath outside the .guild/plans/ directory", () => {
+    it("rejects a planPath outside the .guild/plans/ directory", () => {
     const result = validatePlan("/etc/shadow", testDir)
     expect(result.valid).toBe(false)
     expect(result.errors).toHaveLength(1)
@@ -92,7 +92,7 @@ describe("path confinement", () => {
     expect(result.errors[0].message).toContain("outside the allowed directory")
   })
 
-  it("accepts a planPath within the .guild/plans/ directory", () => {
+    it("accepts a planPath within the .guild/plans/ directory", () => {
     const planPath = writePlan("safe-plan", VALID_PLAN)
     const result = validatePlan(planPath, testDir)
     expect(result.valid).toBe(true)

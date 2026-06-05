@@ -12,12 +12,12 @@ import {
   getOrCreateFingerprint,
 } from "./fingerprint"
 import { readFingerprint, writeFingerprint } from "./storage"
-import { getWeaveVersion } from "../../shared/version"
+import { getGuildVersion } from "../../shared/version"
 
 let tempDir: string
 
 beforeEach(() => {
-  tempDir = mkdtempSync(join(tmpdir(), "weave-fp-test-"))
+  tempDir = mkdtempSync(join(tmpdir(), "guild-fp-test-"))
 })
 
 afterEach(() => {
@@ -238,11 +238,11 @@ describe("generateFingerprint", () => {
     expect(fp.arch!.length).toBeGreaterThan(0)
   })
 
-  it("includes weaveVersion field", () => {
+  it("includes guildVersion field", () => {
     const fp = generateFingerprint(tempDir)
-    expect(typeof fp.weaveVersion).toBe("string")
-    expect(fp.weaveVersion).toMatch(/^\d+\.\d+\.\d+/)
-    expect(fp.weaveVersion).toBe(getWeaveVersion())
+    expect(typeof fp.guildVersion).toBe("string")
+    expect(fp.guildVersion).toMatch(/^\d+\.\d+\.\d+/)
+    expect(fp.guildVersion).toBe(getGuildVersion())
   })
 })
 
@@ -285,8 +285,8 @@ describe("getOrCreateFingerprint", () => {
     expect(fp!.stack.some((s) => s.name === "node")).toBe(true)
   })
 
-  it("regenerates when cached fingerprint has no weaveVersion (legacy)", () => {
-    // Write a legacy fingerprint without weaveVersion
+  it("regenerates when cached fingerprint has no guildVersion (legacy)", () => {
+    // Write a legacy fingerprint without guildVersion
     writeFingerprint(tempDir, {
       generatedAt: "2024-01-01T00:00:00.000Z",
       stack: [],
@@ -296,29 +296,29 @@ describe("getOrCreateFingerprint", () => {
     expect(fp).not.toBeNull()
     // Should have regenerated — generatedAt must differ from the legacy value
     expect(fp!.generatedAt).not.toBe("2024-01-01T00:00:00.000Z")
-    // New fingerprint must include weaveVersion
-    expect(fp!.weaveVersion).toBe(getWeaveVersion())
+    // New fingerprint must include guildVersion
+    expect(fp!.guildVersion).toBe(getGuildVersion())
   })
 
-  it("regenerates when cached fingerprint has a stale weaveVersion", () => {
+  it("regenerates when cached fingerprint has a stale guildVersion", () => {
     // Write a fingerprint with an old version
     writeFingerprint(tempDir, {
       generatedAt: "2024-01-01T00:00:00.000Z",
       stack: [],
       isMonorepo: false,
-      weaveVersion: "0.0.1",
+      guildVersion: "0.0.1",
     })
     const fp = getOrCreateFingerprint(tempDir)
     expect(fp).not.toBeNull()
-    expect(fp!.weaveVersion).toBe(getWeaveVersion())
+    expect(fp!.guildVersion).toBe(getGuildVersion())
     expect(fp!.generatedAt).not.toBe("2024-01-01T00:00:00.000Z")
   })
 
-  it("returns cached fingerprint when weaveVersion matches", () => {
-    // Generate a fresh fingerprint (has correct weaveVersion)
+  it("returns cached fingerprint when guildVersion matches", () => {
+    // Generate a fresh fingerprint (has correct guildVersion)
     const first = fingerprintProject(tempDir)
     expect(first).not.toBeNull()
-    expect(first!.weaveVersion).toBe(getWeaveVersion())
+    expect(first!.guildVersion).toBe(getGuildVersion())
 
     // getOrCreateFingerprint should return from cache (same generatedAt)
     const second = getOrCreateFingerprint(tempDir)

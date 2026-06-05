@@ -15,15 +15,15 @@ describe("workflow service ownership transitions", () => {
   let definitionPath: string
 
   beforeEach(() => {
-    directory = mkdtempSync(join(tmpdir(), "weave-workflow-service-"))
+    directory = mkdtempSync(join(tmpdir(), "guild-workflow-service-"))
     const workflowDir = join(directory, WORKFLOWS_DIR_PROJECT)
     mkdirSync(workflowDir, { recursive: true })
     definition = {
       name: "workflow",
       version: 1,
       steps: [
-        { id: "build", name: "Build", type: "autonomous", agent: "tapestry", prompt: "Build", completion: { method: "agent_signal" } },
-        { id: "review", name: "Review", type: "interactive", agent: "weft", prompt: "Review", completion: { method: "user_confirm" } },
+        { id: "build", name: "Build", type: "autonomous", agent: "fighter", prompt: "Build", completion: { method: "agent_signal" } },
+        { id: "review", name: "Review", type: "interactive", agent: "cleric", prompt: "Review", completion: { method: "user_confirm" } },
       ],
     }
     definitionPath = join(workflowDir, "workflow.json")
@@ -47,7 +47,7 @@ describe("workflow service ownership transitions", () => {
     expect(startedLease).not.toBeNull()
     expect(startedLease?.owner_kind).toBe("workflow")
     expect(startedLease?.owner_ref).toContain("/build")
-    expect(startedLease?.executor_agent).toBe("tapestry")
+    expect(startedLease?.executor_agent).toBe("fighter")
     expect(executionLeaseRepository.readSessionRuntime(directory, "sess-wf")?.mode).toBe("workflow")
 
     expect(workflowService.pauseWorkflow(directory, "Paused for review")).toBe(true)
@@ -72,7 +72,7 @@ describe("workflow service ownership transitions", () => {
     const sessionRuntime = executionLeaseRepository.readSessionRuntime(directory, "sess-wf")
     expect(sessionRuntime).not.toBeNull()
     expect(sessionRuntime?.mode).toBe("ad_hoc")
-    expect(sessionRuntime?.foreground_agent).toBe("tapestry")
+    expect(sessionRuntime?.foreground_agent).toBe("fighter")
     expect(sessionRuntime?.status).toBe("idle")
   })
 
@@ -92,11 +92,11 @@ describe("workflow service ownership transitions", () => {
     expect(executionLeaseRepository.readExecutionLease(directory)).toMatchObject({
       owner_kind: "workflow",
       session_id: "sess-wf-2",
-      executor_agent: "tapestry",
+      executor_agent: "fighter",
       status: "running",
     })
     expect(executionLeaseRepository.readSessionRuntime(directory, "sess-wf-2")).toMatchObject({
-      foreground_agent: "tapestry",
+      foreground_agent: "fighter",
       mode: "workflow",
       status: "running",
     })

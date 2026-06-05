@@ -1,4 +1,4 @@
-import type { WeaveConfig } from "./schema"
+import type { GuildConfig } from "./schema"
 import { createConfigFsLoader } from "../infrastructure/fs/config-fs-loader"
 
 export type { ConfigDiagnostic, ConfigLoadResult } from "../infrastructure/fs/config-fs-loader"
@@ -13,6 +13,6 @@ export function loadGuildConfig(
   directory: string,
   ctx?: unknown,
   homeDir?: string,
-): WeaveConfig {
+): GuildConfig {
   return DefaultConfigLoader.loadGuildConfig(directory, ctx, homeDir)
 }

@@ -1,4 +1,4 @@
-import type { WeaveAgentName } from "../../agents/types"
+import type { GuildAgentName } from "../../agents/types"
 import type { AgentOverrides, CategoriesConfig } from "../../config/schema"
 
 export const EVAL_PHASES = ["prompt", "routing", "trajectory", "experimental"] as const
@@ -33,7 +33,7 @@ export const EVALUATOR_KINDS = [
 ] as const
 export type EvaluatorKind = (typeof EVALUATOR_KINDS)[number]
 
-export type BuiltinEvalAgentName = WeaveAgentName
+export type BuiltinEvalAgentName = GuildAgentName
 
 export interface BuiltinAgentPromptVariant {
   disabledAgents?: string[]

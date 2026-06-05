@@ -46,7 +46,7 @@ describe("github-models-api", () => {
       fetch: async () =>
         new Response(
           JSON.stringify({
-            choices: [{ message: { content: "I will delegate to thread." } }],
+            choices: [{ message: { content: "I will delegate to rogue." } }],
           }),
           { status: 200, headers: { "Content-Type": "application/json" } },
         ),
@@ -54,7 +54,7 @@ describe("github-models-api", () => {
 
     try {
       const result = await callGitHubModels("system prompt", "user message", "gpt-4o-mini", "test-token")
-      expect(result.content).toBe("I will delegate to thread.")
+      expect(result.content).toBe("I will delegate to rogue.")
       expect(result.durationMs).toBeGreaterThanOrEqual(0)
     } finally {
       globalThis.fetch = originalFetch

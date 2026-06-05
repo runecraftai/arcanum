@@ -1,13 +1,13 @@
-import { LOOM_DEFAULTS } from "../../../agents/loom/default"
-import { composeLoomPrompt } from "../../../agents/loom/prompt-composer"
-import { TAPESTRY_DEFAULTS } from "../../../agents/tapestry/default"
-import { composeTapestryPrompt } from "../../../agents/tapestry/prompt-composer"
-import { PATTERN_DEFAULTS } from "../../../agents/pattern/default"
-import { THREAD_DEFAULTS } from "../../../agents/thread/default"
-import { SPINDLE_DEFAULTS } from "../../../agents/spindle/default"
-import { WEFT_DEFAULTS } from "../../../agents/weft/default"
-import { WARP_DEFAULTS } from "../../../agents/warp/default"
-import { SHUTTLE_DEFAULTS } from "../../../agents/shuttle/default"
+import { BARD_DEFAULTS } from "../../../agents/bard/default"
+import { composeBardPrompt } from "../../../agents/bard/prompt-composer"
+import { FIGHTER_DEFAULTS } from "../../../agents/fighter/default"
+import { composeFighterPrompt } from "../../../agents/fighter/prompt-composer"
+import { WIZARD_DEFAULTS } from "../../../agents/wizard/default"
+import { ROGUE_DEFAULTS } from "../../../agents/rogue/default"
+import { WARLOCK_DEFAULTS } from "../../../agents/warlock/default"
+import { CLERIC_DEFAULTS } from "../../../agents/cleric/default"
+import { PALADIN_DEFAULTS } from "../../../agents/paladin/default"
+import { RANGER_DEFAULTS } from "../../../agents/ranger/default"
 import { buildReviewModelVariants } from "../../../agents/review-model-variants"
 import type { BuiltinAgentPromptTarget, ResolvedTarget } from "../types"
 
@@ -21,127 +21,127 @@ export function resolveBuiltinAgentTarget(target: BuiltinAgentPromptTarget): Res
   const reviewModelVariants = buildReviewModelVariants(agentOverrides, disabledAgents)
 
   switch (target.agent) {
-    case "loom": {
-      const renderedPrompt = composeLoomPrompt({
+    case "bard": {
+      const renderedPrompt = composeBardPrompt({
         disabledAgents,
         agentOverrides,
         reviewModelVariants,
-      } as Parameters<typeof composeLoomPrompt>[0])
+      } as Parameters<typeof composeBardPrompt>[0])
       return {
         target,
         artifacts: {
           renderedPrompt,
           promptLength: renderedPrompt.length,
-          toolPolicy: cloneTools(LOOM_DEFAULTS.tools as Record<string, boolean> | undefined),
+          toolPolicy: cloneTools(BARD_DEFAULTS.tools as Record<string, boolean> | undefined),
           agentMetadata: {
-            agent: "loom",
-            description: LOOM_DEFAULTS.description,
+            agent: "bard",
+            description: BARD_DEFAULTS.description,
             sourceKind: "composer",
           },
         },
       }
     }
-    case "tapestry": {
-      const renderedPrompt = composeTapestryPrompt({
+    case "fighter": {
+      const renderedPrompt = composeFighterPrompt({
         disabledAgents,
         categories: target.variant?.categories,
         agentOverrides,
         reviewModelVariants,
-      } as Parameters<typeof composeTapestryPrompt>[0])
+      } as Parameters<typeof composeFighterPrompt>[0])
       return {
         target,
         artifacts: {
           renderedPrompt,
           promptLength: renderedPrompt.length,
-          toolPolicy: cloneTools(TAPESTRY_DEFAULTS.tools as Record<string, boolean> | undefined),
+          toolPolicy: cloneTools(FIGHTER_DEFAULTS.tools as Record<string, boolean> | undefined),
           agentMetadata: {
-            agent: "tapestry",
-            description: TAPESTRY_DEFAULTS.description,
+            agent: "fighter",
+            description: FIGHTER_DEFAULTS.description,
             sourceKind: "composer",
           },
         },
       }
     }
-    case "pattern":
+    case "wizard":
       return {
         target,
         artifacts: {
-          renderedPrompt: PATTERN_DEFAULTS.prompt,
-          promptLength: PATTERN_DEFAULTS.prompt?.length,
-          toolPolicy: cloneTools(PATTERN_DEFAULTS.tools as Record<string, boolean> | undefined),
+          renderedPrompt: WIZARD_DEFAULTS.prompt,
+          promptLength: WIZARD_DEFAULTS.prompt?.length,
+          toolPolicy: cloneTools(WIZARD_DEFAULTS.tools as Record<string, boolean> | undefined),
           agentMetadata: {
-            agent: "pattern",
-            description: PATTERN_DEFAULTS.description,
+            agent: "wizard",
+            description: WIZARD_DEFAULTS.description,
             sourceKind: "default",
           },
         },
       }
-    case "thread":
+    case "rogue":
       return {
         target,
         artifacts: {
-          renderedPrompt: THREAD_DEFAULTS.prompt,
-          promptLength: THREAD_DEFAULTS.prompt?.length,
-          toolPolicy: cloneTools(THREAD_DEFAULTS.tools as Record<string, boolean> | undefined),
+          renderedPrompt: ROGUE_DEFAULTS.prompt,
+          promptLength: ROGUE_DEFAULTS.prompt?.length,
+          toolPolicy: cloneTools(ROGUE_DEFAULTS.tools as Record<string, boolean> | undefined),
           agentMetadata: {
-            agent: "thread",
-            description: THREAD_DEFAULTS.description,
+            agent: "rogue",
+            description: ROGUE_DEFAULTS.description,
             sourceKind: "default",
           },
         },
       }
-    case "spindle":
+    case "warlock":
       return {
         target,
         artifacts: {
-          renderedPrompt: SPINDLE_DEFAULTS.prompt,
-          promptLength: SPINDLE_DEFAULTS.prompt?.length,
-          toolPolicy: cloneTools(SPINDLE_DEFAULTS.tools as Record<string, boolean> | undefined),
+          renderedPrompt: WARLOCK_DEFAULTS.prompt,
+          promptLength: WARLOCK_DEFAULTS.prompt?.length,
+          toolPolicy: cloneTools(WARLOCK_DEFAULTS.tools as Record<string, boolean> | undefined),
           agentMetadata: {
-            agent: "spindle",
-            description: SPINDLE_DEFAULTS.description,
+            agent: "warlock",
+            description: WARLOCK_DEFAULTS.description,
             sourceKind: "default",
           },
         },
       }
-    case "weft":
+    case "cleric":
       return {
         target,
         artifacts: {
-          renderedPrompt: WEFT_DEFAULTS.prompt,
-          promptLength: WEFT_DEFAULTS.prompt?.length,
-          toolPolicy: cloneTools(WEFT_DEFAULTS.tools as Record<string, boolean> | undefined),
+          renderedPrompt: CLERIC_DEFAULTS.prompt,
+          promptLength: CLERIC_DEFAULTS.prompt?.length,
+          toolPolicy: cloneTools(CLERIC_DEFAULTS.tools as Record<string, boolean> | undefined),
           agentMetadata: {
-            agent: "weft",
-            description: WEFT_DEFAULTS.description,
+            agent: "cleric",
+            description: CLERIC_DEFAULTS.description,
             sourceKind: "default",
           },
         },
       }
-    case "warp":
+    case "paladin":
       return {
         target,
         artifacts: {
-          renderedPrompt: WARP_DEFAULTS.prompt,
-          promptLength: WARP_DEFAULTS.prompt?.length,
-          toolPolicy: cloneTools(WARP_DEFAULTS.tools as Record<string, boolean> | undefined),
+          renderedPrompt: PALADIN_DEFAULTS.prompt,
+          promptLength: PALADIN_DEFAULTS.prompt?.length,
+          toolPolicy: cloneTools(PALADIN_DEFAULTS.tools as Record<string, boolean> | undefined),
           agentMetadata: {
-            agent: "warp",
-            description: WARP_DEFAULTS.description,
+            agent: "paladin",
+            description: PALADIN_DEFAULTS.description,
             sourceKind: "default",
           },
         },
       }
-    case "shuttle":
+    case "ranger":
       return {
         target,
         artifacts: {
-          renderedPrompt: SHUTTLE_DEFAULTS.prompt,
-          promptLength: SHUTTLE_DEFAULTS.prompt?.length,
-          toolPolicy: cloneTools(SHUTTLE_DEFAULTS.tools as Record<string, boolean> | undefined),
+          renderedPrompt: RANGER_DEFAULTS.prompt,
+          promptLength: RANGER_DEFAULTS.prompt?.length,
+          toolPolicy: cloneTools(RANGER_DEFAULTS.tools as Record<string, boolean> | undefined),
           agentMetadata: {
-            agent: "shuttle",
-            description: SHUTTLE_DEFAULTS.description,
+            agent: "ranger",
+            description: RANGER_DEFAULTS.description,
             sourceKind: "default",
           },
         },

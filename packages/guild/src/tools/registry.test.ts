@@ -1,9 +1,9 @@
 import { describe, it, expect } from "bun:test"
 import { createToolRegistry } from "./registry"
-import { WeaveConfigSchema } from "../config/schema"
+import { GuildConfigSchema } from "../config/schema"
 
 describe("createToolRegistry", () => {
-  const baseConfig = WeaveConfigSchema.parse({})
+  const baseConfig = GuildConfigSchema.parse({})
 
   it("includes all tools when none are disabled", () => {
     const result = createToolRegistry({
@@ -15,7 +15,7 @@ describe("createToolRegistry", () => {
   })
 
   it("excludes globally disabled tools", () => {
-    const config = WeaveConfigSchema.parse({ disabled_tools: ["write"] })
+    const config = GuildConfigSchema.parse({ disabled_tools: ["write"] })
     const result = createToolRegistry({
       availableTools: ["read", "write", "task"],
       config,
@@ -35,7 +35,7 @@ describe("createToolRegistry", () => {
   })
 
   it("taskSystemEnabled is false when task is disabled", () => {
-    const config = WeaveConfigSchema.parse({ disabled_tools: ["task"] })
+    const config = GuildConfigSchema.parse({ disabled_tools: ["task"] })
     const result = createToolRegistry({
       availableTools: ["read", "task"],
       config,
@@ -48,10 +48,10 @@ describe("createToolRegistry", () => {
     const result = createToolRegistry({
       availableTools: ["read", "write"],
       config: baseConfig,
-      agentRestrictions: { thread: { write: false } },
+      agentRestrictions: { rogue: { write: false } },
     })
-    expect(result.permissions.isToolAllowed("thread", "write")).toBe(false)
-    expect(result.permissions.isToolAllowed("thread", "read")).toBe(true)
-    expect(result.permissions.isToolAllowed("loom", "write")).toBe(true)
+    expect(result.permissions.isToolAllowed("rogue", "write")).toBe(false)
+    expect(result.permissions.isToolAllowed("rogue", "read")).toBe(true)
+    expect(result.permissions.isToolAllowed("bard", "write")).toBe(true)
   })
 })

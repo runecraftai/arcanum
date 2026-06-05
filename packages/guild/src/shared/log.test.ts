@@ -156,17 +156,17 @@ describe("logDelegation", () => {
   it("logDelegation start routes to client with correct message", async () => {
     const { client, calls } = mockClient()
     setClient(client)
-    logDelegation({ phase: "start", agent: "thread" })
+    logDelegation({ phase: "start", agent: "rogue" })
     await Promise.resolve()
     expect(calls.length).toBe(1)
     expect(calls[0].body.message).toContain("[delegation:start]")
-    expect(calls[0].body.message).toContain("agent=thread")
+    expect(calls[0].body.message).toContain("agent=rogue")
   })
 
   it("logDelegation complete includes sessionId in extra", async () => {
     const { client, calls } = mockClient()
     setClient(client)
-    logDelegation({ phase: "complete", agent: "pattern", sessionId: "s123" })
+    logDelegation({ phase: "complete", agent: "wizard", sessionId: "s123" })
     await Promise.resolve()
     expect(calls.length).toBe(1)
     expect(calls[0].body.extra).toMatchObject({ sessionId: "s123" })

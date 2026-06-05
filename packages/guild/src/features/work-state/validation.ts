@@ -14,7 +14,7 @@ export function validatePlan(planPath: string, projectDir: string): ValidationRe
   const errors: ValidationIssue[] = []
   const warnings: ValidationIssue[] = []
 
-  // Guard: planPath must resolve within the project's .weave/plans/ directory
+  // Guard: planPath must resolve within the project's .guild/plans/ directory
   const resolvedPlanPath = resolve(planPath)
   const allowedDir = resolve(projectDir, PLANS_DIR)
   if (!resolvedPlanPath.startsWith(allowedDir + sep) && resolvedPlanPath !== allowedDir) {

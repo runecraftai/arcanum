@@ -105,79 +105,79 @@ export function buildToolSelectionTable(
   }
 
   rows.push("")
-  rows.push("**Default flow**: thread/spindle (background) + tools → pattern (if required)")
+  rows.push("**Default flow**: rogue/warlock (background) + tools → wizard (if required)")
 
   return rows.join("\n")
 }
 
-export function buildThreadSection(agents: AvailableAgent[]): string {
-  const threadAgent = agents.find((a) => a.name === "thread")
-  if (!threadAgent) return ""
+export function buildRogueSection(agents: AvailableAgent[]): string {
+  const rogueAgent = agents.find((a) => a.name === "rogue")
+  if (!rogueAgent) return ""
 
-  const useWhen = threadAgent.metadata.useWhen ?? []
-  const avoidWhen = threadAgent.metadata.avoidWhen ?? []
+  const useWhen = rogueAgent.metadata.useWhen ?? []
+  const avoidWhen = rogueAgent.metadata.avoidWhen ?? []
 
-  return `### Thread Agent = Contextual Grep
+  return `### Rogue Agent = Contextual Grep
 
 Use it as a **peer tool**, not a fallback. Fire liberally.
 
 **Use Direct Tools when:**
 ${avoidWhen.map((w) => `- ${w}`).join("\n")}
 
-**Use Thread Agent when:**
+**Use Rogue Agent when:**
 ${useWhen.map((w) => `- ${w}`).join("\n")}`
 }
 
-export function buildSpindleSection(agents: AvailableAgent[]): string {
-  const spindleAgent = agents.find((a) => a.name === "spindle")
-  if (!spindleAgent) return ""
+export function buildWarlockSection(agents: AvailableAgent[]): string {
+  const warlockAgent = agents.find((a) => a.name === "warlock")
+  if (!warlockAgent) return ""
 
-  const useWhen = spindleAgent.metadata.useWhen ?? []
+  const useWhen = warlockAgent.metadata.useWhen ?? []
 
-  return `### Spindle Agent = Reference Search
+  return `### Warlock Agent = Reference Search
 
 Search **external references** (docs, OSS, web). Fire proactively when unfamiliar libraries are involved.
 
 **Contextual Search (Internal)** — search OUR codebase, find patterns in THIS repo, project-specific logic.
 **Reference Search (External)** — search EXTERNAL resources, official API docs, library best practices, OSS implementation examples.
 
-**Trigger phrases** (fire spindle immediately):
+**Trigger phrases** (fire Warlock immediately):
 ${useWhen.map((w) => `- "${w}"`).join("\n")}`
 }
 
-export function buildWeftSection(agents: AvailableAgent[]): string {
-  const weftAgent = agents.find((a) => a.name === "weft")
-  if (!weftAgent) return ""
+export function buildClericSection(agents: AvailableAgent[]): string {
+  const clericAgent = agents.find((a) => a.name === "cleric")
+  if (!clericAgent) return ""
 
-  const useWhen = weftAgent.metadata.useWhen ?? []
-  const avoidWhen = weftAgent.metadata.avoidWhen ?? []
+  const useWhen = clericAgent.metadata.useWhen ?? []
+  const avoidWhen = clericAgent.metadata.avoidWhen ?? []
 
-  return `### Weft Agent = Quality Gate
+  return `### Cleric Agent = Quality Gate
 
 Invoke after significant work for a read-only review. Approval-biased — rejects only for real blockers.
 
-**Use Weft when:**
+**Use Cleric when:**
 ${useWhen.map((w) => `- ${w}`).join("\n")}
 
-**Skip Weft when:**
+**Skip Cleric when:**
 ${avoidWhen.map((w) => `- ${w}`).join("\n")}`
 }
 
-export function buildWarpSection(agents: AvailableAgent[]): string {
-  const warpAgent = agents.find((a) => a.name === "warp")
-  if (!warpAgent) return ""
+export function buildPaladinSection(agents: AvailableAgent[]): string {
+  const paladinAgent = agents.find((a) => a.name === "paladin")
+  if (!paladinAgent) return ""
 
-  const useWhen = warpAgent.metadata.useWhen ?? []
-  const avoidWhen = warpAgent.metadata.avoidWhen ?? []
+  const useWhen = paladinAgent.metadata.useWhen ?? []
+  const avoidWhen = paladinAgent.metadata.avoidWhen ?? []
 
-  return `### Warp Agent = Security Gate
+  return `### Paladin Agent = Security Gate
 
 Invoke after security-relevant changes for a read-only security audit. Skeptical-biased — rejects when security patterns are at risk.
 
-**Use Warp when:**
+**Use Paladin when:**
 ${useWhen.map((w) => `- ${w}`).join("\n")}
 
-**Skip Warp when:**
+**Skip Paladin when:**
 ${avoidWhen.map((w) => `- ${w}`).join("\n")}`
 }
 
@@ -277,7 +277,7 @@ ${customSkills.length > 0 ? `
 
 ---
 
-### Delegation Pattern
+### Delegation Wizard
 
 \`\`\`typescript
 task(

@@ -9,7 +9,7 @@ const EXISTING_FILE = path.resolve(import.meta.dir, "../../package.json")
 describe("WriteExistingFileGuard", () => {
   it("allows writing to new (non-existent) files without reading first", () => {
     const state = createWriteGuardState()
-    const result = checkWriteAllowed(state, `/tmp/weave-test-nonexistent-${Date.now()}.ts`)
+    const result = checkWriteAllowed(state, `/tmp/guild-test-nonexistent-${Date.now()}.ts`)
     expect(result.allowed).toBe(true)
   })
 

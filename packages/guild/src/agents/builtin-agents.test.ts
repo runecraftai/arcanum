@@ -1,7 +1,7 @@
 import { describe, it, expect } from "bun:test"
 import { createBuiltinAgents, AGENT_METADATA } from "./builtin-agents"
 
-const ALL_AGENT_NAMES = ["loom", "tapestry", "shuttle", "pattern", "thread", "spindle", "weft", "warp"]
+const ALL_AGENT_NAMES = ["bard", "fighter", "ranger", "wizard", "rogue", "warlock", "cleric", "paladin"]
 
 describe("createBuiltinAgents", () => {
   it("returns all 8 agents when none disabled", () => {
@@ -13,10 +13,10 @@ describe("createBuiltinAgents", () => {
   })
 
   it("excludes disabled agents", () => {
-    const agents = createBuiltinAgents({ disabledAgents: ["spindle", "thread"] })
-    expect(agents["spindle"]).toBeUndefined()
-    expect(agents["thread"]).toBeUndefined()
-    expect(agents["loom"]).toBeDefined()
+    const agents = createBuiltinAgents({ disabledAgents: ["warlock", "rogue"] })
+    expect(agents["warlock"]).toBeUndefined()
+    expect(agents["rogue"]).toBeUndefined()
+    expect(agents["bard"]).toBeDefined()
     expect(Object.keys(agents)).toHaveLength(6)
   })
 
@@ -32,30 +32,30 @@ describe("createBuiltinAgents", () => {
 
   it("applies agent model override from agentOverrides", () => {
     const agents = createBuiltinAgents({
-      agentOverrides: { loom: { model: "gpt-4o-custom" } },
+      agentOverrides: { bard: { model: "gpt-4o-custom" } },
       availableModels: new Set(["gpt-4o-custom"]),
     })
-    expect(agents["loom"]?.model).toBe("gpt-4o-custom")
+    expect(agents["bard"]?.model).toBe("gpt-4o-custom")
   })
 
   it("applies prompt_append from agentOverrides", () => {
     const agents = createBuiltinAgents({
-      agentOverrides: { pattern: { prompt_append: "EXTRA INSTRUCTIONS" } },
+      agentOverrides: { wizard: { prompt_append: "EXTRA INSTRUCTIONS" } },
     })
-    expect(agents["pattern"]?.prompt).toContain("EXTRA INSTRUCTIONS")
+    expect(agents["wizard"]?.prompt).toContain("EXTRA INSTRUCTIONS")
   })
 
   it("applies temperature override from agentOverrides", () => {
     const agents = createBuiltinAgents({
-      agentOverrides: { loom: { temperature: 0.3 } },
+      agentOverrides: { bard: { temperature: 0.3 } },
     })
-    expect(agents["loom"]?.temperature).toBe(0.3)
+    expect(agents["bard"]?.temperature).toBe(0.3)
   })
 
   it("applies modelOptions override to builtin subagents", () => {
     const agents = createBuiltinAgents({
       agentOverrides: {
-        pattern: {
+        wizard: {
           modelOptions: {
             reasoningEffort: "high",
             reasoning: { effort: "medium" },
@@ -63,8 +63,8 @@ describe("createBuiltinAgents", () => {
         },
       },
     })
-    const pattern = agents["pattern"] as { options?: Record<string, unknown> } | undefined
-    expect(pattern?.options).toEqual({
+    const wizard = agents["wizard"] as { options?: Record<string, unknown> } | undefined
+    expect(wizard?.options).toEqual({
       reasoningEffort: "high",
       reasoning: { effort: "medium" },
     })
@@ -73,7 +73,7 @@ describe("createBuiltinAgents", () => {
   it("binds approved guild skills to builtin agents", () => {
     const agents = createBuiltinAgents()
 
-    expect(agents.loom?.skills).toEqual([
+    expect(agents.bard?.skills).toEqual([
       "guild-init",
       "guild-load",
       "guild-scope",
@@ -82,18 +82,18 @@ describe("createBuiltinAgents", () => {
       "guild-handoff",
       "guild-ship",
     ])
-    expect(agents.tapestry?.skills).toEqual([
+    expect(agents.fighter?.skills).toEqual([
       "guild-load",
       "guild-execute",
       "guild-verify",
       "guild-handoff",
     ])
-    expect(agents.pattern?.skills).toEqual(["guild-load", "guild-scope", "guild-spec", "guild-plan"])
-    expect(agents.thread?.skills).toEqual(["guild-research"])
-    expect(agents.spindle?.skills).toEqual(["guild-research"])
-    expect(agents.shuttle?.skills).toEqual(["guild-execute"])
-    expect(agents.weft?.skills).toEqual(["guild-review", "guild-verify"])
-    expect(agents.warp?.skills).toEqual(["guild-security"])
+    expect(agents.wizard?.skills).toEqual(["guild-load", "guild-scope", "guild-spec", "guild-plan"])
+    expect(agents.rogue?.skills).toEqual(["guild-research"])
+    expect(agents.warlock?.skills).toEqual(["guild-research"])
+    expect(agents.ranger?.skills).toEqual(["guild-execute"])
+    expect(agents.cleric?.skills).toEqual(["guild-review", "guild-verify"])
+    expect(agents.paladin?.skills).toEqual(["guild-security"])
   })
 
   it("prepends resolved builtin skills to builtin prompts", () => {
@@ -101,14 +101,14 @@ describe("createBuiltinAgents", () => {
       resolveSkills: (skillNames) => `SKILLS:${skillNames.join(",")}`,
     })
 
-    expect(agents.loom?.prompt).toContain("SKILLS:guild-init,guild-load,guild-scope,guild-spec,guild-plan,guild-handoff,guild-ship")
-    expect(agents.pattern?.prompt).toContain("SKILLS:guild-load,guild-scope,guild-spec,guild-plan")
+    expect(agents.bard?.prompt).toContain("SKILLS:guild-init,guild-load,guild-scope,guild-spec,guild-plan,guild-handoff,guild-ship")
+    expect(agents.wizard?.prompt).toContain("SKILLS:guild-load,guild-scope,guild-spec,guild-plan")
   })
 
   it("generates visible review model variants from review_models", () => {
     const agents = createBuiltinAgents({
       agentOverrides: {
-        weft: {
+        cleric: {
           model: "openai/gpt-5.5",
           modelOptions: { reasoningEffort: "xhigh" },
           review_models: ["opencode-go/kimi-k2.6", "opencode-go/glm-5.1"],
@@ -116,13 +116,13 @@ describe("createBuiltinAgents", () => {
       },
     })
 
-    const kimi = agents["weft-review-opencode-go-kimi-k2-6"] as (typeof agents["weft"] & { options?: Record<string, unknown> }) | undefined
-    const glm = agents["weft-review-opencode-go-glm-5-1"]
+    const kimi = agents["cleric-review-opencode-go-kimi-k2-6"] as (typeof agents["cleric"] & { options?: Record<string, unknown> }) | undefined
+    const glm = agents["cleric-review-opencode-go-glm-5-1"]
 
     expect(kimi).toBeDefined()
     expect(kimi?.model).toBe("opencode-go/kimi-k2.6")
     expect(kimi?.mode).toBe("subagent")
-    expect(kimi?.description).toContain("weft @ opencode-go/kimi-k2.6")
+    expect(kimi?.description).toContain("cleric @ opencode-go/kimi-k2.6")
     expect(kimi?.prompt).toContain("visible independent WEFT review variant")
     expect(kimi?.options).toBeUndefined()
 
@@ -134,14 +134,14 @@ describe("createBuiltinAgents", () => {
     const models = ["provider/model@v1", "provider/model.v1", "provider/model+v1"]
     const agents = createBuiltinAgents({
       agentOverrides: {
-        weft: { review_models: models },
+        cleric: { review_models: models },
       },
     })
 
     const keys = [
-      "weft-review-provider-model-v1",
-      "weft-review-provider-model-v1-2",
-      "weft-review-provider-model-v1-3",
+      "cleric-review-provider-model-v1",
+      "cleric-review-provider-model-v1-2",
+      "cleric-review-provider-model-v1-3",
     ]
     const generatedKeys = Object.entries(agents)
       .filter(([, agent]) => models.includes(agent.model ?? ""))
@@ -153,45 +153,45 @@ describe("createBuiltinAgents", () => {
 
   it("omits visible review variants when their base agent is disabled", () => {
     const agents = createBuiltinAgents({
-      disabledAgents: ["weft"],
+      disabledAgents: ["cleric"],
       agentOverrides: {
-        weft: { review_models: ["opencode-go/kimi-k2.6"] },
+        cleric: { review_models: ["opencode-go/kimi-k2.6"] },
       },
     })
 
-    expect(agents["weft"]).toBeUndefined()
-    expect(agents["weft-review-opencode-go-kimi-k2-6"]).toBeUndefined()
+    expect(agents["cleric"]).toBeUndefined()
+    expect(agents["cleric-review-opencode-go-kimi-k2-6"]).toBeUndefined()
   })
 
   it("resolves override skills and prepends them to the agent prompt", () => {
     const agents = createBuiltinAgents({
-      agentOverrides: { pattern: { skills: ["test-skill"] } },
+      agentOverrides: { wizard: { skills: ["test-skill"] } },
       resolveSkills: () => "SKILL_CONTENT",
     })
-    expect(agents["pattern"]?.prompt).toMatch(/^SKILL_CONTENT/)
+    expect(agents["wizard"]?.prompt).toMatch(/^SKILL_CONTENT/)
   })
 
   it("override skills appear before the base prompt content", () => {
     const agents = createBuiltinAgents({
-      agentOverrides: { pattern: { skills: ["test-skill"] } },
+      agentOverrides: { wizard: { skills: ["test-skill"] } },
       resolveSkills: () => "SKILL_CONTENT",
     })
-    const prompt = agents["pattern"]?.prompt ?? ""
+    const prompt = agents["wizard"]?.prompt ?? ""
     const skillIndex = prompt.indexOf("SKILL_CONTENT")
-    const baseIndex = prompt.indexOf("Pattern — strategic planner for Guild.")
+    const baseIndex = prompt.indexOf("Wizard — strategic planner for Guild.")
     expect(skillIndex).toBeGreaterThanOrEqual(0)
     expect(baseIndex).toBeGreaterThan(skillIndex)
   })
 
   it("override skills work alongside prompt_append", () => {
     const agents = createBuiltinAgents({
-      agentOverrides: { pattern: { skills: ["test-skill"], prompt_append: "APPENDED" } },
+      agentOverrides: { wizard: { skills: ["test-skill"], prompt_append: "APPENDED" } },
       resolveSkills: () => "SKILL_CONTENT",
     })
-    const prompt = agents["pattern"]?.prompt ?? ""
+    const prompt = agents["wizard"]?.prompt ?? ""
     expect(prompt.startsWith("SKILL_CONTENT")).toBe(true)
     expect(prompt.endsWith("APPENDED")).toBe(true)
-    expect(prompt.indexOf("Pattern — strategic planner for Guild.")).toBeGreaterThan(0)
+    expect(prompt.indexOf("Wizard — strategic planner for Guild.")).toBeGreaterThan(0)
   })
 
   it("empty skills array does not suppress builtin skill content", () => {
@@ -199,25 +199,25 @@ describe("createBuiltinAgents", () => {
       resolveSkills: () => "SKILL_CONTENT",
     })
     const overrideAgents = createBuiltinAgents({
-      agentOverrides: { pattern: { skills: [] } },
+      agentOverrides: { wizard: { skills: [] } },
       resolveSkills: () => "SKILL_CONTENT",
     })
-    expect(overrideAgents["pattern"]?.prompt).toBe(defaultAgents["pattern"]?.prompt)
+    expect(overrideAgents["wizard"]?.prompt).toBe(defaultAgents["wizard"]?.prompt)
   })
 
   it("resolveSkills returning empty string does not affect the prompt", () => {
     const defaultAgents = createBuiltinAgents()
     const overrideAgents = createBuiltinAgents({
-      agentOverrides: { pattern: { skills: ["disabled-skill"] } },
+      agentOverrides: { wizard: { skills: ["disabled-skill"] } },
       resolveSkills: () => "",
     })
-    expect(overrideAgents["pattern"]?.prompt).toBe(defaultAgents["pattern"]?.prompt)
+    expect(overrideAgents["wizard"]?.prompt).toBe(defaultAgents["wizard"]?.prompt)
   })
 
   it("disabledSkills set is forwarded to resolveSkills", () => {
     let capturedDisabledSkills: Set<string> | undefined
     createBuiltinAgents({
-      agentOverrides: { pattern: { skills: ["test-skill"] } },
+      agentOverrides: { wizard: { skills: ["test-skill"] } },
       disabledSkills: new Set(["blocked-skill"]),
       resolveSkills: (_names, disabled) => { capturedDisabledSkills = disabled; return "SKILL_CONTENT" },
     })
@@ -228,18 +228,18 @@ describe("createBuiltinAgents", () => {
   it("skills are no-op when resolveSkills is not provided", () => {
     const defaultAgents = createBuiltinAgents()
     const overrideAgents = createBuiltinAgents({
-      agentOverrides: { pattern: { skills: ["test-skill"] } },
+      agentOverrides: { wizard: { skills: ["test-skill"] } },
       // resolveSkills intentionally omitted
     })
-    expect(overrideAgents["pattern"]?.prompt).toBe(defaultAgents["pattern"]?.prompt)
+    expect(overrideAgents["wizard"]?.prompt).toBe(defaultAgents["wizard"]?.prompt)
   })
 
-  it("thread agent has denied write tools", () => {
+  it("rogue agent has denied write tools", () => {
     const agents = createBuiltinAgents()
-    const thread = agents["thread"]
-    expect(thread).toBeDefined()
-    // thread factory sets tools: { write: false, edit: false }
-    const tools = (thread as Record<string, unknown>)["tools"] as Record<string, boolean> | undefined
+    const rogue = agents["rogue"]
+    expect(rogue).toBeDefined()
+    // rogue factory sets tools: { write: false, edit: false }
+    const tools = (rogue as Record<string, unknown>)["tools"] as Record<string, boolean> | undefined
     if (tools) {
       expect(tools["write"]).toBe(false)
     }
@@ -258,14 +258,14 @@ describe("createBuiltinAgents", () => {
   it("each agent has a mode", () => {
     const agents = createBuiltinAgents()
     const expectedModes: Record<string, string> = {
-      loom: "primary",
-      tapestry: "primary",
-      shuttle: "all",
-      pattern: "subagent",
-      thread: "subagent",
-      spindle: "subagent",
-      weft: "subagent",
-      warp: "subagent",
+      bard: "primary",
+      fighter: "primary",
+      ranger: "all",
+      wizard: "subagent",
+      rogue: "subagent",
+      warlock: "subagent",
+      cleric: "subagent",
+      paladin: "subagent",
     }
     for (const name of ALL_AGENT_NAMES) {
       const agent = agents[name]
@@ -290,100 +290,99 @@ describe("AGENT_METADATA", () => {
     }
   })
 
-  it("loom has keyTrigger for ultrawork", () => {
-    expect(AGENT_METADATA.loom.keyTrigger).toContain("ultrawork")
+  it("bard has keyTrigger for ultrawork", () => {
+    expect(AGENT_METADATA.bard.keyTrigger).toContain("ultrawork")
   })
 
-  it("warp can be disabled like any other agent", () => {
-    const agents = createBuiltinAgents({ disabledAgents: ["warp"] })
-    expect(agents["warp"]).toBeUndefined()
+  it("paladin can be disabled like any other agent", () => {
+    const agents = createBuiltinAgents({ disabledAgents: ["paladin"] })
+    expect(agents["paladin"]).toBeUndefined()
     expect(Object.keys(agents)).toHaveLength(7)
   })
 
   it("any agent can be disabled via disabledAgents", () => {
-    const agents = createBuiltinAgents({ disabledAgents: ["spindle"] })
-    expect(agents["spindle"]).toBeUndefined()
+    const agents = createBuiltinAgents({ disabledAgents: ["warlock"] })
+    expect(agents["warlock"]).toBeUndefined()
   })
 
-  it("loom prompt strips references to disabled agents", () => {
-    const agents = createBuiltinAgents({ disabledAgents: ["spindle", "thread"] })
-    const prompt = agents["loom"]?.prompt ?? ""
-    expect(prompt).not.toContain("Use spindle")
-    expect(prompt).not.toContain("Use thread")
-    // Warp references should still be present (not disabled in this test)
-    expect(prompt).toContain("MUST use Warp")
+  it("bard prompt strips references to disabled agents", () => {
+    const agents = createBuiltinAgents({ disabledAgents: ["warlock", "rogue"] })
+    const prompt = agents["bard"]?.prompt ?? ""
+    expect(prompt).not.toContain("Use warlock")
+    expect(prompt).not.toContain("Use rogue")
+    // Paladin references should still be present (not disabled in this test)
+    expect(prompt).toContain("MUST use Paladin")
   })
 
-  it("tapestry prompt adapts PostExecutionReview when weft disabled", () => {
-    const agents = createBuiltinAgents({ disabledAgents: ["weft"] })
-    const prompt = agents["tapestry"]?.prompt ?? ""
+  it("fighter prompt adapts PostExecutionReview when cleric disabled", () => {
+    const agents = createBuiltinAgents({ disabledAgents: ["cleric"] })
+    const prompt = agents["fighter"]?.prompt ?? ""
     const reviewSection = prompt.slice(
       prompt.indexOf("<PostExecutionReview>"),
       prompt.indexOf("</PostExecutionReview>"),
     )
-    // Should have Warp (not disabled in this test) but not Weft delegation
-    expect(reviewSection).toContain("Warp")
-    // The advisory mentions "Weft" generically; assert the delegation line is absent
-    expect(reviewSection).not.toContain('Delegate to Weft')
+    // Should not include Cleric delegation when cleric is disabled
+    expect(reviewSection).not.toContain('Delegate to Cleric')
   })
 
-  it("tapestry PlanExecution section omits Weft reference when weft disabled", () => {
-    const agents = createBuiltinAgents({ disabledAgents: ["weft"] })
-    const prompt = agents["tapestry"]?.prompt ?? ""
+  it("fighter PlanExecution section omits review references when cleric disabled", () => {
+    const agents = createBuiltinAgents({ disabledAgents: ["cleric"] })
+    const prompt = agents["fighter"]?.prompt ?? ""
     const planSection = prompt.slice(
       prompt.indexOf("<PlanExecution>"),
       prompt.indexOf("</PlanExecution>"),
     )
     expect(planSection).not.toContain("Weft")
-    expect(planSection).toContain("Verification")
+    expect(planSection).not.toContain("Paladin")
   })
 
-  it("tapestry PlanExecution section mentions Weft by default", () => {
+  it("fighter PlanExecution section stays execution-focused by default", () => {
     const agents = createBuiltinAgents()
-    const prompt = agents["tapestry"]?.prompt ?? ""
+    const prompt = agents["fighter"]?.prompt ?? ""
     const planSection = prompt.slice(
       prompt.indexOf("<PlanExecution>"),
       prompt.indexOf("</PlanExecution>"),
     )
-    expect(planSection).toContain("Weft")
+    expect(planSection).not.toContain("Weft")
+    expect(planSection).not.toContain("Paladin")
   })
 
-  it("threads continuation config into the tapestry factory", () => {
+  it("threads continuation config into the fighter factory", () => {
     const agents = createBuiltinAgents({
       continuation: {
         recovery: { compaction: true },
         idle: { enabled: false, work: false, workflow: false, todo_prompt: false },
       },
     })
-    const prompt = agents["tapestry"]?.prompt ?? ""
+    const prompt = agents["fighter"]?.prompt ?? ""
     expect(prompt).toContain("<PlanExecution>")
     expect(prompt).toContain("<Style>")
     expect(prompt).toContain("<Continuation>")
   })
 
-  it("pattern prompt strips thread reference when thread disabled", () => {
-    const agents = createBuiltinAgents({ disabledAgents: ["thread"] })
-    const prompt = agents["pattern"]?.prompt ?? ""
-    expect(prompt).not.toContain("thread")
+  it("wizard prompt strips rogue reference when rogue disabled", () => {
+    const agents = createBuiltinAgents({ disabledAgents: ["rogue"] })
+    const prompt = agents["wizard"]?.prompt ?? ""
+    expect(prompt).not.toContain("rogue")
     expect(prompt).not.toContain("Thread")
-    // spindle should still be present
-    expect(prompt).toContain("spindle")
+    // warlock should still be present
+    expect(prompt).toContain("warlock")
   })
 
-  it("pattern prompt strips spindle reference when spindle disabled", () => {
-    const agents = createBuiltinAgents({ disabledAgents: ["spindle"] })
-    const prompt = agents["pattern"]?.prompt ?? ""
-    expect(prompt).not.toContain("spindle")
+  it("wizard prompt strips warlock reference when warlock disabled", () => {
+    const agents = createBuiltinAgents({ disabledAgents: ["warlock"] })
+    const prompt = agents["wizard"]?.prompt ?? ""
+    expect(prompt).not.toContain("warlock")
     expect(prompt).not.toContain("Spindle")
-    // thread should still be present
-    expect(prompt).toContain("thread")
+    // rogue should still be present
+    expect(prompt).toContain("rogue")
   })
 
-  it("weft prompt strips pattern reference when pattern disabled", () => {
-    const agents = createBuiltinAgents({ disabledAgents: ["pattern"] })
-    const prompt = agents["weft"]?.prompt ?? ""
-    expect(prompt).not.toContain("Pattern")
-    expect(prompt).not.toContain("pattern")
+  it("cleric prompt strips wizard reference when wizard disabled", () => {
+    const agents = createBuiltinAgents({ disabledAgents: ["wizard"] })
+    const prompt = agents["cleric"]?.prompt ?? ""
+    expect(prompt).not.toContain("Wizard")
+    expect(prompt).not.toContain("wizard")
   })
 
   it("all agent prompts are unmodified when no agents disabled", () => {
@@ -394,7 +393,7 @@ describe("AGENT_METADATA", () => {
     }
   })
 
-  it("registers shuttle-{category} agents for categories with patterns", () => {
+  it("registers ranger-{category} agents for categories with patterns", () => {
     const agents = createBuiltinAgents({
       categories: {
         frontend: {
@@ -405,48 +404,48 @@ describe("AGENT_METADATA", () => {
       },
       availableModels: new Set(["fast-model"]),
     })
-    expect(agents["shuttle"]).toBeDefined()
-    expect(agents["shuttle-frontend"]).toBeDefined()
-    expect(agents["shuttle-frontend"]?.model).toBe("fast-model")
-    expect(agents["shuttle-frontend"]?.prompt).toContain("React expert")
+    expect(agents["ranger"]).toBeDefined()
+    expect(agents["ranger-frontend"]).toBeDefined()
+    expect(agents["ranger-frontend"]?.model).toBe("fast-model")
+    expect(agents["ranger-frontend"]?.prompt).toContain("React expert")
   })
 
-  it("registers shuttle-{category} agents for categories without patterns", () => {
+  it("registers ranger-{category} agents for categories without patterns", () => {
     const agents = createBuiltinAgents({
       categories: {
         backend: { model: "claude-opus-4", temperature: 0.3 },
       },
       availableModels: new Set(["claude-opus-4"]),
     })
-    expect(agents["shuttle"]).toBeDefined()
-    expect(agents["shuttle-backend"]).toBeDefined()
+    expect(agents["ranger"]).toBeDefined()
+    expect(agents["ranger-backend"]).toBeDefined()
   })
 
-  it("category shuttle has category-specific description", () => {
+  it("category ranger has category-specific description", () => {
     const agents = createBuiltinAgents({
       categories: {
         frontend: { patterns: ["*.tsx"], model: "fast-model" },
       },
       availableModels: new Set(["fast-model"]),
     })
-    const desc = agents["shuttle-frontend"]?.description ?? ""
+    const desc = agents["ranger-frontend"]?.description ?? ""
     expect(desc).toContain("frontend")
-    expect(desc).not.toBe(agents["shuttle"]?.description)
+    expect(desc).not.toBe(agents["ranger"]?.description)
   })
 
-  it("base shuttle agent always registered even when categories have patterns", () => {
+  it("base ranger agent always registered even when categories have patterns", () => {
     const agents = createBuiltinAgents({
       categories: {
         frontend: { patterns: ["*.tsx"], model: "fast-model" },
       },
       availableModels: new Set(["fast-model"]),
     })
-    expect(agents["shuttle"]).toBeDefined()
+    expect(agents["ranger"]).toBeDefined()
   })
 
-  it("skips registering only disabled category shuttle agents", () => {
+  it("skips registering only disabled category ranger agents", () => {
     const agents = createBuiltinAgents({
-      disabledAgents: ["shuttle-frontend"],
+      disabledAgents: ["ranger-frontend"],
       categories: {
         frontend: { patterns: ["*.tsx"], model: "fast-model" },
         backend: { patterns: ["*.go"], model: "fast-model" },
@@ -454,21 +453,21 @@ describe("AGENT_METADATA", () => {
       availableModels: new Set(["fast-model"]),
     })
 
-    expect(agents["shuttle"]).toBeDefined()
-    expect(agents["shuttle-frontend"]).toBeUndefined()
-    expect(agents["shuttle-backend"]).toBeDefined()
+    expect(agents["ranger"]).toBeDefined()
+    expect(agents["ranger-frontend"]).toBeUndefined()
+    expect(agents["ranger-backend"]).toBeDefined()
   })
 
-  it("category shuttle inherits base shuttle tools", () => {
+  it("category ranger inherits base ranger tools", () => {
     const agents = createBuiltinAgents({
       categories: {
         frontend: { patterns: ["*.tsx"] },
       },
     })
-    expect(agents["shuttle-frontend"]?.tools).toEqual(agents["shuttle"]?.tools)
+    expect(agents["ranger-frontend"]?.tools).toEqual(agents["ranger"]?.tools)
   })
 
-  it("category shuttle merges tool overrides with base shuttle tools", () => {
+  it("category ranger merges tool overrides with base ranger tools", () => {
     const agents = createBuiltinAgents({
       categories: {
         frontend: {
@@ -477,11 +476,11 @@ describe("AGENT_METADATA", () => {
         },
       },
     })
-    expect(agents["shuttle-frontend"]?.tools?.["call_weave_agent"]).toBe(false)
-    expect(agents["shuttle-frontend"]?.tools?.["web_search"]).toBe(true)
+    expect(agents["ranger-frontend"]?.tools?.["call_guild_agent"]).toBe(false)
+    expect(agents["ranger-frontend"]?.tools?.["web_search"]).toBe(true)
   })
 
-  it("category shuttle agents have mode 'subagent'", () => {
+  it("category ranger agents have mode 'subagent'", () => {
     const agents = createBuiltinAgents({
       categories: {
         frontend: { patterns: ["*.tsx"] },
@@ -489,20 +488,20 @@ describe("AGENT_METADATA", () => {
       },
       availableModels: new Set(["claude-opus-4"]),
     })
-    expect(agents["shuttle-frontend"]?.mode).toBe("subagent")
-    expect(agents["shuttle-backend"]?.mode).toBe("subagent")
+    expect(agents["ranger-frontend"]?.mode).toBe("subagent")
+    expect(agents["ranger-backend"]?.mode).toBe("subagent")
   })
 
-  it("base shuttle agent mode is unchanged ('all') when categories are registered", () => {
+  it("base ranger agent mode is unchanged ('all') when categories are registered", () => {
     const agents = createBuiltinAgents({
       categories: {
         frontend: { patterns: ["*.tsx"] },
       },
     })
-    expect(agents["shuttle"]?.mode).toBe("all")
+    expect(agents["ranger"]?.mode).toBe("all")
   })
 
-  it("creates category shuttle agent with category-specific description", () => {
+  it("creates category ranger agent with category-specific description", () => {
     const agents = createBuiltinAgents({
       categories: {
         frontend: {
@@ -510,11 +509,11 @@ describe("AGENT_METADATA", () => {
         },
       },
     })
-    expect(agents["shuttle-frontend"]?.description).toContain("frontend")
-    expect(agents["shuttle-frontend"]?.description).not.toBe(agents["shuttle"]?.description)
+    expect(agents["ranger-frontend"]?.description).toContain("frontend")
+    expect(agents["ranger-frontend"]?.description).not.toBe(agents["ranger"]?.description)
   })
 
-  it("category shuttle agents have mode 'subagent'", () => {
+  it("category ranger agents have mode 'subagent'", () => {
     const agents = createBuiltinAgents({
       categories: {
         frontend: { patterns: ["*.tsx"] },
@@ -522,16 +521,16 @@ describe("AGENT_METADATA", () => {
       },
       availableModels: new Set(["claude-opus-4"]),
     })
-    expect(agents["shuttle-frontend"]?.mode).toBe("subagent")
-    expect(agents["shuttle-backend"]?.mode).toBe("subagent")
+    expect(agents["ranger-frontend"]?.mode).toBe("subagent")
+    expect(agents["ranger-backend"]?.mode).toBe("subagent")
   })
 
-  it("base shuttle agent mode is unchanged ('all') when categories are registered", () => {
+  it("base ranger agent mode is unchanged ('all') when categories are registered", () => {
     const agents = createBuiltinAgents({
       categories: {
         frontend: { patterns: ["*.tsx"] },
       },
     })
-    expect(agents["shuttle"]?.mode).toBe("all")
+    expect(agents["ranger"]?.mode).toBe("all")
   })
 })

@@ -5,7 +5,7 @@ import { parse } from "jsonc-parser"
 import type { ZodIssue } from "zod"
 import { resolveContinuationConfig } from "../../config/continuation"
 import { mergeConfigs } from "../../config/merge"
-import { WeaveConfigSchema, type WeaveConfig } from "../../config/schema"
+import { GuildConfigSchema, type GuildConfig } from "../../config/schema"
 import { debug, error as logError, warn } from "../../shared/log"
 import type { DeepPartial } from "../../shared/types"
 
@@ -17,13 +17,13 @@ export interface ConfigDiagnostic {
 }
 
 export interface ConfigLoadResult {
-  config: WeaveConfig
+  config: GuildConfig
   loadedFiles: string[]
   diagnostics: ConfigDiagnostic[]
 }
 
 export interface ConfigLoader {
-  loadGuildConfig(directory: string, ctx?: unknown, homeDir?: string): WeaveConfig
+  loadGuildConfig(directory: string, ctx?: unknown, homeDir?: string): GuildConfig
   getLastConfigLoadResult(): ConfigLoadResult | null
 }
 
@@ -34,11 +34,11 @@ export function createConfigFsLoader(): ConfigLoader {
     return lastLoadResult
   }
 
-  function readJsoncFile(filePath: string): DeepPartial<WeaveConfig> {
+  function readJsoncFile(filePath: string): DeepPartial<GuildConfig> {
     try {
       const text = readFileSync(filePath, "utf-8")
       const errors: { error: number; offset: number; length: number }[] = []
-      const parsed = parse(text, errors) as DeepPartial<WeaveConfig> | null
+      const parsed = parse(text, errors) as DeepPartial<GuildConfig> | null
       if (errors.length > 0) {
         warn(`JSONC parse warnings in ${filePath}: ${errors.length} issue(s)`)
       }
@@ -62,9 +62,9 @@ export function createConfigFsLoader(): ConfigLoader {
   }
 
   function recoverValidSections(
-    merged: DeepPartial<WeaveConfig>,
+    merged: DeepPartial<GuildConfig>,
     issues: ZodIssue[],
-  ): { config: WeaveConfig; diagnostics: ConfigDiagnostic[] } | null {
+  ): { config: GuildConfig; diagnostics: ConfigDiagnostic[] } | null {
     const failingKeys = new Set<string>()
     for (const issue of issues) {
       if (issue.path.length > 0) {
@@ -101,7 +101,7 @@ export function createConfigFsLoader(): ConfigLoader {
       delete stripped[key]
     }
 
-    const retry = WeaveConfigSchema.safeParse(stripped)
+    const retry = GuildConfigSchema.safeParse(stripped)
     if (retry.success) {
       debug("Config recovery succeeded", {
         droppedSections: [...failingKeys],
@@ -114,7 +114,7 @@ export function createConfigFsLoader(): ConfigLoader {
     return null
   }
 
-  function loadGuildConfig(directory: string, _ctx?: unknown, homeDir?: string): WeaveConfig {
+  function loadGuildConfig(directory: string, _ctx?: unknown, homeDir?: string): GuildConfig {
     const userBasePath = join(homeDir ?? homedir(), ".config", "opencode", "guild-opencode")
     const projectBasePath = join(directory, ".opencode", "guild-opencode")
 
@@ -139,7 +139,7 @@ export function createConfigFsLoader(): ConfigLoader {
       projectConfigPath ? readJsoncFile(projectConfigPath) : {},
     )
 
-    const result = WeaveConfigSchema.safeParse(merged)
+    const result = GuildConfigSchema.safeParse(merged)
     if (!result.success) {
       const recovery = recoverValidSections(merged, result.error.issues)
       if (recovery) {
@@ -164,7 +164,7 @@ export function createConfigFsLoader(): ConfigLoader {
         })),
       )
 
-      const fallback = WeaveConfigSchema.parse({})
+      const fallback = GuildConfigSchema.parse({})
       lastLoadResult = { config: fallback, loadedFiles, diagnostics }
       return fallback
     }

@@ -5,9 +5,9 @@ describe("mergeConfigs", () => {
   it("returns project config when user is empty", () => {
     const result = mergeConfigs(
       {},
-      { agents: { loom: { model: "claude-opus-4" } } },
+      { agents: { bard: { model: "claude-opus-4" } } },
     )
-    expect(result.agents?.loom?.model).toBe("claude-opus-4")
+    expect(result.agents?.bard?.model).toBe("claude-opus-4")
   })
 
   it("project config overrides user config at top level", () => {
@@ -20,20 +20,20 @@ describe("mergeConfigs", () => {
 
   it("deep merges agents (project wins per-key, user keys preserved)", () => {
     const result = mergeConfigs(
-      { agents: { loom: { model: "claude-opus-3", temperature: 0.5 } } },
-      { agents: { loom: { model: "claude-opus-4" } } },
+      { agents: { bard: { model: "claude-opus-3", temperature: 0.5 } } },
+      { agents: { bard: { model: "claude-opus-4" } } },
     )
-    expect(result.agents?.loom?.model).toBe("claude-opus-4")
-    expect(result.agents?.loom?.temperature).toBe(0.5)
+    expect(result.agents?.bard?.model).toBe("claude-opus-4")
+    expect(result.agents?.bard?.temperature).toBe(0.5)
   })
 
   it("merges agents from both user and project (union of keys)", () => {
     const result = mergeConfigs(
-      { agents: { loom: { model: "claude-opus-4" } } },
-      { agents: { pattern: { model: "claude-sonnet-4" } } },
+      { agents: { bard: { model: "claude-opus-4" } } },
+      { agents: { wizard: { model: "claude-sonnet-4" } } },
     )
-    expect(result.agents?.loom?.model).toBe("claude-opus-4")
-    expect(result.agents?.pattern?.model).toBe("claude-sonnet-4")
+    expect(result.agents?.bard?.model).toBe("claude-opus-4")
+    expect(result.agents?.wizard?.model).toBe("claude-sonnet-4")
   })
 
   it("unions disabled_hooks (no duplicates)", () => {
@@ -56,8 +56,8 @@ describe("mergeConfigs", () => {
 
   it("unions disabled_agents (no duplicates)", () => {
     const result = mergeConfigs(
-      { disabled_agents: ["spindle"] },
-      { disabled_agents: ["thread", "spindle"] },
+      { disabled_agents: ["warlock"] },
+      { disabled_agents: ["rogue", "warlock"] },
     )
     expect(result.disabled_agents?.length).toBe(2)
   })

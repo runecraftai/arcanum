@@ -43,7 +43,7 @@ function makeSummary(
 }
 
 beforeEach(() => {
-  tempDir = mkdtempSync(join(tmpdir(), "weave-token-agg-test-"))
+  tempDir = mkdtempSync(join(tmpdir(), "guild-token-agg-test-"))
 })
 
 afterEach(() => {

@@ -6,28 +6,28 @@ import { detectDelegation, executeTrajectoryRun } from "./trajectory-run"
 import type { ExecutionContext, ResolvedTarget, TrajectoryRunExecutor } from "../types"
 
 describe("detectDelegation", () => {
-  it("detects [delegates to X] pattern", () => {
-    expect(detectDelegation("Let me handle this. [delegates to pattern]")).toBe("pattern")
+  it("detects [delegates to X] wizard", () => {
+    expect(detectDelegation("Let me handle this. [delegates to wizard]")).toBe("wizard")
   })
 
-  it("detects [delegate to X] pattern", () => {
-    expect(detectDelegation("[delegate to thread]")).toBe("thread")
+  it("detects [delegate to X] wizard", () => {
+    expect(detectDelegation("[delegate to rogue]")).toBe("rogue")
   })
 
-  it("detects 'Delegating to X' pattern", () => {
-    expect(detectDelegation("Delegating to Pattern for planning...")).toBe("pattern")
+  it("detects 'Delegating to X' wizard", () => {
+    expect(detectDelegation("Delegating to Wizard for planning...")).toBe("wizard")
   })
 
-  it("detects 'delegate to X' pattern in sentence", () => {
-    expect(detectDelegation("I will delegate to warp for security review")).toBe("warp")
+  it("detects 'delegate to X' wizard in sentence", () => {
+    expect(detectDelegation("I will delegate to paladin for security review")).toBe("paladin")
   })
 
-  it("detects 'route to X' pattern", () => {
-    expect(detectDelegation("Let me route to thread for this exploration")).toBe("thread")
+  it("detects 'route to X' wizard", () => {
+    expect(detectDelegation("Let me route to rogue for this exploration")).toBe("rogue")
   })
 
-  it("detects 'routing to X' pattern", () => {
-    expect(detectDelegation("Routing to warp for security audit")).toBe("warp")
+  it("detects 'routing to X' wizard", () => {
+    expect(detectDelegation("Routing to paladin for security audit")).toBe("paladin")
   })
 
   it("detects plain delegation targets", () => {
@@ -39,7 +39,7 @@ describe("detectDelegation", () => {
   })
 
   it("is case-insensitive", () => {
-    expect(detectDelegation("[DELEGATES TO PATTERN]")).toBe("pattern")
+    expect(detectDelegation("[DELEGATES TO WIZARD]")).toBe("wizard")
   })
 
   it("returns null when no delegation found", () => {
@@ -53,7 +53,7 @@ describe("detectDelegation", () => {
 
 describe("executeTrajectoryRun", () => {
   it("records delegation targets separately from acting-agent sequence", async () => {
-    const directory = mkdtempSync(join(tmpdir(), "weave-trajectory-run-"))
+    const directory = mkdtempSync(join(tmpdir(), "guild-trajectory-run-"))
 
     try {
       const scenariosDir = join(directory, "evals", "scenarios")
@@ -64,7 +64,7 @@ describe("executeTrajectoryRun", () => {
         JSON.stringify({
           id: "delegation-targets",
           title: "Delegation targets trace coverage",
-          agents: ["loom", "worker", "worker-ui"],
+          agents: ["bard", "worker", "worker-ui"],
           turns: [
             {
               turn: 1,
@@ -74,7 +74,7 @@ describe("executeTrajectoryRun", () => {
             {
               turn: 2,
               role: "assistant",
-              agent: "loom",
+              agent: "bard",
               content: "Delegating to worker for investigation.",
             },
             {
@@ -97,7 +97,7 @@ describe("executeTrajectoryRun", () => {
       const resolvedTarget: ResolvedTarget = {
         target: {
           kind: "trajectory-agent",
-          agent: "loom",
+          agent: "bard",
           scenarioRef: "evals/scenarios/delegation-targets.jsonc",
         },
         artifacts: {},
@@ -127,7 +127,7 @@ describe("executeTrajectoryRun", () => {
           },
           {
             turn: 2,
-            agent: "loom",
+            agent: "bard",
             role: "assistant",
             response: "Delegating to worker for investigation.",
             observedDelegation: "worker",
@@ -150,7 +150,7 @@ describe("executeTrajectoryRun", () => {
             durationMs: expect.any(Number),
           },
         ],
-        delegationSequence: ["loom", "worker", "worker-ui"],
+        delegationSequence: ["bard", "worker", "worker-ui"],
         delegationTargets: ["worker", "worker-ui"],
         totalTurns: 4,
         completedTurns: 4,

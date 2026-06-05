@@ -1,4 +1,4 @@
-import type { WeaveConfig } from "../config/schema"
+import type { GuildConfig } from "../config/schema"
 import type { ConfigLoadResult, ConfigDiagnostic } from "../config/loader"
 import { resolveContinuationConfig } from "../config/continuation"
 import { getAgentConfigKey } from "../shared/agent-display-names"
@@ -56,7 +56,7 @@ export function generateHealthReport(
 
   // ── Agents ──
   lines.push("### Loaded Agents")
-  const builtinKeys = new Set(["loom", "tapestry", "shuttle", "pattern", "thread", "spindle", "warp", "weft"])
+  const builtinKeys = new Set(["bard", "fighter", "ranger", "wizard", "rogue", "warlock", "cleric", "paladin"])
   const agentNames = Object.keys(agents)
   const builtinAgents = agentNames.filter((n) => builtinKeys.has(getAgentConfigKey(n)))
   const customAgents = agentNames.filter((n) => !builtinKeys.has(getAgentConfigKey(n)))

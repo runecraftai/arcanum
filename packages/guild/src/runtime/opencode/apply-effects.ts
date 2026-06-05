@@ -141,7 +141,7 @@ export async function applyRuntimeEffects(args: {
             ? `${failureWarning}\n\n${fanOutOutput}`
             : fanOutOutput
           const nonce = randomUUID()
-          const taggedOutput = `${REVIEWER_FANOUT_SENTINEL} <!-- weave:reviewer-fanout nonce:${nonce} -->\n${mergedOutput}`
+          const taggedOutput = `${REVIEWER_FANOUT_SENTINEL} <!-- guild:reviewer-fanout nonce:${nonce} -->\n${mergedOutput}`
 
           if (effect.delivery.kind === "injectPromptAsync") {
             await client.session.promptAsync({

@@ -29,7 +29,7 @@ describe("executeModelResponse", () => {
     expect(
       executeModelResponse(
         {
-          target: { kind: "builtin-agent-prompt", agent: "loom" },
+          target: { kind: "builtin-agent-prompt", agent: "bard" },
           artifacts: { renderedPrompt: "system prompt" },
         },
         {
@@ -49,7 +49,7 @@ describe("executeModelResponse", () => {
       fetch: async () =>
         new Response(
           JSON.stringify({
-            choices: [{ message: { content: "I will delegate to thread for exploration." } }],
+            choices: [{ message: { content: "I will delegate to rogue for exploration." } }],
           }),
           { status: 200, headers: { "Content-Type": "application/json" } },
         ),
@@ -59,7 +59,7 @@ describe("executeModelResponse", () => {
     try {
       const artifacts = await executeModelResponse(
         {
-          target: { kind: "builtin-agent-prompt", agent: "loom" },
+          target: { kind: "builtin-agent-prompt", agent: "bard" },
           artifacts: { renderedPrompt: "system prompt" },
         },
         {
@@ -71,7 +71,7 @@ describe("executeModelResponse", () => {
         { mode: "local", directory: process.cwd() },
       )
 
-      expect(artifacts.modelOutput).toBe("I will delegate to thread for exploration.")
+      expect(artifacts.modelOutput).toBe("I will delegate to rogue for exploration.")
       expect((artifacts.baselineDelta as { provider: string }).provider).toBe("g***s")
       expect((artifacts.baselineDelta as { model: string }).model).toBe("gpt-4o-mini")
       expect((artifacts.baselineDelta as { durationMs: number }).durationMs).toBeGreaterThanOrEqual(0)
@@ -86,7 +86,7 @@ describe("executeModelResponse", () => {
       fetch: async () =>
         new Response(
           JSON.stringify({
-            choices: [{ message: { content: "delegate to pattern" } }],
+            choices: [{ message: { content: "delegate to wizard" } }],
           }),
           { status: 200, headers: { "Content-Type": "application/json" } },
         ),
@@ -96,7 +96,7 @@ describe("executeModelResponse", () => {
     try {
       const artifacts = await executeModelResponse(
         {
-          target: { kind: "builtin-agent-prompt", agent: "loom" },
+          target: { kind: "builtin-agent-prompt", agent: "bard" },
           artifacts: { renderedPrompt: "prompt" },
         },
         {
@@ -136,7 +136,7 @@ describe("executeModelResponse", () => {
     try {
       await executeModelResponse(
         {
-          target: { kind: "builtin-agent-prompt", agent: "loom" },
+          target: { kind: "builtin-agent-prompt", agent: "bard" },
           artifacts: { renderedPrompt: "system" },
         },
         {
@@ -160,7 +160,7 @@ describe("executeModelResponse", () => {
     expect(
       executeModelResponse(
         {
-          target: { kind: "builtin-agent-prompt", agent: "loom" },
+          target: { kind: "builtin-agent-prompt", agent: "bard" },
           artifacts: { renderedPrompt: "system prompt" },
         },
         {
@@ -183,7 +183,7 @@ describe("executeModelResponse", () => {
         capturedUrl = String(url)
         return new Response(
           JSON.stringify({
-            choices: [{ message: { content: "Use thread for repo exploration." } }],
+            choices: [{ message: { content: "Use rogue for repo exploration." } }],
           }),
           { status: 200, headers: { "Content-Type": "application/json" } },
         )
@@ -194,7 +194,7 @@ describe("executeModelResponse", () => {
     try {
       const artifacts = await executeModelResponse(
         {
-          target: { kind: "builtin-agent-prompt", agent: "loom" },
+          target: { kind: "builtin-agent-prompt", agent: "bard" },
           artifacts: { renderedPrompt: "system prompt" },
         },
         {
@@ -207,7 +207,7 @@ describe("executeModelResponse", () => {
       )
 
       expect(capturedUrl).toBe("https://openrouter.ai/api/v1/chat/completions")
-      expect(artifacts.modelOutput).toBe("Use thread for repo exploration.")
+      expect(artifacts.modelOutput).toBe("Use rogue for repo exploration.")
       expect((artifacts.baselineDelta as { provider: string }).provider).toBe("o***r")
       expect((artifacts.baselineDelta as { model: string }).model).toBe("anthropic/claude-3.5-sonnet")
     } finally {
@@ -235,7 +235,7 @@ describe("executeModelResponse", () => {
     try {
       const artifacts = await executeModelResponse(
         {
-          target: { kind: "builtin-agent-prompt", agent: "loom" },
+          target: { kind: "builtin-agent-prompt", agent: "bard" },
           artifacts: { renderedPrompt: "prompt" },
         },
         {
@@ -258,7 +258,7 @@ describe("executeModelResponse", () => {
     await expect(
       executeModelResponse(
         {
-          target: { kind: "builtin-agent-prompt", agent: "loom" },
+          target: { kind: "builtin-agent-prompt", agent: "bard" },
           artifacts: { renderedPrompt: "prompt" },
         },
         {

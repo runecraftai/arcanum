@@ -7,7 +7,7 @@ import { createPluginInterface } from "./plugin-interface"
 import type { ConfigHandler } from "../managers/config-handler"
 import type { CreatedHooks } from "../hooks/create-hooks"
 import type { PluginInterface, ToolsRecord } from "./types"
-import type { WeaveConfig } from "../config/schema"
+import type { GuildConfig } from "../config/schema"
 import { clearAll } from "../hooks/first-message-variant"
 import { clearAllTokenState, getState as getTokenState } from "../hooks"
 import * as sharedLog from "../shared/log"
@@ -23,7 +23,7 @@ import { readSessionSummaries } from "../features/analytics"
 import { createProjectFixture, type ProjectFixture } from "../../test/testkit/fixtures/project-fixture"
 import { FakeOpencodeHost } from "../../test/testkit/host/fake-opencode-host"
 
-const baseConfig: WeaveConfig = {}
+const baseConfig: GuildConfig = {}
 
 const emptyTools: ToolsRecord = {}
 
@@ -34,7 +34,7 @@ function makeHooks(overrides?: Partial<CreatedHooks>): CreatedHooks {
     writeGuard: null,
     firstMessageVariant: null,
     processMessageForKeywords: null,
-    patternMdOnlyEnabled: false,
+    rangerMdOnlyEnabled: false,
     startWork: null,
     workContinuation: null,
     workflowStart: null,
@@ -245,7 +245,7 @@ describe("createPluginInterface", () => {
 
   it("config hook sets config.command from configHandler result", async () => {
     const fakeCommands = {
-      "start-work": { name: "start-work", description: "test", agent: "tapestry", template: "t" },
+      "start-work": { name: "start-work", description: "test", agent: "fighter", template: "t" },
     }
     const handler = {
       handle: async () => ({
@@ -268,7 +268,7 @@ describe("createPluginInterface", () => {
   })
 
   describe("config hook merge behavior", () => {
-    it("merges Weave agents with existing user agents", async () => {
+    it("merges Guild agents with existing user agents", async () => {
       const weaveAgents = {
         "Loom (Main Orchestrator)": { model: "claude-opus-4", prompt: "orchestrate" },
       }
@@ -302,9 +302,9 @@ describe("createPluginInterface", () => {
       expect(agents["Loom (Main Orchestrator)"]).toBeDefined()
     })
 
-    it("lets Weave agents win on name collisions", async () => {
+    it("lets Guild agents win on name collisions", async () => {
       const weaveAgents = {
-        "shared-name": { model: "claude-opus-4", prompt: "weave version" },
+        "shared-name": { model: "claude-opus-4", prompt: "guild version" },
       }
       const handler = {
         handle: async () => ({
@@ -332,12 +332,12 @@ describe("createPluginInterface", () => {
 
       const agents = config.agent as Record<string, { model: string; prompt: string }>
       expect(agents["shared-name"].model).toBe("claude-opus-4")
-      expect(agents["shared-name"].prompt).toBe("weave version")
+      expect(agents["shared-name"].prompt).toBe("guild version")
     })
 
-    it("merges Weave commands with existing user commands", async () => {
+    it("merges Guild commands with existing user commands", async () => {
       const weaveCommands = {
-        "start-work": { name: "start-work", description: "Start work", agent: "tapestry", template: "t" },
+        "start-work": { name: "start-work", description: "Start work", agent: "fighter", template: "t" },
       }
       const handler = {
         handle: async () => ({
@@ -568,10 +568,10 @@ describe("createPluginInterface", () => {
     expect(tracked).toEqual(["/some/file.ts"])
   })
 
-  it("tool.execute.before blocks non-markdown Pattern writes through lifecycle policy", async () => {
+  it("tool.execute.before blocks non-markdown Wizard writes through lifecycle policy", async () => {
     const iface = createPluginInterface({
       pluginConfig: baseConfig,
-      hooks: makeHooks({ patternMdOnlyEnabled: true }),
+      hooks: makeHooks({ rangerMdOnlyEnabled: true }),
       tools: emptyTools,
       configHandler: makeMockConfigHandler(),
       agents: {},
@@ -579,17 +579,17 @@ describe("createPluginInterface", () => {
 
     await expect(
       iface["tool.execute.before"](
-        { tool: "write", sessionID: "s1", callID: "c2", agent: "pattern" },
+        { tool: "write", sessionID: "s1", callID: "c2", agent: "wizard" },
         { args: { file_path: "/some/file.ts" } },
       ),
-    ).rejects.toThrow("Pattern agent can only write to .guild/ directory")
+    ).rejects.toThrow("Wizard agent can only write to .guild/ directory")
   })
 
   it("chat.message injects start-work context into existing text part in-place", async () => {
     const hooks = makeHooks({
       startWork: (_promptText: string, _sessionId: string) => ({
         contextInjection: "## Starting Plan: my-plan\n**Progress**: 0/5 tasks completed",
-        switchAgent: "tapestry",
+        switchAgent: "fighter",
       }),
     })
 
@@ -697,7 +697,7 @@ describe("createPluginInterface", () => {
     const hooks = makeHooks({
       startWork: () => {
         called = true
-        return { contextInjection: "## Starting Plan: test\n**Progress**: 0/3", switchAgent: "tapestry" }
+        return { contextInjection: "## Starting Plan: test\n**Progress**: 0/3", switchAgent: "fighter" }
       },
     })
 
@@ -782,7 +782,7 @@ describe("createPluginInterface", () => {
     let tempDir: string
 
     beforeEach(() => {
-      tempDir = mkdtempSync(join(tmpdir(), "weave-interrupt-"))
+      tempDir = mkdtempSync(join(tmpdir(), "guild-interrupt-"))
       // Set up a temp dir with a plan file and work state so pauseWork/checkContinuation work
       const plansDir = join(tempDir, GUILD_DIR, "plans")
       mkdirSync(plansDir, { recursive: true })
@@ -937,7 +937,7 @@ describe("createPluginInterface", () => {
     let tempDir: string
 
     beforeEach(() => {
-      tempDir = mkdtempSync(join(tmpdir(), "weave-autopause-"))
+      tempDir = mkdtempSync(join(tmpdir(), "guild-autopause-"))
       const plansDir = join(tempDir, GUILD_DIR, "plans")
       mkdirSync(plansDir, { recursive: true })
       const planFile = join(plansDir, "test-plan.md")
@@ -1283,9 +1283,9 @@ describe("delegation logging via tool hooks", () => {
     })
 
     const toolCalls = [
-      { agent: "thread", callID: "c1", description: "explore auth module", prompt: "look at auth" },
-      { agent: "weft", callID: "c2", description: "review auth module", prompt: "review auth" },
-      { agent: "warp", callID: "c3", description: "audit auth module", prompt: "audit auth" },
+      { agent: "rogue", callID: "c1", description: "explore auth module", prompt: "look at auth" },
+      { agent: "cleric", callID: "c2", description: "review auth module", prompt: "review auth" },
+      { agent: "paladin", callID: "c3", description: "audit auth module", prompt: "audit auth" },
     ] as const
 
     for (const toolCall of toolCalls) {
@@ -1297,9 +1297,9 @@ describe("delegation logging via tool hooks", () => {
 
     expect(spy).toHaveBeenCalledTimes(3)
     expect(spy.mock.calls.map(([event]) => event)).toEqual([
-      expect.objectContaining({ phase: "start", agent: "thread", sessionId: "s1", toolCallId: "c1" }),
-      expect.objectContaining({ phase: "start", agent: "weft", sessionId: "s1", toolCallId: "c2" }),
-      expect.objectContaining({ phase: "start", agent: "warp", sessionId: "s1", toolCallId: "c3" }),
+      expect.objectContaining({ phase: "start", agent: "rogue", sessionId: "s1", toolCallId: "c1" }),
+      expect.objectContaining({ phase: "start", agent: "cleric", sessionId: "s1", toolCallId: "c2" }),
+      expect.objectContaining({ phase: "start", agent: "paladin", sessionId: "s1", toolCallId: "c3" }),
     ])
 
     spy.mockRestore()
@@ -1329,7 +1329,7 @@ describe("delegation logging via tool hooks", () => {
     spy.mockRestore()
   })
 
-  it("tool.execute.before does not log delegation for call_weave_agent because runtime delegation evidence is task-only", async () => {
+  it("tool.execute.before does not log delegation for call_guild_agent because runtime delegation evidence is task-only", async () => {
     const spy = spyOn(sharedLog, "logDelegation")
 
     const iface = createPluginInterface({
@@ -1341,8 +1341,8 @@ describe("delegation logging via tool hooks", () => {
     })
 
     await iface["tool.execute.before"](
-      { tool: "call_weave_agent", sessionID: "s1", callID: "c2" },
-      { args: { agent: "weft", prompt: "review these changes" } },
+      { tool: "call_guild_agent", sessionID: "s1", callID: "c2" },
+      { args: { agent: "cleric", prompt: "review these changes" } },
     )
 
     expect(spy).not.toHaveBeenCalled()
@@ -1362,9 +1362,9 @@ describe("delegation logging via tool hooks", () => {
     })
 
     const toolCalls = [
-      { agent: "thread", callID: "c3", description: "explore auth", prompt: "look at auth" },
-      { agent: "weft", callID: "c4", description: "review auth", prompt: "review auth" },
-      { agent: "warp", callID: "c5", description: "audit auth", prompt: "audit auth" },
+      { agent: "rogue", callID: "c3", description: "explore auth", prompt: "look at auth" },
+      { agent: "cleric", callID: "c4", description: "review auth", prompt: "review auth" },
+      { agent: "paladin", callID: "c5", description: "audit auth", prompt: "audit auth" },
     ] as const
 
     for (const toolCall of toolCalls) {
@@ -1376,9 +1376,9 @@ describe("delegation logging via tool hooks", () => {
 
     expect(spy).toHaveBeenCalledTimes(3)
     expect(spy.mock.calls.map(([event]) => event)).toEqual([
-      expect.objectContaining({ phase: "complete", agent: "thread", sessionId: "s2", toolCallId: "c3" }),
-      expect.objectContaining({ phase: "complete", agent: "weft", sessionId: "s2", toolCallId: "c4" }),
-      expect.objectContaining({ phase: "complete", agent: "warp", sessionId: "s2", toolCallId: "c5" }),
+      expect.objectContaining({ phase: "complete", agent: "rogue", sessionId: "s2", toolCallId: "c3" }),
+      expect.objectContaining({ phase: "complete", agent: "cleric", sessionId: "s2", toolCallId: "c4" }),
+      expect.objectContaining({ phase: "complete", agent: "paladin", sessionId: "s2", toolCallId: "c5" }),
     ])
 
     spy.mockRestore()
@@ -1386,12 +1386,12 @@ describe("delegation logging via tool hooks", () => {
 })
 
 describe("tool.execute.after leaves output untouched — fan-out lives elsewhere", () => {
-  it("leaves call_weave_agent output unchanged even when review_models are configured", async () => {
+  it("leaves call_guild_agent output unchanged even when review_models are configured", async () => {
     const { client, state } = makeMockReviewClient()
     const iface = createPluginInterface({
       pluginConfig: {
         agents: {
-          warp: {
+          paladin: {
             model: "anthropic/claude-3-5-sonnet",
             review_models: ["openai/gpt-4o"],
           },
@@ -1406,22 +1406,22 @@ describe("tool.execute.after leaves output untouched — fan-out lives elsewhere
 
     const output = {
       title: "Warp Review",
-      output: "Primary warp review",
+      output: "Primary paladin review",
     }
 
     await iface["tool.execute.after"](
       {
-        tool: "call_weave_agent",
-        sessionID: "sess-visible-only-call-weave-agent",
-        callID: "call-visible-only-call-weave-agent",
-        args: { agent: "warp", prompt: "Review this change" },
+        tool: "call_guild_agent",
+        sessionID: "sess-visible-only-call-guild-agent",
+        callID: "call-visible-only-call-guild-agent",
+        args: { agent: "paladin", prompt: "Review this change" },
       } as Parameters<typeof iface["tool.execute.after"]>[0],
       output,
     )
 
     expect(output).toEqual({
       title: "Warp Review",
-      output: "Primary warp review",
+      output: "Primary paladin review",
     })
     expect(state.createCalls).toHaveLength(0)
     expect(state.promptCalls).toHaveLength(0)
@@ -1433,7 +1433,7 @@ describe("tool.execute.after leaves output untouched — fan-out lives elsewhere
     const iface = createPluginInterface({
       pluginConfig: {
         agents: {
-          weft: {
+          cleric: {
             model: "openai/gpt-5.5",
             review_models: ["opencode-go/kimi-k2.6"],
           },
@@ -1447,8 +1447,8 @@ describe("tool.execute.after leaves output untouched — fan-out lives elsewhere
     })
 
     const output = {
-      title: "weft",
-      output: "Primary task weft review",
+      title: "cleric",
+      output: "Primary task cleric review",
     }
 
     await iface["tool.execute.after"](
@@ -1456,13 +1456,13 @@ describe("tool.execute.after leaves output untouched — fan-out lives elsewhere
         tool: "task",
         sessionID: "sess-task-review-models",
         callID: "call-task-review-models",
-        args: { subagent_type: "weft", prompt: "Review this patch" },
+        args: { subagent_type: "cleric", prompt: "Review this patch" },
       } as Parameters<typeof iface["tool.execute.after"]>[0],
       output,
     )
 
-    expect(output.output).toBe("Primary task weft review")
-    expect(output.title).toBe("weft")
+    expect(output.output).toBe("Primary task cleric review")
+    expect(output.title).toBe("cleric")
     expect(state.createCalls).toHaveLength(0)
     expect(state.promptCalls).toHaveLength(0)
   })
@@ -1473,7 +1473,7 @@ describe("tool.execute.after leaves output untouched — fan-out lives elsewhere
     const iface = createPluginInterface({
       pluginConfig: {
         agents: {
-          weft: {
+          cleric: {
             model: "openai/gpt-5.5",
             review_models: ["opencode-go/glm-5.1"],
           },
@@ -1494,12 +1494,12 @@ describe("tool.execute.after leaves output untouched — fan-out lives elsewhere
 
     await iface["tool.execute.before"](
       toolInput,
-      { args: { subagent_type: "weft", prompt: "Review this captured patch" } },
+      { args: { subagent_type: "cleric", prompt: "Review this captured patch" } },
     )
 
     const output = {
-      title: "weft",
-      output: "Primary captured task weft review",
+      title: "cleric",
+      output: "Primary captured task cleric review",
     }
 
     await iface["tool.execute.after"](
@@ -1507,16 +1507,16 @@ describe("tool.execute.after leaves output untouched — fan-out lives elsewhere
       output,
     )
 
-    expect(output.output).toBe("Primary captured task weft review")
-    expect(output.title).toBe("weft")
+    expect(output.output).toBe("Primary captured task cleric review")
+    expect(output.title).toBe("cleric")
     expect(state.createCalls).toHaveLength(0)
     expect(state.promptCalls).toHaveLength(0)
   })
 })
 
 describe("direct-intent reviewer fan-out via message.updated / onAssistantMessage", () => {
-  it("fans out Weft review variants from explicit @weft mention in Loom session prompt", async () => {
-    const tempDir = mkdtempSync(join(tmpdir(), "weave-direct-fanout-mention-weft-"))
+  it("fans out Weft review variants from explicit @cleric mention in Loom session prompt", async () => {
+    const tempDir = mkdtempSync(join(tmpdir(), "guild-direct-fanout-mention-cleric-"))
     try {
       const { client, state } = makeMockReviewClient({
         reviewerOutputs: { "opencode-go/kimi-k2.6": "Weft variant verdict" },
@@ -1525,7 +1525,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
       const iface = createPluginInterface({
         pluginConfig: {
           agents: {
-            weft: {
+            cleric: {
               model: "openai/gpt-5.5",
               review_models: ["opencode-go/kimi-k2.6"],
             },
@@ -1539,10 +1539,10 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
         directory: tempDir,
       })
 
-      await iface["chat.params"]({ sessionID: "s-mention", agent: "loom" } as never, {} as never)
+      await iface["chat.params"]({ sessionID: "s-mention", agent: "bard" } as never, {} as never)
       await iface["chat.message"](
         { sessionID: "s-mention" },
-        { message: {} as never, parts: [{ type: "text", text: "Puedes probar con @weft el ultimo commit?" }] as never },
+        { message: {} as never, parts: [{ type: "text", text: "Puedes probar con @cleric el ultimo commit?" }] as never },
       )
       await iface.event({
         event: {
@@ -1556,7 +1556,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
         event: {
           type: "message.updated",
           properties: {
-            info: { id: "msg-mention-weft-1", role: "assistant", sessionID: "s-mention", tokens: { input: 42 } },
+            info: { id: "msg-mention-cleric-1", role: "assistant", sessionID: "s-mention", tokens: { input: 42 } },
           },
         } as never,
       })
@@ -1570,7 +1570,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
       })
       const variantPromptText = ((variantPromptCall?.body as { parts?: Array<{ type?: string; text?: string }> } | undefined)
         ?.parts?.find((part) => part.type === "text")?.text) ?? ""
-      expect(variantPromptText).toContain("Puedes probar con @weft el ultimo commit?")
+      expect(variantPromptText).toContain("Puedes probar con @cleric el ultimo commit?")
       expect(variantPromptText).not.toContain("Primary Loom-routed review text")
 
       const postedText = ((state.promptAsyncCalls[0].body as { parts: Array<{ text?: string }> }).parts[0]?.text ?? "")
@@ -1581,7 +1581,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
   })
 
   it("fans out Weft direct-intent review, uses original user request for variant prompt, and is idempotent by message id", async () => {
-    const tempDir = mkdtempSync(join(tmpdir(), "weave-direct-fanout-weft-"))
+    const tempDir = mkdtempSync(join(tmpdir(), "guild-direct-fanout-cleric-"))
     try {
       const { client, state } = makeMockReviewClient({
         reviewerOutputs: { "opencode-go/kimi-k2.6": "Weft variant verdict" },
@@ -1590,7 +1590,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
       const iface = createPluginInterface({
         pluginConfig: {
           agents: {
-            weft: {
+            cleric: {
               model: "openai/gpt-5.5",
               review_models: ["opencode-go/kimi-k2.6"],
             },
@@ -1604,7 +1604,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
         directory: tempDir,
       })
 
-      await iface["chat.params"]({ sessionID: "s1", agent: "weft" } as never, {} as never)
+      await iface["chat.params"]({ sessionID: "s1", agent: "cleric" } as never, {} as never)
       await iface["chat.message"](
         { sessionID: "s1" },
         { message: {} as never, parts: [{ type: "text", text: "Review my auth refactor" }] as never },
@@ -1622,7 +1622,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
         event: {
           type: "message.updated",
           properties: {
-            info: { id: "msg-weft-1", role: "assistant", sessionID: "s1", tokens: { input: 42 } },
+            info: { id: "msg-cleric-1", role: "assistant", sessionID: "s1", tokens: { input: 42 } },
           },
         } as never,
       })
@@ -1650,7 +1650,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
         event: {
           type: "message.updated",
           properties: {
-            info: { id: "msg-weft-1", role: "assistant", sessionID: "s1", tokens: { input: 42 } },
+            info: { id: "msg-cleric-1", role: "assistant", sessionID: "s1", tokens: { input: 42 } },
           },
         } as never,
       })
@@ -1680,7 +1680,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
         event: {
           type: "message.updated",
           properties: {
-            info: { id: "msg-weft-2", role: "assistant", sessionID: "s1", tokens: { input: 42 } },
+            info: { id: "msg-cleric-2", role: "assistant", sessionID: "s1", tokens: { input: 42 } },
           },
         } as never,
       })
@@ -1691,7 +1691,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
   })
 
   it("fans out Warp direct-intent review through message.updated", async () => {
-    const tempDir = mkdtempSync(join(tmpdir(), "weave-direct-fanout-warp-"))
+    const tempDir = mkdtempSync(join(tmpdir(), "guild-direct-fanout-paladin-"))
     try {
       const { client, state } = makeMockReviewClient({
         reviewerOutputs: { "openai/gpt-4o": "Warp variant verdict" },
@@ -1700,7 +1700,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
       const iface = createPluginInterface({
         pluginConfig: {
           agents: {
-            warp: {
+            paladin: {
               model: "anthropic/claude-3-5-sonnet",
               review_models: ["openai/gpt-4o"],
             },
@@ -1714,7 +1714,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
         directory: tempDir,
       })
 
-      await iface["chat.params"]({ sessionID: "s1", agent: "warp" } as never, {} as never)
+      await iface["chat.params"]({ sessionID: "s1", agent: "paladin" } as never, {} as never)
       await iface["chat.message"](
         { sessionID: "s1" },
         { message: {} as never, parts: [{ type: "text", text: "Audit my auth refactor" }] as never },
@@ -1731,7 +1731,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
         event: {
           type: "message.updated",
           properties: {
-            info: { id: "msg-warp-1", role: "assistant", sessionID: "s1", tokens: { input: 25 } },
+            info: { id: "msg-paladin-1", role: "assistant", sessionID: "s1", tokens: { input: 25 } },
           },
         } as never,
       })
@@ -1745,13 +1745,13 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
   })
 
   it("emits no direct fan-out when Weft has no review variants", async () => {
-    const tempDir = mkdtempSync(join(tmpdir(), "weave-direct-fanout-none-"))
+    const tempDir = mkdtempSync(join(tmpdir(), "guild-direct-fanout-none-"))
     try {
       const { client, state } = makeMockReviewClient()
       const iface = createPluginInterface({
         pluginConfig: {
-          agents: { weft: { model: "openai/gpt-5.5", review_models: [] } },
-          disabled_agents: ["warp"],
+          agents: { cleric: { model: "openai/gpt-5.5", review_models: [] } },
+          disabled_agents: ["paladin"],
         },
         hooks: makeHooks(),
         tools: emptyTools,
@@ -1761,7 +1761,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
         directory: tempDir,
       })
 
-      await iface["chat.params"]({ sessionID: "s1", agent: "weft" } as never, {} as never)
+      await iface["chat.params"]({ sessionID: "s1", agent: "cleric" } as never, {} as never)
       await iface["chat.message"]({ sessionID: "s1" }, { message: {} as never, parts: [{ type: "text", text: "Review this" }] as never })
       await iface.event({ event: { type: "message.part.updated", properties: { part: { type: "text", sessionID: "s1", text: "Primary" } } } as never })
       await iface.event({ event: { type: "message.updated", properties: { info: { id: "msg-1", role: "assistant", sessionID: "s1", tokens: { input: 1 } } } } as never })
@@ -1773,13 +1773,13 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
   })
 
   it("runs exactly one post-execution primary-only Weft reviewer, then verification reminder", async () => {
-    const tempDir = mkdtempSync(join(tmpdir(), "weave-postexec-primary-only-"))
+    const tempDir = mkdtempSync(join(tmpdir(), "guild-postexec-primary-only-"))
     const plansDir = join(tempDir, GUILD_DIR, "plans")
     mkdirSync(plansDir, { recursive: true })
     const planPath = join(plansDir, "done.md")
     writeFileSync(planPath, "# Plan\n- [x] Done\n", "utf-8")
     writeWorkState(tempDir, {
-      ...createWorkState(planPath, "s1", "tapestry", tempDir),
+      ...createWorkState(planPath, "s1", "fighter", tempDir),
       session_ids: ["s1"],
     })
 
@@ -1787,8 +1787,8 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
       const { client, state } = makeMockReviewClient({ reviewerOutputs: { "openai/gpt-5.5": "Primary-only runtime reviewer output" } })
       const iface = createPluginInterface({
         pluginConfig: {
-          agents: { weft: { model: "openai/gpt-5.5", review_models: [] } },
-          disabled_agents: ["warp"],
+          agents: { cleric: { model: "openai/gpt-5.5", review_models: [] } },
+          disabled_agents: ["paladin"],
         },
         hooks: makeHooks({ verificationReminderEnabled: true }),
         tools: emptyTools,
@@ -1811,11 +1811,11 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
   })
 
   it("degrades safely when originalPromptText is missing", async () => {
-    const tempDir = mkdtempSync(join(tmpdir(), "weave-direct-missing-original-"))
+    const tempDir = mkdtempSync(join(tmpdir(), "guild-direct-missing-original-"))
     try {
       const { client, state } = makeMockReviewClient()
       const iface = createPluginInterface({
-        pluginConfig: { agents: { weft: { model: "openai/gpt-5.5", review_models: ["opencode-go/kimi-k2.6"] } } },
+        pluginConfig: { agents: { cleric: { model: "openai/gpt-5.5", review_models: ["opencode-go/kimi-k2.6"] } } },
         hooks: makeHooks(),
         tools: emptyTools,
         configHandler: makeMockConfigHandler(),
@@ -1824,7 +1824,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
         directory: tempDir,
       })
 
-      await iface["chat.params"]({ sessionID: "s1", agent: "weft" } as never, {} as never)
+      await iface["chat.params"]({ sessionID: "s1", agent: "cleric" } as never, {} as never)
       await iface.event({ event: { type: "message.part.updated", properties: { part: { type: "text", sessionID: "s1", text: "Primary" } } } as never })
       await iface.event({ event: { type: "message.updated", properties: { info: { id: "msg-x", role: "assistant", sessionID: "s1", tokens: { input: 1 } } } } as never })
 
@@ -1835,12 +1835,12 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
     }
   })
 
-  it("does not run Weft fan-out when foreground agent is Warp and warp review_models are not configured", async () => {
-    const tempDir = mkdtempSync(join(tmpdir(), "weave-direct-boundary-"))
+  it("does not run Weft fan-out when foreground agent is Warp and paladin review_models are not configured", async () => {
+    const tempDir = mkdtempSync(join(tmpdir(), "guild-direct-boundary-"))
     try {
       const { client, state } = makeMockReviewClient()
       const iface = createPluginInterface({
-        pluginConfig: { agents: { weft: { model: "openai/gpt-5.5", review_models: ["opencode-go/kimi-k2.6"] } } },
+        pluginConfig: { agents: { cleric: { model: "openai/gpt-5.5", review_models: ["opencode-go/kimi-k2.6"] } } },
         hooks: makeHooks(),
         tools: emptyTools,
         configHandler: makeMockConfigHandler(),
@@ -1849,13 +1849,13 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
         directory: tempDir,
       })
 
-      await iface["chat.params"]({ sessionID: "s1", agent: "warp" } as never, {} as never)
+      await iface["chat.params"]({ sessionID: "s1", agent: "paladin" } as never, {} as never)
       await iface["chat.message"]({ sessionID: "s1" }, { message: {} as never, parts: [{ type: "text", text: "Security review please" }] as never })
       await iface.event({ event: { type: "message.part.updated", properties: { part: { type: "text", sessionID: "s1", text: "Warp primary" } } } as never })
       await iface.event({ event: { type: "message.updated", properties: { info: { id: "msg-b", role: "assistant", sessionID: "s1", tokens: { input: 1 } } } } as never })
 
-      const weftPrefixedCreates = state.createCalls.filter((call) => String((call.title as string | undefined) ?? "").toLowerCase().includes("weft"))
-      const warpVariantCreates = state.createCalls.filter((call) => String((call.title as string | undefined) ?? "").toLowerCase().includes("warp @"))
+      const weftPrefixedCreates = state.createCalls.filter((call) => String((call.title as string | undefined) ?? "").toLowerCase().includes("cleric"))
+      const warpVariantCreates = state.createCalls.filter((call) => String((call.title as string | undefined) ?? "").toLowerCase().includes("paladin @"))
       expect(weftPrefixedCreates.length).toBe(0)
       expect(warpVariantCreates.length).toBe(0)
       expect(state.createCalls.length).toBe(0)
@@ -1865,13 +1865,13 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
   })
 
   it("does not emit fan-out when Weft is disabled even with review_models configured", async () => {
-    const tempDir = mkdtempSync(join(tmpdir(), "weave-direct-disabled-"))
+    const tempDir = mkdtempSync(join(tmpdir(), "guild-direct-disabled-"))
     try {
       const { client, state } = makeMockReviewClient()
       const iface = createPluginInterface({
         pluginConfig: {
-          agents: { weft: { model: "openai/gpt-5.5", review_models: ["opencode-go/kimi-k2.6"] } },
-          disabled_agents: ["weft"],
+          agents: { cleric: { model: "openai/gpt-5.5", review_models: ["opencode-go/kimi-k2.6"] } },
+          disabled_agents: ["cleric"],
         },
         hooks: makeHooks(),
         tools: emptyTools,
@@ -1881,7 +1881,7 @@ describe("direct-intent reviewer fan-out via message.updated / onAssistantMessag
         directory: tempDir,
       })
 
-      await iface["chat.params"]({ sessionID: "s1", agent: "weft" } as never, {} as never)
+      await iface["chat.params"]({ sessionID: "s1", agent: "cleric" } as never, {} as never)
       await iface["chat.message"]({ sessionID: "s1" }, { message: {} as never, parts: [{ type: "text", text: "Review disabled agent path" }] as never })
       await iface.event({ event: { type: "message.part.updated", properties: { part: { type: "text", sessionID: "s1", text: "Primary disabled" } } } as never })
       await iface.event({ event: { type: "message.updated", properties: { info: { id: "msg-disabled", role: "assistant", sessionID: "s1", tokens: { input: 1 } } } } as never })
@@ -1898,7 +1898,7 @@ describe("runtime delegation evidence via plugin interface", () => {
   let fixture: ProjectFixture
 
   beforeEach(() => {
-    fixture = createProjectFixture("weave-plugin-interface-delegation-")
+    fixture = createProjectFixture("guild-plugin-interface-delegation-")
     fixture.writeProjectConfig({
       analytics: {
         enabled: true,
@@ -1910,21 +1910,21 @@ describe("runtime delegation evidence via plugin interface", () => {
     fixture.cleanup()
   })
 
-  it("counts only executed shuttle task delegations and preserves generic and categorized subagent_type args", async () => {
+  it("counts only executed ranger task delegations and preserves generic and categorized subagent_type args", async () => {
     const host = await FakeOpencodeHost.boot({ directory: fixture.directory })
-    const sessionID = "sess-plugin-runtime-shuttle"
+    const sessionID = "sess-plugin-runtime-ranger"
 
     await host.sendUserMessage({
       sessionID,
-      text: "You may mention shuttle and shuttle-frontend in prose, but only real task executions should count.",
+      text: "You may mention ranger and ranger-frontend in prose, but only real task executions should count.",
     })
 
     await host.executeTool({
       sessionID,
       tool: "task",
-      callID: "call-shuttle-generic",
+      callID: "call-ranger-generic",
       args: {
-        subagent_type: "shuttle",
+        subagent_type: "ranger",
         description: "Inspect the shared runtime behavior",
         prompt: "Inspect the shared runtime behavior and report concrete findings.",
       },
@@ -1932,9 +1932,9 @@ describe("runtime delegation evidence via plugin interface", () => {
     await host.executeTool({
       sessionID,
       tool: "task",
-      callID: "call-shuttle-frontend",
+      callID: "call-ranger-frontend",
       args: {
-        subagent_type: "shuttle-frontend",
+        subagent_type: "ranger-frontend",
         description: "Review the frontend delegation path",
         prompt: "Review the frontend delegation path and report concrete findings.",
       },
@@ -1944,8 +1944,8 @@ describe("runtime delegation evidence via plugin interface", () => {
 
     expect(host.getExecutedToolCalls(sessionID)).toHaveLength(2)
     expect(host.getDelegatedToolCalls(sessionID).map(call => call.args.subagent_type)).toEqual([
-      "shuttle",
-      "shuttle-frontend",
+      "ranger",
+      "ranger-frontend",
     ])
 
     const summaries = readSessionSummaries(fixture.directory)
@@ -1959,18 +1959,18 @@ describe("runtime delegation evidence via plugin interface", () => {
       }),
     )
     expect(summaries[0]?.delegations.map(({ agent, toolCallId }) => ({ agent, toolCallId }))).toEqual([
-      { agent: "shuttle", toolCallId: "call-shuttle-generic" },
-      { agent: "shuttle-frontend", toolCallId: "call-shuttle-frontend" },
+      { agent: "ranger", toolCallId: "call-ranger-generic" },
+      { agent: "ranger-frontend", toolCallId: "call-ranger-frontend" },
     ])
   })
 
-  it("does not count prose-only shuttle mentions as delegation evidence", async () => {
+  it("does not count prose-only ranger mentions as delegation evidence", async () => {
     const host = await FakeOpencodeHost.boot({ directory: fixture.directory })
-    const sessionID = "sess-plugin-runtime-shuttle-prose-only"
+    const sessionID = "sess-plugin-runtime-ranger-prose-only"
 
     await host.sendUserMessage({
       sessionID,
-      text: "Please ask shuttle to inspect the shared behavior and shuttle-frontend to review UI concerns later, but do not execute delegation tools.",
+      text: "Please ask ranger to inspect the shared behavior and ranger-frontend to review UI concerns later, but do not execute delegation tools.",
     })
     await host.emitMessageUpdated({
       role: "assistant",
@@ -2206,7 +2206,7 @@ describe("analytics: agent name and cost tracking", () => {
   let tempDir: string
 
   beforeEach(() => {
-    tempDir = join(tmpdir(), `weave-analytics-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempDir = join(tmpdir(), `guild-analytics-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempDir, { recursive: true })
   })
 
@@ -2326,7 +2326,7 @@ describe("command.execute.before handler", () => {
   let tempDir: string
 
   beforeEach(() => {
-    tempDir = join(tmpdir(), `weave-cmd-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    tempDir = join(tmpdir(), `guild-cmd-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempDir, { recursive: true })
   })
 
@@ -2420,7 +2420,7 @@ describe("workflow integration in plugin-interface", () => {
         name: "test-wf-autopause",
         description: "Test",
         version: 1,
-        steps: [{ id: "s1", name: "Step 1", type: "interactive", agent: "loom", prompt: "Do it", completion: { method: "user_confirm" } }],
+        steps: [{ id: "s1", name: "Step 1", type: "interactive", agent: "bard", prompt: "Do it", completion: { method: "user_confirm" } }],
       }
       const defPath = join(defDir, "test-wf-autopause.json")
       writeFileSync(defPath, JSON.stringify(def))
@@ -2433,7 +2433,7 @@ describe("workflow integration in plugin-interface", () => {
     }
 
     beforeEach(() => {
-      tempDir = mkdtempSync(join(tmpdir(), "weave-wf-autopause-"))
+      tempDir = mkdtempSync(join(tmpdir(), "guild-wf-autopause-"))
       const plansDir = join(tempDir, GUILD_DIR, "plans")
       mkdirSync(plansDir, { recursive: true })
       const planFile = join(plansDir, "test-plan.md")
@@ -2511,7 +2511,7 @@ describe("workflow integration in plugin-interface", () => {
         name: "test-wf-track",
         description: "Test",
         version: 1,
-        steps: [{ id: "s1", name: "Step 1", type: "interactive", agent: "tapestry", prompt: "Do it", completion: { method: "user_confirm" } }],
+        steps: [{ id: "s1", name: "Step 1", type: "interactive", agent: "fighter", prompt: "Do it", completion: { method: "user_confirm" } }],
       }
       const defPath = join(defDir, "test-wf-track.json")
       writeFileSync(defPath, JSON.stringify(def))
@@ -2527,7 +2527,7 @@ describe("workflow integration in plugin-interface", () => {
         ownerRef: `${instance.instance_id}/${instance.current_step_id}`,
         status: "running",
         sessionId: "sess-track",
-        executorAgent: "tapestry",
+        executorAgent: "fighter",
       }))
     }
 
@@ -2557,14 +2557,14 @@ describe("workflow integration in plugin-interface", () => {
           if (lastAssistantMessage && lastAssistantMessage.includes("<!-- workflow:step-complete -->")) {
             return {
               continuationPrompt: "Next step prompt",
-              switchAgent: "tapestry",
+              switchAgent: "fighter",
             }
           }
           return { continuationPrompt: null, switchAgent: null }
         },
       })
 
-      const workflowDir = mkdtempSync(join(tmpdir(), "weave-wf-track-"))
+      const workflowDir = mkdtempSync(join(tmpdir(), "guild-wf-track-"))
       setupTrackingWorkflowInstance(workflowDir)
 
       const iface = createPluginInterface({
@@ -2613,7 +2613,7 @@ describe("workflow integration in plugin-interface", () => {
       const hooks = makeHooks({
         workflowStart: (_promptText: string, _sessionId: string) => ({
           contextInjection: "## Workflow Started\nGoal: Add OAuth2 login",
-          switchAgent: "weft",
+          switchAgent: "cleric",
         }),
       })
 
@@ -2640,7 +2640,7 @@ describe("workflow integration in plugin-interface", () => {
 
       expect(parts[0].text).toContain("Workflow Started")
       expect(parts[0].text).toContain("Add OAuth2 login")
-      expect(message.agent).toBe("weft")
+      expect(message.agent).toBe("cleric")
     })
 
     it("does NOT trigger workflowStart for non-workflow messages", async () => {
@@ -2677,7 +2677,7 @@ describe("workflow integration in plugin-interface", () => {
       const hooks = makeHooks({
         startWork: (_promptText: string, _sessionId: string) => {
           startWorkCalled = true
-          return { contextInjection: "## Plan Not Found", switchAgent: "tapestry" }
+          return { contextInjection: "## Plan Not Found", switchAgent: "fighter" }
         },
         workflowStart: (_promptText: string, _sessionId: string) => ({
           contextInjection: "## Workflow Started",
@@ -2777,7 +2777,7 @@ describe("workflow integration in plugin-interface", () => {
     let tempDir: string
 
     beforeEach(() => {
-      tempDir = mkdtempSync(join(tmpdir(), "weave-wf-interrupt-"))
+      tempDir = mkdtempSync(join(tmpdir(), "guild-wf-interrupt-"))
       const plansDir = join(tempDir, GUILD_DIR, "plans")
       mkdirSync(plansDir, { recursive: true })
       const planFile = join(plansDir, "test-plan.md")
@@ -2815,7 +2815,7 @@ describe("workflow integration in plugin-interface", () => {
     let tempDir: string
 
     beforeEach(() => {
-      tempDir = mkdtempSync(join(tmpdir(), "weave-wf-suppress-"))
+      tempDir = mkdtempSync(join(tmpdir(), "guild-wf-suppress-"))
       const plansDir = join(tempDir, GUILD_DIR, "plans")
       mkdirSync(plansDir, { recursive: true })
       const planFile = join(plansDir, "test-plan.md")
@@ -2840,7 +2840,7 @@ describe("workflow integration in plugin-interface", () => {
         name: "test-wf",
         description: "Test",
         version: 1,
-        steps: [{ id: "s1", name: "Step 1", type: "interactive", agent: "loom", prompt: "Do it", completion: { method: "user_confirm" } }],
+        steps: [{ id: "s1", name: "Step 1", type: "interactive", agent: "bard", prompt: "Do it", completion: { method: "user_confirm" } }],
       }
       const defPath = join(defDir, "test-wf.json")
       writeFileSync(defPath, JSON.stringify(def))
@@ -2968,7 +2968,7 @@ describe("workflow integration in plugin-interface", () => {
         name: "cache-reset-wf",
         description: "Test",
         version: 1,
-        steps: [{ id: "s1", name: "Step 1", type: "interactive", agent: "loom", prompt: "Do it", completion: { method: "user_confirm" } }],
+        steps: [{ id: "s1", name: "Step 1", type: "interactive", agent: "bard", prompt: "Do it", completion: { method: "user_confirm" } }],
       }
       const defPath = join(defDir, "cache-reset-wf.json")
       writeFileSync(defPath, JSON.stringify(def))
@@ -3254,7 +3254,7 @@ describe("workflow integration in plugin-interface", () => {
     })
 
     it("clears cached message text on session.deleted before session id reuse", async () => {
-      const workflowTempDir = mkdtempSync(join(tmpdir(), "weave-msg-cache-reset-"))
+      const workflowTempDir = mkdtempSync(join(tmpdir(), "guild-msg-cache-reset-"))
       const promptAsyncCalls: Array<{ path: { id: string }; body: { parts: Array<{ type: string; text: string }> } }> = []
       const mockClient = {
         session: {
@@ -3573,7 +3573,7 @@ describe("workflow integration in plugin-interface", () => {
             idle: { enabled: false, work: false, workflow: false, todo_prompt: false },
           },
           compactionTodoPreserverEnabled: false,
-          compactionRecovery: () => ({ continuationPrompt: "resume after compaction", switchAgent: "loom" }),
+          compactionRecovery: () => ({ continuationPrompt: "resume after compaction", switchAgent: "bard" }),
         }),
         tools: emptyTools,
         configHandler: makeMockConfigHandler(),
@@ -3629,7 +3629,7 @@ describe("workflow integration in plugin-interface", () => {
         configHandler: makeMockConfigHandler(),
         agents: {},
         client: mockClient,
-        directory: mkdtempSync(join(tmpdir(), "weave-wf-idle-off-")),
+        directory: mkdtempSync(join(tmpdir(), "guild-wf-idle-off-")),
       })
 
       await iface.event({ event: { type: "session.idle", properties: { sessionID: "sess-wf-off" } } })

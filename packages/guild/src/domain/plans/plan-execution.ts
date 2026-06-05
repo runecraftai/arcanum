@@ -52,7 +52,7 @@ export function resumePlanExecution(args: {
   const resumedState = args.planRepository.readWorkState(args.directory)
 
   if (args.executionLeaseRepository && resumedState) {
-    const executorAgent = resumedState.agent ?? "tapestry"
+    const executorAgent = resumedState.agent ?? "fighter"
     const projection = projectExecutionTransition({
       event: "resume_plan",
       sessionId: args.sessionId,

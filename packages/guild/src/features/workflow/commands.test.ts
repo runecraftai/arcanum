@@ -23,7 +23,7 @@ const TWO_STEP_DEF: WorkflowDefinition = {
       id: "gather",
       name: "Gather Requirements",
       type: "interactive",
-      agent: "loom",
+      agent: "bard",
       prompt: "Gather info",
       completion: { method: "user_confirm" },
     },
@@ -31,7 +31,7 @@ const TWO_STEP_DEF: WorkflowDefinition = {
       id: "build",
       name: "Build Feature",
       type: "autonomous",
-      agent: "tapestry",
+      agent: "fighter",
       prompt: "Build it",
       completion: { method: "agent_signal" },
     },
@@ -135,7 +135,7 @@ describe("handleWorkflowCommand", () => {
         setupRunningInstance(testDir)
         const result = handleWorkflowCommand("workflow skip", testDir, "sess-1")
         expect(result.handled).toBe(true)
-        expect(result.switchAgent).toBe("tapestry")
+        expect(result.switchAgent).toBe("fighter")
 
         const instance = getActiveWorkflowInstance(testDir)
         expect(instance?.current_step_id).toBe("build")

@@ -1,10 +1,10 @@
 import { describe, it, expect } from "bun:test"
 import { ConfigHandler } from "./managers/config-handler"
-import { WeaveConfigSchema } from "./config/schema"
+import { GuildConfigSchema } from "./config/schema"
 
 describe("config pipeline", () => {
   it("full config pipeline processes all phases", async () => {
-    const pluginConfig = WeaveConfigSchema.parse({})
+    const pluginConfig = GuildConfigSchema.parse({})
     const handler = new ConfigHandler({ pluginConfig })
     const result = await handler.handle({
       pluginConfig,
@@ -20,7 +20,7 @@ describe("config pipeline", () => {
   })
 
   it("config pipeline handles empty config", async () => {
-    const pluginConfig = WeaveConfigSchema.parse({})
+    const pluginConfig = GuildConfigSchema.parse({})
     const handler = new ConfigHandler({ pluginConfig })
     const result = await handler.handle({ pluginConfig })
     expect(typeof result.agents).toBe("object")

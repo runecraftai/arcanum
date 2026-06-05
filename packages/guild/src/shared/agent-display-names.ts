@@ -1,40 +1,37 @@
+import {
+  GUILD_AGENT_IDENTITIES,
+} from "../agents/types"
+
 /**
  * Agent config keys to display names mapping.
- * Config keys are lowercase (e.g., "loom", "thread").
- * Display names include role suffixes for UI (e.g., "Loom (Main Orchestrator)").
+ * Config keys are lowercase agent names (e.g., "bard", "rogue").
+ * Display names include role suffixes for UI (e.g., "Bard (Guildmaster)").
  *
  * OpenCode uses the agent key in config.agent as the display name in the UI,
- * so we remap lowercase config keys to descriptive display names.
+ * so we remap agent names to descriptive display names.
  *
  * This map is mutable — custom agents can register display names via
  * registerAgentDisplayName().
  */
-export const AGENT_DISPLAY_NAMES: Record<string, string> = {
-  loom: "Bard (Guildmaster)",
-  tapestry: "Fighter (Execution Lead)",
-  pattern: "Wizard (Planner)",
-  thread: "Rogue (Scout)",
-  spindle: "Warlock (Researcher)",
-  shuttle: "Ranger (Specialist)",
-  weft: "Cleric (Reviewer)",
-  warp: "Paladin (Security)",
-}
+export const AGENT_DISPLAY_NAMES: Record<string, string> = Object.fromEntries(
+  Object.values(GUILD_AGENT_IDENTITIES).map((identity) => [identity.classKey, identity.displayName]),
+)
+
+export const GUILD_AGENT_DISPLAY_NAMES = AGENT_DISPLAY_NAMES
 
 /** Built-in agent config keys — these cannot be overwritten by custom agents */
-const BUILTIN_CONFIG_KEYS = new Set(Object.keys(AGENT_DISPLAY_NAMES))
+const BUILTIN_CONFIG_KEYS = new Set(Object.keys(GUILD_AGENT_IDENTITIES))
 
 /**
  * Frozen snapshot of initial builtin display names at module load time.
  * Used by registerAgentDisplayName() to prevent custom agents from
  * claiming builtin display names even after they have been overridden.
  *
- * Example: if the user renames "loom" from "Loom (Main Orchestrator)" to "My Loom",
- * a custom agent must NOT be allowed to claim "Loom (Main Orchestrator)" as its
+ * Example: if the user renames "bard" from "Bard (Guildmaster)" to "My Bard",
+ * a custom agent must NOT be allowed to claim "Bard (Guildmaster)" as its
  * display name — it is still a reserved builtin name.
  */
-const INITIAL_BUILTIN_DISPLAY_NAMES: ReadonlyMap<string, string> = new Map(
-  Object.entries(AGENT_DISPLAY_NAMES),
-)
+const INITIAL_BUILTIN_DISPLAY_NAMES: ReadonlyMap<string, string> = new Map(Object.entries(AGENT_DISPLAY_NAMES))
 
 /**
  * Reset the mutable display name map to its initial state.
@@ -144,7 +141,7 @@ export function getAgentDisplayName(configKey: string): string {
 
 /**
  * Resolve an agent name (display name or config key) to its lowercase config key.
- * "Loom (Main Orchestrator)" → "loom", "loom" → "loom", "unknown" → "unknown"
+ * "Bard (Guildmaster)" → "bard", "bard" → "bard", "unknown" → "unknown"
  */
 export function getAgentConfigKey(agentName: string): string {
   const lower = agentName.toLowerCase()
