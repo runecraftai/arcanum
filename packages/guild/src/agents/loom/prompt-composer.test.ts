@@ -204,12 +204,12 @@ describe("buildPlanWorkflowSection", () => {
     expect(section).toContain("Do not replace base Weft with a variant")
     expect(section).toContain("Do not use weft-review-* variants as Warp/security reviewers")
     expect(section).toContain('subagent_type "weft-review-opencode-go-glm-5-1"')
-    expect(section).toContain("Runtime fan-out is owned by Weave for direct `@weft`/`@warp` calls")
+    expect(section).toContain("Runtime fan-out is owned by Guild for direct `@weft`/`@warp` calls")
   })
 
   it("includes runtime advisory in default plan review step", () => {
     const section = buildPlanWorkflowSection(new Set())
-    expect(section).toContain("Runtime fan-out is owned by Weave for direct `@weft`/`@warp` calls")
+    expect(section).toContain("Runtime fan-out is owned by Guild for direct `@weft`/`@warp` calls")
     expect(section).toContain("Tapestry post-execution review fan-out")
     expect(section).not.toContain('subagent_type "weft-review-')
   })
@@ -231,7 +231,7 @@ describe("buildReviewWorkflowSection", () => {
     const section = buildReviewWorkflowSection(new Set())
     expect(section).toContain("Ad-hoc review")
     expect(section).toContain("Weft")
-    expect(section).toContain("Runtime fan-out is owned by Weave for direct `@weft`/`@warp` calls")
+    expect(section).toContain("Runtime fan-out is owned by Guild for direct `@weft`/`@warp` calls")
   })
 
   it("includes Warp mandatory line when warp enabled", () => {
@@ -287,7 +287,7 @@ describe("buildReviewWorkflowSection", () => {
     expect(section).toContain("delegate to base Weft AND all visible Weft variants")
     expect(section).toContain("Do not replace base Weft with a variant")
     expect(section).toContain("Never label or use weft-review-* variants as Warp/security audits")
-    expect(section).toContain("Runtime fan-out is owned by Weave for direct `@weft`/`@warp` calls")
+    expect(section).toContain("Runtime fan-out is owned by Guild for direct `@weft`/`@warp` calls")
   })
 
   it("does not include weft-review subagent_type entries without configured variants", () => {
@@ -298,7 +298,7 @@ describe("buildReviewWorkflowSection", () => {
 
 describe("individual section builders", () => {
   it("buildRoleSection contains Loom identity", () => {
-    expect(buildRoleSection()).toContain("Loom")
+    expect(buildRoleSection()).toContain("Bard")
     expect(buildRoleSection()).toContain("coordinator")
   })
 

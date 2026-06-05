@@ -116,7 +116,7 @@ describe("buildTapestryPostExecutionReviewSection", () => {
     ])
 
     expect(section).not.toContain('subagent_type "weft-review-opencode-go-kimi-k2-6"')
-    expect(section).toContain("the Weave runtime spawns the configured variants and collates results automatically")
+    expect(section).toContain("the Guild runtime spawns the configured variants and collates results automatically")
     expect(section).toContain("do not issue extra Task calls for them")
     expect(section).toContain("Do not issue terminal reviewer Task calls")
   })
@@ -141,7 +141,7 @@ describe("buildTapestryPostExecutionReviewSection", () => {
 
 describe("individual tapestry section builders", () => {
   it("buildTapestryRoleSection contains Tapestry identity", () => {
-    expect(buildTapestryRoleSection()).toContain("Tapestry")
+    expect(buildTapestryRoleSection()).toContain("Fighter")
     expect(buildTapestryRoleSection()).toContain("coordination orchestrator")
   })
 

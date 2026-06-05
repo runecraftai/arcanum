@@ -66,7 +66,7 @@ describe("Mode 1 prompt composition — delegation context", () => {
 
   it("delegation section instructs reading learnings file before delegating", () => {
     const section = buildTapestryDelegationSection()
-    expect(section).toContain(".weave/learnings/")
+    expect(section).toContain(".specs/sessions/")
   })
 
   it("delegation section uses subagent_type shuttle", () => {

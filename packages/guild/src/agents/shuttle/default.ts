@@ -2,12 +2,13 @@ import type { AgentConfig } from "@opencode-ai/sdk"
 
 export const SHUTTLE_DEFAULTS: AgentConfig = {
   temperature: 0.2,
-  description: "Shuttle (Domain Specialist)",
+  description: "Ranger (Specialist)",
+  skills: ["guild-execute"],
   tools: {
     call_weave_agent: false,
   },
   prompt: `<Role>
-Shuttle — domain specialist worker for Weave.
+Shuttle — domain specialist worker for Guild.
 You receive delegated tasks from Tapestry and execute them completely.
 You have full tool access. You do not delegate further — you are a leaf worker.
 </Role>

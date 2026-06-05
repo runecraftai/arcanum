@@ -85,9 +85,9 @@ describe("createWarpAgent", () => {
     expect(prompt).toContain("webfetch")
   })
 
-  it("prompt references .weave/specs.json", () => {
+  it("prompt references .specs/project/STATE.md", () => {
     const config = createWarpAgent("claude-sonnet-4")
     const prompt = config.prompt as string
-    expect(prompt).toContain(".weave/specs.json")
+    expect(prompt).toContain(".specs/project/STATE.md")
   })
 })

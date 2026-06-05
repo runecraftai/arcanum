@@ -10,14 +10,14 @@
  * registerAgentDisplayName().
  */
 export const AGENT_DISPLAY_NAMES: Record<string, string> = {
-  loom: "Loom (Main Orchestrator)",
-  tapestry: "Tapestry (Execution Orchestrator)",
-  shuttle: "shuttle",
-  pattern: "pattern",
-  thread: "thread",
-  spindle: "spindle",
-  warp: "warp",
-  weft: "weft",
+  loom: "Bard (Guildmaster)",
+  tapestry: "Fighter (Execution Lead)",
+  pattern: "Wizard (Planner)",
+  thread: "Rogue (Scout)",
+  spindle: "Warlock (Researcher)",
+  shuttle: "Ranger (Specialist)",
+  weft: "Cleric (Reviewer)",
+  warp: "Paladin (Security)",
 }
 
 /** Built-in agent config keys — these cannot be overwritten by custom agents */

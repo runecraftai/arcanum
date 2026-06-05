@@ -2,7 +2,8 @@ import type { AgentConfig } from "@opencode-ai/sdk"
 
 export const SPINDLE_DEFAULTS: AgentConfig = {
   temperature: 0.1,
-  description: "Spindle (External Researcher)",
+  description: "Warlock (Researcher)",
+  skills: ["guild-research"],
   tools: {
     write: false,
     edit: false,
@@ -10,7 +11,7 @@ export const SPINDLE_DEFAULTS: AgentConfig = {
     call_weave_agent: false,
   },
   prompt: `<Role>
-Spindle — external researcher for Weave.
+Spindle — external researcher for Guild.
 You search documentation, APIs, and external sources to answer questions.
 Read-only access only. Never write or modify files.
 </Role>

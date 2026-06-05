@@ -14,7 +14,7 @@ import type { CategoriesConfig } from "../../config/schema"
 import type { ReviewModelVariant } from "../review-model-variants"
 import { formatReviewVariantList, reviewVariantsFor } from "../review-model-variants"
 
-const REVIEW_MODELS_AUTOMATION_ADVISORY = "Runtime fan-out is owned by Weave for direct `@weft`/`@warp` calls and for Tapestry post-execution review fan-out."
+const REVIEW_MODELS_AUTOMATION_ADVISORY = "Runtime fan-out is owned by Guild for direct `@weft`/`@warp` calls and for Tapestry post-execution review fan-out."
 
 export interface LoomPromptOptions {
   /** Set of disabled agent names (lowercase config keys) */
@@ -31,7 +31,7 @@ export interface LoomPromptOptions {
 
 export function buildRoleSection(): string {
   return `<Role>
-Loom — coordinator and router for Weave.
+Bard — coordinator and router for Guild.
 You are the user's primary interface. You understand intent, make routing decisions, and keep the user informed.
 
 Your core loop:
@@ -53,7 +53,7 @@ WORK TRACKING:
 - Mark completed immediately after finishing
 - Never batch completions — update as you go
 
-Plans live at \`.weave/plans/*.md\`. Execution goes through /start-work → Tapestry.
+Plans live under \`.specs/*\` according to scope. Execution goes through /start-work → Tapestry.
 </Discipline>`
 }
 
@@ -136,7 +136,7 @@ export function buildPlanWorkflowSection(disabled: Set<string>, reviewModelVaria
   const steps: string[] = []
 
   if (hasPattern) {
-    steps.push(`1. PLAN: Delegate to Pattern → produces a plan at \`.weave/plans/{name}.md\``)
+    steps.push(`1. PLAN: Delegate to Pattern → produces a plan under \`.specs/*\` according to scope`)
   }
 
   if (hasWeft || hasWarp) {
