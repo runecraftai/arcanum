@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.10.0
+
+### Minor Changes
+
+- e8467d1: Add the RPG skill roster and rename the built-in agents to the new class structure.
+
 ## 0.9.0
 
 ### Minor Changes
