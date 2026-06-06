@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 /**
- * Custom publish script that publishes each workspace package directly.
+ * Custom publish script that uses bun publish instead of npm publish.
+ * This ensures workspace:* dependencies are resolved to concrete versions.
  *
  * Called by changesets/action after versioning packages.
- * Replaces: changeset publish so we can control which workspaces publish.
+ * Replaces: changeset publish (which uses npm publish internally)
+ * With: bun publish (which resolves workspace:* automatically)
  *
  * This script:
  * 1. Iterates over each package in packages/
  * 2. Skips private packages and ignored packages (from changesets config)
- * 3. Runs npm publish from each package's directory
+ * 3. Runs bun publish from each package's directory
  */
 
 import { execSync } from "child_process";
@@ -16,7 +18,7 @@ import { readdirSync, readFileSync } from "fs";
 import { join } from "path";
 
 try {
-  console.log("Publishing packages with npm...");
+  console.log("Publishing packages with bun (workspace:* will be resolved)...");
 
   // Read changesets config to get ignored packages
   const configPath = join(process.cwd(), ".changeset", "config.json");
@@ -84,7 +86,7 @@ try {
       }
 
       console.log(`\n→ Publishing ${pkgJson.name} from ${pkgDir}`);
-      execSync("npm publish", {
+      execSync("bun publish", {
         stdio: "inherit",
         cwd: pkgDir,
       });
@@ -100,7 +102,7 @@ try {
   }
 
   console.log(
-    `\n✓ Published successfully with npm (${publishedCount} packages, ${skippedCount} skipped)`
+    `\n✓ Published successfully with bun (${publishedCount} packages, ${skippedCount} skipped)`
   );
   process.exit(0);
 } catch (error) {
