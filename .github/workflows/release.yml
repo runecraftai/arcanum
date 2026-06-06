@@ -50,17 +50,6 @@ jobs:
     - name: Generate changesets from conventional commits
       run: bun run .changeset/generate-from-commits.ts
 
-    - name: Commit generated changesets
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add .changeset/
-        # Only commit and push if there are staged changes (changesets were generated)
-        # The GITHUB_TOKEN is scoped and main branch protection enforces PR reviews
-        git diff --staged --quiet || (git commit -m "chore: auto-generate changesets [skip ci]" && git push)
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Create Release Pull Request or Publish
       uses: changesets/action@2eb40f21fc0fc331693bac5da931f72e4faf1eaf  # v1.4.7
       with:
