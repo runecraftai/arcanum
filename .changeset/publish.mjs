@@ -85,6 +85,19 @@ try {
         continue;
       }
 
+      console.log(`\n→ Verifying ${pkgJson.name}@${pkgJson.version}`);
+      if (pkgJson.scripts?.verify) {
+        execSync("bun run verify", { stdio: "inherit", cwd: pkgDir });
+        console.log(`  ✓ verify passed`);
+      } else {
+        console.log(`  ⊘ no verify script, skipping`);
+      }
+
+      if (pkgJson.scripts?.["smoke-install"]) {
+        execSync("bun run smoke-install", { stdio: "inherit", cwd: pkgDir });
+        console.log(`  ✓ smoke-install passed`);
+      }
+
       console.log(`\n→ Publishing ${pkgJson.name} from ${pkgDir}`);
       execSync("bun publish --auth-type legacy", {
         stdio: "inherit",

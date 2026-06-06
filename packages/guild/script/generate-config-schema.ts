@@ -8,13 +8,13 @@ import {
   getGuildConfigJsonSchemaArtifactPath,
   stringifyGuildConfigJsonSchema,
 } from "../src/config/json-schema"
-import { getWeaveVersion } from "../src/shared/version"
+import { getGuildVersion } from "../src/shared/version"
 
 const checkMode = Bun.argv.includes("--check")
 const rootDir = process.cwd()
 const artifactPath = getGuildConfigJsonSchemaArtifactPath(rootDir)
 const nextArtifact = stringifyGuildConfigJsonSchema(
-  generateGuildConfigJsonSchema({ version: getWeaveVersion() }),
+  generateGuildConfigJsonSchema({ version: getGuildVersion() }),
 )
 const artifactFile = Bun.file(artifactPath)
 const currentArtifact = (await artifactFile.exists()) ? await artifactFile.text() : null

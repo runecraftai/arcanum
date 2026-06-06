@@ -31,6 +31,7 @@
 
 ## Active Features
 - `guild-rpg-agent-structural-rename` — **planned** (2026-06-05)
+- `guild-rpg-agent-structural-rename` — **planned** (2026-06-05)
   - Goal: rename `packages/guild/src/agents/` directories and TypeScript symbols from legacy Weave agent names to RPG class names while preserving old config keys as compatibility keys
   - Scope: spec/design/tasks created; implementation not started
   - Specs: `.specs/features/guild-rpg-agent-structural-rename/`
@@ -74,6 +75,9 @@
 - Residual `Weave|weave|.weave` matches remain in compatibility aliases, legacy tool ids, and historical tests/fixtures; they are being reviewed as intentional exceptions rather than blindly renamed
 
 ## Completed & Archived Features
+- `guild-plugin-installability` — **completed** (2026-06-06)
+  - Goal: make the published `@runecraft/guild` artifact installable and loadable by OpenCode's npm plugin loader without `Plugin export is not a function`
+  - Solved: added `server` named export for PluginModule contract, rewrote `verify.ts` with packed-artifact validation (pack → install → validate), created `smoke-install.ts` script that tests plugin loading in clean isolated environment, wired `prepublishOnly` and release pipeline verify gate, fixed `.opencode/opencode.json` to remove non-existent `list` plugin, fixed stale rename imports (`getWeaveVersion`→`getGuildVersion`, `WeaveConfigSchema`→`GuildConfigSchema`)
 - `npm-publish` → `.specs/archive/npm-publish/` (2026-04-26)
 - `summon-cli` → `.specs/archive/summon-cli/` (2026-04-26)
 - `summon-tui-revision` → `.specs/archive/summon-tui-revision/` (2026-04-26)

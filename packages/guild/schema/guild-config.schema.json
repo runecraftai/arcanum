@@ -297,7 +297,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^(?![\\\\/])(?![A-Za-z]:[\\\\/])(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$",
+            "wizard": "^(?![\\\\/])(?![A-Za-z]:[\\\\/])(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$",
             "description": "Relative directory path only. Absolute paths, leading backslashes/UNC paths, and '..' traversal segments are rejected at runtime."
           }
         },
@@ -435,7 +435,7 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "pattern": "^(?![\\\\/])(?![A-Za-z]:[\\\\/])(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$",
+                "wizard": "^(?![\\\\/])(?![A-Za-z]:[\\\\/])(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$",
                 "description": "Relative directory path only. Absolute paths, leading backslashes/UNC paths, and '..' traversal segments are rejected at runtime."
               }
             }
@@ -459,5 +459,5 @@
   "$id": "https://raw.githubusercontent.com/anomalyco/arcanum/main/packages/guild/schema/guild-config.schema.json",
   "title": "Guild Config",
   "description": "Configuration for the @runecraft/guild OpenCode plugin. Runtime loading accepts JSONC, while the generated schema artifact is plain JSON Schema.",
-  "x-guild-version": "0.8.0"
+  "x-guild-version": "0.10.1"
 }

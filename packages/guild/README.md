@@ -69,6 +69,7 @@ OpenCode automatically installs npm plugins at startup — no manual `bun add` o
 |-------|----------|
 | `404 Not Found` | Ensure the package name is correct: `@runecraft/guild`. |
 | Package not found after publish | npm can take a few minutes to propagate. Wait and retry. |
+| `Plugin export is not a function` | Ensure you have the latest version: `bun update @runecraft/guild` or check OpenCode's cache at `~/.cache/opencode/node_modules/@runecraft/guild`. |
 
 ## Uninstalling
 

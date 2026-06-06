@@ -63,6 +63,11 @@ const GuildPlugin: Plugin = async (ctx) => {
 }
 
 export default GuildPlugin
+
+// OpenCode's plugin loader checks module.server (PluginModule shape) first,
+// then falls back to module.default. Both are provided for compatibility.
+export const server = GuildPlugin
+
 export type { GuildConfig } from "./config/schema"
 export type {
   GuildAgentName,
