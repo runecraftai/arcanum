@@ -28,20 +28,25 @@ function runCheckWithCwd(name: string, cmd: string[], cwd: string): CheckResult 
   return { name, passed, output: output.trim() }
 }
 
+const isPublish = process.argv.includes("--publish")
 const checks: CheckResult[] = []
 
-// 1. generated config schema freshness
-checks.push(runCheck("schema:config:check", ["bun", "run", "schema:config:check"]))
+if (!isPublish) {
+  // 1. generated config schema freshness
+  checks.push(runCheck("schema:config:check", ["bun", "run", "schema:config:check"]))
+}
 
 // 2. typecheck
 checks.push(runCheck("typecheck", ["bun", "run", "typecheck"]))
 
-// 3. test
-const testResult = runCheck("test", ["bun", "test"])
-const testOutput = testResult.output ?? ""
-const testCountMatch = testOutput.match(/(\d+)\s+pass/)
-const testCount = testCountMatch ? ` (${testCountMatch[1]} passed)` : ""
-checks.push({ ...testResult, name: `test${testCount}` })
+if (!isPublish) {
+  // 3. test
+  const testResult = runCheck("test", ["bun", "test"])
+  const testOutput = testResult.output ?? ""
+  const testCountMatch = testOutput.match(/(\d+)\s+pass/)
+  const testCount = testCountMatch ? ` (${testCountMatch[1]} passed)` : ""
+  checks.push({ ...testResult, name: `test${testCount}` })
+}
 
 // 4. build
 const buildResult = runCheck("build", ["bun", "run", "build"])
@@ -189,6 +194,7 @@ for (const check of checks) {
 }
 
 const allPassed = checks.every((c) => c.passed)
+const mode = isPublish ? "(publish mode)" : "(full suite)"
 console.log()
-console.log(allPassed ? "ALL CHECKS PASSED ✓" : "SOME CHECKS FAILED ✗")
+console.log(allPassed ? `ALL CHECKS PASSED ${mode} ✓` : `SOME CHECKS FAILED ${mode} ✗`)
 process.exit(allPassed ? 0 : 1)
