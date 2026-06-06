@@ -1,6 +1,6 @@
 {
   "name": "@runecraft/guild",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Guild — multi-agent orchestration plugin for OpenCode",
   "author": "Arcanum",
   "license": "MIT",
@@ -15,7 +15,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
     }
   },
   "files": [
@@ -28,7 +29,9 @@
     "schema:config": "bun run script/generate-config-schema.ts",
     "schema:config:check": "bun run script/generate-config-schema.ts --check",
     "verify": "bun run script/verify.ts",
+    "smoke-install": "bun run script/smoke-install.ts",
     "typecheck": "tsc --noEmit",
+    "prepublishOnly": "bun run verify && bun run smoke-install",
     "test": "bun test",
     "eval": "bun run script/eval.ts",
     "eval:smoke": "bun run script/eval.ts --suite prompt-smoke",
