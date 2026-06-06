@@ -1,0 +1,39 @@
+{
+  "name": "research-plan-implement",
+  "description": "End-to-end feature development: research the area, write a plan, get approval, then implement.",
+  "default_completion": { "method": "user_confirm" },
+  "steps": [
+    {
+      "id": "research",
+      "type": "autonomous",
+      "prompt": "Use the Warlock researcher to gather external documentation and references relevant to the feature. Save findings under .guild/runtime/<feature-slug>/research.md with citations. Note any patterns or APIs that the implementer should use."
+    },
+    {
+      "id": "scout",
+      "type": "autonomous",
+      "prompt": "Use the Rogue scout to map the existing codebase surface for the feature. Identify the files that will need to change, the public API surface, and the existing test coverage. Save under .guild/runtime/<feature-slug>/scout.md."
+    },
+    {
+      "id": "plan",
+      "type": "autonomous",
+      "prompt": "Invoke the Wizard planner against the research and scout reports. Produce a plan with task breakdown, dependencies, and verification criteria. Write the plan under .guild/plans/<feature-slug>.md with status 'draft'.",
+      "completion": { "method": "plan_created" }
+    },
+    {
+      "id": "review-plan",
+      "type": "gate",
+      "prompt": "Show the plan. The user will edit it inline or approve before implementation."
+    },
+    {
+      "id": "implement",
+      "type": "autonomous",
+      "prompt": "Drive the plan to completion. Update the plan file's status to 'complete' as each task finishes. Run the verification criteria at the end of each task.",
+      "completion": { "method": "plan_complete" }
+    },
+    {
+      "id": "pr",
+      "type": "autonomous",
+      "prompt": "Open a pull request against the default branch. Title: feat: <feature-slug>. Body: summary, plan link, scout link, research link, and 'Closes' references for any tracked issues."
+    }
+  ]
+}

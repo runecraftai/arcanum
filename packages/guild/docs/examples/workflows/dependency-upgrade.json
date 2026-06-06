@@ -1,0 +1,37 @@
+{
+  "name": "dependency-upgrade",
+  "description": "Survey, bump, and verify a dependency upgrade with a human review gate before committing.",
+  "default_completion": { "method": "user_confirm" },
+  "steps": [
+    {
+      "id": "survey",
+      "type": "autonomous",
+      "prompt": "Identify the latest stable version of the named dependency. Read the upstream changelog between the current and target versions. List breaking changes, deprecations, and migration steps. Save under .guild/runtime/dependency-upgrade/survey.md."
+    },
+    {
+      "id": "bump",
+      "type": "autonomous",
+      "prompt": "Update the version in the relevant package.json (or workspace catalog) to the target version. Run the package manager install command. Do not run tests yet."
+    },
+    {
+      "id": "test",
+      "type": "autonomous",
+      "prompt": "Run the test suite from the repo root. If a test fails, capture the failure and stop the workflow. Do not auto-fix; the user decides whether to roll back or push a compatibility patch."
+    },
+    {
+      "id": "typecheck",
+      "type": "autonomous",
+      "prompt": "Run the typecheck command from the repo root. If type errors appear that are attributable to the upgrade, capture the locations and stop the workflow."
+    },
+    {
+      "id": "review",
+      "type": "gate",
+      "prompt": "Show the diff and the test/typecheck results. The user will confirm before committing."
+    },
+    {
+      "id": "commit",
+      "type": "autonomous",
+      "prompt": "Create a single commit with a chore: bump <name> to <version> message. Include the survey.md path in the commit body for traceability."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "code-review",
+  "description": "Run a multi-perspective review on a PR or recent diff, then post the verdict.",
+  "default_completion": { "method": "user_confirm" },
+  "steps": [
+    {
+      "id": "gather-diff",
+      "type": "autonomous",
+      "prompt": "Identify the changed files in the current branch relative to the default branch. Use `git diff --name-only origin/main...HEAD` and produce a per-file summary of the changes. Save the summary under .guild/runtime/code-review/diff.md."
+    },
+    {
+      "id": "quality-review",
+      "type": "autonomous",
+      "prompt": "Run a Cleric-style code-quality review on the diff. Focus on correctness, naming, error handling, and test coverage. Use the review_models entry if configured. Write the verdict under .guild/runtime/code-review/quality.md.",
+      "completion": { "method": "review_verdict" }
+    },
+    {
+      "id": "security-review",
+      "type": "autonomous",
+      "prompt": "Run a Paladin-style security review on the diff. Focus on auth, crypto, input validation, secrets, and OWASP Top 10. Write the verdict under .guild/runtime/code-review/security.md.",
+      "completion": { "method": "review_verdict" }
+    },
+    {
+      "id": "synthesize",
+      "type": "autonomous",
+      "prompt": "Combine the quality and security verdicts into a single review. Group findings by severity. Mark each finding with the file, line range, and a short remediation. If both reviews are APPROVE, the synthesis is APPROVE. Otherwise it is REQUEST_CHANGES."
+    },
+    {
+      "id": "human-ack",
+      "type": "gate",
+      "prompt": "Show the synthesis. The user will edit it inline or approve before posting."
+    },
+    {
+      "id": "post",
+      "type": "autonomous",
+      "prompt": "Post the synthesis as a PR review comment using the gh CLI. If the PR is not yet open, report the verdict to the chat instead."
+    }
+  ]
+}
