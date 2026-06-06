@@ -1,0 +1,32 @@
+{
+  "name": "weekly-review",
+  "description": "Summarize last week's analytics, review open issues, and produce a status report.",
+  "default_completion": { "method": "user_confirm" },
+  "steps": [
+    {
+      "id": "analytics",
+      "type": "autonomous",
+      "prompt": "Read .guild/analytics/metrics-reports.jsonl and produce a per-agent token-usage summary for the last 7 days. Save the summary under .guild/runtime/weekly-review/analytics.md."
+    },
+    {
+      "id": "issues",
+      "type": "autonomous",
+      "prompt": "Use the gh CLI to list issues opened and closed in the last 7 days. Group by label. Save under .guild/runtime/weekly-review/issues.md."
+    },
+    {
+      "id": "synthesis",
+      "type": "autonomous",
+      "prompt": "Combine the analytics and issues reports into a single status report. Highlight regressions and any agent with token usage > 2x the median."
+    },
+    {
+      "id": "review",
+      "type": "gate",
+      "prompt": "Show the status report. The user will edit it inline if needed before publishing."
+    },
+    {
+      "id": "publish",
+      "type": "autonomous",
+      "prompt": "Post the status report to the configured Slack channel."
+    }
+  ]
+}

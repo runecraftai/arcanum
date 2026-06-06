@@ -1,0 +1,32 @@
+{
+  "name": "release",
+  "description": "Bump version, run tests, and publish the @runecraft/guild package.",
+  "default_completion": { "method": "user_confirm" },
+  "steps": [
+    {
+      "id": "bump",
+      "type": "interactive",
+      "prompt": "Ask the user which version segment to bump (patch, minor, major). Apply the bump to packages/guild/package.json."
+    },
+    {
+      "id": "test",
+      "type": "autonomous",
+      "prompt": "From the repo root, run `bun run test`. If any test fails, stop the workflow and report the failing test."
+    },
+    {
+      "id": "schema-check",
+      "type": "autonomous",
+      "prompt": "From packages/guild, run `bun run schema:config:check`. If the schema is out of date, run `bun run schema:config` and commit the result."
+    },
+    {
+      "id": "review",
+      "type": "gate",
+      "prompt": "Show the diff and the version bump. Wait for the user to confirm before publishing."
+    },
+    {
+      "id": "publish",
+      "type": "autonomous",
+      "prompt": "From packages/guild, run `bun run publish`. Verify the version on npm matches package.json."
+    }
+  ]
+}
