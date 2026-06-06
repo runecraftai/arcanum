@@ -8,9 +8,9 @@ For the JSON schema, see [Authoring](../../workflows/authoring.md). For an overv
 
 | Workflow | Purpose |
 | --- | --- |
-| [release.json](release.json) | Bump version, test, schema-check, review, and publish a package. |
-| [weekly-review.json](weekly-review.json) | Summarize last week's analytics, review issues, and post a status report. |
-| [refactor-prep.json](refactor-prep.json) | Scope, plan, and open the first PR for a refactor. |
+| [code-review.json](code-review.json) | Run a multi-perspective review (Cleric + Paladin) on a diff and post the verdict. |
+| [research-plan-implement.json](research-plan-implement.json) | Research, scope, plan, get approval, then implement a feature end-to-end. |
+| [dependency-upgrade.json](dependency-upgrade.json) | Survey, bump, test, and commit a dependency upgrade with a review gate. |
 
 ## Using an example
 
