@@ -30,6 +30,7 @@ Welcome to the Guild documentation. Guild is a multi-agent orchestration plugin 
 - [Workflows — overview](workflows/overview.md) — what workflows are and how they execute.
 - [Workflows — authoring](workflows/authoring.md) — workflow file format, step types, and completion.
 - [Workflows — controls](workflows/controls.md) — pause, skip, abort, and resume controls.
+- [Examples — workflows](examples/workflows/) — copy-pasteable workflow definitions.
 - [Troubleshooting](troubleshooting.md) — symptom-based diagnosis for install, config, commands, workflows, and analytics.
 
 ## Maintainers
@@ -38,7 +39,6 @@ Welcome to the Guild documentation. Guild is a multi-agent orchestration plugin 
 - [Model guide](model-guide.md) — practical model selection by agent and use case.
 - [Background agents](background-agents.md) — concurrency and stale-timeout behavior.
 - [Releases](releases.md) — package verification and release checklist.
-- [Examples — workflows](examples/workflows/secure-feature.jsonc) — example workflow definitions you can adapt.
 
 ## Documentation conventions
 
