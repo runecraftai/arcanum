@@ -118,6 +118,22 @@ function findLastReleaseRef(): string {
     // Ignore errors
   }
 
+  // Fallback: look for the most recent merge of a changeset-release PR
+  try {
+    const result = spawnSync(
+      ["git", "log", "--merges", "--grep=changeset-release/main", "--max-count=1", "--format=%H"],
+      { cwd: process.cwd() }
+    );
+    if (result.success) {
+      const hash = result.stdout.toString().trim();
+      if (hash) {
+        return hash;
+      }
+    }
+  } catch (error) {
+    // Ignore
+  }
+
   // Fallback: get first commit SHA
   try {
     const result = spawnSync(
