@@ -78,6 +78,10 @@
 - `guild-plugin-installability` — **completed** (2026-06-06)
   - Goal: make the published `@runecraft/guild` artifact installable and loadable by OpenCode's npm plugin loader without `Plugin export is not a function`
   - Solved: added `server` named export for PluginModule contract, rewrote `verify.ts` with packed-artifact validation (pack → install → validate), created `smoke-install.ts` script that tests plugin loading in clean isolated environment, wired `prepublishOnly` and release pipeline verify gate, fixed `.opencode/opencode.json` to remove non-existent `list` plugin, fixed stale rename imports (`getWeaveVersion`→`getGuildVersion`, `WeaveConfigSchema`→`GuildConfigSchema`)
+- `guild-user-docs` → `.specs/archive/2026-06-06-guild-user-docs/` (2026-06-06)
+  - Goal: create repo-local Guild user documentation modeled after Weave docs, with README as a landing page and `packages/guild/docs/` as the future site-ready source
+  - Status: ✅ All 20 tasks across 4 phases complete; 17 markdown pages + 3 example workflows shipped; 0 broken internal links; new-user and maintainer paths verified
+  - Specs: `.specs/archive/2026-06-06-guild-user-docs/`
 - `npm-publish` → `.specs/archive/npm-publish/` (2026-04-26)
 - `summon-cli` → `.specs/archive/summon-cli/` (2026-04-26)
 - `summon-tui-revision` → `.specs/archive/summon-tui-revision/` (2026-04-26)
