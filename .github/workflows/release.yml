@@ -44,7 +44,7 @@ jobs:
           HUSKY: "0"
 
       - name: Build
-        run: bun run build
+        run: bun run build --filter="...[main]"
 
       - name: Generate changesets from conventional commits
         run: bun run .changeset/generate-from-commits.ts

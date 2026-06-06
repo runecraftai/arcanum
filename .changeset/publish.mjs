@@ -86,9 +86,10 @@ try {
       }
 
       console.log(`\n→ Verifying ${pkgJson.name}@${pkgJson.version}`);
-      if (pkgJson.scripts?.verify) {
-        execSync("bun run verify", { stdio: "inherit", cwd: pkgDir });
-        console.log(`  ✓ verify passed`);
+      const verifyScript = pkgJson.scripts?.["verify:publish"] ? "verify:publish" : "verify"
+      if (pkgJson.scripts?.[verifyScript]) {
+        execSync(`bun run ${verifyScript}`, { stdio: "inherit", cwd: pkgDir });
+        console.log(`  ✓ ${verifyScript} passed`);
       } else {
         console.log(`  ⊘ no verify script, skipping`);
       }
