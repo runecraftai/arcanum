@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.10.2
+
+### Patch Changes
+
+- fix(guild): add require condition to exports field for CJS plugin loading
+
 ## 0.10.0
 
 ### Minor Changes
