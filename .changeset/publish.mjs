@@ -86,7 +86,7 @@ try {
       }
 
       console.log(`\n→ Publishing ${pkgJson.name} from ${pkgDir}`);
-      execSync("bun publish", {
+      execSync("bun publish --auth-type legacy", {
         stdio: "inherit",
         cwd: pkgDir,
       });
