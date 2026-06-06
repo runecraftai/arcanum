@@ -86,7 +86,7 @@ try {
       }
 
       console.log(`\n→ Publishing ${pkgJson.name} from ${pkgDir}`);
-      execSync("npm publish", {
+      execSync("bun publish", {
         stdio: "inherit",
         cwd: pkgDir,
       });
