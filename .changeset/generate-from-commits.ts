@@ -318,18 +318,6 @@ function main() {
         process.exit(0);
       }
     }
-    // Also check if the parent commit is "chore: version packages"
-    const parentMsgResult = spawnSync(
-      ["git", "log", "-1", "--format=%s", "HEAD^1"],
-      { cwd: process.cwd() }
-    );
-    if (parentMsgResult.success) {
-      const parentMsg = parentMsgResult.stdout.toString().trim();
-      if (parentMsg.startsWith("chore: version packages")) {
-        console.log("⊘ Skipping: parent commit is a version bump");
-        process.exit(0);
-      }
-    }
   } catch (error) {
     // Continue on error
   }
