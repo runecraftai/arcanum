@@ -63,7 +63,7 @@ export function buildSidebarTodosSection(): string {
 The user sees a Todo sidebar (~35 char width). Use todowrite to keep it current:
 
 - Create todos before starting multi-step work (atomic breakdown)
-- Update todowrite BEFORE each Task tool call so the sidebar reflects active delegations
+- Update todowrite BEFORE each delegation call so the sidebar reflects active delegations
 - Mark completed after each step — never leave stale in_progress items
 - Max 35 chars per item, prefix delegations with agent name (e.g. "rogue: scan models")
 </SidebarTodos>`
@@ -74,14 +74,14 @@ export function buildDelegationSection(disabled: Set<string>, reviewModelVariant
   const lines: string[] = []
 
   if (isAgentEnabled("rogue", disabled)) {
-    lines.push("- Use Rogue for fast codebase exploration (read-only, cheap)")
+    lines.push("- Use `call_guild_agent` to delegate to Rogue for fast codebase exploration (read-only, cheap)")
   }
   if (isAgentEnabled("warlock", disabled)) {
-    lines.push("- Use Warlock for external docs and research (read-only)")
+    lines.push("- Use `call_guild_agent` to delegate to Warlock for external docs and research (read-only)")
   }
   if (isAgentEnabled("wizard", disabled)) {
     lines.push(
-      "- Use Wizard for planning, scoping, and work breakdown before substantial implementation begins",
+      "- Use `call_guild_agent` to delegate to Wizard for planning, scoping, and work breakdown before substantial implementation begins",
     )
   }
   if (isAgentEnabled("fighter", disabled)) {
@@ -89,19 +89,19 @@ export function buildDelegationSection(disabled: Set<string>, reviewModelVariant
   }
   if (isAgentEnabled("ranger", disabled)) {
     lines.push(
-      "- Use Ranger for category-specific specialist work when the main need is domain expertise rather than planning or scoping",
+      "- Use the Task tool to delegate to Ranger (subagent_type=\"ranger\") for category-specific specialist work when the main need is domain expertise rather than planning or scoping",
     )
   }
   if (isAgentEnabled("cleric", disabled)) {
-    let clericLine = "- Use Cleric for reviewing completed work or validating plans before execution. Never label or use cleric-review-* variants as Paladin/security audits."
+    let clericLine = "- Use `call_guild_agent` to delegate to Cleric for reviewing completed work or validating plans before execution. Never label or use cleric-review-* variants as Paladin/security audits."
     if (isAgentEnabled("paladin", disabled)) {
       clericLine +=
-        "\n  - MUST use Paladin for security audits when changes touch auth, crypto, certificates, tokens, signatures, input validation, secrets, passwords, sessions, CORS, CSP, .env files, or OAuth/OIDC/SAML flows — not optional. Use subagent_type \"paladin\" for security. Never substitute a cleric-review-* variant for Paladin."
+        "\n  - MUST use `call_guild_agent` to delegate to Paladin for security audits when changes touch auth, crypto, certificates, tokens, signatures, input validation, secrets, passwords, sessions, CORS, CSP, .env files, or OAuth/OIDC/SAML flows — not optional. Never substitute a cleric-review-* variant for Paladin."
     }
     lines.push(clericLine)
   } else if (isAgentEnabled("paladin", disabled)) {
     // Paladin without Cleric — still mention Paladin
-    const warpLine = "- MUST use Paladin for security audits when changes touch auth, crypto, tokens, signatures, input validation, secrets, passwords, sessions, CORS, CSP, .env files, or OAuth/OIDC/SAML flows — not optional."
+    const warpLine = "- MUST use `call_guild_agent` to delegate to Paladin for security audits when changes touch auth, crypto, tokens, signatures, input validation, secrets, passwords, sessions, CORS, CSP, .env files, or OAuth/OIDC/SAML flows — not optional."
     lines.push(warpLine)
   }
   lines.push("- Delegate aggressively to keep your context lean")
@@ -123,7 +123,7 @@ export function buildDelegationNarrationSection(disabled: Set<string> = new Set(
   return `<DelegationNarration>
 When delegating:
 1. Tell the user which agent you're delegating to by name and why
-2. Update the sidebar todo BEFORE the Task tool call
+2. Update the sidebar todo BEFORE the delegation call
 3. Summarize what the agent found when it returns${durationNote}
 </DelegationNarration>`
 }
@@ -154,7 +154,7 @@ export function buildPlanWorkflowSection(disabled: Set<string>, reviewModelVaria
       boundaries.push("Do not use cleric-review-* variants as Paladin/security reviewers.")
       const clericVariants = reviewVariantsFor(reviewModelVariants, "cleric")
       if (clericVariants.length > 0) {
-        boundaries.push(`For Bard-authored PLAN review Task delegations, delegate to base Cleric AND all visible Cleric variants in the same assistant turn: ${formatReviewVariantList(clericVariants)}. Do not replace base Cleric with a variant.`)
+        boundaries.push(`For Bard-authored PLAN review delegations via call_guild_agent, delegate to base Cleric AND all visible Cleric variants in the same assistant turn: ${formatReviewVariantList(clericVariants)}. Do not replace base Cleric with a variant.`)
       }
     }
     boundaries.push(REVIEW_MODELS_AUTOMATION_ADVISORY)
@@ -192,11 +192,11 @@ export function buildReviewWorkflowSection(disabled: Set<string>, reviewModelVar
     lines.push("- Never label or use cleric-review-* variants as Paladin/security audits")
     const clericVariants = reviewVariantsFor(reviewModelVariants, "cleric")
     if (clericVariants.length > 0) {
-        lines.push(`- For Bard-authored ad-hoc review Task delegations, delegate to base Cleric AND all visible Cleric variants in the same assistant turn: ${formatReviewVariantList(clericVariants)}. Do not replace base Cleric with a variant.`)
+        lines.push(`- For Bard-authored ad-hoc review delegations via call_guild_agent, delegate to base Cleric AND all visible Cleric variants in the same assistant turn: ${formatReviewVariantList(clericVariants)}. Do not replace base Cleric with a variant.`)
     }
   }
   if (hasPaladin) {
-    lines.push("- Paladin is mandatory when changes touch auth, crypto, tokens, secrets, or input validation; use subagent_type \"paladin\"")
+    lines.push("- Paladin is mandatory when changes touch auth, crypto, tokens, secrets, or input validation; use `call_guild_agent(name=\"paladin\")`")
   }
   lines.push(`- ${REVIEW_MODELS_AUTOMATION_ADVISORY}`)
 

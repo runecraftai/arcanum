@@ -100,7 +100,7 @@ describe("createBardAgent", () => {
       prompt.indexOf("<Delegation>"),
       prompt.indexOf("</Delegation>"),
     )
-    expect(delegation).toContain("MUST use Paladin")
+    expect(delegation).toContain("delegate to Paladin for security")
   })
 
   it("PlanWorkflow notes Fighter handles execution", () => {
