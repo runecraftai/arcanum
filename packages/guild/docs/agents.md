@@ -36,7 +36,7 @@ A domain-specific specialist worker. The base Ranger agent is a generic fallback
 
 **When to use directly**: domain work in a specific category, or as a generic doer for tasks that should not require high-cost models.
 
-See [Configuration — Category specialist example](configuration.md#category-specialist) and the [category](../README.md) section below.
+See [Configuration — Category specialist example](configuration.md#category-specialist) and the [category](README.md) section below.
 
 ### Wizard (Planner) — subagent
 
@@ -108,7 +108,7 @@ For Cleric and Paladin, you can supply `review_models` in an agent override. Gui
 Prefer additive customization. The recommended order is:
 
 1. **Skills** — assign skills via `agents.<name>.skills` to inject domain expertise.
-2. **`prompt_append`** — append additional instructions without replacing the base prompt.
+2. **`prompt_append`** — append additional instructions without replacing the base prompt. See [Prompt append recipe](prompt-append.md).
 3. **`temperature`, `top_p`, `model`** — adjust sampling or model without touching the prompt.
 4. **`prompt`** — full replacement. Use only when the additive approach cannot express the change.
 5. **`tools`** — explicit allow/deny per tool. Booleans only; an empty object merges no overrides.
@@ -149,7 +149,7 @@ To prevent a built-in agent from registering, add its name to `disabled_agents`:
 { "disabled_agents": ["paladin"] }
 ```
 
-`disabled_agents` is a **union** across user and project files — remove the entry from both files to bring the agent back. See [Configuration](configuration.md#merge-behavior).
+`disabled_agents` is a **union** across user and project files — remove the entry from both files to bring the agent back. See [Configuration](configuration.md#merge-behavior) and [Disabling features](disabling-features.md).
 
 ## See also
 

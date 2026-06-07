@@ -23,6 +23,19 @@ Welcome to the Guild documentation. Guild is a multi-agent orchestration plugin 
 - [Configuration](configuration.md) — config files, merge rules, schema, and reference examples.
 - [Continuation](continuation.md) — resume, compaction recovery, idle prompts, and todos.
 
+## Customize how agents think and act
+
+Want to shape agent behavior without replacing the whole system? Start with the layer that fits your goal:
+
+| If you want to… | Read this |
+| --- | --- |
+| Append guidance to any agent's prompt | [Prompt append](prompt-append.md) |
+| Teach agents new skills or workflows | [Skills](skills.md) |
+| Route work to domain specialists by file pattern | [Categories](categories.md) |
+| Create your own agents with custom behavior | [Custom agents](custom-agents.md) |
+| Turn off built-in agents or features you don't need | [Disabling features](disabling-features.md) |
+| See all customization options in a single config | [Full example](full-example.md) |
+
 ## Reference
 
 - [Commands](commands.md) — `/start-work`, `/run-workflow`, `/guild-health`, `/metrics`, `/token-report`.

@@ -97,7 +97,7 @@ To skip a skill entirely (e.g. you do not want the bundled skill to load on top 
 { "disabled_skills": ["guild-commit-learning"] }
 ```
 
-`disabled_skills` is a **union** across user and project files — to re-enable a skill, remove the entry from both files.
+`disabled_skills` is a **union** across user and project files — to re-enable a skill, remove the entry from both files. See [Disabling features](disabling-features.md) for the full set of disabling keys.
 
 ## Extra skill directories
 

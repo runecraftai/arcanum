@@ -30,52 +30,52 @@ Make Guild customization discoverable through recipe pages without changing runt
 
 ## TODOs
 
-- [ ] 1. Confirm schema-supported fields for examples
+- [x] 1. Confirm schema-supported fields for examples
   **What**: Review `packages/guild/schema/guild-config.schema.json` and note which fields are valid for `agents` (including `prompt_append`), `categories` (including `patterns` and `prompt_append`), and `custom_agents` (including `prompt` and `prompt_file`). Check `review_models` for provider qualification.
   **Files**: `packages/guild/schema/guild-config.schema.json`
   **Acceptance**: Supported fields documented; any `review_models` example uses provider-qualified names like `anthropic/claude-sonnet-4`
 
-- [ ] 2. Update docs index for customization discovery
+- [x] 2. Update docs index for customization discovery
   **What**: Add a discovery-oriented customization section to `packages/guild/docs/README.md` linking to prompt-append.md, skills.md, categories.md, custom-agents.md, disabling-features.md, and full-example.md. Keep existing reference/maintainer links intact.
   **Files**: `packages/guild/docs/README.md`
   **Acceptance**: Index links to all 6 new pages; existing links preserved; section written as user intent
 
-- [ ] 3. Add prompt_append recipe page
+- [x] 3. Add prompt_append recipe page
   **What**: Create `packages/guild/docs/prompt-append.md` explaining additive prompt customization. Cover what it does, compare with skills/prompt, show examples per agent (Bard, Fighter, Rogue, Wizard, Cleric, Paladin, Ranger/category), and warn about common mistakes (using prompt when append suffices, putting prompt_append under custom_agents).
   **Files**: `packages/guild/docs/prompt-append.md`
   **Acceptance**: Examples cover all built-in agent groups; page states custom_agents use prompt/prompt_file not prompt_append; all snippets validate against schema
 
-- [ ] 4. Add custom_agents recipe page
+- [x] 4. Add custom_agents recipe page
   **What**: Create `packages/guild/docs/custom-agents.md` explaining when to create a custom agent vs override a built-in. List supported fields (prompt, prompt_file, model, display_name, mode, fallback_models, category, cost, temperature, top_p, maxTokens, modelOptions, tools, skills, triggers, description). Provide docs-writer, release-manager, migration-planner, and qa-specialist examples.
   **Files**: `packages/guild/docs/custom-agents.md`
   **Acceptance**: No example uses unsupported prompt_append; supported fields listed; 4 practical agent examples; prompt vs prompt_file guidance included
 
-- [ ] 5. Add categories recipe page
+- [x] 5. Add categories recipe page
   **What**: Create `packages/guild/docs/categories.md` explaining categories as `ranger-<category>` specializations. Cover how patterns guide routing, how categories complement skills, and how to disable a category Ranger. Examples for frontend, backend, infra, and docs.
   **Files**: `packages/guild/docs/categories.md`
   **Acceptance**: Explains ranger-<category> registration; patterns routing documented; 4 domain examples; disabling documented
 
-- [ ] 6. Add disabling features guide
+- [x] 6. Add disabling features guide
   **What**: Create `packages/guild/docs/disabling-features.md` centralizing safe surface-area reduction. Cover disabled_agents, disabled_tools, disabled_hooks, disabled_skills, and agents.<name>.disable if schema-supported. Explain user/project union merge behavior. Include minimal, security-conscious, and category-Ranger examples.
   **Files**: `packages/guild/docs/disabling-features.md`
   **Acceptance**: All disabling keys covered; merge behavior explained; 3 example setups
 
-- [ ] 7. Add full configuration example
+- [x] 7. Add full configuration example
   **What**: Create `packages/guild/docs/full-example.md` with a complete copy/paste `.opencode/guild-opencode.jsonc`. Include $schema, agents, categories, custom_agents, background, continuation, analytics, log_level. Comments must be JSONC-compatible.
   **Files**: `packages/guild/docs/full-example.md`
   **Acceptance**: Valid JSONC; covers all major sections; tells user to run `/guild-health` after editing
 
-- [ ] 8. Add cross-links from existing docs
+- [x] 8. Add cross-links from existing docs
   **What**: Update configuration.md, agents.md, skills.md, model-guide.md, and troubleshooting.md to link to the new recipe pages where natural.
   **Files**: `packages/guild/docs/configuration.md`, `packages/guild/docs/agents.md`, `packages/guild/docs/skills.md`, `packages/guild/docs/model-guide.md`, `packages/guild/docs/troubleshooting.md`
   **Acceptance**: Each existing page links to relevant recipe pages; no broken relative paths
 
-- [ ] 9. Validate snippets and terminology
+- [x] 9. Validate snippets and terminology
   **What**: Editorial validation pass across all changed docs. Check: no Weave agent names (Loom, Tapestry, Shuttle, etc.), prompt_append only where schema-supported, custom_agents use prompt/prompt_file, disabled-list merge behavior consistent, no public gaps/limitations section.
   **Files**: All modified doc files + `packages/guild/schema/guild-config.schema.json`
   **Acceptance**: Zero Weave agent names; prompt_append only under supported sections; no gaps section published
 
-- [ ] 10. Run lightweight verification
+- [x] 10. Run lightweight verification
   **What**: Run schema generation/check (`bun run schema:config:check` from packages/guild if available). Optionally run targeted tests. Manually inspect all doc links for broken relative paths. Summarize results.
   **Files**: `packages/guild`
   **Acceptance**: Schema check passes; no broken links; verification summary documented
