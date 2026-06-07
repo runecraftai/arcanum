@@ -1,5 +1,14 @@
 # @runecraft/guild
 
+## 0.12.0
+
+### Minor Changes
+
+- fix(release): unblock guild publish verification
+  fix(guild): normalize agent config key inputs
+  feat(guild): add builtin model failover
+  fix(guild): add require condition to exports field for CJS plugin loading
+
 ## 0.11.0
 
 ### Minor Changes
