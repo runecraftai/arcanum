@@ -1,5 +1,17 @@
 # @runecraft/guild
 
+## 0.15.0
+
+### Minor Changes
+
+- fix(guild): route start-work through command path
+  fix(guild): register agents under config keys for subagent_type resolution
+  fix(guild): route Bard delegation through call_guild_agent instead of Task tool
+  fix(release): unblock guild publish verification
+  fix(guild): normalize agent config key inputs
+  feat(guild): add builtin model failover
+  fix(guild): add require condition to exports field for CJS plugin loading
+
 ## 0.14.0
 
 ### Minor Changes
