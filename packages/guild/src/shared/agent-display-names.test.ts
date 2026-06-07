@@ -52,6 +52,12 @@ describe("getAgentConfigKey", () => {
   it("returns lowercase for unknown agents", () => {
     expect(getAgentConfigKey("UnknownAgent")).toBe("unknownagent")
   })
+
+  it("accepts structured agent objects", () => {
+    expect(getAgentConfigKey({ name: "Bard (Guildmaster)" })).toBe("bard")
+    expect(getAgentConfigKey({ label: "Paladin (Security)" })).toBe("paladin")
+    expect(getAgentConfigKey({ id: "cleric" })).toBe("cleric")
+  })
 })
 
 describe("AGENT_DISPLAY_NAMES", () => {
