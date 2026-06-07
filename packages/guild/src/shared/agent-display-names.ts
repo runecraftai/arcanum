@@ -143,11 +143,38 @@ export function getAgentDisplayName(configKey: string): string {
  * Resolve an agent name (display name or config key) to its lowercase config key.
  * "Bard (Guildmaster)" → "bard", "bard" → "bard", "unknown" → "unknown"
  */
-export function getAgentConfigKey(agentName: string): string {
-  const lower = agentName.toLowerCase()
+export function getAgentConfigKey(agentName: unknown): string {
+  const lower = normalizeAgentName(agentName).toLowerCase()
   const reverse = getReverseDisplayNames()
   const reversed = reverse[lower]
   if (reversed !== undefined) return reversed
   if (AGENT_DISPLAY_NAMES[lower] !== undefined) return lower
   return lower
+}
+
+function normalizeAgentName(agentName: unknown): string {
+  if (typeof agentName === "string") {
+    return agentName
+  }
+
+  if (agentName && typeof agentName === "object") {
+    const record = agentName as Record<string, unknown>
+    const candidates = [
+      record.name,
+      record.displayName,
+      record.display_name,
+      record.label,
+      record.id,
+      record.key,
+      record.agent,
+    ]
+
+    for (const candidate of candidates) {
+      if (typeof candidate === "string" && candidate.length > 0) {
+        return candidate
+      }
+    }
+  }
+
+  return String(agentName ?? "")
 }
