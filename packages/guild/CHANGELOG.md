@@ -1,5 +1,12 @@
 # @runecraft/guild
 
+## 0.11.0
+
+### Minor Changes
+
+- feat(guild): add builtin model failover
+  fix(guild): add require condition to exports field for CJS plugin loading
+
 ## 0.10.3
 
 ### Patch Changes
