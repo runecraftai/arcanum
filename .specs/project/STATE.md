@@ -30,6 +30,14 @@
    - Improves skill clarity and reduces ambiguity in agent dispatch
 
 ## Active Features
+- `guild-agent-model-configuration` — **planned** (2026-06-07)
+  - Goal: define and document the official Guild model strategy balancing OpenAI window usage, OpenCode Go cost, and free OpenCode models
+  - Scope: create spec/design/tasks for agent-to-model distribution, reference config, and weekly stats review policy
+  - Specs: `.specs/features/guild-agent-model-configuration/`
+- `guild-builtin-model-fallbacks` — **planned** (2026-06-07)
+  - Goal: make built-in agents honor `fallback_models` and add automatic fallback only for eligible OpenAI quota/rate-limit failures
+  - Scope: resolution fix + runtime failover policy with anti-loop and observability
+  - Specs: `.specs/features/guild-builtin-model-fallbacks/`
 - `guild-rpg-agent-structural-rename` — **planned** (2026-06-05)
 - `guild-rpg-agent-structural-rename` — **planned** (2026-06-05)
   - Goal: rename `packages/guild/src/agents/` directories and TypeScript symbols from legacy Weave agent names to RPG class names while preserving old config keys as compatibility keys
