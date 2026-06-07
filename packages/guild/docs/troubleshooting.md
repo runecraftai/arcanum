@@ -39,7 +39,7 @@ When in doubt, start with `/guild-health`. It prints the loaded config files, th
 
 **Symptom**: A specific agent (e.g. Wizard) does not show up in `/guild-health` or in agent routing.
 
-1. Check `disabled_agents` in your config. The field is a union across user and project files — remove the entry from **both** files.
+1. Check `disabled_agents` in your config. The field is a union across user and project files — remove the entry from **both** files. See [Disabling features](disabling-features.md) for all five disabling keys and their merge behavior.
 2. Confirm the agent name is one of the eight built-ins: `bard`, `fighter`, `ranger`, `wizard`, `rogue`, `warlock`, `cleric`, `paladin`. See [Agents](agents.md).
 3. Check the OpenCode log for a `[guild:DEBUG]` line that mentions a disabled agent.
 

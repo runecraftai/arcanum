@@ -47,7 +47,7 @@ Rogue and Warlock are intentionally free-tier defaults because they are high-vol
 }
 ```
 
-This is the most common override. Use it when one specific agent is too slow, too expensive, or too weak for your workflow.
+This is the most common override. Use it when one specific agent is too slow, too expensive, or too weak for your workflow. See [Prompt append recipe](prompt-append.md) for the recommended way to adjust behavior additively.
 
 ### Per category Ranger
 
@@ -66,8 +66,14 @@ The category model overrides the base Ranger model only for that category's dedi
 
 ```jsonc
 {
-  "review_models": {
-    "anthropic/claude-sonnet-4": { "enabled": true }
+  "agents": {
+    "cleric": {
+      "model": "anthropic/claude-sonnet-4",
+      "review_models": [
+        "anthropic/claude-opus-4.6",
+        "openai/gpt-5"
+      ]
+    }
   }
 }
 ```
@@ -219,3 +225,4 @@ The full default model set uses a mix of providers specifically to keep costs lo
 - [Configuration — Agents](configuration.md#agents)
 - [Background agents](background-agents.md)
 - [Agents](agents.md)
+- [Full Example recipe](full-example.md) — a complete production-ready config with provider-qualified model strings.

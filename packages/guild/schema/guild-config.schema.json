@@ -459,5 +459,5 @@
   "$id": "https://raw.githubusercontent.com/anomalyco/arcanum/main/packages/guild/schema/guild-config.schema.json",
   "title": "Guild Config",
   "description": "Configuration for the @runecraft/guild OpenCode plugin. Runtime loading accepts JSONC, while the generated schema artifact is plain JSON Schema.",
-  "x-guild-version": "0.10.1"
+  "x-guild-version": "0.15.0"
 }

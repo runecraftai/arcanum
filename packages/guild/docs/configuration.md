@@ -49,6 +49,8 @@ The current top-level keys are listed below in the order they appear in the sche
 | `disabled_tools` | Tool names to hide from agent tool lists. |
 | `disabled_agents` | Built-in agent names to skip registering. |
 | `disabled_skills` | Skill names to skip loading. |
+
+See [Disabling features](disabling-features.md) for all five disabling keys and the [Categories recipe](categories.md) for pattern-based domain routing.
 | `skill_directories` | Extra relative directories to scan for skills. |
 | `background` | Concurrency and stale-timeout settings for background agents. |
 | `analytics` | Opt-in analytics and fingerprinting switches. |
@@ -97,7 +99,7 @@ Replace `<release-tag>` with the Guild release you are targeting. Pinning a tag 
 
 ## Examples
 
-The examples below are short by design. They show the most common shape of each section — refer to the linked reference pages for the full field lists.
+The examples below are short by design. See the [Full Example recipe](full-example.md) for a complete production-ready config you can copy and adapt.
 
 ### Agent override
 
@@ -116,6 +118,8 @@ The examples below are short by design. They show the most common shape of each 
   }
 }
 ```
+
+See the [Prompt append recipe](prompt-append.md) for a full guide to `prompt_append` and the [Custom agents recipe](custom-agents.md) for a comparison with `custom_agents`.
 
 The `fallback_models` field defines an ordered list of models to try if the primary model fails at runtime. See [Model guide](model-guide.md#fallback-models) for the full semantics, eligible error types, and the one-shot failover guard.
 
