@@ -13,11 +13,11 @@ Ja levantamos os modelos realmente disponiveis no ambiente, os custos do `openco
 
 ## Goals
 
-- [ ] Definir uma estrategia oficial de distribuicao de modelos por agente para equilibrar janela `openai`, custo `opencode-go` e uso de modelos gratuitos
-- [ ] Documentar o racional por papel de agente (`bard`, `wizard`, `fighter`, `cleric`, `paladin`, `ranger`, `rogue`, `warlock`)
-- [ ] Criar uma configuracao de referencia para `guild-opencode.jsonc`
-- [ ] Tornar explicita a politica operacional de revisao semanal via `opencode stats`
-- [ ] Evitar defaults caros ou inconsistentes como parte da recomendacao oficial do time
+- [x] Definir uma estrategia oficial de distribuicao de modelos por agente para equilibrar janela `openai`, custo `opencode-go` e uso de modelos gratuitos
+- [x] Documentar o racional por papel de agente (`bard`, `wizard`, `fighter`, `cleric`, `paladin`, `ranger`, `rogue`, `warlock`)
+- [x] Criar uma configuracao de referencia para `guild-opencode.jsonc`
+- [x] Tornar explicita a politica operacional de revisao semanal via `opencode stats`
+- [x] Evitar defaults caros ou inconsistentes como parte da recomendacao oficial do time
 
 ## Out of Scope
 
@@ -35,7 +35,7 @@ Fora do escopo desta feature.
 
 ## User Stories
 
-### P1: Definir a distribuicao oficial de modelos por agente ⭐ MVP
+### P1: Definir a distribuicao oficial de modelos por agente ⭐ MVP ✅
 
 **User Story**: Como mantenedor do Guild, eu quero uma distribuicao oficial de modelos por agente para que o time nao configure cada agente no improviso.
 
@@ -51,7 +51,7 @@ Fora do escopo desta feature.
 
 ---
 
-### P1: Gerar configuracao de referencia para `guild-opencode.jsonc` ⭐ MVP
+### P1: Gerar configuracao de referencia para `guild-opencode.jsonc` ⭐ MVP ✅
 
 **User Story**: Como usuario do Guild, eu quero um snippet de configuracao de referencia para aplicar a estrategia sem ter que reconstruir a matriz manualmente.
 
@@ -67,7 +67,7 @@ Fora do escopo desta feature.
 
 ---
 
-### P1: Registrar a politica de balanceamento entre janela OpenAI e custo Go ⭐ MVP
+### P1: Registrar a politica de balanceamento entre janela OpenAI e custo Go ⭐ MVP ✅
 
 **User Story**: Como time, eu quero um criterio operacional de balanceamento para que ajustes futuros nao destruam a economia obtida.
 
@@ -83,7 +83,7 @@ Fora do escopo desta feature.
 
 ---
 
-### P2: Consolidar as restricoes explicitas da escolha de modelos
+### P2: Consolidar as restricoes explicitas da escolha de modelos ✅
 
 **User Story**: Como mantenedor, eu quero capturar restricoes explicitas ja decididas para que a estrategia futura nao recoloque modelos rejeitados.
 
@@ -99,6 +99,55 @@ Fora do escopo desta feature.
 
 ---
 
+## Reference Configuration Snippet
+
+O snippet abaixo define a estrategia oficial de distribuicao de modelos. Copie para `.opencode/guild-opencode.jsonc` ou `~/.config/opencode/guild-opencode.jsonc` para aplicar.
+
+```jsonc
+{
+  "$schema": "https://raw.githubusercontent.com/anomalyco/arcanum/main/packages/guild/schema/guild-config.schema.json",
+
+  "agents": {
+    // Coordenacao principal — melhor retorno por chamada OpenAI
+    "bard":    { "model": "openai/gpt-5.4-mini" },
+    // Planejamento — mesmo nivel de bard para qualidade consistente
+    "wizard":  { "model": "openai/gpt-5.4-mini" },
+    // Execucao — fast variant preserva qualidade sem custo Go
+    "fighter": { "model": "openai/gpt-5.4-mini-fast" },
+    // Review — fast variant, primeiro candidato a corte na janela OpenAI
+    "cleric":  { "model": "openai/gpt-5.4-mini-fast" },
+    // Seguranca — fora da janela OpenAI, custo controlado
+    "paladin": { "model": "opencode-go/minimax-m2.7" },
+    // Especialista mecanico — barato, volume medio
+    "ranger":  { "model": "opencode-go/minimax-m2.5" },
+    // Exploracao — alto volume, custo zero
+    "rogue":   { "model": "opencode/deepseek-v4-flash-free" },
+    // Pesquisa externa — barato, nao drena OpenAI
+    "warlock": { "model": "opencode-go/deepseek-v4-flash" }
+  }
+}
+```
+
+## Weekly Review Loop
+
+Procedimento minimo de revisao para manter a estrategia saudavel:
+
+1. Rodar `opencode stats --days 7 --models 20 --project ""`
+2. Verificar se `opencode-go/*` models estao concentrando custo (>$0.50/semana)
+3. Verificar se `openai/*` models estao consumindo mais de 60% das mensagens
+4. Se janela OpenAI apertar: mover `cleric` -> `opencode-go/minimax-m2.7` primeiro, depois `fighter` -> `opencode-go/minimax-m2.5` se necessario
+5. Se `bard` ou `wizard` precisarem sair de OpenAI, reavaliar estrategia — isso e limite
+
+**Frequencia:** Semanal, junto com revisao de custo do projeto.
+
+## Modelos e providers evitados
+
+| Modelo | Motivo |
+|--------|--------|
+| `opencode-go/qwen3.7-plus` | Custo elevado sem ganho proporcional |
+| `opencode-go/qwen3.6-plus` | Custo elevado (observado $1.04/semana) |
+| `opencode-go/deepseek-v4-pro` | Custo alto para volume baixo ($0.77/semana) |
+
 ## Edge Cases
 
 - WHEN um modelo gratuito do provider `opencode` desaparecer do catalogo THEN a estrategia SHALL continuar funcional sem depender dele em agentes criticos.
@@ -113,19 +162,19 @@ Fora do escopo desta feature.
 
 | Requirement ID | Story | Planned Artifact | Status |
 | --- | --- | --- | --- |
-| GUILD-MODEL-01 | Distribuicao oficial por agente | `.specs/features/guild-agent-model-configuration/spec.md` | Planned |
-| GUILD-MODEL-02 | Snippet de configuracao de referencia | `.specs/features/guild-agent-model-configuration/design.md` | Planned |
-| GUILD-MODEL-03 | Politica de balanceamento OpenAI vs Go | `.specs/features/guild-agent-model-configuration/design.md` | Planned |
-| GUILD-MODEL-04 | Restricoes e modelos evitados | `.specs/features/guild-agent-model-configuration/spec.md` | Planned |
+| GUILD-MODEL-01 | Distribuicao oficial por agente | `.specs/features/guild-agent-model-configuration/spec.md` | ✅ Done |
+| GUILD-MODEL-02 | Snippet de configuracao de referencia | `guild-opencode.jsonc` snippet in spec | ✅ Done |
+| GUILD-MODEL-03 | Politica de balanceamento OpenAI vs Go | `.specs/features/guild-agent-model-configuration/design.md` | ✅ Done |
+| GUILD-MODEL-04 | Restricoes e modelos evitados | `.specs/features/guild-agent-model-configuration/spec.md` | ✅ Done |
 
-**Coverage:** 4 total, 0 mapped to tasks, 4 unmapped.
+**Coverage:** 4 total, 4 mapped to tasks, 0 unmapped.
 
 ---
 
 ## Success Criteria
 
-- [ ] Existe uma estrategia oficial de modelos por agente
-- [ ] Existe um snippet de configuracao de referencia para `guild-opencode.jsonc`
-- [ ] A estrategia preserva OpenAI para agentes de maior alavancagem sem esvaziar a janela inteira
-- [ ] A estrategia reduz dependencia de modelos caros do `opencode-go`
-- [ ] As restricoes ja aprovadas pelo time ficam registradas para manutencao futura
+- [x] Existe uma estrategia oficial de modelos por agente
+- [x] Existe um snippet de configuracao de referencia para `guild-opencode.jsonc`
+- [x] A estrategia preserva OpenAI para agentes de maior alavancagem sem esvaziar a janela inteira
+- [x] A estrategia reduz dependencia de modelos caros do `opencode-go`
+- [x] As restricoes ja aprovadas pelo time ficam registradas para manutencao futura

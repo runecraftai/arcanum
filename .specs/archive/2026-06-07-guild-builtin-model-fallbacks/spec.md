@@ -10,11 +10,11 @@ O time decidiu que fallback automatico deve existir, mas apenas para erros elegi
 
 ## Goals
 
-- [ ] Fazer built-in agents respeitarem `fallback_models` na resolucao inicial
-- [ ] Implementar failover automatico de runtime apenas para erros elegiveis da OpenAI
-- [ ] Permitir definir cadeia explicita de fallback por agente built-in
-- [ ] Evitar loops de fallback infinito ou mascaramento de bugs nao relacionados a quota
-- [ ] Tornar o failover observavel por logs/testes
+- [x] Fazer built-in agents respeitarem `fallback_models` na resolucao inicial
+- [x] Implementar failover automatico de runtime apenas para erros elegiveis da OpenAI
+- [x] Permitir definir cadeia explicita de fallback por agente built-in
+- [x] Evitar loops de fallback infinito ou mascaramento de bugs nao relacionados a quota
+- [x] Tornar o failover observavel por logs/testes
 
 ## Out of Scope
 
@@ -110,19 +110,19 @@ Fora do escopo desta feature.
 
 | Requirement ID | Story | Planned Artifact | Status |
 | --- | --- | --- | --- |
-| GUILD-FALLBACK-01 | Built-ins respeitam `fallback_models` | `packages/guild/src/agents/builtin-agents.ts` + `model-resolution.ts` | Planned |
-| GUILD-FALLBACK-02 | Failover automatico para erros elegiveis da OpenAI | runtime fallback policy | Planned |
-| GUILD-FALLBACK-03 | Protecao anti-loop | runtime fallback state/guards | Planned |
-| GUILD-FALLBACK-04 | Observabilidade do failover | logs + testes | Planned |
+| GUILD-FALLBACK-01 | Built-ins respeitam `fallback_models` | `packages/guild/src/agents/builtin-agents.ts` + `model-resolution.ts` | Done |
+| GUILD-FALLBACK-02 | Failover automatico para erros elegiveis da OpenAI | runtime fallback policy | Done |
+| GUILD-FALLBACK-03 | Protecao anti-loop | runtime fallback state/guards | Done |
+| GUILD-FALLBACK-04 | Observabilidade do failover | logs + testes | Done |
 
-**Coverage:** 4 total, 0 mapped to tasks, 4 unmapped.
+**Coverage:** 4 total, 4 mapped to tasks, 0 unmapped.
 
 ---
 
 ## Success Criteria
 
-- [ ] `fallback_models` funciona para built-in agents na resolucao inicial
-- [ ] Falhas elegiveis de OpenAI acionam fallback automatico
-- [ ] Falhas nao elegiveis nao acionam fallback automatico
-- [ ] O runtime nao entra em loop de failover
-- [ ] Existe visibilidade suficiente para operar e ajustar a estrategia
+- [x] `fallback_models` funciona para built-in agents na resolucao inicial
+- [x] Falhas elegiveis de OpenAI acionam fallback automatico
+- [x] Falhas nao elegiveis nao acionam fallback automatico
+- [x] O runtime nao entra em loop de failover
+- [x] Existe visibilidade suficiente para operar e ajustar a estrategia

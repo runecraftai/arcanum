@@ -18,20 +18,36 @@ O design precisa resultar em uma matriz simples de operar, sem depender de memor
 
 - `openai` autenticado via OAuth com modelos GPT 5.x disponiveis
 - `opencode-go` autenticado com modelos open-weight/curated de varios niveis de custo
-- `opencode` com modelos gratuitos disponiveis, incluindo `deepseek-v4-flash-free`
+- `opencode` com modelos gratuitos disponiveis (deepseek-v4-flash-free, mimo-v2.5-free, minimax-m3-free, nemotron-3-ultra-free, big-pickle)
 
 ### Restricoes ja conhecidas
 
 - `qwen3.7-plus` nao deve entrar na estrategia por custo
+- `qwen3.6-plus` tambem tem custo elevado (projetado ~$1.04/semana no uso atual)
 - `wizard` nao deve cair para um modelo fraco demais, porque planejamento ruim gera retrabalho
 - modelos gratuitos devem ser usados com cuidado em tarefas que consomem muito contexto do repositorio
 - `rogue` e o melhor candidato para volume alto em modelo gratuito
 
-### Evidencia operacional
+### Evidencia operacional (opencode stats --days 7 --models 20 --project "")
 
-- o projeto ja usa bastante OpenAI, entao nao podemos concentrar todos os agentes na mesma janela
-- o custo observado no `opencode-go` mostrou que modelos intermediarios/caros podem dominar o gasto rapidamente
-- o maior ganho vem de preservar OpenAI para poucos agentes e puxar exploracao/trabalho mecanico para modelos baratos ou free
+**Sessoes:** 41 | **Mensagens:** 2,234 | **Custo total:** $1.95
+
+| Modelo | Msgs | Custo | Obs |
+|--------|------|-------|-----|
+| openai/gpt-5.4-mini-fast | 573 | $0.00 | Maior volume, sem custo direto |
+| opencode/deepseek-v4-flash-free | 449 | $0.00 | Segundo maior volume, custo zero |
+| openai/gpt-5.4 | 372 | $0.00 | Planejamento/coordenacao |
+| opencode-go/qwen3.6-plus | 199 | **$1.04** | MAIOR custo real — 53% do total |
+| opencode-go/deepseek-v4-flash | 166 | $0.14 | Custo controlado |
+| opencode/minimax-m3-free | 97 | $0.00 | Gratuito, uso medio |
+| openai/gpt-5.5 | 65 | $0.00 | Casos mais pesados |
+| opencode-go/deepseek-v4-pro | 28 | **$0.77** | 39% do total com baixo volume |
+
+**Conclusoes da evidencia:**
+- OpenAI via OAuth nao aparece como custo monetario, mas consome janela de uso
+- Go models caros (qwen3.6-plus, deepseek-v4-pro) = 92% do custo total mesmo com baixo volume de chamadas
+- Preservar OpenAI para papeis de maior alavancagem e mover volume mecanico para Go barato ou free reduz custo sem perder qualidade
+- Modelos gratuitos do provider `opencode` sao viaveis para exploracao (deepseek-v4-flash-free ja e o segundo mais usado)
 
 ## Target State
 

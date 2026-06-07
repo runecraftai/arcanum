@@ -59,9 +59,9 @@ T08 -> T09 -> T10
 
 **Done when**:
 
-- [ ] A precedencia `model` + `fallback_models` fica explicita no codigo
-- [ ] Built-ins com cadeia custom usam essa cadeia antes da cadeia nativa
-- [ ] `systemDefaultModel` continua como fallback tardio
+- [x] A precedencia `model` + `fallback_models` fica explicita no codigo
+- [x] Built-ins com cadeia custom usam essa cadeia antes da cadeia nativa
+- [x] `systemDefaultModel` continua como fallback tardio
 
 ### T03: Add unit tests for builtin fallback resolution
 
@@ -73,9 +73,9 @@ T08 -> T09 -> T10
 
 **Done when**:
 
-- [ ] Existem testes para built-in com `fallback_models`
-- [ ] Existe teste para built-in com `model + fallback_models`
-- [ ] Existe teste para queda na cadeia nativa quando a custom nao casar
+- [x] Existem testes para built-in com `fallback_models`
+- [x] Existe teste para built-in com `model + fallback_models`
+- [x] Existe teste para queda na cadeia nativa quando a custom nao casar
 
 ### T04: Discover the exact runtime error surface for OpenAI quota failures
 
@@ -87,9 +87,9 @@ T08 -> T09 -> T10
 
 **Done when**:
 
-- [ ] O ponto de interceptacao do erro esta identificado
-- [ ] Ficou claro se o erro chega como excecao, evento ou ambos
-- [ ] Existe evidencia suficiente para implementar sem chute
+- [x] O ponto de interceptacao do erro esta identificado
+- [x] Ficou claro se o erro chega como excecao, evento ou ambos
+- [x] Existe evidencia suficiente para implementar sem chute
 
 ### T05: Implement a conservative OpenAI failover error classifier
 
@@ -101,9 +101,9 @@ T08 -> T09 -> T10
 
 **Done when**:
 
-- [ ] `quota exceeded`, `429`, `rate limit` e `model unavailable` OpenAI sao reconhecidos
-- [ ] Erros nao elegiveis retornam `false`
-- [ ] Em caso de duvida o classificador falha de forma conservadora
+- [x] `quota exceeded`, `429`, `rate limit` e `model unavailable` OpenAI sao reconhecidos
+- [x] Erros nao elegiveis retornam `false`
+- [x] Em caso de duvida o classificador falha de forma conservadora
 
 ### T06: Add one-shot failover guard state
 
@@ -115,9 +115,9 @@ T08 -> T09 -> T10
 
 **Done when**:
 
-- [ ] O runtime sabe se ja tentou failover para aquela execucao
-- [ ] Existe no maximo uma tentativa automatica adicional
-- [ ] Falha repetida nao reentra em loop
+- [x] O runtime sabe se ja tentou failover para aquela execucao
+- [x] Existe no maximo uma tentativa automatica adicional
+- [x] Falha repetida nao reentra em loop
 
 ### T07: Replay the failed OpenAI step using the next fallback model
 
@@ -129,9 +129,9 @@ T08 -> T09 -> T10
 
 **Done when**:
 
-- [ ] O runtime escolhe o proximo fallback do agente
-- [ ] A etapa e reenviada uma unica vez
-- [ ] Se o fallback falhar, o erro segue normalmente
+- [x] O runtime escolhe o proximo fallback do agente
+- [x] A etapa e reenviada uma unica vez
+- [x] Se o fallback falhar, o erro segue normalmente
 
 ### T08: Add structured logging for failover events
 
@@ -143,9 +143,9 @@ T08 -> T09 -> T10
 
 **Done when**:
 
-- [ ] Cada failover gera um log estruturado
-- [ ] Os logs diferenciam erro elegivel de erro ignorado
-- [ ] O time consegue rastrear fallback sem mergulho manual profundo
+- [x] Cada failover gera um log estruturado
+- [x] Os logs diferenciam erro elegivel de erro ignorado
+- [x] O time consegue rastrear fallback sem mergulho manual profundo
 
 ### T09: Add runtime tests for fallback and non-fallback paths
 
@@ -157,9 +157,9 @@ T08 -> T09 -> T10
 
 **Done when**:
 
-- [ ] Erro elegivel OpenAI aciona fallback em teste
-- [ ] Erro nao elegivel nao aciona fallback em teste
-- [ ] Existe teste que prova ausencia de loop
+- [x] Erro elegivel OpenAI aciona fallback em teste
+- [x] Erro nao elegivel nao aciona fallback em teste
+- [x] Existe teste que prova ausencia de loop
 
 ### T10: Document fallback semantics and operator expectations
 
@@ -171,6 +171,6 @@ T08 -> T09 -> T10
 
 **Done when**:
 
-- [ ] A semantica de `fallback_models` dos built-ins ficou clara
-- [ ] O time entende que o failover automatico vale apenas para erros OpenAI elegiveis
-- [ ] A feature fica pronta para execucao sem ambiguidade
+- [x] A semantica de `fallback_models` dos built-ins ficou clara
+- [x] O time entende que o failover automatico vale apenas para erros OpenAI elegiveis
+- [x] A feature fica pronta para execucao sem ambiguidade

@@ -90,6 +90,23 @@ See [Analytics](analytics.md) for the privacy model and what gets recorded.
 
 See [Skills](skills.md) for the SKILL.md format and assignment rules.
 
+## Failover not triggering
+
+**Symptom**: An OpenAI error occurs but Guild does not switch to a fallback model.
+
+1. Confirm the agent has a fallback chain defined. Check `fallback_models` in your config or rely on the built-in native chain (see [Model guide](model-guide.md#built-in-native-fallback-chains)).
+2. Check the OpenAI error classification. Failover only triggers for:
+   - **quota** — `quota exceeded`, `insufficient_quota`, `billing limit`
+   - **rate_limit** — `rate limit`, `429`, `too many requests`
+   - **model_unavailable** — `model unavailable`, `503`, `502`, `bad gateway`
+3. Set `log_level: "DEBUG"` and search for `[failover:` in the OpenCode log. You will see one of:
+   - `[failover:eligible_retry]` — failover was triggered
+   - `[failover:error_ignored]` — error was not eligible (expected for auth/prompt/permission errors)
+   - `[failover:blocked_loop]` — failover already attempted for this execution (one-shot guard)
+   - `[failover:no_fallback_available]` — no next model in the chain
+4. If the error is from a non-OpenAI provider (Anthropic, Google, etc.), failover is intentionally not triggered.
+5. If failover already occurred once for this execution, it will not retry again (anti-loop protection).
+
 ## Logs and debugging
 
 When the above checklists do not pin down the cause:

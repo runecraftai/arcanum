@@ -45,3 +45,19 @@ Quick fix for the changeset generator (`.changeset/generate-from-commits.ts`):
 ## Knowledge Graph
 
 Rebuilt: 196 nodes, 244 edges, 26 communities.
+
+## 2026-06-07: guild-agent-model-configuration ✅
+
+**Spec:** `.specs/features/guild-agent-model-configuration/`
+**Status:** Completed
+
+Executed T01-T07:
+
+- Collected real model inventory via `opencode models` (28 models across 3 providers)
+- Captured 7-day usage evidence via `opencode stats` (41 sessions, $1.95 cost, 2,234 messages)
+- Identified top cost drivers: `qwen3.6-plus` ($1.04/wk), `deepseek-v4-pro` ($0.77/wk)
+- Defined official matrix for 8 built-in agents balancing OpenAI window vs Go cost vs free models
+- Produced reference `guild-opencode.jsonc` snippet
+- Documented pressure-release order (cleric → fighter → bard/wizard preserved)
+- Documented weekly review loop with `opencode stats`
+- Listed avoided models (qwen3.7-plus, qwen3.6-plus, deepseek-v4-pro)

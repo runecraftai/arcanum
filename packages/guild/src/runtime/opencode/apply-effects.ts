@@ -6,6 +6,10 @@ import type { SessionTracker } from "../../features/analytics"
 import type { RuntimeEffect } from "./effects"
 import { randomUUID } from "node:crypto"
 import type { TrustedInjectedPromptMetadata } from "./trusted-message-state"
+import { classifyOpenAIFailoverError } from "../../application/failover/openai-error-classifier"
+import { canAttemptFailover, markFailoverAttempted } from "../../application/failover/failover-guard"
+import { getNextFallbackModel } from "../../agents/model-resolution"
+import { logFailoverEvent } from "../../shared/log"
 
 const REVIEWER_FANOUT_SENTINEL = "<!-- guild:reviewer-fanout -->"
 const reviewerFanOutSeenByClient = new WeakMap<object, Set<string>>()
@@ -28,9 +32,14 @@ export async function applyRuntimeEffects(args: {
   recordInjectedPrompt?: (sessionId: string, text: string, metadata?: TrustedInjectedPromptMetadata) => void
   pausePlan?: () => void
   pauseWorkflow?: (reason: string) => void
+  availableModels?: Set<string>
 }): Promise<void> {
-  const { effects, output, client, tracker, recordInjectedPrompt, pausePlan, pauseWorkflow } = args
+  const { effects, output, client, tracker, recordInjectedPrompt, pausePlan, pauseWorkflow, availableModels } = args
   const sessionClient = client ? createSessionClient(client) : null
+
+  // Track the current model per session (from trackModel analytics events)
+  // so we can resolve the next fallback when injectPromptAsync fails.
+  const sessionModel = new Map<string, string>()
 
   for (const effect of effects) {
     switch (effect.type) {
@@ -54,12 +63,122 @@ export async function applyRuntimeEffects(args: {
       }
       case "injectPromptAsync": {
         if (sessionClient) {
-          await sessionClient.promptAsync({
-            sessionId: effect.sessionId,
-            parts: [{ type: "text", text: effect.text }],
-            ...(effect.agent ? { agent: getAgentDisplayName(effect.agent) } : {}),
-          })
-          recordInjectedPrompt?.(effect.sessionId, effect.text)
+          const failoverKey = `inject:${effect.sessionId}:${effect.agent ?? "default"}`
+          try {
+            await sessionClient.promptAsync({
+              sessionId: effect.sessionId,
+              parts: [{ type: "text", text: effect.text }],
+              ...(effect.agent ? { agent: getAgentDisplayName(effect.agent) } : {}),
+            })
+            recordInjectedPrompt?.(effect.sessionId, effect.text)
+          } catch (error) {
+            // Classify the error to determine failover eligibility and reason
+            const classification = classifyOpenAIFailoverError(error)
+
+            // Non-eligible error: log and propagate
+            if (!classification.eligible) {
+              logFailoverEvent({
+                status: classification.provider === "openai" ? "error_ignored" : "error_ignored",
+                sessionId: effect.sessionId,
+                agent: effect.agent,
+                currentModel: sessionModel.get(effect.sessionId),
+                reason: classification.reason,
+                summary: `[failover:error_ignored] provider=${classification.provider} reason=${classification.reason ?? "none"}`,
+              })
+              throw error
+            }
+
+            // One-shot guard: only one failover attempt per execution
+            if (!canAttemptFailover(failoverKey)) {
+              logFailoverEvent({
+                status: "blocked_loop",
+                sessionId: effect.sessionId,
+                agent: effect.agent,
+                currentModel: sessionModel.get(effect.sessionId),
+                reason: classification.reason,
+                failoverKey,
+                summary: `[failover:blocked_loop] already attempted for this execution`,
+              })
+              throw error
+            }
+
+            // Resolve the next fallback model
+            const currentModel = sessionModel.get(effect.sessionId)
+            if (!currentModel) {
+              logFailoverEvent({
+                status: "no_model_tracked",
+                sessionId: effect.sessionId,
+                agent: effect.agent,
+                reason: classification.reason,
+                failoverKey,
+                summary: `[failover:no_model_tracked] cannot resolve next fallback`,
+              })
+              markFailoverAttempted(failoverKey)
+              throw error
+            }
+
+            const nextModel = effect.agent
+              ? getNextFallbackModel(effect.agent, currentModel, availableModels ?? new Set())
+              : null
+
+            if (!nextModel) {
+              logFailoverEvent({
+                status: "no_fallback_available",
+                sessionId: effect.sessionId,
+                agent: effect.agent,
+                currentModel,
+                reason: classification.reason,
+                failoverKey,
+                summary: `[failover:no_fallback_available] current=${currentModel}`,
+              })
+              markFailoverAttempted(failoverKey)
+              throw error
+            }
+
+            // Mark failover as attempted before retrying
+            markFailoverAttempted(failoverKey)
+
+            logFailoverEvent({
+              status: "eligible_retry",
+              sessionId: effect.sessionId,
+              agent: effect.agent,
+              currentModel,
+              nextModel,
+              reason: classification.reason,
+              failoverKey,
+              summary: `[failover:eligible_retry] ${currentModel} → ${nextModel} reason=${classification.reason}`,
+            })
+
+            // Retry once with the fallback model
+            try {
+              await sessionClient.promptAsync({
+                sessionId: effect.sessionId,
+                parts: [{ type: "text", text: effect.text }],
+                ...(effect.agent ? { agent: getAgentDisplayName(effect.agent) } : {}),
+              })
+              recordInjectedPrompt?.(effect.sessionId, effect.text)
+              logFailoverEvent({
+                status: "retry_succeeded",
+                sessionId: effect.sessionId,
+                agent: effect.agent,
+                currentModel,
+                nextModel,
+                reason: classification.reason,
+                summary: `[failover:retry_succeeded] ${nextModel}`,
+              })
+            } catch (retryError) {
+              logFailoverEvent({
+                status: "retry_failed",
+                sessionId: effect.sessionId,
+                agent: effect.agent,
+                currentModel,
+                nextModel,
+                reason: classification.reason,
+                summary: `[failover:retry_failed] ${nextModel} also failed`,
+              })
+              throw error
+            }
+          }
         }
         break
       }
@@ -92,6 +211,7 @@ export async function applyRuntimeEffects(args: {
             break
           case "trackModel":
             tracker.trackModel(event.sessionId, event.modelId)
+            sessionModel.set(event.sessionId, event.modelId)
             break
           case "endSession":
             tracker.endSession(event.sessionId)

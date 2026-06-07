@@ -7,7 +7,7 @@ import { createRogueAgent } from "./rogue"
 import { createWarlockAgent } from "./warlock"
 import { createClericAgent } from "./cleric"
 import { createPaladinAgent } from "./paladin"
-import { resolveAgentModel } from "./model-resolution"
+import { resolveAgentModel, type FallbackEntry } from "./model-resolution"
 import { buildAgent } from "./agent-builder"
 import type { AgentFactory, AgentPromptMetadata, GuildAgentName } from "./types"
 import type { CategoriesConfig, AgentOverrideConfig } from "../config/schema"
@@ -207,12 +207,23 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
     const override = agentOverrides[name]
     const overrideModel = override?.model
 
+    const customFallbackChain: FallbackEntry[] | undefined = override?.fallback_models?.length
+      ? override.fallback_models.map((m) => {
+          if (m.includes("/")) {
+            const [provider, model] = m.split("/", 2)
+            return { providers: [provider], model }
+          }
+          return { providers: [], model: m }
+        })
+      : undefined
+
     const resolvedModel = resolveAgentModel(name, {
       availableModels,
       agentMode: factory.mode,
       uiSelectedModel,
       systemDefaultModel,
       overrideModel,
+      customFallbackChain,
     })
 
     if (overrideModel) {

@@ -14,56 +14,56 @@ export type AgentModelRequirement = {
 export const AGENT_MODEL_REQUIREMENTS: Record<GuildAgentName, AgentModelRequirement> = {
   bard: {
     fallbackChain: [
-      { providers: ["github-copilot"], model: "claude-opus-4.6" },
+      { providers: ["anthropic"], model: "claude-opus-4.6" },
       { providers: ["anthropic"], model: "claude-opus-4" },
       { providers: ["openai"], model: "gpt-5" },
     ],
   },
   fighter: {
     fallbackChain: [
-      { providers: ["github-copilot"], model: "claude-sonnet-4.6" },
+      { providers: ["anthropic"], model: "claude-sonnet-4.6" },
       { providers: ["anthropic"], model: "claude-sonnet-4" },
       { providers: ["openai"], model: "gpt-5" },
     ],
   },
   ranger: {
     fallbackChain: [
-      { providers: ["github-copilot"], model: "claude-sonnet-4.6" },
+      { providers: ["anthropic"], model: "claude-sonnet-4.6" },
       { providers: ["anthropic"], model: "claude-sonnet-4" },
       { providers: ["openai"], model: "gpt-5" },
     ],
   },
   wizard: {
     fallbackChain: [
-      { providers: ["github-copilot"], model: "claude-opus-4.6" },
+      { providers: ["anthropic"], model: "claude-opus-4.6" },
       { providers: ["anthropic"], model: "claude-opus-4" },
       { providers: ["openai"], model: "gpt-5" },
     ],
   },
   rogue: {
     fallbackChain: [
-      { providers: ["github-copilot"], model: "claude-haiku-4.5" },
+      { providers: ["anthropic"], model: "claude-haiku-4.5" },
       { providers: ["anthropic"], model: "claude-haiku-4" },
       { providers: ["google"], model: "gemini-3-flash" },
     ],
   },
   warlock: {
     fallbackChain: [
-      { providers: ["github-copilot"], model: "claude-haiku-4.5" },
+      { providers: ["anthropic"], model: "claude-haiku-4.5" },
       { providers: ["anthropic"], model: "claude-haiku-4" },
       { providers: ["google"], model: "gemini-3-flash" },
     ],
   },
   cleric: {
     fallbackChain: [
-      { providers: ["github-copilot"], model: "claude-sonnet-4.6" },
+      { providers: ["anthropic"], model: "claude-sonnet-4.6" },
       { providers: ["anthropic"], model: "claude-sonnet-4" },
       { providers: ["openai"], model: "gpt-5" },
     ],
   },
   paladin: {
     fallbackChain: [
-      { providers: ["github-copilot"], model: "claude-opus-4.6" },
+      { providers: ["anthropic"], model: "claude-opus-4.6" },
       { providers: ["anthropic"], model: "claude-opus-4" },
       { providers: ["openai"], model: "gpt-5" },
     ],
@@ -77,15 +77,19 @@ export type ResolveAgentModelOptions = {
   categoryModel?: string
   overrideModel?: string
   systemDefaultModel?: string
-  /** Custom fallback chain for agents not in AGENT_MODEL_REQUIREMENTS */
+  /** Custom fallback chain — takes precedence over built-in defaults when provided */
   customFallbackChain?: FallbackEntry[]
 }
 
 /**
  * Resolve the model for an agent. Accepts any string agent name.
- * Built-in agents use AGENT_MODEL_REQUIREMENTS for fallback chains.
- * Custom agents use the customFallbackChain option, or fall through
- * to system default / hardcoded fallback.
+ *
+ * Precedence (after override/UI/category):
+ *   1. customFallbackChain — explicit per-agent override chain (built-ins and custom agents)
+ *   2. AGENT_MODEL_REQUIREMENTS[agent].fallbackChain — built-in default chain
+ *   3. systemDefaultModel — late fallback
+ *   4. Offline best-guess from the active fallback chain
+ *   5. Hardcoded default ("anthropic/claude-opus-4.6")
  */
 export function resolveAgentModel(agentName: string, options: ResolveAgentModelOptions): string {
   const { availableModels, agentMode, uiSelectedModel, categoryModel, overrideModel, systemDefaultModel, customFallbackChain } = options
@@ -109,8 +113,8 @@ export function resolveAgentModel(agentName: string, options: ResolveAgentModelO
     return categoryModel
   }
 
-  // 4. Fallback chain — first available match (built-in or custom)
-  const fallbackChain = requirement?.fallbackChain ?? customFallbackChain
+  // 4. Fallback chain — custom override takes precedence over built-in defaults
+  const fallbackChain = customFallbackChain ?? requirement?.fallbackChain
   if (fallbackChain) {
     for (const entry of fallbackChain) {
       for (const provider of entry.providers) {
@@ -141,8 +145,47 @@ export function resolveAgentModel(agentName: string, options: ResolveAgentModelO
       debug(`Model resolved for "${agentName}" (offline best-guess — no available models matched)`, { via: "offline-guess", model: guessed })
       return guessed
     }
+    // Bare model name fallback if no providers listed
+    debug(`Model resolved for "${agentName}" (offline best-guess — bare model)`, { via: "offline-guess", model: first.model })
+    return first.model
   }
 
-  warn(`No model resolved for agent "${agentName}" — falling back to default github-copilot/claude-opus-4.6`, { agentName })
-  return "github-copilot/claude-opus-4.6"
+  warn(`No model resolved for agent "${agentName}" — falling back to default anthropic/claude-opus-4.6`, { agentName })
+  return "anthropic/claude-opus-4.6"
+}
+
+/**
+ * Given an agent name, the model that just failed, and the set of available
+ * models, return the next eligible model from the agent's fallback chain.
+ *
+ * Returns null when there is no next model (end of chain, or agent has no
+ * fallback chain).
+ */
+export function getNextFallbackModel(
+  agentName: string,
+  failedModel: string,
+  availableModels: Set<string>,
+): string | null {
+  const requirement = AGENT_MODEL_REQUIREMENTS[agentName as GuildAgentName] as AgentModelRequirement | undefined
+  const fallbackChain = requirement?.fallbackChain
+  if (!fallbackChain) return null
+
+  let foundFailed = false
+  for (const entry of fallbackChain) {
+    for (const provider of entry.providers) {
+      const qualified = `${provider}/${entry.model}`
+      // Skip until we pass the failed model
+      if (!foundFailed) {
+        if (qualified === failedModel || entry.model === failedModel) {
+          foundFailed = true
+        }
+        continue
+      }
+      // Return the first available model after the failed one
+      if (availableModels.has(qualified)) return qualified
+      if (availableModels.has(entry.model)) return entry.model
+    }
+  }
+
+  return null
 }

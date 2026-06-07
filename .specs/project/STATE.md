@@ -30,13 +30,14 @@
    - Improves skill clarity and reduces ambiguity in agent dispatch
 
 ## Active Features
-- `guild-agent-model-configuration` — **planned** (2026-06-07)
+- `guild-agent-model-configuration` — **completed** (2026-06-07)
   - Goal: define and document the official Guild model strategy balancing OpenAI window usage, OpenCode Go cost, and free OpenCode models
-  - Scope: create spec/design/tasks for agent-to-model distribution, reference config, and weekly stats review policy
+  - Result: matrix defined for all 8 built-in agents, reference `guild-opencode.jsonc` snippet, pressure-release policy, weekly review loop, and explicit avoid-list for high-cost models
   - Specs: `.specs/features/guild-agent-model-configuration/`
-- `guild-builtin-model-fallbacks` — **planned** (2026-06-07)
+- `guild-builtin-model-fallbacks` — **completed** (2026-06-07)
   - Goal: make built-in agents honor `fallback_models` and add automatic fallback only for eligible OpenAI quota/rate-limit failures
   - Scope: resolution fix + runtime failover policy with anti-loop and observability
+  - Result: `fallback_models` wired into built-in resolution, OpenAI error classifier (quota/rate_limit/model_unavailable), one-shot failover guard in `apply-effects.ts`, structured logging for all failover events, full test coverage for eligible/non-eligible/loop paths
   - Specs: `.specs/features/guild-builtin-model-fallbacks/`
 - `guild-rpg-agent-structural-rename` — **planned** (2026-06-05)
 - `guild-rpg-agent-structural-rename` — **planned** (2026-06-05)

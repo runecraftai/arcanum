@@ -106,12 +106,18 @@ The examples below are short by design. They show the most common shape of each 
   "agents": {
     "bard": {
       "model": "anthropic/claude-sonnet-4",
+      "fallback_models": [
+        "openai/gpt-5-mini",
+        "google/gemini-2.5-pro"
+      ],
       "temperature": 0.2,
       "prompt_append": "Prefer additive changes and explicit acceptance criteria."
     }
   }
 }
 ```
+
+The `fallback_models` field defines an ordered list of models to try if the primary model fails at runtime. See [Model guide](model-guide.md#fallback-models) for the full semantics, eligible error types, and the one-shot failover guard.
 
 ### Skill assignment
 

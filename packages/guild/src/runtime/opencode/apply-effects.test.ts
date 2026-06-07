@@ -1,6 +1,8 @@
-import { describe, expect, it, mock } from "bun:test"
+import { describe, expect, it, mock, beforeEach, afterEach } from "bun:test"
 import type { ReviewerPlan } from "../../agents/review-resolver"
 import { applyRuntimeEffects } from "./apply-effects"
+import { clearFailoverGuard } from "../../application/failover/failover-guard"
+import { installTestSink, setLogLevel } from "../../shared/log"
 
 function fanOutPlan(scope: "direct" | "post-execution"): ReviewerPlan {
   return {
@@ -73,7 +75,7 @@ describe("applyRuntimeEffects", () => {
       output,
     })
 
-    expect(output.message.agent).toBe("Tapestry (Execution Orchestrator)")
+    expect(output.message.agent).toBe("Fighter (Execution Lead)")
     expect(output.parts[0].text).toContain("## Injected")
   })
 
@@ -130,7 +132,7 @@ describe("applyRuntimeEffects", () => {
 
     expect(calls).toHaveLength(1)
     expect(calls[0].path.id).toBe("s2")
-    expect(calls[0].body.agent).toBe("Loom (Main Orchestrator)")
+    expect(calls[0].body.agent).toBe("Bard (Guildmaster)")
     expect(calls[0].body.parts).toEqual([])
   })
 
@@ -289,5 +291,465 @@ describe("applyRuntimeEffects", () => {
     expect(recorded).toHaveLength(1)
     expect(recorded[0]?.metadata?.kind).toBe("reviewer-fanout")
     expect(recorded[0]?.metadata?.nonce).toMatch(/^[0-9a-f-]{36}$/i)
+  })
+})
+
+describe("injectPromptAsync failover replay", () => {
+  beforeEach(() => {
+    clearFailoverGuard()
+  })
+
+  function makeFailingClient(shouldFail: (callIndex: number) => boolean) {
+    let callIndex = 0
+    const calls: Array<{ path: { id: string }; body: { parts: Array<{ type: string; text?: string }>; agent?: string } }> = []
+    const client = {
+      session: {
+        promptAsync: async (input: { path: { id: string }; body: { parts: Array<{ type: string; text?: string }>; agent?: string } }) => {
+          calls.push(input)
+          const fail = shouldFail(callIndex)
+          callIndex++
+          if (fail) {
+            throw new Error("OpenAI: quota exceeded")
+          }
+        },
+      },
+    }
+    return { client, calls }
+  }
+
+  function makeMockTracker() {
+    return {
+      setAgentName: () => {},
+      trackModel: () => {},
+      endSession: () => {},
+      trackCost: () => {},
+      trackTokenUsage: () => {},
+      trackToolStart: () => {},
+      trackToolEnd: () => {},
+    }
+  }
+
+  it("retries with next fallback model when OpenAI quota error occurs", async () => {
+    // First call fails, second succeeds
+    const { client, calls } = makeFailingClient((idx) => idx === 0)
+
+    await applyRuntimeEffects({
+      effects: [
+        // Track claude-opus-4.6 (first in bard's chain) so next fallback is claude-opus-4
+        { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "anthropic/claude-opus-4.6" } },
+        { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+      ],
+      client: client as never,
+      tracker: makeMockTracker(),
+      availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6", "anthropic/claude-opus-4"]),
+    })
+
+    // Two calls: original (failed) + retry
+    expect(calls).toHaveLength(2)
+    expect(calls[0].path.id).toBe("s1")
+    expect(calls[1].path.id).toBe("s1")
+  })
+
+  it("does NOT retry for non-eligible errors", async () => {
+    const nonEligibleClient = {
+      session: {
+        promptAsync: async () => {
+          throw new Error("openai: invalid API key")
+        },
+      },
+    }
+
+    await expect(
+      applyRuntimeEffects({
+        effects: [
+          { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "openai/gpt-5" } },
+          { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+        ],
+        client: nonEligibleClient as never,
+        tracker: makeMockTracker(),
+        availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6"]),
+      }),
+    ).rejects.toThrow("openai: invalid API key")
+  })
+
+  it("propagates error when failover also fails", async () => {
+    // Both calls fail
+    const { client, calls } = makeFailingClient(() => true)
+
+    await expect(
+      applyRuntimeEffects({
+        effects: [
+          { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "anthropic/claude-opus-4.6" } },
+          { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+        ],
+        client: client as never,
+        tracker: makeMockTracker(),
+        availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6", "anthropic/claude-opus-4"]),
+      }),
+    ).rejects.toThrow("OpenAI: quota exceeded")
+
+    // Two calls: original + failed retry
+    expect(calls).toHaveLength(2)
+  })
+
+  it("does NOT retry when no model is tracked for session", async () => {
+    const { client, calls } = makeFailingClient(() => true)
+
+    await expect(
+      applyRuntimeEffects({
+        effects: [
+          // No trackModel effect — session has no tracked model
+          { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+        ],
+        client: client as never,
+        availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6"]),
+      }),
+    ).rejects.toThrow("OpenAI: quota exceeded")
+
+    // Only one call — no retry because no model tracked
+    expect(calls).toHaveLength(1)
+  })
+
+  it("does NOT retry when no next fallback is available", async () => {
+    const { client, calls } = makeFailingClient(() => true)
+
+    await expect(
+      applyRuntimeEffects({
+        effects: [
+          { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "anthropic/claude-opus-4.6" } },
+          { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+        ],
+        client: client as never,
+        tracker: makeMockTracker(),
+        // Only the current model is available — no next fallback
+        availableModels: new Set(["anthropic/claude-opus-4.6"]),
+      }),
+    ).rejects.toThrow("OpenAI: quota exceeded")
+
+    // Only one call — no retry because no next fallback
+    expect(calls).toHaveLength(1)
+  })
+
+  it("prevents loop: second failover for same execution is blocked", async () => {
+    const { client, calls } = makeFailingClient(() => true)
+
+    // First attempt: failover is attempted but fails
+    await expect(
+      applyRuntimeEffects({
+        effects: [
+          { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "anthropic/claude-opus-4.6" } },
+          { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+        ],
+        client: client as never,
+        tracker: makeMockTracker(),
+        availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6", "anthropic/claude-opus-4"]),
+      }),
+    ).rejects.toThrow("OpenAI: quota exceeded")
+
+    const firstCallCount = calls.length
+
+    // Second attempt: same session+agent — guard blocks retry
+    await expect(
+      applyRuntimeEffects({
+        effects: [
+          { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "anthropic/claude-opus-4.6" } },
+          { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+        ],
+        client: client as never,
+        tracker: makeMockTracker(),
+        availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6", "anthropic/claude-opus-4"]),
+      }),
+    ).rejects.toThrow("OpenAI: quota exceeded")
+
+    // Second invocation should NOT attempt failover (only 1 call instead of 2)
+    const secondCallCount = calls.length - firstCallCount
+    expect(secondCallCount).toBe(1) // Only the original call, no retry
+  })
+
+  it("succeeds on retry when fallback model works", async () => {
+    let callIndex = 0
+    const calls: Array<{ path: { id: string }; body: { parts: Array<{ type: string; text?: string }>; agent?: string } }> = []
+    const client = {
+      session: {
+        promptAsync: async (input: { path: { id: string }; body: { parts: Array<{ type: string; text?: string }>; agent?: string } }) => {
+          calls.push(input)
+          callIndex++
+          // First call fails with eligible error, second succeeds
+          if (callIndex === 1) {
+            throw new Error("OpenAI: rate limit exceeded")
+          }
+        },
+      },
+    }
+
+    const recorded: Array<{ sessionId: string; text: string }> = []
+
+    await applyRuntimeEffects({
+      effects: [
+        { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "anthropic/claude-opus-4.6" } },
+        { type: "injectPromptAsync", sessionId: "s1", text: "continue working", agent: "bard" },
+      ],
+      client: client as never,
+      tracker: makeMockTracker(),
+      availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6", "anthropic/claude-opus-4"]),
+      recordInjectedPrompt: (sessionId, text) => recorded.push({ sessionId, text }),
+    })
+
+    expect(calls).toHaveLength(2)
+    expect(recorded).toHaveLength(1)
+    expect(recorded[0].text).toBe("continue working")
+  })
+})
+
+describe("failover structured logging", () => {
+  beforeEach(() => {
+    clearFailoverGuard()
+    setLogLevel("DEBUG")
+  })
+
+  afterEach(() => {
+    setLogLevel("INFO")
+  })
+
+  function makeMockTracker() {
+    return {
+      setAgentName: () => {},
+      trackModel: () => {},
+      endSession: () => {},
+      trackCost: () => {},
+      trackTokenUsage: () => {},
+      trackToolStart: () => {},
+      trackToolEnd: () => {},
+    }
+  }
+
+  it("logs eligible_retry with agent, models, and reason", async () => {
+    const { entries, uninstall } = installTestSink()
+    let callIndex = 0
+    const client = {
+      session: {
+        promptAsync: async () => {
+          callIndex++
+          if (callIndex === 1) throw new Error("OpenAI: quota exceeded")
+        },
+      },
+    }
+
+    await applyRuntimeEffects({
+      effects: [
+        { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "anthropic/claude-opus-4.6" } },
+        { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+      ],
+      client: client as never,
+      tracker: makeMockTracker(),
+      availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6", "anthropic/claude-opus-4"]),
+    })
+
+    const eligibleEntry = entries.find((e) => e.data && (e.data as Record<string, unknown>).status === "eligible_retry")
+    expect(eligibleEntry).toBeDefined()
+    const d = eligibleEntry!.data as Record<string, unknown>
+    expect(d.sessionId).toBe("s1")
+    expect(d.agent).toBe("bard")
+    expect(d.currentModel).toBe("anthropic/claude-opus-4.6")
+    expect(d.nextModel).toBe("anthropic/claude-opus-4")
+    expect(d.reason).toBe("quota")
+    uninstall()
+  })
+
+  it("logs retry_succeeded when fallback works", async () => {
+    const { entries, uninstall } = installTestSink()
+    let callIndex = 0
+    const client = {
+      session: {
+        promptAsync: async () => {
+          callIndex++
+          if (callIndex === 1) throw new Error("OpenAI: rate limit exceeded")
+        },
+      },
+    }
+
+    await applyRuntimeEffects({
+      effects: [
+        { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "anthropic/claude-opus-4.6" } },
+        { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+      ],
+      client: client as never,
+      tracker: makeMockTracker(),
+      availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6", "anthropic/claude-opus-4"]),
+    })
+
+    const successEntry = entries.find((e) => e.data && (e.data as Record<string, unknown>).status === "retry_succeeded")
+    expect(successEntry).toBeDefined()
+    const d = successEntry!.data as Record<string, unknown>
+    expect(d.nextModel).toBe("anthropic/claude-opus-4")
+    expect(d.reason).toBe("rate_limit")
+    uninstall()
+  })
+
+  it("logs retry_failed when fallback also fails", async () => {
+    const { entries, uninstall } = installTestSink()
+    const client = {
+      session: {
+        promptAsync: async () => {
+          throw new Error("OpenAI: quota exceeded")
+        },
+      },
+    }
+
+    await expect(
+      applyRuntimeEffects({
+        effects: [
+          { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "anthropic/claude-opus-4.6" } },
+          { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+        ],
+        client: client as never,
+        tracker: makeMockTracker(),
+        availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6", "anthropic/claude-opus-4"]),
+      }),
+    ).rejects.toThrow("OpenAI: quota exceeded")
+
+    const failedEntry = entries.find((e) => e.data && (e.data as Record<string, unknown>).status === "retry_failed")
+    expect(failedEntry).toBeDefined()
+    const d = failedEntry!.data as Record<string, unknown>
+    expect(d.currentModel).toBe("anthropic/claude-opus-4.6")
+    expect(d.nextModel).toBe("anthropic/claude-opus-4")
+    expect(d.reason).toBe("quota")
+    uninstall()
+  })
+
+  it("logs blocked_loop when guard prevents retry", async () => {
+    const { entries, uninstall } = installTestSink()
+    const client = {
+      session: {
+        promptAsync: async () => {
+          throw new Error("OpenAI: quota exceeded")
+        },
+      },
+    }
+
+    // First attempt
+    await expect(
+      applyRuntimeEffects({
+        effects: [
+          { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "anthropic/claude-opus-4.6" } },
+          { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+        ],
+        client: client as never,
+        tracker: makeMockTracker(),
+        availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6", "anthropic/claude-opus-4"]),
+      }),
+    ).rejects.toThrow("OpenAI: quota exceeded")
+
+    // Second attempt — should be blocked
+    await expect(
+      applyRuntimeEffects({
+        effects: [
+          { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "anthropic/claude-opus-4.6" } },
+          { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+        ],
+        client: client as never,
+        tracker: makeMockTracker(),
+        availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6", "anthropic/claude-opus-4"]),
+      }),
+    ).rejects.toThrow("OpenAI: quota exceeded")
+
+    const blockedEntry = entries.find((e) => e.data && (e.data as Record<string, unknown>).status === "blocked_loop")
+    expect(blockedEntry).toBeDefined()
+    const d = blockedEntry!.data as Record<string, unknown>
+    expect(d.sessionId).toBe("s1")
+    expect(d.agent).toBe("bard")
+    expect(d.failoverKey).toBe("inject:s1:bard")
+    uninstall()
+  })
+
+  it("logs no_model_tracked when session has no tracked model", async () => {
+    const { entries, uninstall } = installTestSink()
+    const client = {
+      session: {
+        promptAsync: async () => {
+          throw new Error("OpenAI: quota exceeded")
+        },
+      },
+    }
+
+    await expect(
+      applyRuntimeEffects({
+        effects: [
+          { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+        ],
+        client: client as never,
+        availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6"]),
+      }),
+    ).rejects.toThrow("OpenAI: quota exceeded")
+
+    const noModelEntry = entries.find((e) => e.data && (e.data as Record<string, unknown>).status === "no_model_tracked")
+    expect(noModelEntry).toBeDefined()
+    const d = noModelEntry!.data as Record<string, unknown>
+    expect(d.sessionId).toBe("s1")
+    expect(d.agent).toBe("bard")
+    expect(d.currentModel).toBeUndefined()
+    uninstall()
+  })
+
+  it("logs no_fallback_available when no next model exists", async () => {
+    const { entries, uninstall } = installTestSink()
+    const client = {
+      session: {
+        promptAsync: async () => {
+          throw new Error("OpenAI: quota exceeded")
+        },
+      },
+    }
+
+    await expect(
+      applyRuntimeEffects({
+        effects: [
+          { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "anthropic/claude-opus-4.6" } },
+          { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+        ],
+        client: client as never,
+        tracker: makeMockTracker(),
+        availableModels: new Set(["anthropic/claude-opus-4.6"]),
+      }),
+    ).rejects.toThrow("OpenAI: quota exceeded")
+
+    const noFallbackEntry = entries.find((e) => e.data && (e.data as Record<string, unknown>).status === "no_fallback_available")
+    expect(noFallbackEntry).toBeDefined()
+    const d = noFallbackEntry!.data as Record<string, unknown>
+    expect(d.sessionId).toBe("s1")
+    expect(d.currentModel).toBe("anthropic/claude-opus-4.6")
+    expect(d.reason).toBe("quota")
+    uninstall()
+  })
+
+  it("logs error_ignored for non-eligible errors", async () => {
+    const { entries, uninstall } = installTestSink()
+    const client = {
+      session: {
+        promptAsync: async () => {
+          throw new Error("openai: invalid API key")
+        },
+      },
+    }
+
+    await expect(
+      applyRuntimeEffects({
+        effects: [
+          { type: "trackAnalytics", event: { kind: "trackModel", sessionId: "s1", modelId: "openai/gpt-5" } },
+          { type: "injectPromptAsync", sessionId: "s1", text: "continue", agent: "bard" },
+        ],
+        client: client as never,
+        tracker: makeMockTracker(),
+        availableModels: new Set(["openai/gpt-5", "anthropic/claude-opus-4.6"]),
+      }),
+    ).rejects.toThrow("openai: invalid API key")
+
+    const ignoredEntry = entries.find((e) => e.data && (e.data as Record<string, unknown>).status === "error_ignored")
+    expect(ignoredEntry).toBeDefined()
+    const d = ignoredEntry!.data as Record<string, unknown>
+    expect(d.sessionId).toBe("s1")
+    expect(d.agent).toBe("bard")
+    expect(d.reason).toBeNull()
+    uninstall()
   })
 })

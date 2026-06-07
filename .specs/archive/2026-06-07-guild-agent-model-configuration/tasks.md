@@ -1,7 +1,7 @@
 # Tasks: guild-agent-model-configuration
 
 **Design**: `.specs/features/guild-agent-model-configuration/design.md`
-**Status**: Draft
+**Status**: Completed ✅
 
 ---
 
@@ -39,9 +39,9 @@ T05 -> T06 -> T07
 
 **Done when**:
 
-- [ ] Os providers realmente disponiveis estao listados
-- [ ] Os modelos gratuitos relevantes estao identificados
-- [ ] As restricoes aprovadas (`qwen3.7-plus` fora, cuidado com free, etc.) estao capturadas
+- [x] Os providers realmente disponiveis estao listados
+- [x] Os modelos gratuitos relevantes estao identificados
+- [x] As restricoes aprovadas (`qwen3.7-plus` fora, cuidado com free, etc.) estao capturadas
 
 ### T02: Capture operating evidence from current project usage
 
@@ -53,9 +53,9 @@ T05 -> T06 -> T07
 
 **Done when**:
 
-- [ ] O uso recente de OpenAI versus Go foi resumido
-- [ ] Os modelos que mais consumiram custo Go ficaram explicitos
-- [ ] A leitura diferenciou custo monetario de consumo de janela OpenAI
+- [x] O uso recente de OpenAI versus Go foi resumido
+- [x] Os modelos que mais consumiram custo Go ficaram explicitos
+- [x] A leitura diferenciou custo monetario de consumo de janela OpenAI
 
 ### T03: Define model classes by agent role
 
@@ -67,9 +67,9 @@ T05 -> T06 -> T07
 
 **Done when**:
 
-- [ ] Os agentes foram agrupados por perfil de consumo/criticidade
-- [ ] Existe justificativa para OpenAI, Go barato e free por papel
-- [ ] A classificacao evita improviso por agente
+- [x] Os agentes foram agrupados por perfil de consumo/criticidade
+- [x] Existe justificativa para OpenAI, Go barato e free por papel
+- [x] A classificacao evita improviso por agente
 
 ### T04: Produce the official agent-to-model matrix
 
@@ -81,9 +81,9 @@ T05 -> T06 -> T07
 
 **Done when**:
 
-- [ ] Os oito built-ins possuem modelo oficial recomendado
-- [ ] O racional por agente foi registrado
-- [ ] A matriz esta coerente com custo e janela OpenAI
+- [x] Os oito built-ins possuem modelo oficial recomendado
+- [x] O racional por agente foi registrado
+- [x] A matriz esta coerente com custo e janela OpenAI
 
 ### T05: Define the pressure-release policy for OpenAI window usage
 
@@ -95,9 +95,9 @@ T05 -> T06 -> T07
 
 **Done when**:
 
-- [ ] Existe uma ordem explicita de alivio da janela OpenAI
-- [ ] `bard` e `wizard` sao preservados ate o fim por default
-- [ ] Review e execucao aparecem como primeiros candidatos de corte
+- [x] Existe uma ordem explicita de alivio da janela OpenAI
+- [x] `bard` e `wizard` sao preservados ate o fim por default
+- [x] Review e execucao aparecem como primeiros candidatos de corte
 
 ### T06: Write the reference `guild-opencode.jsonc` snippet
 
@@ -109,9 +109,9 @@ T05 -> T06 -> T07
 
 **Done when**:
 
-- [ ] Existe snippet completo para os built-ins
-- [ ] O snippet e compativel com o schema atual
-- [ ] A matriz e o snippet batem 1:1
+- [x] Existe snippet completo para os built-ins
+- [x] O snippet e compativel com o schema atual
+- [x] A matriz e o snippet batem 1:1
 
 ### T07: Document the weekly review loop
 
@@ -123,6 +123,6 @@ T05 -> T06 -> T07
 
 **Done when**:
 
-- [ ] O comando de revisao esta documentado
-- [ ] O time sabe o que observar em OpenAI e Go
-- [ ] A feature termina com um loop operacional, nao so uma foto estatica
+- [x] O comando de revisao esta documentado
+- [x] O time sabe o que observar em OpenAI e Go
+- [x] A feature termina com um loop operacional, nao so uma foto estatica
