@@ -115,6 +115,32 @@ Prefer additive customization. The recommended order is:
 
 See [Configuration — Agent override example](configuration.md#agent-override) for a concrete snippet.
 
+## Model fallback and runtime failover
+
+Each built-in agent has a native fallback chain (documented in [Model guide](model-guide.md#built-in-native-fallback-chains)). You can override this chain per agent using `fallback_models` in your config.
+
+### How it works
+
+- **Initial resolution:** Guild picks the model using the precedence defined in [Model guide](model-guide.md#model-resolution-precedence). The explicit `model` override always wins.
+- **Runtime failover:** If the chosen model fails during execution with an **eligible OpenAI error** (quota exceeded, rate limit / 429, or model unavailable), Guild automatically retries once with the next model in the agent's fallback chain.
+- **One-shot guard:** Only one automatic failover is allowed per execution. If the fallback also fails, the error propagates normally.
+- **Conservative classification:** Errors from non-OpenAI providers, authentication failures, invalid prompts, and permission errors do NOT trigger failover. When in doubt, Guild fails closed.
+
+### Configuring per-agent fallback
+
+```jsonc
+{
+  "agents": {
+    "bard": {
+      "model": "openai/gpt-5-mini",
+      "fallback_models": ["anthropic/claude-sonnet-4", "google/gemini-2.5-pro"]
+    }
+  }
+}
+```
+
+For the full list of eligible errors, failover flow, and observability details, see [Model guide — Runtime failover](model-guide.md#runtime-failover).
+
 ## Disabling agents
 
 To prevent a built-in agent from registering, add its name to `disabled_agents`:

@@ -71,6 +71,9 @@ export function createPluginAdapter(args: {
     trustedMessageState.registerInjectedPrompt(sessionId, text, metadata)
   }
 
+  // Build the set of available model IDs from agent configs for failover resolution.
+  const availableModels = buildAvailableModels(agents)
+
   return {
     config: async (config: Record<string, unknown>) => {
       const result = await configHandler.handle({
@@ -168,6 +171,7 @@ export function createPluginAdapter(args: {
         client: trackedClient,
         tracker,
         recordInjectedPrompt,
+        availableModels,
         pausePlan: directory ? () => {
           pauseWork(directory)
           info("[work-continuation] Auto-paused: user message received during active plan", { sessionId: sessionID })
@@ -233,6 +237,7 @@ export function createPluginAdapter(args: {
         client: trackedClient,
         tracker,
         recordInjectedPrompt,
+        availableModels,
         pauseWorkflow: directory ? () => handlePauseExecutionEffect({
           effectReason: "User interrupt",
           directory,
@@ -420,4 +425,19 @@ function getDeletedSessionId(event: { type: string; properties?: unknown }): str
 
   const properties = event.properties as { sessionID?: string; sessionId?: string; info?: { id?: string } } | undefined
   return properties?.info?.id ?? properties?.sessionID ?? properties?.sessionId ?? null
+}
+
+/**
+ * Extract the set of available model IDs from agent configurations.
+ * Models are in the format `provider/model` (e.g. `anthropic/claude-sonnet-4.6`).
+ */
+function buildAvailableModels(agents: Record<string, AgentConfig>): Set<string> {
+  const models = new Set<string>()
+  for (const agent of Object.values(agents)) {
+    const model = agent.model
+    if (typeof model === "string" && model.length > 0) {
+      models.add(model)
+    }
+  }
+  return models
 }

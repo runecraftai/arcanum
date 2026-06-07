@@ -52,7 +52,8 @@ function parseFallbackModels(models: string[]): FallbackEntry[] {
       const [provider, model] = m.split("/", 2)
       return { providers: [provider], model }
     }
-    return { providers: ["github-copilot"], model: m }
+    // Default to bare model name (no provider prefix) — OpenCode resolves it directly
+    return { providers: [], model: m }
   })
 }
 
