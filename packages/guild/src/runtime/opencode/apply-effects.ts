@@ -80,7 +80,7 @@ export async function applyRuntimeEffects(args: {
               logFailoverEvent({
                 status: classification.provider === "openai" ? "error_ignored" : "error_ignored",
                 sessionId: effect.sessionId,
-                agent: effect.agent,
+                agent: effect.agent ?? undefined,
                 currentModel: sessionModel.get(effect.sessionId),
                 reason: classification.reason,
                 summary: `[failover:error_ignored] provider=${classification.provider} reason=${classification.reason ?? "none"}`,
@@ -93,7 +93,7 @@ export async function applyRuntimeEffects(args: {
               logFailoverEvent({
                 status: "blocked_loop",
                 sessionId: effect.sessionId,
-                agent: effect.agent,
+                agent: effect.agent ?? undefined,
                 currentModel: sessionModel.get(effect.sessionId),
                 reason: classification.reason,
                 failoverKey,
@@ -108,7 +108,7 @@ export async function applyRuntimeEffects(args: {
               logFailoverEvent({
                 status: "no_model_tracked",
                 sessionId: effect.sessionId,
-                agent: effect.agent,
+                agent: effect.agent ?? undefined,
                 reason: classification.reason,
                 failoverKey,
                 summary: `[failover:no_model_tracked] cannot resolve next fallback`,
@@ -125,7 +125,7 @@ export async function applyRuntimeEffects(args: {
               logFailoverEvent({
                 status: "no_fallback_available",
                 sessionId: effect.sessionId,
-                agent: effect.agent,
+                agent: effect.agent ?? undefined,
                 currentModel,
                 reason: classification.reason,
                 failoverKey,
@@ -141,7 +141,7 @@ export async function applyRuntimeEffects(args: {
             logFailoverEvent({
               status: "eligible_retry",
               sessionId: effect.sessionId,
-              agent: effect.agent,
+              agent: effect.agent ?? undefined,
               currentModel,
               nextModel,
               reason: classification.reason,
@@ -160,7 +160,7 @@ export async function applyRuntimeEffects(args: {
               logFailoverEvent({
                 status: "retry_succeeded",
                 sessionId: effect.sessionId,
-                agent: effect.agent,
+                agent: effect.agent ?? undefined,
                 currentModel,
                 nextModel,
                 reason: classification.reason,
@@ -170,7 +170,7 @@ export async function applyRuntimeEffects(args: {
               logFailoverEvent({
                 status: "retry_failed",
                 sessionId: effect.sessionId,
-                agent: effect.agent,
+                agent: effect.agent ?? undefined,
                 currentModel,
                 nextModel,
                 reason: classification.reason,
