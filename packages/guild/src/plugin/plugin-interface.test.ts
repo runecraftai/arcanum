@@ -2384,7 +2384,7 @@ describe("command.execute.before handler", () => {
     expect(output.parts[0].text).toContain("$0.25")
   })
 
-  it("is no-op for other commands", async () => {
+  it("is no-op for unsupported commands", async () => {
     const iface = createPluginInterface({
       pluginConfig: baseConfig,
       hooks: makeHooks(),
@@ -2396,7 +2396,7 @@ describe("command.execute.before handler", () => {
 
     const output = { parts: [] as Array<{ type: string; text: string }> }
     await iface["command.execute.before"](
-      { command: "start-work", sessionID: "s1", arguments: "my-plan" } as Parameters<typeof iface["command.execute.before"]>[0],
+      { command: "unknown", sessionID: "s1", arguments: "my-plan" } as Parameters<typeof iface["command.execute.before"]>[0],
       output as Parameters<typeof iface["command.execute.before"]>[1],
     )
 

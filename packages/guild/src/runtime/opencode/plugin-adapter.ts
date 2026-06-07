@@ -326,6 +326,7 @@ export function createPluginAdapter(args: {
 
       const effects = routeCommandExecuteBefore({
         command: input.command,
+        sessionId: input.sessionID,
         argumentsText: input.arguments,
         directory,
         hooks,

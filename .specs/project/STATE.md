@@ -30,67 +30,47 @@
    - Improves skill clarity and reduces ambiguity in agent dispatch
 
 ## Active Features
-- `guild-agent-model-configuration` — **completed** (2026-06-07)
-  - Goal: define and document the official Guild model strategy balancing OpenAI window usage, OpenCode Go cost, and free OpenCode models
-  - Result: matrix defined for all 8 built-in agents, reference `guild-opencode.jsonc` snippet, pressure-release policy, weekly review loop, and explicit avoid-list for high-cost models
-  - Specs: `.specs/features/guild-agent-model-configuration/`
-- `guild-builtin-model-fallbacks` — **completed** (2026-06-07)
-  - Goal: make built-in agents honor `fallback_models` and add automatic fallback only for eligible OpenAI quota/rate-limit failures
-  - Scope: resolution fix + runtime failover policy with anti-loop and observability
-  - Result: `fallback_models` wired into built-in resolution, OpenAI error classifier (quota/rate_limit/model_unavailable), one-shot failover guard in `apply-effects.ts`, structured logging for all failover events, full test coverage for eligible/non-eligible/loop paths
-  - Specs: `.specs/features/guild-builtin-model-fallbacks/`
-- `guild-rpg-agent-structural-rename` — **planned** (2026-06-05)
 - `guild-rpg-agent-structural-rename` — **planned** (2026-06-05)
   - Goal: rename `packages/guild/src/agents/` directories and TypeScript symbols from legacy Weave agent names to RPG class names while preserving old config keys as compatibility keys
   - Scope: spec/design/tasks created; implementation not started
-  - Specs: `.specs/features/guild-rpg-agent-structural-rename/`
-- `guild-weave-replatform` — **completed** (2026-06-04)
-  - Goal: replace `packages/guild` implementation with `opencode-weave`, preserve legacy guild in archive, and rename public surfaces from weave to guild
-  - Status: ✅ All 5 phases complete, build/typecheck pass, 1918/1936 tests pass (18 env-only failures)
-  - Backup: `packages/_archived/guild-legacy-20260604/`
-  - Migration source: `/home/rehem/Projects/opencode-weave`
-
-### Rename sweep status
-| Surface | Status | Notes |
-|---------|--------|-------|
-| NPM package identity (`@runecraft/guild`) | ✅ Done | |
-| Plugin export (`GuildPlugin`, `GuildConfig`, `GuildAgentName`) | ✅ Done | Types exported as aliases |
-| Config paths (`guild-opencode.jsonc`) | ✅ Done | loader, fixtures, tests |
-| State dir (`.guild/`) | ✅ Done | constants, storage, tests |
-| Log service (`service: "guild"`) | ✅ Done | log.ts, health-report |
-| Log prefix (`[guild:LEVEL]`) | ✅ Done | console.error prefix |
-| Env var (`GUILD_LOG_LEVEL`) | ✅ Done | |
-| Schema artifact (`guild-config.schema.json`) | ✅ Done | regenerated |
-| Schema version key (`x-guild-version`) | ✅ Done | |
-| Health command (`guild-health`) | ✅ Done | command, routing, tests |
-| Envelope tags (`guild-command-envelope`, etc.) | ✅ Done | protocol.ts |
-| Continuation markers (`<!-- guild:* -->`) | ✅ Done | |
-| README/docs | ✅ Done | |
-| Build/test pipeline | ✅ Done | tsc, tests, schema all working |
-
-### Explicitly deferred (intentional non-rename)
-| Item | Reason |
-|------|--------|
-| Agent names (`loom`, `tapestry`, `shuttle`, `pattern`, `thread`, `spindle`, `weft`, `warp`) | Internal architecture only |
-| `call_weave_agent` tool | Used in agent configs, too risky to rename |
-| `getWeaveVersion()` function | Internal utility, no public surface impact |
-| `WeaveConfig` type name | Used in 40+ files, rename adds risk without user-facing gain |
-| `WeaveConfigSchema` zod schema | Same as above |
-| `GenerateWeaveConfigJsonSchemaOptions` type | Internal config generation
-
-### Rebrand verification notes (2026-06-05)
-- `bun run typecheck` passes in `packages/guild`
-- Targeted tests for builtin skills, workflow completion/context, version, validation, and builtin agent binding pass
-- Residual `Weave|weave|.weave` matches remain in compatibility aliases, legacy tool ids, and historical tests/fixtures; they are being reviewed as intentional exceptions rather than blindly renamed
+  - Specs: `.specs/archive/2026-06-05-guild-rpg-agent-structural-rename/`
 
 ## Completed & Archived Features
-- `guild-plugin-installability` — **completed** (2026-06-06)
-  - Goal: make the published `@runecraft/guild` artifact installable and loadable by OpenCode's npm plugin loader without `Plugin export is not a function`
-  - Solved: added `server` named export for PluginModule contract, rewrote `verify.ts` with packed-artifact validation (pack → install → validate), created `smoke-install.ts` script that tests plugin loading in clean isolated environment, wired `prepublishOnly` and release pipeline verify gate, fixed `.opencode/opencode.json` to remove non-existent `list` plugin, fixed stale rename imports (`getWeaveVersion`→`getGuildVersion`, `WeaveConfigSchema`→`GuildConfigSchema`)
+- `guild-weave-replatform` → `.specs/archive/2026-06-04-guild-weave-replatform/` (2026-06-04)
+  - Goal: replace `packages/guild` implementation with `opencode-weave`, preserve legacy guild in archive, and rename public surfaces from weave to guild
+  - Status: ✅ All 5 phases complete, build/typecheck pass, 1918/1936 tests pass (18 env-only failures)
+  - The rename sweep (surfaces, deferred items, rebrand notes) is documented in the feature specs
+- `guild-agent-model-configuration` → `.specs/archive/2026-06-07-guild-agent-model-configuration/` (2026-06-07)
+  - Goal: define and document the official Guild model strategy balancing OpenAI window usage, OpenCode Go cost, and free OpenCode models
+  - Status: ✅ Matrix defined for all 8 built-in agents, reference `guild-opencode.jsonc` snippet, pressure-release policy, weekly review loop, and explicit avoid-list for high-cost models
 - `guild-user-docs` → `.specs/archive/2026-06-06-guild-user-docs/` (2026-06-06)
   - Goal: create repo-local Guild user documentation modeled after Weave docs, with README as a landing page and `packages/guild/docs/` as the future site-ready source
   - Status: ✅ All 20 tasks across 4 phases complete; 17 markdown pages + 3 example workflows shipped; 0 broken internal links; new-user and maintainer paths verified
   - Specs: `.specs/archive/2026-06-06-guild-user-docs/`
+- `guild-plugin-installability` → `.specs/archive/2026-06-07-guild-plugin-installability/` (2026-06-07)
+  - Goal: make the published `@runecraft/guild` artifact installable and loadable by OpenCode's npm plugin loader without `Plugin export is not a function`
+  - Status: ✅ All 13 tasks complete — `server` export, verify.ts with packed-artifact validation, smoke-install.ts, prepublishOnly gate
+- `guild-builtin-model-fallbacks` → `.specs/archive/2026-06-07-guild-builtin-model-fallbacks/` (2026-06-07)
+  - Goal: make built-in agents honor `fallback_models` and add automatic fallback only for eligible OpenAI quota/rate-limit failures
+  - Status: ✅ All 10 tasks complete — resolution fix + runtime failover policy with anti-loop and observability
+- `spec-driven-v4` → `.specs/archive/2026-06-07-spec-driven-v4/` (2026-06-07)
+  - Goal: restructure spec-driven skill references, migrate `docs/` to `.specs/`, add MAP/init phases, knowledge chain, sub-agent delegation
+  - Status: ✅ All 20 tasks across 5 phases (A-E) complete
+- `changeset-publish` → `.specs/archive/2026-06-07-changeset-publish/` (2026-06-07)
+  - Goal: complete npm publish pipeline for the monorepo
+  - Status: ✅ All 13 tasks complete — `.npmrc`, `publishConfig`, CI/CD workflow, CONTRIBUTING.md
+- `automated-changesets-conventional-commits` → `.specs/archive/2026-06-07-automated-changesets-conventional-commits/` (2026-06-07)
+  - Goal: auto-generate changesets from conventional commits via Husky + commitlint + CI script
+  - Status: ✅ All 10 tasks complete — commit-msg hook, cz-git, generate-from-commits.ts, release workflow
+- `summon-quality-refactor` → `.specs/archive/2026-06-07-summon-quality-refactor/` (2026-06-07)
+  - Goal: refactor summon codebase — dispatch tables, function extraction, magic strings, remove inline comments, fix bugs, add tests
+  - Status: ✅ All 19 tasks complete — zero if/else chains, all functions ≤30 lines, tests passing
+- `summon-workspace-normalization` → `.specs/archive/2026-06-07-summon-workspace-normalization/` (2026-06-07)
+  - Goal: flatten `package/` subdirectory into workspace root so changesets can process summon
+  - Status: ✅ All 8 tasks complete — summon is a proper workspace member
+- `symlink-intermediate-layer` → `.specs/archive/2026-06-07-symlink-intermediate-layer/` (2026-06-07)
+  - Goal: add `.agents/skills/` hub for symlink-mode skill installation
+  - Status: ✅ All 16 tasks complete — hub chain, discovery enhancement, TUI flow adjusted, tests passing
 - `npm-publish` → `.specs/archive/npm-publish/` (2026-04-26)
 - `summon-cli` → `.specs/archive/summon-cli/` (2026-04-26)
 - `summon-tui-revision` → `.specs/archive/summon-tui-revision/` (2026-04-26)
