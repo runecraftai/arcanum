@@ -308,10 +308,10 @@ describe("AGENT_METADATA", () => {
   it("bard prompt strips references to disabled agents", () => {
     const agents = createBuiltinAgents({ disabledAgents: ["warlock", "rogue"] })
     const prompt = agents["bard"]?.prompt ?? ""
-    expect(prompt).not.toContain("Use warlock")
-    expect(prompt).not.toContain("Use rogue")
+    expect(prompt).not.toContain("delegate to Warlock")
+    expect(prompt).not.toContain("delegate to Rogue")
     // Paladin references should still be present (not disabled in this test)
-    expect(prompt).toContain("MUST use Paladin")
+    expect(prompt).toContain("delegate to Paladin")
   })
 
   it("fighter prompt adapts PostExecutionReview when cleric disabled", () => {

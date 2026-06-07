@@ -1,7 +1,7 @@
 import { describe, it, expect } from "bun:test"
 import {
   composeBardPrompt,
-  buildRoleSection,
+  buildBardRoleSection,
   buildDisciplineSection,
   buildSidebarTodosSection,
   buildDelegationSection,
@@ -35,7 +35,7 @@ describe("composeBardPrompt", () => {
 
   it("preserves Warp security language with no disabled agents", () => {
     const prompt = composeBardPrompt()
-    expect(prompt).toContain("MUST use Paladin")
+    expect(prompt).toContain("delegate to Paladin for security")
     expect(prompt).toContain("Paladin is mandatory")
   })
 
@@ -111,19 +111,19 @@ describe("buildDelegationSection", () => {
 
   it("excludes rogue when disabled", () => {
     const section = buildDelegationSection(new Set(["rogue"]))
-    expect(section).not.toContain("Use Rogue")
+    expect(section).not.toContain("delegate to Rogue")
   })
 
   it("excludes paladin line when paladin disabled", () => {
     const section = buildDelegationSection(new Set(["paladin"]))
     expect(section).toContain("Cleric")
-    expect(section).not.toContain("MUST use Paladin")
+    expect(section).not.toContain("delegate to Paladin for security")
   })
 
   it("excludes cleric line when cleric disabled but keeps paladin", () => {
     const section = buildDelegationSection(new Set(["cleric"]))
-    expect(section).not.toContain("Use Cleric")
-    expect(section).toContain("MUST use Paladin")
+    expect(section).not.toContain("delegate to Cleric")
+    expect(section).toContain("delegate to Paladin for security")
   })
 
   it("excludes both cleric and paladin when both disabled", () => {
@@ -298,8 +298,8 @@ describe("buildReviewWorkflowSection", () => {
 
 describe("individual section builders", () => {
   it("buildRoleSection contains Loom identity", () => {
-    expect(buildRoleSection()).toContain("Bard")
-    expect(buildRoleSection()).toContain("coordinator")
+    expect(buildBardRoleSection()).toContain("Bard")
+    expect(buildBardRoleSection()).toContain("coordinator")
   })
 
   it("buildDisciplineSection contains work tracking rules", () => {
@@ -319,7 +319,7 @@ describe("individual section builders", () => {
   it("buildSidebarTodosSection contains stale-items rule", () => {
     const section = buildSidebarTodosSection()
     expect(section).toContain("never leave stale in_progress")
-    expect(section).toContain("BEFORE each Task tool call")
+    expect(section).toContain("BEFORE each delegation call")
   })
 
   it("buildDelegationNarrationSection contains slow-agent note", () => {
