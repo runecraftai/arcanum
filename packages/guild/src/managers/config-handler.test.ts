@@ -49,10 +49,10 @@ describe("ConfigHandler", () => {
     expect(result.agents[getAgentDisplayName("fighter")]).toBeDefined()
     expect(result.agents[getAgentDisplayName("wizard")]).toBeDefined()
     expect(result.agents[getAgentDisplayName("rogue")]).toBeDefined()
-    // Primary agent original lowercase keys should not exist (they get remapped to display names)
-    expect(result.agents["bard"]).toBeUndefined()
-    expect(result.agents["fighter"]).toBeUndefined()
-    // Subagent keys stay as-is (display name === config key)
+    // Config-key aliases are also registered so Task(subagent_type="rogue") works
+    // alongside Task(subagent_type="Rogue (Scout)").
+    expect(result.agents["bard"]).toBeDefined()
+    expect(result.agents["fighter"]).toBeDefined()
     expect(result.agents["wizard"]).toBeDefined()
     expect(result.agents["rogue"]).toBeDefined()
   })

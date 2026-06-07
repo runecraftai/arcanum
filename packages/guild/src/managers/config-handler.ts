@@ -99,6 +99,14 @@ export class ConfigHandler {
       // Remap key to display name for OpenCode UI
       const displayName = getAgentDisplayName(name)
       result[displayName] = merged
+
+      // Also register under config key so Task(subagent_type="rogue") works
+      // alongside Task(subagent_type="Rogue (Scout)").
+      // Skip if config key matches display name (e.g. category ranger agents)
+      // to avoid registering the same agent twice under the same key.
+      if (name !== displayName) {
+        result[name] = merged
+      }
     }
 
     return result
