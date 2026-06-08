@@ -29,7 +29,7 @@ With `continuation.recovery.compaction: true` (the default), Guild injects a sho
 
 - which plan or workflow it was working on,
 - the current step and the remaining tasks,
-- a hint to read the relevant state file before continuing.
+- a hint to read the plan's `.guild/plans/<slug>/state.md` and `.guild/plans/<slug>/tasks.md` before continuing.
 
 To turn recovery off (not recommended for long sessions):
 

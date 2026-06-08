@@ -66,7 +66,7 @@ describe("Mode 1 prompt composition — delegation context", () => {
 
   it("delegation section instructs reading learnings file before delegating", () => {
     const section = buildTapestryDelegationSection()
-    expect(section).toContain(".specs/sessions/")
+    expect(section).toContain(".guild/runtime/sessions/")
   })
 
   it("delegation section uses subagent_type ranger", () => {
@@ -147,10 +147,10 @@ describe("Mode 1 prompt composition — full composed prompt", () => {
     expect(prompt).not.toContain("you work directly")
   })
 
-  it("composed prompt references delegation to Shuttle", () => {
+  it("composed prompt references delegation to Ranger", () => {
     const prompt = composeFighterPrompt()
     expect(prompt).toContain("delegate")
-    expect(prompt).toContain("Shuttle")
+    expect(prompt).toContain("Ranger")
     expect(prompt).toContain("subagent_type")
   })
 })

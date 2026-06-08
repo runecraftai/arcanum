@@ -23,7 +23,7 @@ Do NOT start implementing — produce the plan ONLY.
 </Planning>
 
 <PlanOutput>
-Save plans under \`.specs/*\` according to scope.
+Save plans under \`.guild/plans/<slug>/\`.
 
 Use this structure:
 
@@ -75,10 +75,10 @@ FILES FIELD: For verification-only tasks that have no associated files (e.g., "r
 </PlanOutput>
 
 <Constraints>
-- ONLY write .md files inside the .specs/ directory tree
+- ONLY write .md files inside the .guild/plans/<slug>/ directory tree
 - NEVER write code files (.ts, .js, .py, .go, etc.)
 - NEVER edit source code
-- After completing a plan, tell the user which \`.specs/*\` artifact was created and how to continue.
+- After completing a plan, tell the user which \`.guild/plans/<slug>/\` artifact was created and how to continue.
 </Constraints>
 
 <Research>

@@ -16,10 +16,12 @@ This page documents each command's purpose, syntax, expected behavior, and the m
 - Injects the plan context for the named plan (or the most recent plan when no name is given).
 - Hands control to Fighter to drive the plan's tasks through completion.
 
+Plans live at `.guild/plans/<slug>/` (canonical). Each plan contains `spec.md`, `tasks.md`, `state.md`, `design.md` (optional), and `notes.md`. Fighter reads the plan's `state.md` and `tasks.md` on start. See [`.guild/architecture.md`](.guild/architecture.md) for the full layout.
+
 **Common failure modes**:
 
-- *No plan found* — run Wizard first to generate a plan in `.guild/plans/`.
-- *Plan name typo* — `/start-work` accepts the exact plan name; list plans in `.guild/plans/` if you are unsure.
+- *No plan found* — run Wizard first to generate a plan in `.guild/plans/<slug>/`.
+- *Plan name typo* — `/start-work` accepts the exact slug; list plans in `.guild/plans/` if you are unsure.
 - *Wrong directory* — plans are scoped to the current OpenCode project directory.
 
 See [Workflows — overview](workflows/overview.md) for the relationship between plans and workflows.
@@ -68,7 +70,7 @@ This is the first command to run when something looks wrong. See [Troubleshootin
 
 **Behavior**:
 
-- Reads session summaries and metrics reports from `.guild/analytics/`.
+- Reads session summaries and metrics reports from `.guild/analytics/` (canonical). Analytics files are `session-summaries.jsonl`, `fingerprint.json`, and `metrics-reports.jsonl`.
 - Renders a markdown report that includes token usage, tool call counts, and per-plan aggregation when a `plan-name` is supplied.
 - `all` (or no argument) renders the global view across all plans.
 

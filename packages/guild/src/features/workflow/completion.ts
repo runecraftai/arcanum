@@ -152,7 +152,22 @@ function checkPlanComplete(context: CompletionContext): CompletionCheckResult {
 }
 
 function resolveSpecArtifactPath(directory: string, planName: string): string | null {
-  const candidates = [
+  // .guild/ (canonical) — checked first
+  const canonicalCandidates = [
+    join(directory, ".guild", "plans", planName, "tasks.md"),
+    join(directory, ".guild", "plans", planName, "spec.md"),
+    join(directory, ".guild", "plans", planName, "design.md"),
+    join(directory, ".guild", "plans", planName, "state.md"),
+  ]
+
+  for (const candidate of canonicalCandidates) {
+    if (existsSync(candidate)) {
+      return candidate
+    }
+  }
+
+  // .specs/* (legacy fallback) — checked second
+  const legacyCandidates = [
     join(directory, ".specs", "features", planName, "tasks.md"),
     join(directory, ".specs", "features", planName, "spec.md"),
     join(directory, ".specs", "features", planName, "design.md"),
@@ -160,7 +175,7 @@ function resolveSpecArtifactPath(directory: string, planName: string): string | 
     join(directory, ".specs", "project", `${planName}.md`),
   ]
 
-  for (const candidate of candidates) {
+  for (const candidate of legacyCandidates) {
     if (existsSync(candidate)) {
       return candidate
     }

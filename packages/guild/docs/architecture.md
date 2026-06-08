@@ -102,13 +102,29 @@ See [Continuation](continuation.md).
 
 ## On-disk state
 
-Guild keeps all runtime state under the project-local `.guild/` directory.
+Guild keeps all working memory under the project-local `.guild/` directory. This is the canonical home for context, plans, knowledge, and runtime state.
 
 ```
 .guild/
-├── plans/                # Plan markdown files
-├── runtime/              # Run records and per-step state
-├── workflows/            # Generated or cached workflow artifacts
+├── context/              # Project-level state (single source of truth)
+│   ├── project.md        # Project identity, tech stack, key files
+│   ├── roadmap.md        # High-level milestones
+│   ├── state.md          # Current project status and blockers
+│   └── handoff.md        # Last handoff summary
+├── knowledge/            # Persistent cross-plan learnings
+│   ├── index.md
+│   ├── decisions.md
+│   ├── conventions.md
+│   └── gotchas.md
+├── plans/                # Active planning workspaces
+│   └── <slug>/
+│       ├── spec.md
+│       ├── design.md
+│       ├── tasks.md
+│       ├── state.md
+│       └── notes.md
+├── archive/              # Completed or abandoned plans
+├── runtime/              # Run records and per-step state (auto-managed)
 └── analytics/            # Optional, only if analytics.enabled = true
     ├── session-summaries.jsonl
     ├── fingerprint.json
@@ -116,6 +132,8 @@ Guild keeps all runtime state under the project-local `.guild/` directory.
 ```
 
 Add `.guild/` to `.gitignore`. None of these files should be committed.
+
+> **Legacy paths (`.specs/`, `.notebook/`)**: These are **fallback only**. Guild reads them when `.guild/context/` or `.guild/knowledge/` is absent or empty. Writes always go to `.guild/`. See [`.guild/architecture.md`](.guild/architecture.md) for the full canonical layout, migration rules, and stop conditions.
 
 User-level config and user workflows live outside the project:
 
@@ -147,3 +165,4 @@ User-level config and user workflows live outside the project:
 - [Configuration](configuration.md)
 - [Agents](agents.md)
 - [Workflows](workflows/overview.md)
+- [`.guild/architecture.md`](.guild/architecture.md) — canonical layout definition, state update rules, and migration notes.

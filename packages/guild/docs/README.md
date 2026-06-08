@@ -53,6 +53,10 @@ Want to shape agent behavior without replacing the whole system? Start with the 
 - [Background agents](background-agents.md) — concurrency and stale-timeout behavior.
 - [Releases](releases.md) — package verification and release checklist.
 
+## Canonical workspace
+
+Guild's canonical workspace is `.guild/` at the project root. See `.guild/architecture.md` for the full layout (context, knowledge, plans, archive), state update rules, and migration notes for legacy `.specs/` and `.notebook/` paths.
+
 ## Documentation conventions
 
 - **Relative links** — every cross-reference uses a relative path so the tree can be moved or rendered as a static site without changes.
