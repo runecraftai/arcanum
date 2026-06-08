@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.16.2
+
+### Patch Changes
+
+- fix(guild): use correct agent invocation names
+
 ## 0.16.1
 
 ### Patch Changes
