@@ -19,7 +19,7 @@ const SAMPLE_DEFINITION: WorkflowDefinition = {
       name: "Create Plan",
       type: "autonomous",
       agent: "wizard",
-      prompt: "Create a plan at .specs/features/{{instance.slug}}/tasks.md based on {{artifacts.spec}}",
+      prompt: "Create a plan at .guild/plans/{{instance.slug}}/tasks.md based on {{artifacts.spec}}",
       completion: { method: "plan_created", plan_name: "{{instance.slug}}" },
     },
     {
@@ -167,7 +167,7 @@ describe("buildContextHeader", () => {
       current_step_id: "review",
       artifacts: {
         spec: "Users need OAuth2 login",
-        plan_path: ".specs/features/add-oauth2/tasks.md",
+        plan_path: ".guild/plans/add-oauth2/tasks.md",
       },
     })
     const header = buildContextHeader(instance, SAMPLE_DEFINITION)
@@ -222,13 +222,13 @@ describe("composeStepPrompt", () => {
         plan: {
           id: "plan",
           status: "completed",
-          summary: "Plan saved to .specs/features/add-oauth2/tasks.md",
+          summary: "Plan saved to .guild/plans/add-oauth2/tasks.md",
         },
         review: { id: "review", status: "active" },
       },
       artifacts: {
         spec: "Users need OAuth2 login",
-        plan_path: ".specs/features/add-oauth2/tasks.md",
+        plan_path: ".guild/plans/add-oauth2/tasks.md",
       },
     })
     const stepDef = SAMPLE_DEFINITION.steps[2]
@@ -238,7 +238,7 @@ describe("composeStepPrompt", () => {
     expect(prompt).toContain("[✓] **Gather Requirements**")
     expect(prompt).toContain("[✓] **Create Plan**")
     // Should have resolved artifact
-    expect(prompt).toContain("Review the plan at .specs/features/add-oauth2/tasks.md")
+    expect(prompt).toContain("Review the plan at .guild/plans/add-oauth2/tasks.md")
     // Should show step 3 of 3
     expect(prompt).toContain("step 3 of 3")
   })

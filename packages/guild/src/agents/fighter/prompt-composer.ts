@@ -153,12 +153,12 @@ Task [N/M]: [Task Title]
 **Acceptance**: [acceptance criteria from plan]
 
 **Context from completed tasks**: [any output or decisions from prior tasks that affect this one]
-**Learnings**: [relevant entries from .specs/sessions/{plan-name}.md if the file exists]
+**Learnings**: [relevant entries from .guild/runtime/sessions/{plan-name}.md if the file exists]
 \`\`\`
 
 RULES:
 - Always include task number, What, Files, and Acceptance in every delegation prompt
-- Read .specs/sessions/{plan-name}.md before delegating — include relevant entries
+- Read .guild/runtime/sessions/{plan-name}.md before delegating — include relevant entries
 - Include context from completed tasks only when it directly affects the current task
 - Use ${subagentType}
 - Do NOT implement the work yourself — delegate everything to Ranger
@@ -247,7 +247,7 @@ When Ranger returns an error or incomplete result:
 1. **First failure**: Retry once — re-delegate the same task with the error output appended:
    "Previous attempt failed with: [error details]. Please address this and try again."
 
-2. **Retry failure**: Mark the task blocked in the plan, log the reason to .specs/sessions/{plan-name}.md, and continue to the next unchecked task.
+2. **Retry failure**: Mark the task blocked in the plan, log the reason to .guild/runtime/sessions/{plan-name}.md, and continue to the next unchecked task.
 
 3. **Build/test failure after Ranger completes**: Re-delegate with the failure output included:
    "Ranger completed but verification failed: [build/test output]. Please fix and re-run."
@@ -334,7 +334,7 @@ After Ranger completes a task — BEFORE marking \`- [ ]\` → \`- [x]\`:
      - Assumptions the plan made that were wrong
      - Missing steps the plan should have included
      - Ambiguous instructions that required guesswork
-    - Create or append to \`.specs/sessions/{plan-name}.md\` using this format:
+    - Create or append to \`.guild/runtime/sessions/{plan-name}.md\` using this format:
      \`\`\`markdown
      # Learnings: {Plan Name}
      
@@ -458,3 +458,18 @@ export function composeFighterPrompt(options: FighterPromptOptions = {}): string
 
   return sections.join("\n\n")
 }
+
+// Aliases for backward-compatible test imports (old "Tapestry" naming → current "Fighter" naming)
+export const buildTapestryRoleSection = buildFighterRoleSection
+export const buildTapestryDisciplineSection = buildFighterDisciplineSection
+export const buildTapestrySidebarTodosSection = buildFighterSidebarTodosSection
+export const buildTapestryDelegationSection = buildFighterDelegationSection
+export const buildTapestryParallelismSection = buildFighterParallelismSection
+export const buildTapestryPlanExecutionSection = buildFighterPlanExecutionSection
+export const buildTapestryContinuationHintSection = buildFighterContinuationHintSection
+export const buildTapestryVerificationSection = buildFighterVerificationSection
+export const buildTapestryErrorHandlingSection = buildFighterErrorHandlingSection
+export const buildTapestryPostExecutionReviewSection = buildFighterPostExecutionReviewSection
+export const buildTapestryExecutionSection = buildFighterExecutionSection
+export const buildTapestryStyleSection = buildFighterStyleSection
+export const buildTapestryCategoryRoutingSection = buildFighterCategoryRoutingSection

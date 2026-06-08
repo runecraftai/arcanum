@@ -96,8 +96,8 @@ Each step can specify a `completion` block. If absent, the workflow's `default_c
 | Method | Signal | Typical use |
 | --- | --- | --- |
 | `user_confirm` | User types a confirmation in the chat. | Interactive steps and gates. |
-| `plan_created` | A new plan appears in `.guild/plans/`. | Steps that drive planning. |
-| `plan_complete` | An active plan reaches the `complete` state. | Implementation steps driven by a plan. |
+| `plan_created` | A new plan appears in `.guild/plans/<slug>/`. | Steps that drive planning. |
+| `plan_complete` | An active plan reaches the `done` state (`.guild/plans/<slug>/state.md`). | Implementation steps driven by a plan. |
 | `review_verdict` | Cleric or Paladin emits APPROVE. | Review gates. |
 | `agent_signal` | A custom signal emitted at the end of a step. | Step-internal completion. |
 
@@ -107,7 +107,7 @@ Example:
 {
   "id": "implement",
   "type": "autonomous",
-  "prompt": "Implement the plan in .guild/plans/feature-x.md.",
+  "prompt": "Implement the plan in .guild/plans/<slug>/. Read spec.md, tasks.md, and state.md before starting.",
   "completion": { "method": "plan_complete" }
 }
 ```

@@ -50,8 +50,8 @@ Steps are executed in the order they appear in the `steps` array. The first step
 Steps finish when one of these signals is detected:
 
 - `user_confirm` — the user types a confirmation keyword in the chat.
-- `plan_created` — a plan file appears under `.guild/plans/`.
-- `plan_complete` — a plan's status flips to complete.
+- `plan_created` — a plan file appears under `.guild/plans/<slug>/` (canonical).
+- `plan_complete` — a plan's status flips to complete (plan state reaches `done` in `.guild/plans/<slug>/state.md`).
 - `review_verdict` — Cleric or Paladin produces an APPROVE verdict.
 - `agent_signal` — a custom signal the agent emits at the end of a step.
 

@@ -54,7 +54,7 @@ WORK TRACKING:
 - Mark completed immediately after finishing
 - Never batch completions — update as you go
 
-Plans live under \`.specs/*\` according to scope. Execution goes through /start-work → Fighter.
+Plans live under \`.guild/plans/<slug>/\`. Execution goes through /start-work → Fighter.
 </Discipline>`
 }
 
@@ -137,7 +137,7 @@ export function buildPlanWorkflowSection(disabled: Set<string>, reviewModelVaria
   const steps: string[] = []
 
   if (hasWizard) {
-    steps.push(`1. PLAN: Delegate to Wizard → produces a plan under \`.specs/*\` according to scope`)
+    steps.push(`1. PLAN: Delegate to Wizard → produces a plan under \`.guild/plans/<slug>/\``)
   }
 
   if (hasCleric || hasPaladin) {

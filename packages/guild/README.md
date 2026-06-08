@@ -75,10 +75,6 @@ rm -f .opencode/guild-opencode.jsonc .opencode/guild-opencode.json
 rm -f ~/.config/opencode/guild-opencode.jsonc ~/.config/opencode/guild-opencode.json
 ```
 
-## Acknowledgments
-
-Guild's technical foundation is based on [opencode-guild](https://github.com/pgermishuys/opencode-guild) by [@pgermishuys](https://github.com/pgermishuys). The agent architecture, skill system, and workflow engine were adapted from Guild's implementation.
-
 ## License
 
 MIT

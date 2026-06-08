@@ -85,9 +85,9 @@ describe("createPaladinAgent", () => {
     expect(prompt).toContain("webfetch")
   })
 
-  it("prompt references .specs/project/STATE.md", () => {
+  it("prompt references .guild/context/state.md", () => {
     const config = createPaladinAgent("claude-sonnet-4")
     const prompt = config.prompt as string
-    expect(prompt).toContain(".specs/project/STATE.md")
+    expect(prompt).toContain(".guild/context/state.md")
   })
 })

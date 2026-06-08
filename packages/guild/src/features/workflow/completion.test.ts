@@ -100,7 +100,18 @@ describe("user_confirm", () => {
 })
 
 describe("plan_created", () => {
-  it("detects plan file by direct path", () => {
+  it("detects plan file in .guild/ (canonical)", () => {
+    const planDir = join(testDir, ".guild", "plans", "my-plan")
+    mkdirSync(planDir, { recursive: true })
+    writeFileSync(join(planDir, "tasks.md"), "# Plan", "utf-8")
+    const ctx = makeContext({ config: { method: "plan_created", plan_name: "my-plan" } })
+    const result = checkStepCompletion("plan_created", ctx)
+    expect(result.complete).toBe(true)
+    expect(result.artifacts).toBeDefined()
+    expect(result.artifacts!.plan_path).toContain(".guild/plans/my-plan/tasks.md")
+  })
+
+  it("falls back to .specs/ (legacy) when .guild/ is absent", () => {
     const planDir = join(testDir, ".specs", "features", "my-plan")
     mkdirSync(planDir, { recursive: true })
     writeFileSync(join(planDir, "tasks.md"), "# Plan", "utf-8")
@@ -109,6 +120,22 @@ describe("plan_created", () => {
     expect(result.complete).toBe(true)
     expect(result.artifacts).toBeDefined()
     expect(result.artifacts!.plan_path).toContain(".specs/features/my-plan/tasks.md")
+  })
+
+  it(".guild/ takes precedence over .specs/ when both exist", () => {
+    // Create .specs/ (legacy) first — it should NOT win
+    const legacyDir = join(testDir, ".specs", "features", "my-plan")
+    mkdirSync(legacyDir, { recursive: true })
+    writeFileSync(join(legacyDir, "tasks.md"), "# Legacy Plan", "utf-8")
+    // Create .guild/ (canonical) second — it SHOULD win
+    const guildDir = join(testDir, ".guild", "plans", "my-plan")
+    mkdirSync(guildDir, { recursive: true })
+    writeFileSync(join(guildDir, "tasks.md"), "# Guild Plan", "utf-8")
+    const ctx = makeContext({ config: { method: "plan_created", plan_name: "my-plan" } })
+    const result = checkStepCompletion("plan_created", ctx)
+    expect(result.complete).toBe(true)
+    expect(result.artifacts!.plan_path).toContain(".guild/plans/my-plan/tasks.md")
+    expect(result.artifacts!.plan_path).not.toContain(".specs/")
   })
 
   it("returns false when plan doesn't exist", () => {
@@ -126,8 +153,8 @@ describe("plan_created", () => {
 })
 
 describe("plan_complete", () => {
-  it("detects completed plan", () => {
-    const planDir = join(testDir, ".specs", "features", "my-plan")
+  it("detects completed plan in .guild/", () => {
+    const planDir = join(testDir, ".guild", "plans", "my-plan")
     mkdirSync(planDir, { recursive: true })
     writeFileSync(join(planDir, "tasks.md"), "- [x] Done 1\n- [x] Done 2\n", "utf-8")
     const ctx = makeContext({ config: { method: "plan_complete", plan_name: "my-plan" } })
@@ -136,8 +163,8 @@ describe("plan_complete", () => {
     expect(result.summary).toContain("2/2")
   })
 
-  it("returns false for incomplete plan", () => {
-    const planDir = join(testDir, ".specs", "features", "my-plan")
+  it("returns false for incomplete plan in .guild/", () => {
+    const planDir = join(testDir, ".guild", "plans", "my-plan")
     mkdirSync(planDir, { recursive: true })
     writeFileSync(join(planDir, "tasks.md"), "- [x] Done\n- [ ] Todo\n", "utf-8")
     const ctx = makeContext({ config: { method: "plan_complete", plan_name: "my-plan" } })

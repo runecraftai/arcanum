@@ -40,9 +40,11 @@ See [Configuration — Category specialist example](configuration.md#category-sp
 
 ### Wizard (Planner) — subagent
 
-The strategic planner. Wizard analyzes requirements, produces detailed implementation plans with research and dependency mapping, and writes the plan to `.guild/plans/`. Wizard is invoked by Bard (or by running the planning skill) when a plan is needed.
+The strategic planner. Wizard analyzes requirements, produces detailed implementation plans with research and dependency mapping, and writes the plan to `.guild/plans/<slug>/`. Wizard is invoked by Bard (or by running the planning skill) when a plan is needed.
 
 **When to use**: planning a new feature, decomposing a large task, or producing a research-backed approach to a complex problem.
+
+Plans follow the canonical layout: `spec.md` (what to build), `design.md` (architecture), `tasks.md` (atomic work items), `state.md` (status), and `notes.md` (scratchpad). Cross-cutting learnings go to `.guild/knowledge/` after the plan completes. See [`.guild/architecture.md`](.guild/architecture.md) for the full layout.
 
 ### Rogue (Scout) — subagent
 

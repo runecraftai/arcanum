@@ -25,7 +25,7 @@ For each unchecked \`- [ ]\` task in the plan:
    **Files**: [file paths from plan]
    **Acceptance**: [acceptance criteria from plan]
    **Context from completed tasks**: [any output or decisions from prior tasks that affect this one]
-    **Learnings**: [relevant entries from .specs/sessions/{plan-name}.md if the file exists]
+    **Learnings**: [relevant entries from .guild/runtime/sessions/{plan-name}.md if the file exists]
    \`\`\`
 3. **Verify** Shuttle's result — re-read modified files, check acceptance criteria are met
 4. **Mark complete** — use the Edit tool to change \`- [ ]\` to \`- [x]\` in the plan file
