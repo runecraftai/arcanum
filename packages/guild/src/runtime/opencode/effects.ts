@@ -9,6 +9,7 @@ export type RuntimeEffect =
   | PauseExecutionEffect
   | TrackAnalyticsEffect
   | AppendCommandOutputEffect
+  | SpawnFighterSessionEffect
 
 export interface SwitchAgentEffect {
   type: "switchAgent"
@@ -73,4 +74,18 @@ export interface TrackAnalyticsEffect {
 export interface AppendCommandOutputEffect {
   type: "appendCommandOutput"
   text: string
+}
+
+export interface SpawnFighterSessionEffect {
+  type: "spawnFighterSession"
+  /** The originating Bard session ID (UX entrypoint) */
+  sessionId: string
+  /** Path to the plan file */
+  planPath: string
+  /** Name of the plan */
+  planName: string
+  /** Progress snapshot */
+  progress: { total: number; completed: number }
+  /** Full context to seed the Fighter session */
+  contextInjection: string
 }

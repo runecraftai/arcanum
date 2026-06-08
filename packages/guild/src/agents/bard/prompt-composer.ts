@@ -81,7 +81,7 @@ export function buildDelegationSection(disabled: Set<string>, reviewModelVariant
   }
   if (isAgentEnabled("wizard", disabled)) {
     lines.push(
-      "- Use `call_guild_agent` to delegate to Wizard for planning, scoping, and work breakdown before substantial implementation begins",
+      "- Use `call_guild_agent` to delegate to Wizard for planning, scoping, and work breakdown. Wizard uses guild-scope, guild-spec, guild-plan, guild-handoff skills.",
     )
   }
   if (isAgentEnabled("fighter", disabled)) {
@@ -137,7 +137,7 @@ export function buildPlanWorkflowSection(disabled: Set<string>, reviewModelVaria
   const steps: string[] = []
 
   if (hasWizard) {
-    steps.push(`1. PLAN: Delegate to Wizard → produces a plan under \`.guild/plans/<slug>/\``)
+    steps.push(`1. PLAN: Delegate to Wizard → Wizard runs an interactive planning loop (guild-scope, guild-spec, guild-plan) → plan saved under \`.guild/plans/<slug>/\``)
   }
 
   if (hasCleric || hasPaladin) {
@@ -167,7 +167,7 @@ export function buildPlanWorkflowSection(disabled: Set<string>, reviewModelVaria
   }
 
   const resumeStepNum = steps.length + 1
-  steps.push(`${resumeStepNum}. RESUME: \`/start-work\` also resumes interrupted work`)
+  steps.push(`${resumeStepNum}. RESUME: \`/start-work\` also resumes interrupted work (guild-handoff tracks state)`)
 
   return `<PlanWorkflow>
 Plans are executed by Fighter, not Bard. Tell the user to run \`/start-work\` to begin.

@@ -60,11 +60,15 @@ Built at startup from the merged config. The registry contains:
 - Optional review-model variants for Cleric and Paladin derived from `review_models`.
 - Any `custom_agents` from the merged config.
 
+Wizard runs in `mode: all` — selectable as a primary and callable as a subagent. This enables the interactive planning loop where Bard delegates to Wizard, Wizard works directly with the user, and control returns to Bard when the plan is ready.
+
 The registry is exposed to OpenCode as the list of available agents. See [Agents](agents.md) for details.
 
 ### Command router
 
 Dispatches slash commands. Guild ships five: `/start-work`, `/run-workflow`, `/guild-health`, `/metrics`, `/token-report`. The router maps a command name to its handler.
+
+For `/start-work`, the router resolves the target plan, validates it, and attempts to spawn Fighter in a new session/window. Bard stays active in the original window (clean-window model). If spawning fails (not supported or returns an error), the router falls back to an in-place agent switch and surfaces a clear message to the user: *"Could not open Fighter in new window. Running in current session instead."* No confirmation is required — execution proceeds and the user is informed.
 
 If a command is not recognized, the message falls through to OpenCode as a normal chat turn.
 
@@ -86,6 +90,8 @@ Discovers skills from four sources (OpenCode API, project `.opencode/skills/`, u
 ### Plan store
 
 A thin wrapper around the `.guild/plans/` directory. Plans are markdown files with a small frontmatter that records status (draft, in-progress, complete) and the workflow or plan they belong to. The store supports create, read, update, and list.
+
+Wizard writes plans to `.guild/plans/<slug>/` using the skill-driven artifact-scope rule. Wizard loads `guild-scope`, `guild-spec`, `guild-plan`, `guild-handoff`, and `guild-verify` at startup — it does not carry long inline workflow rules. Small scopes get a single concise document, medium scopes get a full plan document, and large scopes get `spec.md` + `design.md` + `tasks.md` plus supporting artifacts as needed. Fighter reads from the same directory to drive execution.
 
 ### Analytics recorder
 

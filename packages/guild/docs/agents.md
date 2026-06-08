@@ -10,9 +10,9 @@ Every agent has a `mode` that controls how OpenCode uses it.
 
 | Mode | Behavior |
 | --- | --- |
-| `primary` | Selectable as the main session agent. Bard and Fighter are primaries. |
-| `subagent` | Callable only via delegation from a primary agent. Wizard, Rogue, Warlock, Cleric, and Paladin are subagents. |
-| `all` | Selectable as a primary **and** callable as a subagent. Ranger uses `all` because it can be both directly invoked and dispatched via the category system. |
+| `primary` | Selectable as the main session agent. Bard is a primary. |
+| `subagent` | Callable only via delegation from a primary agent. Rogue, Warlock, Cleric, and Paladin are subagents. |
+| `all` | Selectable as a primary **and** callable as a subagent. Wizard, Fighter, and Ranger use `all`. |
 
 You can override the mode via `agents.<name>.mode` in your config. See [Configuration](configuration.md).
 
@@ -20,15 +20,19 @@ You can override the mode via `agents.<name>.mode` in your config. See [Configur
 
 ### Bard (Guildmaster) — primary
 
-The central team lead. Bard plans tasks, coordinates work, and delegates to specialized agents. Bard is the default landing agent when a Guild session starts.
+The central team lead. Bard understands intent, makes routing decisions, and coordinates the plan → execute cycle. Bard is the default landing agent when a Guild session starts.
 
 **When to use directly**: high-level planning, system design, or any task that needs full multi-agent orchestration. Bard also accepts the `ultrawork` keyword for maximum effort, parallel agents, and deep execution.
 
-### Fighter (Execution Lead) — primary
+**Planning and execution split**: Bard decides whether to invoke Wizard (planning) or jump straight to Fighter (execution of an existing plan). When Wizard is delegated, Bard stays active in the original window — the planning loop is visible and interactive, and you can ask follow-up questions at any time. When planning is done, Wizard hands a summary back to Bard via `guild-handoff`, and Bard directs you to run `/start-work` for execution.
+
+### Fighter (Execution Lead) — `all`
 
 The execution orchestrator. Fighter drives todo-list execution of multi-step plans, focusing on sequential implementation without spawning broad subagent trees. Use Fighter after a plan exists and you want to execute it.
 
 **When to use directly**: implementation tasks that have a clear plan, or any multi-step coding work where you want the model to track progress through todos.
+
+**Session boundary**: When invoked via `/start-work`, Fighter runs in a separate session/window — the original Bard window stays clean and available. If spawning a new session is not supported, Fighter falls back to an in-place agent switch with a clear user-visible message: *"Could not open Fighter in new window. Running in current session instead."* No confirmation is required — execution proceeds and you are informed of the fallback. Fighter can also be invoked directly as a primary agent for ad-hoc execution of existing plans.
 
 ### Ranger (Specialist) — `all`
 
@@ -38,13 +42,37 @@ A domain-specific specialist worker. The base Ranger agent is a generic fallback
 
 See [Configuration — Category specialist example](configuration.md#category-specialist) and the [category](README.md) section below.
 
-### Wizard (Planner) — subagent
+### Wizard (Planner) — `all`
 
-The strategic planner. Wizard analyzes requirements, produces detailed implementation plans with research and dependency mapping, and writes the plan to `.guild/plans/<slug>/`. Wizard is invoked by Bard (or by running the planning skill) when a plan is needed.
+The interactive planning specialist. Wizard works directly with the user in a visible, iterative planning loop — asking clarifying questions, presenting explicit options, drafting the plan, and refining it based on feedback until the plan is solid enough to hand off. Wizard produces plans but never writes implementation code.
 
 **When to use**: planning a new feature, decomposing a large task, or producing a research-backed approach to a complex problem.
 
-Plans follow the canonical layout: `spec.md` (what to build), `design.md` (architecture), `tasks.md` (atomic work items), `state.md` (status), and `notes.md` (scratchpad). Cross-cutting learnings go to `.guild/knowledge/` after the plan completes. See [`.guild/architecture.md`](.guild/architecture.md) for the full layout.
+**Interactive planning loop**: Wizard uses the question tool when requirements are ambiguous. For every question, Wizard presents 2–4 explicit options with tradeoffs so you can make an informed choice. Wizard waits for the answer — it does not assume or pick defaults silently. Related questions are combined to reduce back-and-forth without sacrificing clarity.
+
+**Skill-driven artifact generation**: Wizard does not carry long inline workflow rules. Instead, it loads the following skills at startup to drive its behavior:
+
+| Skill | Role |
+| --- | --- |
+| `guild-scope` | Classifies the work (init, feature, quick task) and selects the appropriate artifact set |
+| `guild-spec` | Writes the feature specification document |
+| `guild-plan` | Breaks the spec into atomic, ordered tasks with verification criteria |
+| `guild-handoff` | Captures pause/resume context in `context/handoff.md` and `plans/<slug>/state.md` |
+| `guild-verify` | Proves that changes meet acceptance criteria with evidence |
+
+**Artifact scope rule**: Wizard always generates the artifact set appropriate to the task scope — never a single flat plan file:
+
+| Scope | Artifacts |
+| --- | --- |
+| **Small** (1–3 files, quick fix) | Single concise plan document with objectives, file list, and step-by-step TODOs |
+| **Medium** (4–10 files, feature work) | Full plan document with context, objectives, deliverables, TODOs, and verification |
+| **Large** (10+ files, complex feature or refactor) | Full plan document **plus** `design.md` (architecture) and `tasks.md` (checklist), plus supporting artifacts as needed (Mermaid diagrams, data models, API contracts) |
+
+Infer scope from request complexity, implied file count, and whether multiple layers (backend, frontend, infra) are involved. When in doubt, go one level richer — a medium task treated as small produces inadequate plans.
+
+**Handoff**: When the plan is ready, Wizard returns control to Bard with a concise summary via `guild-handoff`. Bard then directs you to run `/start-work` for execution.
+
+Plans are written to `.guild/plans/<slug>/`. See [`.guild/architecture.md`](.guild/architecture.md) for the full layout.
 
 ### Rogue (Scout) — subagent
 

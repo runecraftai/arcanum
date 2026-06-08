@@ -131,6 +131,59 @@ function makeMockReviewClient(args?: {
   return { client, state }
 }
 
+function createMockPluginClient() {
+  let sessionCounter = 0
+  const createCalls: Array<{ title: string; agent?: string }> = []
+  const promptAsyncCalls: Array<Record<string, unknown>> = []
+
+  const client = {
+    sessionCreateCalls: createCalls,
+    sessionPromptAsyncCalls: promptAsyncCalls,
+    session: {
+      create: async (input: Record<string, unknown>) => {
+        sessionCounter++
+        const sessionId = `fighter-session-${sessionCounter}`
+        createCalls.push({
+          title: String(input.body?.title ?? input.title ?? ""),
+          agent: input.body && typeof input.body === "object" ? (input.body as { agent?: string }).agent : undefined,
+        })
+        return { id: sessionId }
+      },
+      promptAsync: async (input: Record<string, unknown>) => {
+        promptAsyncCalls.push(input)
+        return { data: { ok: true } }
+      },
+      prompt: async (input: Record<string, unknown>) => {
+        return { data: { output: "Mock prompt response" } }
+      },
+      todo: async (input: Record<string, unknown>) => {
+        return { data: [] }
+      },
+    },
+  } as unknown as NonNullable<Parameters<typeof createPluginInterface>[0]["client"]>
+
+  // Add mock tracking
+  Object.defineProperty(client.session, "create", {
+    value: client.session.create,
+    writable: true,
+  })
+  ;(client.session.create as unknown as { mockClear: () => void }).mockClear = () => {
+    createCalls.length = 0
+  }
+  ;(client.session.create as unknown as { mockReturnValue: (v: unknown) => void }).mockReturnValue = () => {}
+
+  Object.defineProperty(client.session, "promptAsync", {
+    value: client.session.promptAsync,
+    writable: true,
+  })
+  ;(client.session.promptAsync as unknown as { mockClear: () => void }).mockClear = () => {
+    promptAsyncCalls.length = 0
+  }
+  ;(client.session.promptAsync as unknown as { mockReturnValue: (v: unknown) => void }).mockReturnValue = () => {}
+
+  return client
+}
+
 async function primeBuiltinCommand(
   iface: PluginInterface,
   input: { command: "start-work" | "run-workflow" | "metrics" | "token-report" | "guild-health"; sessionID: string; arguments?: string },
@@ -585,20 +638,22 @@ describe("createPluginInterface", () => {
     ).rejects.toThrow("Wizard agent can only write to .guild/ directory")
   })
 
-  it("chat.message injects start-work context into existing text part in-place", async () => {
+  it("chat.message spawns Fighter session (windowed mode) when client is available", async () => {
     const hooks = makeHooks({
       startWork: (_promptText: string, _sessionId: string) => ({
-        contextInjection: "## Starting Plan: my-plan\n**Progress**: 0/5 tasks completed",
+        contextInjection: "## Starting Plan: my-plan\n**Plan file**: `.guild/plans/my-plan.md`\n**Progress**: 0/5 tasks completed",
         switchAgent: "fighter",
       }),
     })
 
+    const mockClient = createMockPluginClient()
     const iface = createPluginInterface({
       pluginConfig: baseConfig,
       hooks,
       tools: emptyTools,
       configHandler: makeMockConfigHandler(),
       agents: {},
+      client: mockClient,
     })
 
     const parts = [
@@ -614,13 +669,36 @@ describe("createPluginInterface", () => {
 
     await iface["chat.message"]({ sessionID: "s1" }, output)
 
-    // Context should be appended to the SAME part object (in-place mutation)
-    expect(parts[0].text).toContain("## Starting Plan: my-plan")
-    expect(parts[0].text).toContain("---")
-    // Should NOT have created a new part
-    expect(parts.length).toBe(1)
-    // Agent should be switched to Tapestry display name
-    expect(message.agent).toBe("Tapestry (Execution Orchestrator)")
+    // Windowed mode: Bard session should NOT switch agents in-place
+    // Agent should remain as Loom (or Bard display name)
+    expect(message.agent).toBe("Loom (Main Orchestrator)")
+
+    // The output should contain the handoff notification
+    expect(parts[0].text).toContain("Fighter session spawned")
+    expect(parts[0].text).toContain("my-plan")
+    expect(parts[0].text).toContain("0/5 tasks")
+
+    // A new session should have been created for Fighter
+    // Check via sessionCreateCalls array (not jest mocks since we use bun:test)
+    expect(mockClient.sessionCreateCalls).toHaveLength(1)
+    expect(mockClient.sessionCreateCalls[0].title).toContain("Fighter:")
+    expect(mockClient.sessionCreateCalls[0].agent).toBe("Fighter (Execution Lead)")
+
+// The Fighter session should receive the plan context
+    expect(mockClient.sessionPromptAsyncCalls).toHaveLength(1)
+    expect(mockClient.sessionPromptAsyncCalls[0].path).toEqual(
+      expect.objectContaining({ id: expect.stringContaining("fighter-") }),
+    )
+    expect(mockClient.sessionPromptAsyncCalls[0].body).toEqual(
+      expect.objectContaining({
+        parts: expect.arrayContaining([
+          expect.objectContaining({
+            text: expect.stringContaining("Starting Plan: my-plan"),
+          }),
+        ]),
+        agent: "Fighter (Execution Lead)",
+      }),
+    )
   })
 
   it("chat.message does not modify parts when startWork returns null contextInjection", async () => {

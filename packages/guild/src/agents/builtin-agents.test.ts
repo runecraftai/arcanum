@@ -178,7 +178,7 @@ describe("createBuiltinAgents", () => {
     })
     const prompt = agents["wizard"]?.prompt ?? ""
     const skillIndex = prompt.indexOf("SKILL_CONTENT")
-    const baseIndex = prompt.indexOf("Wizard — strategic planner for Guild.")
+    const baseIndex = prompt.indexOf("Wizard — interactive planning specialist for Guild.")
     expect(skillIndex).toBeGreaterThanOrEqual(0)
     expect(baseIndex).toBeGreaterThan(skillIndex)
   })
@@ -191,7 +191,7 @@ describe("createBuiltinAgents", () => {
     const prompt = agents["wizard"]?.prompt ?? ""
     expect(prompt.startsWith("SKILL_CONTENT")).toBe(true)
     expect(prompt.endsWith("APPENDED")).toBe(true)
-    expect(prompt.indexOf("Wizard — strategic planner for Guild.")).toBeGreaterThan(0)
+    expect(prompt.indexOf("Wizard — interactive planning specialist for Guild.")).toBeGreaterThan(0)
   })
 
   it("empty skills array does not suppress builtin skill content", () => {
@@ -376,6 +376,98 @@ describe("AGENT_METADATA", () => {
     expect(prompt).not.toContain("Spindle")
     // rogue should still be present
     expect(prompt).toContain("rogue")
+  })
+
+  it("wizard prompt references guild-scope, guild-plan, guild-spec, guild-handoff skills", () => {
+    const agents = createBuiltinAgents({
+      resolveSkills: (names) => `SKILLS:${names.join(",")}`,
+    })
+    const prompt = agents["wizard"]?.prompt ?? ""
+    // Skill content is prepended; the base prompt should reference the skills by name
+    expect(prompt).toContain("guild-scope")
+    expect(prompt).toContain("guild-plan")
+    expect(prompt).toContain("guild-spec")
+    expect(prompt).toContain("guild-handoff")
+    // Inline artifact tier block removed — scope is delegated to guild-scope
+    expect(prompt).not.toContain("SMALL (1-3 files")
+    expect(prompt).not.toContain("MEDIUM (4-10 files")
+    expect(prompt).not.toContain("LARGE (10+ files")
+    // Inline question tool rules consolidated into a concise pointer
+    expect(prompt).not.toContain("Iteration cadence")
+    expect(prompt).toContain("**Question tool**")
+    expect(prompt).toContain("**Artifact scope**")
+    expect(prompt).toContain("**Plan structure**")
+    expect(prompt).toContain("**Pause/resume**")
+  })
+
+  it("wizard prompt delegates artifact scope to guild-skill, not inline tiers", () => {
+    const agents = createBuiltinAgents()
+    const prompt = agents["wizard"]?.prompt ?? ""
+    // The prompt should reference guild-scope for artifact decisions
+    expect(prompt).toContain("See guild-scope")
+    // Should NOT contain inline size-based tiers (the old approach)
+    expect(prompt).not.toContain("SMALL")
+    expect(prompt).not.toContain("MEDIUM")
+    expect(prompt).not.toContain("LARGE")
+    expect(prompt).not.toContain("1-3 files")
+    expect(prompt).not.toContain("4-10 files")
+    expect(prompt).not.toContain("10+ files")
+  })
+
+  it("wizard prompt delegates pause/resume to guild-handoff skill", () => {
+    const agents = createBuiltinAgents()
+    const prompt = agents["wizard"]?.prompt ?? ""
+    expect(prompt).toContain("See guild-handoff")
+    expect(prompt).toContain(".guild/plans/<slug>/state.md")
+  })
+
+  it("wizard prompt delegates plan structure to guild-plan skill", () => {
+    const agents = createBuiltinAgents()
+    const prompt = agents["wizard"]?.prompt ?? ""
+    expect(prompt).toContain("See guild-plan")
+    expect(prompt).toContain("**What**, **Files**, and **Acceptance**")
+  })
+
+  it("wizard agent is skill-driven: skills are bound and base prompt references them", () => {
+    const agents = createBuiltinAgents()
+    const wizard = agents["wizard"]
+    expect(wizard?.skills).toEqual(["guild-load", "guild-scope", "guild-spec", "guild-plan"])
+
+    // The base prompt references the skills it directly uses in its workflow
+    const prompt = wizard?.prompt ?? ""
+    // guild-scope for artifact scope decisions
+    expect(prompt).toContain("guild-scope")
+    // guild-plan for plan structure
+    expect(prompt).toContain("guild-plan")
+    // guild-handoff for pause/resume boundaries
+    expect(prompt).toContain("guild-handoff")
+    // guild-spec and guild-load are bound but referenced via workflow concepts, not raw names
+    expect(prompt).not.toContain("guild-spec")
+    expect(prompt).not.toContain("guild-load")
+  })
+
+  it("wizard prompt is under 60 lines (base prompt only, excluding skill content)", () => {
+    const agents = createBuiltinAgents()
+    const prompt = agents["wizard"]?.prompt ?? ""
+    // Extract base prompt (after skill content is prepended)
+    const roleStart = prompt.indexOf("<Role>")
+    const constraintsEnd = prompt.lastIndexOf("</Constraints>")
+    const styleEnd = prompt.lastIndexOf("</Style>")
+    const endMarker = styleEnd > 0 ? styleEnd : (constraintsEnd > 0 ? constraintsEnd + 14 : prompt.length)
+    const basePrompt = prompt.slice(roleStart, endMarker > 0 ? endMarker : prompt.length)
+    expect(basePrompt.split("\n").length).toBeLessThan(60)
+  })
+
+  it("wizard prompt is materially shorter than the original inline version", () => {
+    const agents = createBuiltinAgents()
+    const prompt = agents["wizard"]?.prompt ?? ""
+    // The old prompt had ~120 lines with a full markdown template block.
+    // The new prompt should be under 60 lines (prompt text only, excluding skill content).
+    // Extract just the base prompt text by finding the Role section.
+    const roleStart = prompt.indexOf("<Role>")
+    const styleEnd = prompt.lastIndexOf("</Style>")
+    const basePrompt = prompt.slice(roleStart, styleEnd > 0 ? styleEnd + 9 : prompt.length)
+    expect(basePrompt.split("\n").length).toBeLessThan(60)
   })
 
   it("cleric prompt strips wizard reference when wizard disabled", () => {

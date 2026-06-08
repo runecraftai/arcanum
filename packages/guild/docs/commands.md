@@ -6,25 +6,40 @@ This page documents each command's purpose, syntax, expected behavior, and the m
 
 ## `/start-work`
 
-**Purpose**: Start executing a Guild plan that was produced by the **Wizard** planner agent.
+**Purpose**: Hand off a Guild plan to **Fighter** for execution. Fighter runs in a separate session/window, keeping the original Bard window clean and available for follow-up questions or monitoring.
 
 **Syntax**: `/start-work [plan-name]`
 
 **Behavior**:
 
-- Switches the active agent to **Fighter**, the execution orchestrator.
-- Injects the plan context for the named plan (or the most recent plan when no name is given).
-- Hands control to Fighter to drive the plan's tasks through completion.
+1. **Detect and resolve.** The command router parses `/start-work` and resolves the target plan (explicit name, most recent incomplete, or prompts for selection among multiple incomplete plans).
+2. **Validate.** The plan is checked for structural validity before execution begins. Invalid plans return an error and ask the user to fix the file — execution is blocked.
+3. **Spawn Fighter in a new session.** Guild attempts to open Fighter in a new session/window and seeds it with the plan context (plan path, progress, sidebar todo instructions). Bard stays active in the original window.
+4. **Fallback.** If session spawning is unsupported or fails, Guild falls back to an in-place agent switch with a clear message: *"Could not open Fighter in new window. Running in current session instead."* No extra confirmation is required — the user is informed and execution proceeds.
+5. **Workflow guard.** If a workflow is currently active, `/start-work` presents options to pause the workflow, abort it, or cancel — it does not start execution while a workflow is running.
 
-Plans live at `.guild/plans/<slug>/` (canonical). Each plan contains `spec.md`, `tasks.md`, `state.md`, `design.md` (optional), and `notes.md`. Fighter reads the plan's `state.md` and `tasks.md` on start. See [`.guild/architecture.md`](.guild/architecture.md) for the full layout.
+**Bard stays active**: The original Bard session remains interactive throughout. You can ask follow-up questions, check status, or issue other commands while Fighter executes in its window. This is the clean-window model.
+
+**Fighter receives**: The plan file path, progress snapshot (`N/M tasks done`), working directory, and instructions to restore the sidebar todo state from the first unchecked task.
+
+**What Wizard generates** (artifact-scope rule): Plans live at `.guild/plans/<slug>/`. Wizard always generates the artifact set appropriate to the task scope using the `guild-scope` skill:
+
+| Scope | Artifacts |
+| --- | --- |
+| **Small** (1–3 files, quick fix) | Single concise plan document with objectives, file list, and step-by-step TODOs |
+| **Medium** (4–10 files, feature work) | Full plan document with context, objectives, deliverables, TODOs, and verification |
+| **Large** (10+ files, complex feature or refactor) | `spec.md` + `design.md` + `tasks.md`, plus supporting artifacts as needed (Mermaid diagrams, data models, API contracts) |
+
+Wizard produces these via `guild-spec` (writes the spec), `guild-plan` (breaks it into tasks), and `guild-handoff`/`guild-verify` for state management. See [Agents — Wizard](agents.md#wizard-planner) for the full skill-driven model.
 
 **Common failure modes**:
 
 - *No plan found* — run Wizard first to generate a plan in `.guild/plans/<slug>/`.
 - *Plan name typo* — `/start-work` accepts the exact slug; list plans in `.guild/plans/` if you are unsure.
 - *Wrong directory* — plans are scoped to the current OpenCode project directory.
-
-See [Workflows — overview](workflows/overview.md) for the relationship between plans and workflows.
+- *Spawn not supported* — falls back to in-session execution with a user-visible message.
+- *Plan validation failed* — the plan has structural issues; fix the file and retry.
+- *Active workflow conflict* — presented with options to pause, abort, or cancel.
 
 ## `/run-workflow`
 

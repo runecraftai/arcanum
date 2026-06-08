@@ -41,10 +41,27 @@ export class FakePluginClient {
   readonly promptAsyncCalls: FakePromptAsyncCall[] = []
   readonly todoRequests: Array<{ path: { id: string } }> = []
   readonly executedToolCalls: FakeExecutedToolCall[] = []
+  readonly sessionCreateCalls: Array<{ title: string; agent?: string }> = []
 
   private readonly todosBySession = new Map<string, FakeTodoItem[]>()
+  private sessionCounter = 0
+
+  /** When set, session.create will throw this error */
+  sessionCreateError: Error | null = null
 
   readonly session = {
+    create: async (opts: { title?: string; body?: { title?: string; agent?: string } }) => {
+      if (this.sessionCreateError) {
+        throw this.sessionCreateError
+      }
+      this.sessionCreateCalls.push({
+        title: opts.body?.title ?? opts.title ?? "",
+        agent: opts.body?.agent,
+      })
+      // Generate a unique session ID for testing
+      this.sessionCounter++
+      return { id: `fake-session-${this.sessionCounter}` }
+    },
     promptAsync: async (opts: FakePromptAsyncCall) => {
       this.promptAsyncCalls.push({
         path: { id: opts.path.id },
@@ -100,5 +117,6 @@ export class FakePluginClient {
     this.promptAsyncCalls.length = 0
     this.todoRequests.length = 0
     this.executedToolCalls.length = 0
+    this.sessionCreateCalls.length = 0
   }
 }
