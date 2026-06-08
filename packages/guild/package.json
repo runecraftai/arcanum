@@ -21,7 +21,8 @@
   },
   "files": [
     "dist/",
-    "skills/"
+    "skills/",
+    "schema/"
   ],
   "scripts": {
     "build": "bun run script/build.ts && tsc --emitDeclarationOnly",

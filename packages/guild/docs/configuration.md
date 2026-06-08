@@ -84,18 +84,15 @@ bun run schema:config:check
 
 ### Editor integration
 
-The published npm package currently ships `dist/` only, so the schema file is not in the published artifact. To enable IntelliSense in your editor, do one of the following:
-
-- **Vendor the schema** into your own repository (recommended for monorepos).
-- **Pin to a tagged URL** in your `guild-opencode.jsonc` `$schema` field, for example:
+The published npm package includes `schema/guild-config.schema.json`, so you can point `$schema` at the published file directly. Use the version you have installed:
 
   ```jsonc
   {
-    "$schema": "https://raw.githubusercontent.com/anomalyco/arcanum/<release-tag>/packages/guild/schema/guild-config.schema.json"
+    "$schema": "https://unpkg.com/@runecraft/guild@<version>/schema/guild-config.schema.json"
   }
   ```
 
-Replace `<release-tag>` with the Guild release you are targeting. Pinning a tag keeps the schema stable across upgrades.
+You can also use `@latest`, but a pinned version keeps editor validation aligned with the installed release.
 
 ## Examples
 

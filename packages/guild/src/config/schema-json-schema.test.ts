@@ -6,6 +6,7 @@ import { getGuildVersion } from "../shared/version"
 import {
   generateGuildConfigJsonSchema,
   getGuildConfigJsonSchemaArtifactPath,
+  getGuildConfigJsonSchemaId,
   SAFE_RELATIVE_PATH_DESCRIPTION,
   SAFE_RELATIVE_PATH_PATTERN,
   stringifyGuildConfigJsonSchema,
@@ -14,9 +15,6 @@ import {
   GUILD_CONFIG_JSON_SCHEMA_ROOT_NAME,
   GUILD_CONFIG_JSON_SCHEMA_TITLE,
 } from "./json-schema"
-
-const EXPECTED_PUBLIC_SCHEMA_ID =
-  "https://raw.githubusercontent.com/anomalyco/arcanum/main/packages/guild/schema/guild-config.schema.json"
 
 type JsonSchemaObject = Record<string, unknown>
 
@@ -46,7 +44,7 @@ describe("generateGuildConfigJsonSchema", () => {
     const schema = getGeneratedSchema()
 
     expect(schema.$schema).toBe(GUILD_CONFIG_JSON_SCHEMA_DRAFT)
-    expect(schema.$id).toBe(EXPECTED_PUBLIC_SCHEMA_ID)
+    expect(schema.$id).toBe(getGuildConfigJsonSchemaId(getGuildVersion()))
     expect(schema.title).toBe(GUILD_CONFIG_JSON_SCHEMA_TITLE)
     expect(schema.description).toBe(GUILD_CONFIG_JSON_SCHEMA_DESCRIPTION)
     expect(schema["x-guild-version"]).toBe(getGuildVersion())

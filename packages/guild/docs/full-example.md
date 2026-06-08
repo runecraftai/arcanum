@@ -10,12 +10,12 @@ This page shows a complete `.opencode/guild-opencode.jsonc` you can copy, paste,
 // .opencode/guild-opencode.jsonc
 // ──────────────────────────────────────────────────────────────────────────────
 // Guild — full configuration reference
-// Schema: https://raw.githubusercontent.com/anomalyco/arcanum/<release-tag>/packages/guild/schema/guild-config.schema.json
+// Schema: https://unpkg.com/@runecraft/guild@<version>/schema/guild-config.schema.json
 // ──────────────────────────────────────────────────────────────────────────────
 {
   // IDE / schema hint — keep this so your editor can offer autocomplete.
-  // Replace <release-tag> with the version you have installed, e.g. v0.10.1.
-  "$schema": "https://raw.githubusercontent.com/anomalyco/arcanum/v0.10.1/packages/guild/schema/guild-config.schema.json",
+  // Replace <version> with the Guild version you are targeting.
+  "$schema": "https://unpkg.com/@runecraft/guild@<version>/schema/guild-config.schema.json",
 
   // ── Agents ─────────────────────────────────────────────────────────────────
   // Override any built-in agent's model, prompt, tools, skills, or sampling

@@ -43,7 +43,7 @@ Restart OpenCode — npm plugins are auto-installed and loaded at startup. No `b
 - **Project config**: `.opencode/guild-opencode.jsonc` (or `.json`)
 - **User config**: `~/.config/opencode/guild-opencode.jsonc` (or `.json`)
 - **State directory**: `.guild/` (plans, runtime, analytics)
-- **Schema artifact**: `schema/guild-config.schema.json` in this repository
+- **Schema artifact**: `schema/guild-config.schema.json` in this repository and in the published npm package
 
 See [docs/configuration.md](docs/configuration.md) for the full reference.
 
