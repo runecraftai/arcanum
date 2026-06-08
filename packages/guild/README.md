@@ -9,6 +9,9 @@ Guild is a multi-agent orchestration plugin for OpenCode. It provides a cohesive
 ## Highlights
 
 - **8 specialized agents** designed for specific roles in the development lifecycle.
+- **Interactive planning** — Wizard works directly with you in a visible loop, asking clarifying questions and presenting explicit options before producing a plan. Wizard uses a skill-driven model: `guild-scope`, `guild-spec`, `guild-plan`, `guild-handoff`, and `guild-verify` handle artifact generation, task decomposition, and state management.
+- **Clean-window execution** — `/start-work` launches Fighter in a separate session/window; your Bard session stays clean and available. Falls back gracefully if spawning is unsupported.
+- **Artifact-scope rule** — plans are as detailed as the task warrants: concise single-doc for small fixes, full spec+design+tasks for complex features.
 - **Category-based task dispatch** to route work to domain-optimized models and configurations.
 - **Skill system** for injecting domain-specific expertise that modifies agent behavior via prompt orchestration.
 - **Background agent management** for parallel asynchronous sub-agent execution with concurrency control.
@@ -49,7 +52,7 @@ See [docs/configuration.md](docs/configuration.md) for the full reference.
 
 ## Built-in commands
 
-- `/start-work` — execute a plan created by Wizard
+- `/start-work` — hand off a plan to Fighter in a new session/window (Bard stays clean; falls back to in-session execution if spawning is unsupported)
 - `/run-workflow` — run a multi-step workflow
 - `/guild-health` — show config health and validation issues
 - `/metrics` — analytics and plan metrics (opt-in)

@@ -79,8 +79,20 @@ export const AGENT_METADATA: Record<GuildAgentName, AgentPromptMetadata> = {
     category: "advisor",
     cost: "EXPENSIVE",
     triggers: [
-      { domain: "Planning", trigger: "Detailed task breakdown and step-by-step planning" },
+      { domain: "Planning", trigger: "Detailed task breakdown and step-by-step planning via interactive planning loop" },
       { domain: "Strategy", trigger: "Approach selection for complex technical problems" },
+      { domain: "Scoping", trigger: "Defining file scope, effort estimation, and task decomposition" },
+    ],
+    useWhen: [
+      "User asks to plan a feature or refactor",
+      "Multi-file changes requiring task breakdown",
+      "User wants to understand scope before committing to implementation",
+      "Complex work with multiple interdependent steps",
+    ],
+    avoidWhen: [
+      "Quick single-file fixes",
+      "Simple questions answerable without planning",
+      "User explicitly says 'just do it'",
     ],
   },
   rogue: {

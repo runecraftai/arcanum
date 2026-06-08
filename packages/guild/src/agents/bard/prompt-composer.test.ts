@@ -103,9 +103,10 @@ describe("buildDelegationSection", () => {
     expect(section).toContain("Paladin")
   })
 
-  it("clarifies Wizard versus Shuttle routing boundary", () => {
+  it("clarifies Wizard versus Ranger routing boundary", () => {
     const section = buildDelegationSection(new Set())
-    expect(section).toContain("planning, scoping, and work breakdown")
+    expect(section).toContain("delegate to Wizard for planning, scoping, and work breakdown")
+    expect(section).toContain("guild-scope, guild-spec, guild-plan, guild-handoff")
     expect(section).toContain("domain expertise rather than planning or scoping")
   })
 
@@ -605,5 +606,121 @@ describe("composeBardPrompt with categories", () => {
     const defaultPrompt = composeBardPrompt()
     const withNoPatterned = composeBardPrompt({ categories: { frontend: {} } })
     expect(withNoPatterned).not.toBe(defaultPrompt)
+  })
+})
+
+describe("Bard prompt skill references", () => {
+  // Bard's skills are bound via builtin-agents.ts (see builtin-agents.test.ts).
+  // The Bard prompt itself references skill-based concepts via section names and workflow guidance,
+  // not raw skill names. The actual skill names appear in the prepended skill content.
+  // Here we test the concepts that the skill references govern in the prompt text.
+
+  it("PlanWorkflow section references the planning loop that guild-scope/guild-plan govern", () => {
+    const section = buildPlanWorkflowSection(new Set())
+    // Wizard's planning loop — this is what guild-scope/guild-plan guide
+    expect(section).toContain("Wizard runs an interactive planning loop")
+    expect(section).toContain("guild-scope, guild-spec, guild-plan")
+    expect(section).toContain("plan saved under `.guild/plans/<slug>/`")
+  })
+
+  it("PlanWorkflow section references resume via /start-work that guild-handoff governs", () => {
+    const section = buildPlanWorkflowSection(new Set())
+    expect(section).toContain("/start-work")
+    expect(section).toContain("RESUME:")
+    expect(section).toContain("guild-handoff tracks state")
+  })
+
+  it("Discipline section references .guild/plans/ that guild-plan and guild-spec produce", () => {
+    const section = buildDisciplineSection()
+    expect(section).toContain(".guild/plans/<slug>/")
+    expect(section).toContain("/start-work")
+    expect(section).toContain("Fighter")
+  })
+
+  it("Delegation section routes to Wizard (who uses guild-scope, guild-spec, guild-plan) and Fighter (who uses guild-verify)", () => {
+    const section = buildDelegationSection(new Set())
+    // Wizard: planning, scoping, work breakdown
+    expect(section).toContain("delegate to Wizard for planning, scoping, and work breakdown")
+    // Fighter: /start-work for execution
+    expect(section).toContain("/start-work")
+    expect(section).toContain("Fighter")
+  })
+
+  it("Bard prompt references skill names for Wizard's planning workflow", () => {
+    // Bard references skill names to point to Wizard skill behavior without restating full workflow.
+    // Skill content is prepended when the agent is created with resolveSkills (tested in builtin-agents.test.ts).
+    const prompt = composeBardPrompt()
+    expect(prompt).toContain("guild-scope")
+    expect(prompt).toContain("guild-spec")
+    expect(prompt).toContain("guild-plan")
+    expect(prompt).toContain("guild-handoff")
+  })
+})
+
+describe("Bard planning phase returns control to Bard", () => {
+  it("PlanWorkflow section routes plan execution to Fighter, not Bard", () => {
+    const section = buildPlanWorkflowSection(new Set())
+    // Bard should tell user to run /start-work, not execute the plan itself
+    expect(section).toContain("Plans are executed by Fighter")
+    expect(section).toContain("/start-work")
+    expect(section).not.toContain("Bard executes")
+    expect(section).not.toContain("Bard handles execution")
+  })
+
+  it("PlanWorkflow includes Wizard in planning phase, then hands off to Fighter", () => {
+    const section = buildPlanWorkflowSection(new Set())
+    // Wizard does the planning, Fighter does the execution
+    expect(section).toContain("Wizard")
+    expect(section).toContain("Fighter")
+    // The workflow should show: Wizard plans → Fighter executes
+    expect(section).toContain("PLAN:")
+    expect(section).toContain("EXECUTE:")
+  })
+
+  it("PlanWorkflow tells user to run /start-work to begin plan execution", () => {
+    const section = buildPlanWorkflowSection(new Set())
+    expect(section).toContain("run `/start-work`")
+    expect(section).toContain("Fighter handles execution")
+  })
+
+  it("Discipline section notes plans live under .guild/plans/ and execution goes through /start-work", () => {
+    const section = buildDisciplineSection()
+    expect(section).toContain(".guild/plans")
+    expect(section).toContain("/start-work")
+    expect(section).toContain("Fighter")
+  })
+
+  it("Delegation section routes Fighter execution to /start-work", () => {
+    const section = buildDelegationSection(new Set())
+    expect(section).toContain("/start-work")
+    expect(section).toContain("Fighter")
+    // Bard delegates via /start-work, not in-place — handoff is explicit
+    expect(section).toContain("hand off to Fighter")
+    expect(section).toContain("todo-list driven execution")
+  })
+})
+
+describe("Bard session boundary semantics", () => {
+  it("Delegation section clarifies Fighter executes in a separate session", () => {
+    const section = buildDelegationSection(new Set())
+    // Should not say Fighter works in the current session
+    expect(section).not.toContain("current session")
+    expect(section).not.toContain("same session")
+  })
+
+  it("PlanWorkflow shows clear handoff boundary between Wizard planning and Fighter execution", () => {
+    const section = buildPlanWorkflowSection(new Set())
+    // Clear separation: plan via Wizard → execute via /start-work → Fighter
+    expect(section).toContain("Wizard runs an interactive planning loop")
+    expect(section).toContain("/start-work")
+    expect(section).toContain("Fighter handles execution")
+  })
+
+  it("no in-place agent switch guidance in Bard prompt — handoff is explicit", () => {
+    const prompt = composeBardPrompt()
+    // Bard should not be told to "switch to Fighter" — it should hand off via /start-work
+    expect(prompt).not.toContain("switch to Fighter")
+    expect(prompt).not.toContain("switchAgent")
+    expect(prompt).toContain("/start-work")
   })
 })

@@ -5,6 +5,6 @@ import { WIZARD_DEFAULTS } from "./default"
 export const createWizardAgent: AgentFactory = (model: string): AgentConfig => ({
   ...WIZARD_DEFAULTS,
   model,
-  mode: "subagent",
+  mode: "all",
 })
-createWizardAgent.mode = "subagent"
+createWizardAgent.mode = "all"

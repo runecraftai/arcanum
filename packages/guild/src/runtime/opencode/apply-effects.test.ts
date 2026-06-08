@@ -294,6 +294,245 @@ describe("applyRuntimeEffects", () => {
   })
 })
 
+describe("spawnFighterSession effect", () => {
+  it("creates a new Fighter session and seeds it with plan context", async () => {
+    const createCalls: Array<{ title: string; agent?: string }> = []
+    const promptAsyncCalls: Array<{ sessionId: string; text: string; agent?: string }> = []
+    let sessionCounter = 0
+
+    const client = {
+      session: {
+        create: mock(async (opts: { body?: { title?: string; agent?: string } }) => {
+          createCalls.push({
+            title: opts?.body?.title ?? "",
+            agent: opts?.body?.agent,
+          })
+          sessionCounter++
+          return { id: `fighter-session-${sessionCounter}` }
+        }),
+        promptAsync: mock(async (input: { path: { id: string }; body: { parts: Array<{ type: string; text?: string }>; agent?: string } }) => {
+          const text = input.body.parts[0]?.text ?? ""
+          promptAsyncCalls.push({ sessionId: input.path.id, text, agent: input.body.agent })
+        }),
+      },
+    }
+
+    const output = {
+      message: { agent: "Bard (Guildmaster)" },
+      parts: [{ type: "text", text: "Starting work..." }],
+    }
+
+    await applyRuntimeEffects({
+      effects: [{
+        type: "spawnFighterSession",
+        sessionId: "bard-session-1",
+        planPath: ".guild/plans/my-feature/plan.md",
+        planName: "my-feature",
+        progress: { total: 5, completed: 0 },
+        contextInjection: "## Starting Plan: my-feature\n**Progress**: 0/5 tasks",
+      }],
+      output,
+      client: client as never,
+    })
+
+    // Session should be created
+    expect(client.session.create).toHaveBeenCalledTimes(1)
+    expect(createCalls[0].title).toContain("Fighter:")
+    expect(createCalls[0].title).toContain("my-feature")
+
+    // Fighter session should be seeded with context
+    expect(client.session.promptAsync).toHaveBeenCalledTimes(1)
+    expect(promptAsyncCalls[0].sessionId).toMatch(/fighter-session-/)
+    expect(promptAsyncCalls[0].text).toContain("Starting Plan: my-feature")
+    expect(promptAsyncCalls[0].agent).toBe("Fighter (Execution Lead)")
+
+    // Handoff notification should be injected into the Bard session output
+    expect(output.parts[0].text).toContain("Fighter session spawned")
+    expect(output.parts[0].text).toContain("my-feature")
+    expect(output.parts[0].text).toContain("0/5 tasks")
+
+    // Bard agent should remain unchanged (no in-place switch)
+    expect(output.message.agent).toBe("Bard (Guildmaster)")
+  })
+
+  it("falls back to in-place agent switch when session creation fails", async () => {
+    const client = {
+      session: {
+        create: mock(async () => {
+          throw new Error("Session creation failed: quota exceeded")
+        }),
+        promptAsync: mock(async () => {}),
+      },
+    }
+
+    const output = {
+      message: { agent: "Bard (Guildmaster)" },
+      parts: [{ type: "text", text: "Starting work..." }],
+    }
+
+    await applyRuntimeEffects({
+      effects: [{
+        type: "spawnFighterSession",
+        sessionId: "bard-session-2",
+        planPath: ".guild/plans/fail-plan/plan.md",
+        planName: "fail-plan",
+        progress: { total: 3, completed: 0 },
+        contextInjection: "## Starting Plan: fail-plan\n**Progress**: 0/3 tasks",
+      }],
+      output,
+      client: client as never,
+    })
+
+    // No new session should be created (creation failed)
+    expect(client.session.create).toHaveBeenCalledTimes(1)
+    expect(client.session.promptAsync).toHaveBeenCalledTimes(0)
+
+    // Agent should switch to Fighter in-place (fallback)
+    expect(output.message.agent).toBe("Fighter (Execution Lead)")
+
+    // Context injection should be appended to the current session
+    expect(output.parts[0].text).toContain("Starting Plan: fail-plan")
+
+    // Fallback error notice should be present
+    expect(output.parts[0].text).toContain("Session spawn failed")
+    expect(output.parts[0].text).toContain("quota exceeded")
+  })
+
+  it("appends handoff notification as a new text part when no existing text part", async () => {
+    const client = {
+      session: {
+        create: mock(async () => ({ id: "fighter-sess-3" })),
+        promptAsync: mock(async () => {}),
+      },
+    }
+
+    const output = {
+      message: { agent: "Bard (Guildmaster)" },
+      parts: [{ type: "image", text: undefined }],
+    }
+
+    await applyRuntimeEffects({
+      effects: [{
+        type: "spawnFighterSession",
+        sessionId: "bard-session-3",
+        planPath: ".guild/plans/image-test/plan.md",
+        planName: "image-test",
+        progress: { total: 2, completed: 0 },
+        contextInjection: "## Starting Plan: image-test",
+      }],
+      output,
+      client: client as never,
+    })
+
+    // A new text part should be appended for the handoff notification
+    expect(output.parts).toHaveLength(2)
+    expect(output.parts[1].type).toBe("text")
+    expect(output.parts[1].text).toContain("Fighter session spawned")
+  })
+
+  it("records injected prompt metadata for session spawn tracking", async () => {
+    const client = {
+      session: {
+        create: mock(async () => ({ id: "fighter-sess-4" })),
+        promptAsync: mock(async () => {}),
+      },
+    }
+
+    const recorded: Array<{ sessionId: string; text: string }> = []
+
+    await applyRuntimeEffects({
+      effects: [{
+        type: "spawnFighterSession",
+        sessionId: "bard-session-4",
+        planPath: ".guild/plans/track-test/plan.md",
+        planName: "track-test",
+        progress: { total: 1, completed: 0 },
+        contextInjection: "## Starting Plan: track-test",
+      }],
+      output: { parts: [{ type: "text", text: "" }] },
+      client: client as never,
+      recordInjectedPrompt: (sessionId, text) => recorded.push({ sessionId, text }),
+    })
+
+    // The spawn metadata should be recorded on the originating session
+    expect(recorded).toHaveLength(1)
+    expect(recorded[0].sessionId).toBe("bard-session-4")
+    expect(recorded[0].text).toContain("[spawn:Fighter:")
+    expect(recorded[0].text).toContain("track-test")
+  })
+
+  it("handles non-Error exceptions gracefully during session creation", async () => {
+    const client = {
+      session: {
+        create: mock(async () => {
+          throw "string error"
+        }),
+        promptAsync: mock(async () => {}),
+      },
+    }
+
+    const output = {
+      message: { agent: "Bard (Guildmaster)" },
+      parts: [{ type: "text", text: "test" }],
+    }
+
+    // Should not throw — graceful degradation to fallback
+    await expect(
+      applyRuntimeEffects({
+        effects: [{
+          type: "spawnFighterSession",
+          sessionId: "bard-session-5",
+          planPath: ".guild/plans/string-error/plan.md",
+          planName: "string-error",
+          progress: { total: 1, completed: 0 },
+          contextInjection: "## Starting Plan: string-error",
+        }],
+        output,
+        client: client as never,
+      }),
+    ).resolves.toBeUndefined()
+
+    // Fallback should still apply
+    expect(output.message.agent).toBe("Fighter (Execution Lead)")
+    expect(output.parts[0].text).toContain("Session spawn failed")
+  })
+
+  it("old same-window mutation is gone: agent stays as Bard when session creation succeeds", async () => {
+    const client = {
+      session: {
+        create: mock(async () => ({ id: "fighter-sess-old-mutation" })),
+        promptAsync: mock(async () => {}),
+      },
+    }
+
+    const output = {
+      message: { agent: "Bard (Guildmaster)" },
+      parts: [{ type: "text", text: "test" }],
+    }
+
+    await applyRuntimeEffects({
+      effects: [{
+        type: "spawnFighterSession",
+        sessionId: "bard-session-old",
+        planPath: ".guild/plans/old-mutation/plan.md",
+        planName: "old-mutation",
+        progress: { total: 3, completed: 0 },
+        contextInjection: "## Starting Plan: old-mutation",
+      }],
+      output,
+      client: client as never,
+    })
+
+    // The old behavior would have switched Bard → Fighter in the same session.
+    // The new behavior: agent stays as Bard in originating session.
+    expect(output.message.agent).toBe("Bard (Guildmaster)")
+    // Fighter is in a new session, not in-place
+    expect(client.session.promptAsync).toHaveBeenCalledTimes(1)
+    const calledSessionId = (client.session.promptAsync.mock.calls[0] as [{ path: { id: string } }])[0].path.id
+    expect(calledSessionId).not.toBe("bard-session-old")
+  })
+})
+
 describe("injectPromptAsync failover replay", () => {
   beforeEach(() => {
     clearFailoverGuard()
