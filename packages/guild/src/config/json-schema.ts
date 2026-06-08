@@ -7,8 +7,8 @@ import { GuildConfigSchema } from "./schema"
 export type JsonSchemaObject = Record<string, unknown>
 
 export const GUILD_CONFIG_JSON_SCHEMA_RELATIVE_PATH = "schema/guild-config.schema.json"
-export const GUILD_CONFIG_JSON_SCHEMA_ID =
-  "https://raw.githubusercontent.com/anomalyco/arcanum/main/packages/guild/schema/guild-config.schema.json"
+export const getGuildConfigJsonSchemaId = (version: string) =>
+  `https://unpkg.com/@runecraft/guild@${version}/schema/guild-config.schema.json`
 export const GUILD_CONFIG_JSON_SCHEMA_DRAFT = "https://json-schema.org/draft/2020-12/schema"
 export const GUILD_CONFIG_JSON_SCHEMA_TITLE = "Guild Config"
 export const GUILD_CONFIG_JSON_SCHEMA_DESCRIPTION =
@@ -26,13 +26,13 @@ export const SAFE_RELATIVE_PATH_DESCRIPTION =
 
 /**
  * Root-level metadata contract shared by the config schema generator, tests,
- * and docs. The artifact stays at one stable repository path; version
- * traceability is embedded as metadata instead of versioning filenames.
+ * and docs. The public schema URL is versioned so editors can reference the
+ * published npm package without copying the file.
  */
 export function getGuildConfigJsonSchemaMetadata(version: string) {
   return {
     $schema: GUILD_CONFIG_JSON_SCHEMA_DRAFT,
-    $id: GUILD_CONFIG_JSON_SCHEMA_ID,
+    $id: getGuildConfigJsonSchemaId(version),
     title: GUILD_CONFIG_JSON_SCHEMA_TITLE,
     description: GUILD_CONFIG_JSON_SCHEMA_DESCRIPTION,
     [GUILD_CONFIG_JSON_SCHEMA_VERSION_KEY]: version,

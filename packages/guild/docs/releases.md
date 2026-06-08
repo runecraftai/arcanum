@@ -87,13 +87,13 @@ bun run schema:config:check
 
 The check command exits non-zero if the committed schema is out of date. CI runs the check on every PR.
 
-The published schema is referenced from documentation as `<release-tag>`:
+The published schema is available through npm/CDN at:
 
 ```text
-https://raw.githubusercontent.com/anomalyco/arcanum/<release-tag>/packages/guild/schema/guild-config.schema.json
+https://unpkg.com/@runecraft/guild@<version>/schema/guild-config.schema.json
 ```
 
-A new release does not require a manual edit to the docs — the tag is updated automatically on the next push to `main`.
+The docs use a versioned URL so the editor validates against the exact release the user installed.
 
 ## Rolling out
 

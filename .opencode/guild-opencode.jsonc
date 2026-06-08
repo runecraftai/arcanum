@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/anomalyco/arcanum/main/packages/guild/schema/guild-config.schema.json",
+  "$schema": "../packages/guild/schema/guild-config.schema.json",
 
   "agents": {
     // Coordenacao principal — melhor retorno por chamada OpenAI
