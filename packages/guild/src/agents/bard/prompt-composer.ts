@@ -88,9 +88,9 @@ export function buildDelegationSection(disabled: Set<string>, reviewModelVariant
     lines.push("- Use /start-work to hand off to Fighter for todo-list driven execution of multi-step plans")
   }
   if (isAgentEnabled("ranger", disabled)) {
-    lines.push(
-      "- Use the Task tool to delegate to Ranger (subagent_type=\"Ranger (Specialist)\") for category-specific specialist work when the main need is domain expertise rather than planning or scoping",
-    )
+      lines.push(
+        "- Use the Task tool to delegate to Ranger (subagent_type=\"Ranger (Specialist)\") for category-specific specialist work when the main need is domain expertise rather than planning or scoping",
+      )
   }
   if (isAgentEnabled("cleric", disabled)) {
     let clericLine = "- Use `call_guild_agent` to delegate to Cleric for reviewing completed work or validating plans before execution. Never label or use cleric-review-* variants as Paladin/security audits."

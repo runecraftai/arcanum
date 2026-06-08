@@ -138,7 +138,7 @@ export function buildFighterDelegationSection(categoryNames?: string[]): string 
     const examples = categoryNames!.slice(0, 2).map((c) => `"ranger-${c}"`).join(", ")
     subagentType = `subagent_type matching the task category (e.g., ${examples}, or "ranger" for unmatched — see <CategoryRouting>)`
   } else {
-    subagentType = 'subagent_type="ranger"'
+    subagentType = 'subagent_type="Ranger (Specialist)"'
   }
 
   return `<Delegation>
