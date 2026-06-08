@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.16.1
+
+### Patch Changes
+
+- fix(guild): publish schema for editor use
+
 ## 0.16.0
 
 ### Minor Changes
