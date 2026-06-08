@@ -86,42 +86,28 @@ function buildPackageMap(): Map<string, string> {
   return packageMap;
 }
 
-// Find last release tag
-function findLastReleaseRef(): string {
+// Find last release boundary
+export function findLastReleaseRef(): string {
   try {
-    // Look for tags matching @runecraft/*@*
     let result = spawnSync(
-      ["git", "tag", "--list", "@runecraft/*@*", "--sort=-version:refname"],
+      ["git", "describe", "--tags", "--abbrev=0", "--match", "@runecraft/*@*"],
       { cwd: process.cwd() }
     );
 
     if (result.success) {
-      const tags = result.stdout.toString().trim().split("\n");
-      if (tags.length > 0 && tags[0]) {
-        return tags[0];
-      }
-    }
-
-    // Fallback: look for v* tags (e.g. v0.1.0-guild)
-    result = spawnSync(
-      ["git", "tag", "--list", "v*", "--sort=-version:refname"],
-      { cwd: process.cwd() }
-    );
-
-    if (result.success) {
-      const tags = result.stdout.toString().trim().split("\n");
-      if (tags.length > 0 && tags[0]) {
-        return tags[0];
+      const tag = result.stdout.toString().trim();
+      if (tag) {
+        return tag;
       }
     }
   } catch (error) {
     // Ignore errors
   }
 
-  // Fallback: look for the most recent merge of a changeset-release PR
+  // Fallback: use the most recent version commit
   try {
     const result = spawnSync(
-      ["git", "log", "--merges", "--grep=changeset-release/main", "--max-count=1", "--format=%H"],
+      ["git", "log", "-n", "1", "--format=%H", "--grep=^chore: version packages"],
       { cwd: process.cwd() }
     );
     if (result.success) {
@@ -421,4 +407,6 @@ function main() {
   process.exit(0);
 }
 
-main();
+if (import.meta.main) {
+  main();
+}
