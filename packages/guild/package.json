@@ -4,10 +4,10 @@
   "description": "Guild — multi-agent orchestration plugin for OpenCode",
   "author": "Arcanum",
   "license": "MIT",
-  "homepage": "https://github.com/anomalyco/arcanum#readme",
+  "homepage": "https://github.com/runecraftai/arcanum#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anomalyco/arcanum.git"
+    "url": "https://github.com/runecraftai/arcanum.git"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

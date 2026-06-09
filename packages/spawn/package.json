@@ -29,12 +29,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anomalyco/arcanum.git"
+    "url": "https://github.com/runecraftai/arcanum.git"
   },
   "bugs": {
-    "url": "https://github.com/anomalyco/arcanum/issues"
+    "url": "https://github.com/runecraftai/arcanum/issues"
   },
-  "homepage": "https://github.com/anomalyco/arcanum#readme",
+  "homepage": "https://github.com/runecraftai/arcanum#readme",
   "publishConfig": {
     "access": "public"
   },
