@@ -5,6 +5,8 @@ export const FINALIZE_TODOS_MARKER = "<!-- guild:finalize-todos -->"
 
 export type BuiltinCommandEnvelopeName =
   | "start-work"
+  | "start-plan"
+  | "start-handoff"
   | "run-workflow"
   | "metrics"
   | "token-report"

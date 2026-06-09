@@ -13,6 +13,8 @@ import {
 
 const BUILTIN_COMMANDS = new Set<BuiltinCommandEnvelopeName>([
   "start-work",
+  "start-plan",
+  "start-handoff",
   "run-workflow",
   "metrics",
   "token-report",
