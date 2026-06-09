@@ -15,7 +15,7 @@ An [OpenCode](https://opencode.ai) plugin that provides **smart tmux integration
 Paste this into any LLM agent (OpenCode, Claude Code, Cursor, etc.):
 
 ```text
-Install the spawn plugin by following: https://raw.githubusercontent.com/anomalyco/arcanum/main/README.md
+Install the spawn plugin by following: https://raw.githubusercontent.com/runecraftai/arcanum/main/README.md
 ```
 
 <details>

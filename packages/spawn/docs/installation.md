@@ -13,7 +13,7 @@ Follow these steps to install and configure the **spawn** plugin.
 Run this one-liner in your terminal:
 
 ```bash
-git clone https://github.com/anomalyco/arcanum.git ~/Code/spawn && \
+git clone https://github.com/runecraftai/arcanum.git ~/Code/spawn && \
 cd ~/Code/spawn && \
 bun install && \
 bun run build

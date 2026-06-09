@@ -6,7 +6,7 @@ This guide is for contributors who want to develop and test `spawn` locally.
 
 ```bash
 # Clone the repository (if you haven't already)
-git clone https://github.com/anomalyco/arcanum.git
+git clone https://github.com/runecraftai/arcanum.git
 cd spawn
 
 # Install dependencies
