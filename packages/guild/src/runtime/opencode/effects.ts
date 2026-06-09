@@ -10,6 +10,7 @@ export type RuntimeEffect =
   | TrackAnalyticsEffect
   | AppendCommandOutputEffect
   | SpawnFighterSessionEffect
+  | SpawnWizardSessionEffect
 
 export interface SwitchAgentEffect {
   type: "switchAgent"
@@ -87,5 +88,15 @@ export interface SpawnFighterSessionEffect {
   /** Progress snapshot */
   progress: { total: number; completed: number }
   /** Full context to seed the Fighter session */
+  contextInjection: string
+}
+
+export interface SpawnWizardSessionEffect {
+  type: "spawnWizardSession"
+  /** The originating Bard session ID (UX entrypoint) */
+  sessionId: string
+  /** Title for the spawned session */
+  title: string
+  /** Full context to seed the Wizard session */
   contextInjection: string
 }

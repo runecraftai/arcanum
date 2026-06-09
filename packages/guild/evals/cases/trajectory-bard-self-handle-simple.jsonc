@@ -1,0 +1,16 @@
+{
+  "id": "trajectory-bard-self-handle-simple",
+  "title": "Bard handles simple question directly",
+  "phase": "trajectory",
+  "target": { "kind": "trajectory-agent", "agent": "bard" },
+  "executor": { "kind": "trajectory-run", "scenarioRef": "bard-self-handle-simple.jsonc" },
+  "evaluators": [
+    {
+      "kind": "trajectory-assertion",
+      "expectedSequence": ["bard"],
+      "expectedDelegationTargets": [],
+      "minTurns": 2,
+      "maxTurns": 2
+    }
+  ]
+}

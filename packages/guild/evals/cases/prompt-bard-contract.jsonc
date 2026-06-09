@@ -1,0 +1,18 @@
+{
+  "id": "prompt-bard-contract",
+  "title": "Bard prompt renders core sections",
+  "phase": "prompt",
+  "target": {
+    "kind": "builtin-agent-prompt",
+    "agent": "bard"
+  },
+  "executor": {
+    "kind": "prompt-render"
+  },
+  "evaluators": [
+    {
+      "kind": "contains-all",
+      "patterns": ["<Role>", "<Delegation>"]
+    }
+  ]
+}

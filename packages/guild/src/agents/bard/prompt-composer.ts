@@ -81,7 +81,7 @@ export function buildDelegationSection(disabled: Set<string>, reviewModelVariant
   }
   if (isAgentEnabled("wizard", disabled)) {
     lines.push(
-      "- Use `call_guild_agent` to delegate to Wizard for planning, scoping, and work breakdown. Wizard uses guild-scope, guild-spec, guild-plan, guild-handoff skills.",
+      "- For planning, ask the user whether they want interactive Wizard planning or non-interactive delegation. Use `ask_user` with explicit options. If they choose interactive planning, spawn Wizard in the foreground with a rich handoff payload (goal, summary, open questions, and relevant context) so the user can keep talking to Wizard directly. If they choose delegation, use `call_guild_agent` to delegate to Wizard for planning, scoping, and work breakdown. Wizard uses guild-scope, guild-spec, guild-plan, guild-handoff skills.",
     )
   }
   if (isAgentEnabled("fighter", disabled)) {
@@ -168,6 +168,9 @@ export function buildPlanWorkflowSection(disabled: Set<string>, reviewModelVaria
 
   const resumeStepNum = steps.length + 1
   steps.push(`${resumeStepNum}. RESUME: \`/start-work\` also resumes interrupted work (guild-handoff tracks state)`)
+
+  const finishStepNum = steps.length + 1
+  steps.push(`${finishStepNum}. HANDOFF: At the end of planning, use the question tool to offer next actions: start Fighter execution, return to Bard, continue refining, or ask for review where relevant`)
 
   return `<PlanWorkflow>
 Plans are executed by Fighter, not Bard. Tell the user to run \`/start-work\` to begin.

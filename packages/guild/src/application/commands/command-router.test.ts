@@ -2,6 +2,25 @@ import { describe, expect, it } from "bun:test"
 import { routeCommandExecuteBefore } from "./command-router"
 
 describe("routeCommandExecuteBefore", () => {
+  it("injects the start-plan prompt for /start-plan", () => {
+    const effects = routeCommandExecuteBefore({
+      command: "start-plan",
+      sessionId: "sess-123",
+      argumentsText: "build a dashboard",
+      directory: "/tmp/guild",
+      hooks: {
+        analyticsEnabled: false,
+      } as never,
+      agents: {},
+    })
+
+    expect(effects).toHaveLength(1)
+    expect(effects[0]).toEqual(expect.objectContaining({
+      type: "spawnWizardSession",
+      title: "build a dashboard",
+    }))
+  })
+
   it("injects the start-work prompt for /start-work", () => {
     const effects = routeCommandExecuteBefore({
       command: "start-work",

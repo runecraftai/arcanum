@@ -138,7 +138,7 @@ export function buildFighterDelegationSection(categoryNames?: string[]): string 
     const examples = categoryNames!.slice(0, 2).map((c) => `"ranger-${c}"`).join(", ")
     subagentType = `subagent_type matching the task category (e.g., ${examples}, or "ranger" for unmatched — see <CategoryRouting>)`
   } else {
-    subagentType = 'subagent_type="Ranger (Specialist)"'
+    subagentType = 'subagent_type="ranger"'
   }
 
   return `<Delegation>
@@ -221,13 +221,13 @@ ROUTING PRIORITY (apply in order):
 RULES:
 - Use the category agent's name as subagent_type (e.g., subagent_type="ranger-frontend")
 - If multiple categories match the same task's files, the earliest declared matching category wins; later matches do not override earlier ones
-- Categories without file patterns are explicit/manual-use only and are never eligible for file-pattern auto-routing
+- Categories without file patterns are explicit/manual-use only and are never eligible for file-wizard auto-routing
 - Tasks in different categories CAN run in parallel if their file sets are disjoint
 - Always fall back to generic \`ranger\` if the named category agent is unavailable`
       : `
 RULES:
 - Use the category agent's name as subagent_type (e.g., subagent_type="ranger-backend")
-- Categories without file patterns are explicit/manual-use only and are never eligible for file-pattern auto-routing
+- Categories without file patterns are explicit/manual-use only and are never eligible for file-wizard auto-routing
 - Always fall back to generic \`ranger\` if the named category agent is unavailable`
 
   return `<CategoryRouting>

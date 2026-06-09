@@ -1,10 +1,15 @@
 import { describe, it, expect } from "bun:test"
 import { BUILTIN_COMMANDS } from "./commands"
 import { START_WORK_TEMPLATE } from "./templates/start-work"
+import { START_PLAN_TEMPLATE } from "./templates/start-plan"
 
 describe("BUILTIN_COMMANDS", () => {
   it("has start-work command", () => {
     expect(BUILTIN_COMMANDS["start-work"]).toBeDefined()
+  })
+
+  it("has start-plan command", () => {
+    expect(BUILTIN_COMMANDS["start-plan"]).toBeDefined()
   })
 
   it("start-work targets fighter agent", () => {
@@ -40,6 +45,15 @@ describe("BUILTIN_COMMANDS", () => {
 
   it("start-work has name matching its key", () => {
     expect(BUILTIN_COMMANDS["start-work"].name).toBe("start-work")
+  })
+
+  it("start-plan targets wizard agent", () => {
+    expect(BUILTIN_COMMANDS["start-plan"].agent).toBe("wizard")
+  })
+
+  it("start-plan template contains planning guidance", () => {
+    expect(BUILTIN_COMMANDS["start-plan"].template).toContain("interactive planning session")
+    expect(START_PLAN_TEMPLATE).toContain("Wizard should run an interactive planning session")
   })
 
   it("has token-report command", () => {

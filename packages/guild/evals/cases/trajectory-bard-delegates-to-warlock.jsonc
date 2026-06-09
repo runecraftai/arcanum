@@ -1,0 +1,14 @@
+{
+  "id": "trajectory-bard-delegates-to-warlock",
+  "title": "Bard delegates external research to Warlock",
+  "phase": "trajectory",
+  "target": { "kind": "trajectory-agent", "agent": "bard" },
+  "executor": { "kind": "trajectory-run", "scenarioRef": "bard-delegates-to-warlock.jsonc" },
+  "evaluators": [
+    {
+      "kind": "trajectory-assertion",
+      "expectedSequence": ["bard", "warlock"],
+      "expectedDelegationTargets": ["warlock"]
+    }
+  ]
+}

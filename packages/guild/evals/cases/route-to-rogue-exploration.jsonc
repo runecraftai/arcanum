@@ -1,0 +1,21 @@
+{
+  "id": "route-to-rogue-exploration",
+  "title": "Route exploration to Rogue",
+  "phase": "routing",
+  "target": {
+    "kind": "builtin-agent-prompt",
+    "agent": "bard"
+  },
+  "executor": {
+    "kind": "model-response",
+    "provider": "openrouter",
+    "model": "anthropic/claude-3.5-sonnet",
+    "input": "Find where user routes are defined."
+  },
+  "evaluators": [
+    {
+      "kind": "llm-judge",
+      "expectedContains": ["rogue"]
+    }
+  ]
+}

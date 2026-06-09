@@ -1,0 +1,9 @@
+{
+  "id": "bard-self-handle-simple",
+  "title": "Bard handles simple request",
+  "agents": ["bard"],
+  "turns": [
+    { "turn": 1, "role": "user", "content": "What does Guild do?" },
+    { "turn": 2, "role": "assistant", "agent": "bard", "content": "Guild coordinates agents.", "mockResponse": "Guild coordinates agents." }
+  ]
+}

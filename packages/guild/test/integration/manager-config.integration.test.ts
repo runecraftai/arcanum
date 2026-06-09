@@ -113,7 +113,7 @@ describe("Integration: manager config", () => {
     expect(result).toContain("Keep")
   })
 
-  it("forwards categories to createBuiltinAgents — shuttle-frontend exists and tapestry prompt has CategoryRouting", () => {
+  it("forwards categories to createBuiltinAgents — ranger-frontend exists and fighter prompt has CategoryRouting", () => {
     const config = WeaveConfigSchema.parse({
       categories: {
         frontend: {
@@ -129,15 +129,15 @@ describe("Integration: manager config", () => {
       pluginConfig: config,
     })
 
-    // (a) shuttle-frontend agent must exist with category model/prompt
-    expect(managers.agents["shuttle-frontend"]).toBeDefined()
-    expect(managers.agents["shuttle-frontend"].model).toBe("gpt-4o")
-    expect(managers.agents["shuttle-frontend"].prompt).toContain("Focus on React.")
+    // (a) ranger-frontend agent must exist with category model/prompt
+    expect(managers.agents["ranger-frontend"]).toBeDefined()
+    expect(managers.agents["ranger-frontend"].model).toBe("gpt-4o")
+    expect(managers.agents["ranger-frontend"].prompt).toContain("Focus on React.")
 
-    // (b) tapestry prompt must contain CategoryRouting block, agent name, and glob
-    const tapestryPrompt = managers.agents["tapestry"]?.prompt ?? ""
+    // (b) fighter prompt must contain CategoryRouting block, agent name, and glob
+    const tapestryPrompt = managers.agents["fighter"]?.prompt ?? ""
     expect(tapestryPrompt).toContain("<CategoryRouting>")
-    expect(tapestryPrompt).toContain("shuttle-frontend")
+    expect(tapestryPrompt).toContain("ranger-frontend")
     expect(tapestryPrompt).toContain("src/frontend/**")
   })
 
@@ -145,7 +145,7 @@ describe("Integration: manager config", () => {
     createManagers({
       ctx: makeMockCtx(fixture.directory),
       pluginConfig: WeaveConfigSchema.parse({
-        disabled_agents: ["loom", "tapestry", "shuttle", "pattern", "spindle", "warp", "weft"],
+        disabled_agents: ["bard", "fighter", "ranger", "wizard", "warlock", "paladin", "cleric"],
         custom_agents: {
           "pipeline-lead": {
             prompt: "Orchestrate pipeline tasks. Delegate to data-validator for checks.",

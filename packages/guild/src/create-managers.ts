@@ -10,7 +10,7 @@ import { BackgroundManager } from "./managers/background-manager"
 import { SkillMcpManager } from "./managers/skill-mcp-manager"
 import { createBuiltinAgents, registerCustomAgentMetadata } from "./agents/builtin-agents"
 import { buildCustomAgent, buildCustomAgentMetadata } from "./agents/custom-agent-factory"
-import { updateBuiltinDisplayName } from "./shared/agent-display-names"
+import { getAgentConfigKey, updateBuiltinDisplayName } from "./shared/agent-display-names"
 import { addBuiltinNameVariant } from "./agents/agent-builder"
 import { debug } from "./shared/log"
 
@@ -33,13 +33,15 @@ export function createManagers(options: {
   configDir?: string
 }): GuildManagers {
   const { pluginConfig, continuation, resolveSkills, fingerprint, configDir } = options
+  const disabledAgentKeys = normalizeAgentKeys(pluginConfig.disabled_agents)
+  const normalizedAgentOverrides = normalizeAgentOverrides(pluginConfig.agents)
 
   // Step 1: Build custom agent metadata FIRST so Loom's prompt can include triggers
   const customAgentMetadata: AvailableAgent[] = []
   if (pluginConfig.custom_agents) {
-    const disabledSet = new Set(pluginConfig.disabled_agents ?? [])
+    const disabledSet = new Set(disabledAgentKeys)
     for (const [name, customConfig] of Object.entries(pluginConfig.custom_agents)) {
-      if (disabledSet.has(name)) continue
+      if (disabledSet.has(getAgentConfigKey(name))) continue
       const metadata = buildCustomAgentMetadata(name, customConfig)
       customAgentMetadata.push({
         name,
@@ -51,8 +53,8 @@ export function createManagers(options: {
 
   // Step 2: Build builtins WITH custom agent metadata for Loom's prompt
   const agents = createBuiltinAgents({
-    disabledAgents: pluginConfig.disabled_agents,
-    agentOverrides: pluginConfig.agents,
+    disabledAgents: disabledAgentKeys,
+    agentOverrides: normalizedAgentOverrides,
     categories: pluginConfig.categories,
     resolveSkills,
     fingerprint,
@@ -63,18 +65,22 @@ export function createManagers(options: {
   // Step 2.5: Apply builtin display name overrides from config.
   // Must happen after createBuiltinAgents() (so agents map is populated)
   // and before ConfigHandler.handle() (so getAgentDisplayName returns the new name).
-  if (pluginConfig.agents) {
-    for (const [name, override] of Object.entries(pluginConfig.agents)) {
+  if (normalizedAgentOverrides) {
+    for (const [name, override] of Object.entries(pluginConfig.agents ?? {})) {
+      const configKey = getAgentConfigKey(name)
       const displayName = override.display_name?.trim()
       if (displayName) {
         try {
-          updateBuiltinDisplayName(name, displayName)
-          addBuiltinNameVariant(name, displayName)
+          updateBuiltinDisplayName(configKey, displayName)
+          if (name !== configKey) {
+            AGENT_DISPLAY_NAMES[name] = displayName
+          }
+          addBuiltinNameVariant(configKey, displayName)
           // MANDATORY: Guard against disabled agents where agents[name] is undefined.
           // createBuiltinAgents() skips disabled agents, so agents[name] may not exist.
           // Spreading undefined produces a broken config — this guard is required.
-          if (agents[name]) {
-            agents[name] = { ...agents[name], description: displayName }
+          if (agents[configKey]) {
+            agents[configKey] = { ...agents[configKey], description: displayName }
           }
         } catch (err) {
           // Only swallow "not a built-in agent" errors (non-builtin key in agents section).
@@ -91,12 +97,12 @@ export function createManagers(options: {
 
   // Step 3: Build custom agent configs and register metadata
   if (pluginConfig.custom_agents) {
-    const disabledSet = new Set(pluginConfig.disabled_agents ?? [])
+    const disabledSet = new Set(disabledAgentKeys)
     for (const [name, customConfig] of Object.entries(pluginConfig.custom_agents)) {
       // Skip disabled custom agents
-      if (disabledSet.has(name)) continue
+      if (disabledSet.has(getAgentConfigKey(name))) continue
       // Prevent custom agents from overriding built-in agents
-      if (agents[name] !== undefined) continue
+      if (agents[name] !== undefined || agents[getAgentConfigKey(name)] !== undefined) continue
 
       agents[name] = buildCustomAgent(name, customConfig, {
         resolveSkills,
@@ -117,4 +123,15 @@ export function createManagers(options: {
   const skillMcpManager = new SkillMcpManager()
 
   return { configHandler, backgroundManager, skillMcpManager, agents }
+}
+
+function normalizeAgentKeys(agentNames: string[] | undefined): string[] | undefined {
+  return agentNames?.map((name) => getAgentConfigKey(name))
+}
+
+function normalizeAgentOverrides(pluginAgents: GuildConfig["agents"]): GuildConfig["agents"] {
+  if (!pluginAgents) return undefined
+  return Object.fromEntries(
+    Object.entries(pluginAgents).map(([key, value]) => [getAgentConfigKey(key), value]),
+  )
 }

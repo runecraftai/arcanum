@@ -1,0 +1,6 @@
+{
+  "id": "agent-routing",
+  "title": "Agent Routing",
+  "phase": "routing",
+  "caseFiles": ["../cases/route-to-rogue-exploration.jsonc"]
+}

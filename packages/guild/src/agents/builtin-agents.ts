@@ -16,6 +16,7 @@ import type { ResolveSkillsFn } from "./agent-builder"
 import type { ProjectFingerprint } from "../features/analytics/types"
 import type { AvailableAgent } from "./dynamic-prompt-builder"
 import { buildReviewModelVariantAgent, buildReviewModelVariants } from "./review-model-variants"
+import { getAgentConfigKey } from "../shared/agent-display-names"
 import { debug } from "../shared/log"
 
 type AgentConfigWithOptions = AgentConfig & {
@@ -205,8 +206,11 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
     continuation,
   } = options
 
-  const disabledSet = new Set(disabledAgents)
-  const reviewModelVariants = buildReviewModelVariants(agentOverrides, disabledSet)
+  const disabledSet = new Set(disabledAgents.map((name) => getAgentConfigKey(name)))
+  const normalizedAgentOverrides = Object.fromEntries(
+    Object.entries(agentOverrides).map(([key, value]) => [getAgentConfigKey(key), value]),
+  )
+  const reviewModelVariants = buildReviewModelVariants(normalizedAgentOverrides, disabledSet)
 
   const result: Record<string, AgentConfig> = {}
 
@@ -216,7 +220,7 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
       continue
     }
 
-    const override = agentOverrides[name]
+    const override = normalizedAgentOverrides[name]
     const overrideModel = override?.model
 
     const customFallbackChain: FallbackEntry[] | undefined = override?.fallback_models?.length

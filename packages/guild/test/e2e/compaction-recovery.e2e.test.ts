@@ -39,7 +39,7 @@ describe("compaction recovery ownership matrix", () => {
       fixture.directory,
       createSessionRuntimeState({
         sessionId: "sess-loom",
-        foregroundAgent: "loom",
+      foregroundAgent: "bard",
         mode: "ad_hoc",
         status: "idle",
       }),
@@ -49,7 +49,7 @@ describe("compaction recovery ownership matrix", () => {
     await host.emitSessionCompacted("sess-loom")
 
     expect(host.client.promptAsyncCalls).toHaveLength(2)
-    expect(host.client.promptAsyncCalls[0].body.agent).toBe("Loom (Main Orchestrator)")
+    expect(host.client.promptAsyncCalls[0].body.agent).toBe("Bard (Guildmaster)")
     expect(host.client.promptAsyncCalls[0].body.parts).toEqual([])
     expect(host.client.promptAsyncCalls[1].body.parts[0].text).toContain("Foreground agent restored: loom")
   })
@@ -82,7 +82,7 @@ describe("compaction recovery ownership matrix", () => {
       fixture.directory,
       createSessionRuntimeState({
         sessionId: "sess-plan",
-        foregroundAgent: "tapestry",
+      foregroundAgent: "fighter",
         mode: "plan",
         executionRef: planPath,
         status: "running",
@@ -95,7 +95,7 @@ describe("compaction recovery ownership matrix", () => {
     await host.emitSessionCompacted("sess-plan")
 
     expect(host.client.promptAsyncCalls).toHaveLength(2)
-    expect(host.client.promptAsyncCalls[0].body.agent).toBe("Tapestry (Execution Orchestrator)")
+    expect(host.client.promptAsyncCalls[0].body.agent).toBe("Fighter (Execution Lead)")
     expect(host.client.promptAsyncCalls[1].body.parts[0].text).toContain(CONTINUATION_MARKER)
   })
 
@@ -120,7 +120,7 @@ describe("compaction recovery ownership matrix", () => {
     await host.emitSessionCompacted("sess-workflow")
 
     expect(host.client.promptAsyncCalls).toHaveLength(2)
-    expect(host.client.promptAsyncCalls[0].body.agent).toBe("weft")
+    expect(host.client.promptAsyncCalls[0].body.agent).toBe("cleric")
     expect(host.client.promptAsyncCalls[1].body.parts[0].text).toContain(WORKFLOW_CONTINUATION_MARKER)
   })
 
@@ -134,7 +134,7 @@ describe("compaction recovery ownership matrix", () => {
         ownerRef: missingPlanPath,
         status: "running",
         sessionId: "sess-stale-plan",
-        executorAgent: "tapestry",
+        executorAgent: "fighter",
       }),
     )
     executionLeaseRepository.writeSessionRuntime(
@@ -293,7 +293,7 @@ describe("compaction recovery ownership matrix", () => {
       fixture.directory,
       createSessionRuntimeState({
         sessionId: "sess-paused-plan",
-        foregroundAgent: "tapestry",
+      foregroundAgent: "fighter",
         mode: "plan",
         executionRef: planPath,
         status: "paused",
@@ -307,8 +307,8 @@ describe("compaction recovery ownership matrix", () => {
     await host.emitSessionCompacted("sess-paused-plan")
 
     expect(host.client.promptAsyncCalls).toHaveLength(2)
-    expect(host.client.promptAsyncCalls[0].body.agent).toBe("Tapestry (Execution Orchestrator)")
-    expect(host.client.promptAsyncCalls[1].body.parts[0].text).toContain("Foreground agent restored: tapestry")
+    expect(host.client.promptAsyncCalls[0].body.agent).toBe("Fighter (Execution Lead)")
+    expect(host.client.promptAsyncCalls[1].body.parts[0].text).toContain("Foreground agent restored: fighter")
     expect(host.client.promptAsyncCalls[1].body.parts[0].text).not.toContain(CONTINUATION_MARKER)
   })
 
@@ -334,7 +334,7 @@ describe("compaction recovery ownership matrix", () => {
     await host.emitSessionCompacted("sess-paused-workflow")
 
     expect(host.client.promptAsyncCalls).toHaveLength(2)
-    expect(host.client.promptAsyncCalls[0].body.agent).toBe("weft")
+    expect(host.client.promptAsyncCalls[0].body.agent).toBe("cleric")
     expect(host.client.promptAsyncCalls[1].body.parts[0].text).toContain("Foreground agent restored: weft")
     expect(host.client.promptAsyncCalls[1].body.parts[0].text).toContain("No running plan or workflow owns this session")
   })

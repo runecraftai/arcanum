@@ -1,0 +1,6 @@
+{
+  "id": "prompt-contracts",
+  "title": "Prompt Contracts",
+  "phase": "prompt",
+  "caseFiles": ["../cases/prompt-bard-contract.jsonc"]
+}

@@ -4,7 +4,7 @@ import { getAgentDisplayName } from "../../src/shared/agent-display-names"
 import { createProjectFixture, type ProjectFixture } from "../testkit/fixtures/project-fixture"
 import { FakeOpencodeHost } from "../testkit/host/fake-opencode-host"
 
-describe("E2E: Tapestry categorized Shuttle delegation", () => {
+describe("E2E: Fighter categorized Ranger delegation", () => {
   let fixture: ProjectFixture
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe("E2E: Tapestry categorized Shuttle delegation", () => {
     fixture.cleanup()
   })
 
-  it("preserves generic and categorized Shuttle subagent_type values through a /start-work flow", async () => {
+  it("preserves generic and categorized Ranger subagent_type values through a /start-work flow", async () => {
     fixture.writePlan(
       "categorized-delegation",
       [
@@ -60,7 +60,7 @@ describe("E2E: Tapestry categorized Shuttle delegation", () => {
       timestamp: "2026-01-01T00:00:00.000Z",
     })
 
-    expect(host.getCurrentAgent(sessionID)).toBe(getAgentDisplayName("tapestry"))
+    expect(host.getCurrentAgent(sessionID)).toBe(getAgentDisplayName("fighter"))
     expect(output.parts[0].text).toContain("Starting Plan: categorized-delegation")
     expect(output.parts[0].text).toContain("SIDEBAR TODOS")
 
@@ -69,7 +69,7 @@ describe("E2E: Tapestry categorized Shuttle delegation", () => {
       tool: "task",
       callID: "call-shuttle-generic",
       args: {
-        subagent_type: "shuttle",
+        subagent_type: "ranger",
         description: "Handle the shared task",
         prompt: "Handle the shared src/shared/util.ts task and report concrete findings.",
       },
@@ -79,18 +79,18 @@ describe("E2E: Tapestry categorized Shuttle delegation", () => {
       tool: "task",
       callID: "call-shuttle-frontend",
       args: {
-        subagent_type: "shuttle-frontend",
+        subagent_type: "ranger-frontend",
         description: "Handle the frontend task",
         prompt: "Handle the frontend src/frontend/App.tsx task and report concrete findings.",
       },
     })
 
     expect(host.getDelegatedToolCalls(sessionID).map(call => call.args.subagent_type)).toEqual([
-      "shuttle",
-      "shuttle-frontend",
+      "ranger",
+      "ranger-frontend",
     ])
-    expect(host.getDelegatedToolCalls(sessionID).at(-1)?.args.subagent_type).toBe("shuttle-frontend")
-    expect(host.getDelegatedToolCalls(sessionID).filter(call => call.args.subagent_type === "shuttle")).toHaveLength(1)
+    expect(host.getDelegatedToolCalls(sessionID).at(-1)?.args.subagent_type).toBe("ranger-frontend")
+    expect(host.getDelegatedToolCalls(sessionID).filter(call => call.args.subagent_type === "ranger")).toHaveLength(1)
 
     await host.emitSessionDeleted(sessionID)
 
@@ -105,9 +105,9 @@ describe("E2E: Tapestry categorized Shuttle delegation", () => {
       }),
     )
     expect(summaries[0]?.delegations.map(({ agent, toolCallId }) => ({ agent, toolCallId }))).toEqual([
-      { agent: "shuttle", toolCallId: "call-shuttle-generic" },
-      { agent: "shuttle-frontend", toolCallId: "call-shuttle-frontend" },
+      { agent: "ranger", toolCallId: "call-shuttle-generic" },
+      { agent: "ranger-frontend", toolCallId: "call-shuttle-frontend" },
     ])
-    expect(summaries[0]?.delegations.map(({ agent }) => agent)).not.toEqual(["shuttle", "shuttle"])
+    expect(summaries[0]?.delegations.map(({ agent }) => agent)).not.toEqual(["ranger", "ranger"])
   })
 })

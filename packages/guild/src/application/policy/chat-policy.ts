@@ -2,6 +2,7 @@ import { readWorkState } from "../../features/work-state"
 import type { ParsedCommandEnvelope } from "../../runtime/opencode/command-envelope"
 import type { RuntimeEffect } from "../../runtime/opencode/effects"
 import { executeRunWorkflowCommand } from "../commands/run-workflow-command"
+import { executeStartPlanCommand } from "../commands/start-plan-command"
 import { executeStartWorkCommand } from "../commands/start-work-command"
 import {
   shouldAutoPauseForUserMessage,
@@ -37,6 +38,9 @@ export function createCommandChatPolicy(): ChatPolicy {
         input.parsedEnvelope?.kind === "builtin-command" && input.parsedEnvelope.command === "run-workflow"
 
       const effects: RuntimeEffect[] = [
+        ...((input.parsedEnvelope?.kind === "builtin-command" && input.parsedEnvelope.command === "start-plan")
+          ? executeStartPlanCommand({ sessionId: input.sessionId, argumentsText: input.promptText })
+          : []),
         ...executeStartWorkCommand({
           hooks: input.hooks,
           promptText: input.promptText,

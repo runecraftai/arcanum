@@ -123,7 +123,7 @@ function annotateSafeRelativePathArray(root: JsonSchemaObject, value: unknown) {
   // returns a fresh schema object, resolveJsonSchemaRef(root, value) resolves the
   // referenced array node for us, and mutating items directly keeps wizard and
   // appendDescription(items, ...) attached to that final resolved schema branch.
-  items.wizard = SAFE_RELATIVE_PATH_PATTERN
+  items.pattern = SAFE_RELATIVE_PATH_PATTERN
   appendDescription(items, SAFE_RELATIVE_PATH_DESCRIPTION)
 }
 

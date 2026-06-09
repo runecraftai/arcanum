@@ -1,0 +1,13 @@
+{
+  "id": "agent-trajectory",
+  "title": "Agent Trajectory",
+  "phase": "trajectory",
+  "caseFiles": [
+    "../cases/trajectory-bard-delegates-to-wizard.jsonc",
+    "../cases/trajectory-bard-self-handle-simple.jsonc",
+    "../cases/trajectory-bard-delegates-to-rogue.jsonc",
+    "../cases/trajectory-bard-delegates-to-warlock.jsonc",
+    "../cases/trajectory-wizard-continues-planning.jsonc",
+    "../cases/trajectory-bard-delegates-to-fighter.jsonc"
+  ]
+}

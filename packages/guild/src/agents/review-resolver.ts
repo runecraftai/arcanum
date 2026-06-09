@@ -12,7 +12,7 @@ type ReviewScope = "direct" | "post-execution"
 
 type ReviewerPrimary = {
   agentName: ReviewBaseAgent
-  label: "Cleric" | "Paladin"
+  label: "Weft" | "Warp"
   model: string
 }
 
@@ -68,7 +68,7 @@ export function resolveReviewers(input: {
 
   const primary = {
     agentName: baseAgent,
-    label: baseAgent === "cleric" ? "Cleric" : "Paladin",
+    label: baseAgent === "cleric" ? "Weft" : "Warp",
     model: primaryModel,
   } as const
 

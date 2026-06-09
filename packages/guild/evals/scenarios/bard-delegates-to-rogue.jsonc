@@ -1,0 +1,10 @@
+{
+  "id": "bard-delegates-to-rogue",
+  "title": "Bard delegates to Rogue",
+  "agents": ["bard", "rogue"],
+  "turns": [
+    { "turn": 1, "role": "user", "content": "Find the config loader." },
+    { "turn": 2, "role": "assistant", "agent": "bard", "content": "I will delegate to rogue for codebase exploration.", "mockResponse": "I will delegate to rogue for codebase exploration." },
+    { "turn": 3, "role": "assistant", "agent": "rogue", "content": "Found the loader.", "mockResponse": "Found the loader." }
+  ]
+}

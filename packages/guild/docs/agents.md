@@ -24,7 +24,7 @@ The central team lead. Bard understands intent, makes routing decisions, and coo
 
 **When to use directly**: high-level planning, system design, or any task that needs full multi-agent orchestration. Bard also accepts the `ultrawork` keyword for maximum effort, parallel agents, and deep execution.
 
-**Planning and execution split**: Bard decides whether to invoke Wizard (planning) or jump straight to Fighter (execution of an existing plan). When Wizard is delegated, Bard stays active in the original window — the planning loop is visible and interactive, and you can ask follow-up questions at any time. When planning is done, Wizard hands a summary back to Bard via `guild-handoff`, and Bard directs you to run `/start-work` for execution.
+**Planning and execution split**: Bard decides whether to invoke Wizard (planning) or jump straight to Fighter (execution of an existing plan). Bard can either delegate Wizard non-interactively or start a foreground Wizard planning session with a rich handoff payload. In foreground planning, the user continues speaking directly with Wizard. When planning is done, Wizard uses the question tool to offer next actions and can hand back to Bard via `guild-handoff`.
 
 ### Fighter (Execution Lead) — `all`
 
@@ -70,7 +70,7 @@ The interactive planning specialist. Wizard works directly with the user in a vi
 
 Infer scope from request complexity, implied file count, and whether multiple layers (backend, frontend, infra) are involved. When in doubt, go one level richer — a medium task treated as small produces inadequate plans.
 
-**Handoff**: When the plan is ready, Wizard returns control to Bard with a concise summary via `guild-handoff`. Bard then directs you to run `/start-work` for execution.
+**Handoff**: When the plan is ready, Wizard uses the question tool to offer next actions: start Fighter execution, return to Bard, continue refining, or review where relevant. Wizard can also return control to Bard with a concise summary via `guild-handoff`.
 
 Plans are written to `.guild/plans/<slug>/`. See [`.guild/architecture.md`](.guild/architecture.md) for the full layout.
 

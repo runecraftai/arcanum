@@ -54,12 +54,12 @@ describe("Integration: plugin bootstrap config", () => {
     const agents = configObj.agent as Record<string, { prompt?: string }>
     expect(agents).toBeDefined()
 
-    const builtinNames = ["loom", "tapestry", "shuttle", "pattern", "thread", "spindle", "warp", "weft"]
+    const builtinNames = ["bard", "fighter", "ranger", "wizard", "rogue", "warlock", "paladin", "cleric"]
     for (const name of builtinNames) {
       expect(agents[getAgentDisplayName(name)]).toBeDefined()
     }
 
-    const loomDisplayName = getAgentDisplayName("loom")
+    const loomDisplayName = getAgentDisplayName("bard")
     expect(agents[loomDisplayName].prompt).toContain("<Role>")
     expect(configObj.default_agent).toBe(loomDisplayName)
   })
@@ -98,7 +98,7 @@ describe("Integration: plugin bootstrap config", () => {
     await (plugin.config as (config: Record<string, unknown>) => Promise<void>)(configObj)
 
     const agents = configObj.agent as Record<string, { prompt?: string }>
-    const loomPrompt = agents[getAgentDisplayName("loom")].prompt ?? ""
+    const loomPrompt = agents[getAgentDisplayName("bard")].prompt ?? ""
 
     expect(loomPrompt).toContain("<ProjectContext>")
     expect(loomPrompt).toContain("typescript")
@@ -114,12 +114,12 @@ describe("Integration: plugin bootstrap config", () => {
     await (plugin.config as (config: Record<string, unknown>) => Promise<void>)(configObj)
 
     const agents = configObj.agent as Record<string, { prompt?: string }>
-    const loomPrompt = agents[getAgentDisplayName("loom")].prompt ?? ""
+    const loomPrompt = agents[getAgentDisplayName("bard")].prompt ?? ""
 
     expect(loomPrompt).not.toContain("<ProjectContext>")
   })
 
-  it("generates shuttle-{category} agent and CategoryRouting in Tapestry prompt when categories configured", async () => {
+  it("generates ranger-{category} agent and CategoryRouting in Fighter prompt when categories configured", async () => {
     fixture.writeProjectConfig({
       categories: {
         frontend: {
@@ -135,18 +135,18 @@ describe("Integration: plugin bootstrap config", () => {
     await (plugin.config as (config: Record<string, unknown>) => Promise<void>)(configObj)
 
     const agents = configObj.agent as Record<string, { prompt?: string }>
-    expect(agents["shuttle-frontend"]).toBeDefined()
+    expect(agents["ranger-frontend"]).toBeDefined()
 
-    const tapestryDisplayName = getAgentDisplayName("tapestry")
+    const tapestryDisplayName = getAgentDisplayName("fighter")
     const tapestryPrompt = agents[tapestryDisplayName]?.prompt ?? ""
     expect(tapestryPrompt).toContain("<CategoryRouting>")
-    expect(tapestryPrompt).toContain("shuttle-frontend")
+    expect(tapestryPrompt).toContain("ranger-frontend")
   })
 
   it("applies overrides, custom agents, disabled agents, and fingerprinted prompts together", async () => {
     fixture.writeFile("bun.lockb", "")
     fixture.writeProjectConfig({
-      agents: { loom: { model: "override-test-model" } },
+      agents: { bard: { model: "override-test-model" } },
       custom_agents: {
         "my-specialist": {
           prompt: "I handle specialized tasks.",
@@ -155,7 +155,7 @@ describe("Integration: plugin bootstrap config", () => {
           cost: "CHEAP",
         },
       },
-      disabled_agents: ["spindle"],
+      disabled_agents: ["warlock"],
       analytics: { enabled: true, use_fingerprint: true },
     })
 
@@ -164,16 +164,16 @@ describe("Integration: plugin bootstrap config", () => {
     await (plugin.config as (config: Record<string, unknown>) => Promise<void>)(configObj)
 
     const agents = configObj.agent as Record<string, { prompt?: string; model?: string }>
-    const loomDisplayName = getAgentDisplayName("loom")
+    const loomDisplayName = getAgentDisplayName("bard")
     const loomPrompt = agents[loomDisplayName].prompt ?? ""
 
     expect(agents[loomDisplayName]).toBeDefined()
     expect(agents[loomDisplayName].model).toBe("override-test-model")
     expect(agents["My Specialist"]).toBeDefined()
     expect(agents["My Specialist"].prompt).toContain("specialized tasks")
-    expect(agents[getAgentDisplayName("spindle")]).toBeUndefined()
-    expect(agents[getAgentDisplayName("thread")]).toBeDefined()
-    expect(agents[getAgentDisplayName("tapestry")]).toBeDefined()
+    expect(agents[getAgentDisplayName("warlock")]).toBeUndefined()
+    expect(agents[getAgentDisplayName("rogue")]).toBeDefined()
+    expect(agents[getAgentDisplayName("fighter")]).toBeDefined()
     expect(loomPrompt).toContain("<ProjectContext>")
     expect(loomPrompt).toContain("typescript")
     expect(existsSync(join(fixture.directory, ANALYTICS_DIR))).toBe(true)

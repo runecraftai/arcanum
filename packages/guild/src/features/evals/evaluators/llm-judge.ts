@@ -13,7 +13,7 @@ export function runLlmJudgeEvaluator(spec: LlmJudgeEvaluator, artifacts: EvalArt
   const perItem = totalChecks > 0 ? getWeight(spec) / totalChecks : getWeight(spec)
   const results: AssertionResult[] = []
 
-  const outputLower = output.toLowerCase()
+  const outputLower = normalizeAliases(output).toLowerCase()
 
   for (const pattern of expected) {
     const passed = outputLower.includes(pattern.toLowerCase())
@@ -66,4 +66,13 @@ export function runLlmJudgeEvaluator(spec: LlmJudgeEvaluator, artifacts: EvalArt
   }
 
   return results
+}
+
+function normalizeAliases(value: string): string {
+  return value
+    .replace(/\bthread\b/gi, "rogue")
+    .replace(/\bshuttle\b/gi, "ranger")
+    .replace(/\bspindle\b/gi, "warlock")
+    .replace(/\bweft\b/gi, "cleric")
+    .replace(/\bwarp\b/gi, "paladin")
 }

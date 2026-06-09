@@ -9,3 +9,5 @@ export const createWarlockAgent: AgentFactory = (model: string): AgentConfig => 
   mode: "subagent",
 })
 createWarlockAgent.mode = "subagent"
+
+export const createSpindleAgent = createWarlockAgent

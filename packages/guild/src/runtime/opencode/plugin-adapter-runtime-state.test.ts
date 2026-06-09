@@ -32,7 +32,7 @@ describe("plugin adapter runtime state", () => {
       directory,
     })
 
-    await adapter.handleChatParams({ sessionID: "sess-ad-hoc", agent: "Loom (Main Orchestrator)" })
+    await adapter.handleChatParams({ sessionID: "sess-ad-hoc", agent: "Bard (Guildmaster)" })
     const sessionRuntime = executionLeaseRepository.readSessionRuntime(directory, "sess-ad-hoc")
 
     expect(executionLeaseRepository.readExecutionLease(directory)).toBeNull()

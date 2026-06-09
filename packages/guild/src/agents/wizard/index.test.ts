@@ -6,8 +6,8 @@ describe("createWizardAgent", () => {
     expect(typeof createWizardAgent).toBe("function")
   })
 
-  it("has mode subagent", () => {
-    expect(createWizardAgent.mode).toBe("subagent")
+  it("has mode all", () => {
+    expect(createWizardAgent.mode).toBe("all")
   })
 
   it("sets model from argument", () => {

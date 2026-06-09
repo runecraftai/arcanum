@@ -123,7 +123,7 @@ describe("createBuiltinAgents", () => {
     expect(kimi?.model).toBe("opencode-go/kimi-k2.6")
     expect(kimi?.mode).toBe("subagent")
     expect(kimi?.description).toContain("cleric @ opencode-go/kimi-k2.6")
-    expect(kimi?.prompt).toContain("visible independent WEFT review variant")
+    expect(kimi?.prompt).toContain("visible independent CLERIC review variant")
     expect(kimi?.options).toBeUndefined()
 
     expect(glm).toBeDefined()
@@ -261,7 +261,7 @@ describe("createBuiltinAgents", () => {
       bard: "primary",
       fighter: "primary",
       ranger: "all",
-      wizard: "subagent",
+      wizard: "all",
       rogue: "subagent",
       warlock: "subagent",
       cleric: "subagent",

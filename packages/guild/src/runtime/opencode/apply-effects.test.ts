@@ -533,6 +533,51 @@ describe("spawnFighterSession effect", () => {
   })
 })
 
+describe("spawnWizardSession effect", () => {
+  it("creates a new Wizard session and seeds it with plan context", async () => {
+    const createCalls: Array<{ title: string; agent?: string }> = []
+    const promptAsyncCalls: Array<{ sessionId: string; text: string; agent?: string }> = []
+    let sessionCounter = 0
+
+    const client = {
+      session: {
+        create: mock(async (opts: { body?: { title?: string; agent?: string } }) => {
+          createCalls.push({ title: opts?.body?.title ?? "", agent: opts?.body?.agent })
+          sessionCounter++
+          return { id: `wizard-session-${sessionCounter}` }
+        }),
+        promptAsync: mock(async (input: { path: { id: string }; body: { parts: Array<{ type: string; text?: string }>; agent?: string } }) => {
+          promptAsyncCalls.push({ sessionId: input.path.id, text: input.body.parts[0]?.text ?? "", agent: input.body.agent })
+        }),
+      },
+    }
+
+    const output = {
+      message: { agent: "Bard (Guildmaster)" },
+      parts: [{ type: "text", text: "Planning..." }],
+    }
+
+    await applyRuntimeEffects({
+      effects: [{
+        type: "spawnWizardSession",
+        sessionId: "bard-session-1",
+        title: "dashboard redesign",
+        contextInjection: "## Starting Plan: dashboard redesign\n**Progress**: 0/0 tasks",
+      }],
+      output,
+      client: client as never,
+    })
+
+    expect(client.session.create).toHaveBeenCalledTimes(1)
+    expect(createCalls[0].title).toContain("Wizard:")
+    expect(createCalls[0].title).toContain("dashboard redesign")
+    expect(client.session.promptAsync).toHaveBeenCalledTimes(1)
+    expect(promptAsyncCalls[0].agent).toBe("Wizard (Planner)")
+    expect(output.message.agent).toBe("Bard (Guildmaster)")
+    expect(output.parts[0].text).toContain("Wizard session spawned")
+  })
+})
+
 describe("injectPromptAsync failover replay", () => {
   beforeEach(() => {
     clearFailoverGuard()

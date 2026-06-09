@@ -362,6 +362,58 @@ Fighter will continue in the current session instead.`
 
         break
       }
+      case "spawnWizardSession": {
+        if (!sessionClient || !client) {
+          break
+        }
+
+        const { title, contextInjection } = effect
+        const wizardAgent = getAgentDisplayName("wizard")
+        const sessionTitle = `Wizard: ${title}`
+
+        log("[guild:spawnWizardSession] Creating new Wizard session", { title })
+
+        try {
+          const wizardSessionId = await sessionClient.createSession({
+            title: sessionTitle,
+            agent: wizardAgent,
+          })
+
+          await sessionClient.promptAsync({
+            sessionId: wizardSessionId,
+            parts: [{ type: "text", text: contextInjection }],
+            agent: wizardAgent,
+          })
+
+          const handoffMessage = `
+
+---
+
+**Wizard session spawned:** Planning for "${title}" has been delegated to a new Wizard session.
+
+The Wizard session is now handling interactive planning independently. You can continue here or switch to the Wizard session to collaborate.`
+
+          if (output?.parts) {
+            appendToTextParts(output.parts, handoffMessage, "\n\n---\n")
+          }
+
+          recordInjectedPrompt?.(effect.sessionId, `[spawn:Wizard:${wizardSessionId}:${title}]`)
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : String(error)
+          console.error(`[guild:ERROR] spawnWizardSession failed: ${errorMessage}`)
+
+          if (output?.parts) {
+            appendToTextParts(output.parts, `\n\n---\n\n**Session spawn failed:** Could not create a new Wizard session (${errorMessage}).\n\nWizard will continue in the current session instead.`, "\n\n---\n")
+            appendToTextParts(output.parts, contextInjection, "\n\n")
+          }
+
+          if (output?.message) {
+            output.message.agent = wizardAgent
+          }
+        }
+
+        break
+      }
     }
   }
 }

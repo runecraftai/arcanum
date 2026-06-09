@@ -1,0 +1,11 @@
+{
+  "id": "bard-delegates-to-wizard",
+  "title": "Bard delegates planning to Wizard",
+  "agents": ["bard", "wizard"],
+  "turns": [
+    { "turn": 1, "role": "user", "content": "Plan a multi-file feature." },
+    { "turn": 2, "role": "assistant", "agent": "bard", "content": "I will delegate to wizard for planning.", "mockResponse": "I will delegate to wizard for planning." },
+    { "turn": 3, "role": "assistant", "agent": "wizard", "content": "I will draft the plan with the user.", "mockResponse": "I will draft the plan with the user." },
+    { "turn": 4, "role": "assistant", "agent": "bard", "content": "Wizard returned the plan summary.", "mockResponse": "Wizard returned the plan summary." }
+  ]
+}

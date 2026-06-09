@@ -1,0 +1,10 @@
+{
+  "id": "bard-delegates-to-warlock",
+  "title": "Bard delegates to Warlock",
+  "agents": ["bard", "warlock"],
+  "turns": [
+    { "turn": 1, "role": "user", "content": "Check external API docs." },
+    { "turn": 2, "role": "assistant", "agent": "bard", "content": "I will delegate to warlock for external research.", "mockResponse": "I will delegate to warlock for external research." },
+    { "turn": 3, "role": "assistant", "agent": "warlock", "content": "Found the API reference.", "mockResponse": "Found the API reference." }
+  ]
+}

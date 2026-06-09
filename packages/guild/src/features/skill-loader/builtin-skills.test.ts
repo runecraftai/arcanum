@@ -6,11 +6,13 @@ const BUILTIN_SKILLS_DIR = resolve(import.meta.dir, "..", "..", "..", "skills")
 
 const EXPECTED_BUILTIN_SKILLS = [
   "guild-commit-learning",
+  "guild-configurator",
   "guild-execute",
   "guild-handoff",
   "guild-init",
   "guild-load",
   "guild-plan",
+  "guild-recon",
   "guild-research",
   "guild-review",
   "guild-scope",

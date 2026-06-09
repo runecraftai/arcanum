@@ -1,5 +1,7 @@
 import type { BuiltinCommand, BuiltinCommandName } from "./types"
 import { START_WORK_TEMPLATE } from "./templates/start-work"
+import { START_PLAN_TEMPLATE } from "./templates/start-plan"
+import { START_HANDOFF_TEMPLATE } from "./templates/start-handoff"
 import { METRICS_TEMPLATE } from "./templates/metrics"
 import { RUN_WORKFLOW_TEMPLATE } from "./templates/run-workflow"
 import { renderBuiltinCommandEnvelope } from "../../runtime/opencode/protocol"
@@ -21,6 +23,40 @@ ${renderBuiltinCommandEnvelope({
 <session-context>Session ID: $SESSION_ID  Timestamp: $TIMESTAMP</session-context>
 <user-request>$ARGUMENTS</user-request>`,
     argumentHint: "[plan-name]",
+  },
+  "start-plan": {
+    name: "start-plan",
+    description: "Start an interactive planning session with Wizard",
+    agent: "wizard",
+    template: `<command-instruction>
+${START_PLAN_TEMPLATE}
+</command-instruction>
+${renderBuiltinCommandEnvelope({
+  command: "start-plan",
+  arguments: "$ARGUMENTS",
+  sessionId: "$SESSION_ID",
+  timestamp: "$TIMESTAMP",
+})}
+<session-context>Session ID: $SESSION_ID  Timestamp: $TIMESTAMP</session-context>
+<user-request>$ARGUMENTS</user-request>`,
+    argumentHint: "[goal]",
+  },
+  "start-handoff": {
+    name: "start-handoff",
+    description: "Start an agent handoff between Bard, Wizard, and Fighter",
+    agent: "bard",
+    template: `<command-instruction>
+${START_HANDOFF_TEMPLATE}
+</command-instruction>
+${renderBuiltinCommandEnvelope({
+  command: "start-handoff",
+  arguments: "$ARGUMENTS",
+  sessionId: "$SESSION_ID",
+  timestamp: "$TIMESTAMP",
+})}
+<session-context>Session ID: $SESSION_ID  Timestamp: $TIMESTAMP</session-context>
+<user-request>$ARGUMENTS</user-request>`,
+    argumentHint: "[planning|execution|delegation]",
   },
   "token-report": {
     name: "token-report",

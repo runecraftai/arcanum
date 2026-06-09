@@ -1,0 +1,9 @@
+{
+  "id": "wizard-continues-planning",
+  "title": "Wizard continues planning",
+  "agents": ["wizard"],
+  "turns": [
+    { "turn": 1, "role": "user", "content": "Continue refining the plan." },
+    { "turn": 2, "role": "assistant", "agent": "wizard", "content": "I will refine the plan interactively.", "mockResponse": "I will refine the plan interactively." }
+  ]
+}
