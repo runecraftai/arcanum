@@ -1,22 +1,37 @@
 {
   "$schema": "../packages/guild/schema/guild-config.schema.json",
-
   "agents": {
     // Coordenacao principal — melhor retorno por chamada OpenAI
-    "bard":    { "model": "openai/gpt-5.4-mini" },
+    "bard": {
+      "model": "openai/gpt-5.4-mini"
+    },
     // Planejamento — mesmo nivel de bard para qualidade consistente
-    "wizard":  { "model": "openai/gpt-5.4-mini" },
+    "wizard": {
+      "model": "openai/gpt-5.4-mini"
+    },
     // Execucao — fast variant preserva qualidade sem custo Go
-    "fighter": { "model": "openai/gpt-5.4-mini-fast" },
+    "fighter": {
+      "model": "openai/gpt-5.4-mini-fast"
+    },
     // Review — mesmo modelo de bard/wizard (fast variant nao disponivel)
-    "cleric":  { "model": "openai/gpt-5.4-mini" },
+    "cleric": {
+      "model": "openai/gpt-5.4-mini"
+    },
     // Seguranca — fora da janela OpenAI, custo controlado
-    "paladin": { "model": "opencode-go/minimax-m2.7" },
+    "paladin": {
+      "model": "opencode-go/minimax-m2.7"
+    },
     // Especialista mecanico — barato, volume medio
-    "ranger":  { "model": "opencode-go/minimax-m2.5" },
+    "ranger": {
+      "model": "openai/gpt-5.4-mini-fast"
+    },
     // Exploracao — alto volume, custo zero
-    "rogue":   { "model": "opencode/deepseek-v4-flash-free" },
+    "rogue": {
+      "model": "opencode/deepseek-v4-flash-free"
+    },
     // Pesquisa externa — barato, nao drena OpenAI
-    "warlock": { "model": "opencode-go/deepseek-v4-flash" }
+    "warlock": {
+      "model": "opencode/deepseek-v4-flash-free"
+    }
   }
 }
