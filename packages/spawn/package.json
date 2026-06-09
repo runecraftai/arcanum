@@ -1,0 +1,49 @@
+{
+  "name": "@arcanum/spawn",
+  "version": "0.1.0",
+  "description": "Spawn tmux integration: automatically opens subagent panes and renders real-time agent execution with smart layouts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "spawn": "./dist/bin/spawn.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "mkdir -p dist/bin dist/scripts && bun build src/index.ts --outdir dist --target node && bun build src/bin/spawn.ts --outdir dist/bin --target node --executable && bun build src/scripts/install.ts --outdir dist/scripts --target node && bun build src/scripts/update-plugins.ts --outdir dist/scripts --target node && node -e \"require('fs').chmodSync('dist/bin/spawn.js', 0o755)\"",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "bun run build",
+    "postinstall": "test -f dist/scripts/install.js && node dist/scripts/install.js || echo 'Skipping postinstall setup (dist not found)'"
+  },
+  "keywords": [
+    "arcanum",
+    "opencode-plugin",
+    "tmux",
+    "agent",
+    "subagent",
+    "spawn"
+  ],
+  "author": "Arcanum",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anomalyco/arcanum.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anomalyco/arcanum/issues"
+  },
+  "homepage": "https://github.com/anomalyco/arcanum#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "proper-lockfile": "^4.1.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "bun-types": "^1.3.14",
+    "typescript": "^5.7.3"
+  }
+}
