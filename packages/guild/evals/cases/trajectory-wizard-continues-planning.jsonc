@@ -1,0 +1,14 @@
+{
+  "id": "trajectory-wizard-continues-planning",
+  "title": "Wizard continues interactive planning",
+  "phase": "trajectory",
+  "target": { "kind": "trajectory-agent", "agent": "wizard" },
+  "executor": { "kind": "trajectory-run", "scenarioRef": "wizard-continues-planning.jsonc" },
+  "evaluators": [
+    {
+      "kind": "trajectory-assertion",
+      "expectedSequence": ["wizard"],
+      "expectedDelegationTargets": []
+    }
+  ]
+}

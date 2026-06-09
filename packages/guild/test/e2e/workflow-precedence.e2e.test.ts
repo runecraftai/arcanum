@@ -120,8 +120,8 @@ describe("E2E: workflow precedence over plan idle loop", () => {
         name: "test-workflow",
         version: 1,
         steps: [
-          { id: "build", name: "Build", type: "autonomous", agent: "tapestry", prompt: "Build {{instance.goal}}", completion: { method: "agent_signal" } },
-          { id: "verify", name: "Verify", type: "interactive", agent: "loom", prompt: "Verify {{instance.goal}}", completion: { method: "user_confirm" } },
+          { id: "build", name: "Build", type: "autonomous", agent: "fighter", prompt: "Build {{instance.goal}}", completion: { method: "agent_signal" } },
+          { id: "verify", name: "Verify", type: "interactive", agent: "bard", prompt: "Verify {{instance.goal}}", completion: { method: "user_confirm" } },
         ],
       }),
       "utf-8",
@@ -137,8 +137,8 @@ describe("E2E: workflow precedence over plan idle loop", () => {
     await host.emitSessionCompacted("sess-precedence")
 
     expect(host.client.promptAsyncCalls).toHaveLength(2)
-    expect(host.client.promptAsyncCalls[0].body.agent).toBe("Loom (Main Orchestrator)")
+    expect(host.client.promptAsyncCalls[0].body.agent).toBe("Bard (Guildmaster)")
     expect(host.client.promptAsyncCalls[1].body.parts[0].text).toContain(WORKFLOW_CONTINUATION_MARKER)
-    expect(executionLeaseRepository.readExecutionLease(fixture.directory)).toMatchObject({ owner_kind: "workflow", executor_agent: "loom" })
+    expect(executionLeaseRepository.readExecutionLease(fixture.directory)).toMatchObject({ owner_kind: "workflow", executor_agent: "bard" })
   })
 })

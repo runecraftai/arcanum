@@ -297,7 +297,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "wizard": "^(?![\\\\/])(?![A-Za-z]:[\\\\/])(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$",
+            "pattern": "^(?![\\\\/])(?![A-Za-z]:[\\\\/])(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$",
             "description": "Relative directory path only. Absolute paths, leading backslashes/UNC paths, and '..' traversal segments are rejected at runtime."
           }
         },
@@ -435,7 +435,7 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "wizard": "^(?![\\\\/])(?![A-Za-z]:[\\\\/])(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$",
+                "pattern": "^(?![\\\\/])(?![A-Za-z]:[\\\\/])(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$",
                 "description": "Relative directory path only. Absolute paths, leading backslashes/UNC paths, and '..' traversal segments are rejected at runtime."
               }
             }
@@ -456,8 +456,8 @@
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://unpkg.com/@runecraft/guild@0.16.0/schema/guild-config.schema.json",
+  "$id": "https://unpkg.com/@runecraft/guild@0.17.0/schema/guild-config.schema.json",
   "title": "Guild Config",
   "description": "Configuration for the @runecraft/guild OpenCode plugin. Runtime loading accepts JSONC, while the generated schema artifact is plain JSON Schema.",
-  "x-guild-version": "0.16.0"
+  "x-guild-version": "0.17.0"
 }

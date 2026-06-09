@@ -188,6 +188,8 @@ export const GuildConfigSchema = z.object({
   log_level: z.enum(["DEBUG", "INFO", "WARN", "ERROR"]).optional(),
 })
 
+export const WeaveConfigSchema = GuildConfigSchema
+
 export type AgentOverrideConfig = z.infer<typeof AgentOverrideConfigSchema>
 export type AgentOverrides = z.infer<typeof AgentOverridesSchema>
 export type CustomAgentConfig = z.infer<typeof CustomAgentConfigSchema>
@@ -203,3 +205,4 @@ export type TmuxConfig = z.infer<typeof TmuxConfigSchema>
 export type ExperimentalConfig = z.infer<typeof ExperimentalConfigSchema>
 export type WorkflowConfig = z.infer<typeof WorkflowConfigSchema>
 export type GuildConfig = z.infer<typeof GuildConfigSchema>
+export type WeaveConfig = GuildConfig

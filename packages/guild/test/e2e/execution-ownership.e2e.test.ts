@@ -207,20 +207,20 @@ describe("E2E: execution ownership", () => {
     )
 
     const host = await FakeOpencodeHost.boot({ directory: fixture.directory })
-    await host.sendChatParams({ sessionID: "sess-own-plan", agent: "Loom (Main Orchestrator)" })
+    await host.sendChatParams({ sessionID: "sess-own-plan", agent: "Bard (Guildmaster)" })
 
     expect(executionLeaseRepository.readExecutionLease(fixture.directory)).toBeNull()
-    expect(executionLeaseRepository.readSessionRuntime(fixture.directory, "sess-own-plan")?.foreground_agent).toBe("loom")
+    expect(executionLeaseRepository.readSessionRuntime(fixture.directory, "sess-own-plan")?.foreground_agent).toBe("bard")
 
     await host.sendStartWork({ sessionID: "sess-own-plan", planName: "ownership-plan" })
 
     expect(executionLeaseRepository.readExecutionLease(fixture.directory)).toMatchObject({
       owner_kind: "plan",
       session_id: "sess-own-plan",
-      executor_agent: "tapestry",
+      executor_agent: "fighter",
     })
     expect(executionLeaseRepository.readSessionRuntime(fixture.directory, "sess-own-plan")).toMatchObject({
-      foreground_agent: "tapestry",
+      foreground_agent: "fighter",
       mode: "plan",
       status: "running",
     })
@@ -242,7 +242,7 @@ describe("E2E: execution ownership", () => {
     )
 
     const host = await FakeOpencodeHost.boot({ directory: fixture.directory })
-    await host.sendChatParams({ sessionID: "sess-own-workflow", agent: "Loom (Main Orchestrator)" })
+    await host.sendChatParams({ sessionID: "sess-own-workflow", agent: "Bard (Guildmaster)" })
     await host.sendRunWorkflow({ sessionID: "sess-own-workflow", workflowArgs: 'review "Check auth"' })
 
     expect(executionLeaseRepository.readExecutionLease(fixture.directory)).toMatchObject({
@@ -339,7 +339,7 @@ describe("E2E: execution ownership", () => {
     expect(host.client.promptAsyncCalls[0]?.body.parts[0]?.text).toContain("## Verification Required")
     expect(executionLeaseRepository.readExecutionLease(fixture.directory)).toBeNull()
     expect(executionLeaseRepository.readSessionRuntime(fixture.directory, "sess-plan-complete")).toMatchObject({
-      foreground_agent: "tapestry",
+      foreground_agent: "fighter",
       mode: "ad_hoc",
       status: "idle",
       execution_ref: planPath,

@@ -1,6 +1,6 @@
 import type { AgentConfig } from "@opencode-ai/sdk"
 import type { GuildConfig } from "../config/schema"
-import { getAgentDisplayName } from "../shared/agent-display-names"
+import { getAgentConfigKey, getAgentDisplayName } from "../shared/agent-display-names"
 import { BUILTIN_COMMANDS } from "../features/builtin-commands"
 
 /** Input to the config pipeline */
@@ -83,30 +83,23 @@ export class ConfigHandler {
     agents: Record<string, AgentConfig>,
     pluginConfig: GuildConfig,
   ): Record<string, AgentConfig> {
-    const disabledSet = new Set(pluginConfig.disabled_agents ?? [])
-    const overrides = pluginConfig.agents ?? {}
+    const disabledSet = new Set((pluginConfig.disabled_agents ?? []).map((name) => getAgentConfigKey(name)))
+    const overrides = Object.fromEntries(
+      Object.entries(pluginConfig.agents ?? {}).map(([key, value]) => [getAgentConfigKey(key), value]),
+    )
 
     const result: Record<string, AgentConfig> = {}
 
     for (const [name, agentConfig] of Object.entries(agents)) {
-      if (disabledSet.has(name)) {
+      if (disabledSet.has(getAgentConfigKey(name))) {
         continue
       }
 
       const override = overrides[name]
       const merged = override ? { ...agentConfig, ...override } : { ...agentConfig }
 
-      // Remap key to display name for OpenCode UI
       const displayName = getAgentDisplayName(name)
       result[displayName] = merged
-
-      // Also register under config key so Task(subagent_type="rogue") works
-      // alongside Task(subagent_type="Rogue (Scout)").
-      // Skip if config key matches display name (e.g. category ranger agents)
-      // to avoid registering the same agent twice under the same key.
-      if (name !== displayName) {
-        result[name] = merged
-      }
     }
 
     return result

@@ -1,0 +1,14 @@
+{
+  "id": "trajectory-bard-delegates-to-rogue",
+  "title": "Bard delegates exploration to Rogue",
+  "phase": "trajectory",
+  "target": { "kind": "trajectory-agent", "agent": "bard" },
+  "executor": { "kind": "trajectory-run", "scenarioRef": "bard-delegates-to-rogue.jsonc" },
+  "evaluators": [
+    {
+      "kind": "trajectory-assertion",
+      "expectedSequence": ["bard", "rogue"],
+      "expectedDelegationTargets": ["rogue"]
+    }
+  ]
+}

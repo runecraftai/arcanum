@@ -1,0 +1,16 @@
+{
+  "id": "trajectory-bard-delegates-to-wizard",
+  "title": "Bard delegates planning to Wizard",
+  "phase": "trajectory",
+  "target": { "kind": "trajectory-agent", "agent": "bard" },
+  "executor": { "kind": "trajectory-run", "scenarioRef": "bard-delegates-to-wizard.jsonc" },
+  "evaluators": [
+    {
+      "kind": "trajectory-assertion",
+      "expectedSequence": ["bard", "wizard", "bard"],
+      "expectedDelegationTargets": ["wizard"],
+      "minTurns": 4,
+      "maxTurns": 4
+    }
+  ]
+}

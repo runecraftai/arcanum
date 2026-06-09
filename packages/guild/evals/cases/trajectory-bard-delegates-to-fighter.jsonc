@@ -1,0 +1,14 @@
+{
+  "id": "trajectory-bard-delegates-to-fighter",
+  "title": "Bard starts Fighter execution",
+  "phase": "trajectory",
+  "target": { "kind": "trajectory-agent", "agent": "bard" },
+  "executor": { "kind": "trajectory-run", "scenarioRef": "bard-delegates-to-fighter.jsonc" },
+  "evaluators": [
+    {
+      "kind": "trajectory-assertion",
+      "expectedSequence": ["bard", "fighter"],
+      "expectedDelegationTargets": ["fighter"]
+    }
+  ]
+}

@@ -14,4 +14,4 @@ export interface BuiltinCommand {
   argumentHint?: string
 }
 
-export type BuiltinCommandName = "start-work" | "token-report" | "metrics" | "run-workflow" | "guild-health"
+export type BuiltinCommandName = "start-work" | "start-plan" | "start-handoff" | "token-report" | "metrics" | "run-workflow" | "guild-health"

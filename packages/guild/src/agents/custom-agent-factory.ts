@@ -25,6 +25,7 @@ const KNOWN_TOOL_NAMES = new Set([
   "call_guild_agent",
   "webfetch",
   "todowrite",
+  "ask_user",
   "skill",
   "apply_patch",
 ])

@@ -106,10 +106,10 @@ beforeAll(async () => {
 // ── Tests ──────────────────────────────────────────────────────────
 
 describe("CLI E2E: Guild plugin loading", () => {
-  it("opencode loads Guild and exposes Loom agent", async () => {
+  it("opencode loads Guild and exposes Bard agent", async () => {
     if (!opencodeAvailable || !pluginBuilt) return
 
-    const loomName = getAgentDisplayName("loom")
+    const loomName = getAgentDisplayName("bard")
     const agent = await debugAgent(loomName)
 
     expect(agent).not.toBeNull()
@@ -120,16 +120,16 @@ describe("CLI E2E: Guild plugin loading", () => {
     // Verify key prompt sections are present
     const prompt = agent!.prompt as string
     expect(prompt).toContain("<Role>")
-    expect(prompt).toContain("Loom")
+    expect(prompt).toContain("Bard")
     expect(prompt).toContain("<Delegation>")
     expect(prompt).toContain("<PlanWorkflow>")
     expect(prompt).toContain("<Style>")
   })
 
-  it("opencode loads Guild and exposes Tapestry agent", async () => {
+  it("opencode loads Guild and exposes Fighter agent", async () => {
     if (!opencodeAvailable || !pluginBuilt) return
 
-    const tapestryName = getAgentDisplayName("tapestry")
+    const tapestryName = getAgentDisplayName("fighter")
     const agent = await debugAgent(tapestryName)
 
     expect(agent).not.toBeNull()
@@ -137,7 +137,7 @@ describe("CLI E2E: Guild plugin loading", () => {
     expect(typeof agent!.prompt).toBe("string")
 
     const prompt = agent!.prompt as string
-    expect(prompt).toContain("Tapestry")
+    expect(prompt).toContain("Fighter")
     expect(prompt).toContain("<PlanExecution>")
     expect(prompt).toContain("<PostExecutionReview>")
   })
@@ -147,7 +147,7 @@ describe("CLI E2E: Guild plugin loading", () => {
     async () => {
       if (!opencodeAvailable || !pluginBuilt) return
 
-      const builtinKeys = ["loom", "tapestry", "shuttle", "pattern", "thread", "spindle", "warp", "weft"]
+      const builtinKeys = ["bard", "fighter", "ranger", "wizard", "rogue", "warlock", "paladin", "cleric"]
 
       for (const key of builtinKeys) {
         const displayName = getAgentDisplayName(key)
@@ -162,16 +162,16 @@ describe("CLI E2E: Guild plugin loading", () => {
     30_000,
   )
 
-  it("Loom agent has correct tool permissions", async () => {
+  it("Bard agent has correct tool permissions", async () => {
     if (!opencodeAvailable || !pluginBuilt) return
 
-    const loomName = getAgentDisplayName("loom")
+    const loomName = getAgentDisplayName("bard")
     const agent = await debugAgent(loomName)
 
     expect(agent).not.toBeNull()
     const tools = agent!.tools as Record<string, boolean> | undefined
 
-    // Loom should allow core coordination tools. Some host-provided tools
+    // Bard should allow core coordination tools. Some host-provided tools
     // (like apply_patch) may vary by OpenCode environment/version.
     expect(tools).toBeDefined()
     expect(tools?.task).toBe(true)
@@ -207,36 +207,36 @@ describe("CLI E2E: Guild plugin loading", () => {
     const agents = config!.agent as Record<string, unknown>
     expect(agents).toBeDefined()
 
-    const loomName = getAgentDisplayName("loom")
+    const loomName = getAgentDisplayName("bard")
     expect(agents[loomName]).toBeDefined()
   })
 
-  it("Loom is configured as default agent", async () => {
+  it("Bard is configured as default agent", async () => {
     if (!opencodeAvailable || !pluginBuilt) return
 
     const config = await debugConfig()
     expect(config).not.toBeNull()
 
-    const loomName = getAgentDisplayName("loom")
+    const loomName = getAgentDisplayName("bard")
     expect(config!.default_agent).toBe(loomName)
   })
 
-  it("Loom prompt references all delegation targets", async () => {
+  it("Bard prompt references all delegation targets", async () => {
     if (!opencodeAvailable || !pluginBuilt) return
 
-    const loomName = getAgentDisplayName("loom")
+    const loomName = getAgentDisplayName("bard")
     const agent = await debugAgent(loomName)
 
     expect(agent).not.toBeNull()
     const prompt = agent!.prompt as string
 
-    // Loom should reference all agents it can delegate to
-    expect(prompt).toContain("thread")
-    expect(prompt).toContain("spindle")
-    expect(prompt).toContain("pattern")
-    expect(prompt).toContain("shuttle")
-    expect(prompt).toContain("Weft")
-    expect(prompt).toContain("Warp")
+    // Bard should reference all agents it can delegate to
+    expect(prompt).toContain("rogue")
+    expect(prompt).toContain("warlock")
+    expect(prompt).toContain("wizard")
+    expect(prompt).toContain("ranger")
+    expect(prompt).toContain("cleric")
+    expect(prompt).toContain("paladin")
   })
 
   it(
@@ -244,7 +244,7 @@ describe("CLI E2E: Guild plugin loading", () => {
     async () => {
       if (!opencodeAvailable || !pluginBuilt) return
 
-      const builtinKeys = ["loom", "tapestry", "shuttle", "pattern", "thread", "spindle", "warp", "weft"]
+      const builtinKeys = ["bard", "fighter", "ranger", "wizard", "rogue", "warlock", "paladin", "cleric"]
 
       for (const key of builtinKeys) {
         const displayName = getAgentDisplayName(key)
@@ -272,7 +272,7 @@ describe("CLI E2E: Guild plugin loading", () => {
       if (!agents) return
 
       // Identify custom agents: they are in config.agent but NOT builtin display names
-      const builtinKeys = ["loom", "tapestry", "shuttle", "pattern", "thread", "spindle", "warp", "weft"]
+      const builtinKeys = ["bard", "fighter", "ranger", "wizard", "rogue", "warlock", "paladin", "cleric"]
       const builtinDisplayNames = new Set(builtinKeys.map((k) => getAgentDisplayName(k)))
 
       const customAgentNames = Object.keys(agents).filter((name) => !builtinDisplayNames.has(name))
@@ -302,7 +302,7 @@ describe("CLI E2E: Guild plugin loading", () => {
     const agents = config!.agent as Record<string, unknown>
     expect(agents).toBeDefined()
 
-    const loomName = getAgentDisplayName("loom")
+    const loomName = getAgentDisplayName("bard")
     expect(agents[loomName]).toBeDefined()
 
     // Loom should still have a non-trivial prompt (not reset to empty default)

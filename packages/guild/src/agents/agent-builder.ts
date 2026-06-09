@@ -27,14 +27,14 @@ type AgentConfigExtended = AgentConfig & {
  * must restore original arrays in afterEach to avoid state pollution.
  */
 export const AGENT_NAME_VARIANTS: Record<string, string[]> = {
-  rogue: ["rogue", "Rogue"],
-  warlock: ["warlock", "Warlock"],
-  cleric: ["cleric", "Cleric"],
-  paladin: ["paladin", "Paladin"],
-  ranger: ["ranger", "Ranger"],
-  wizard: ["wizard", "Wizard"],
-  bard: ["bard", "Bard"],
-  fighter: ["fighter", "Fighter"],
+  rogue: ["rogue", "Rogue", "thread", "Thread"],
+  warlock: ["warlock", "Warlock", "spindle", "Spindle"],
+  cleric: ["cleric", "Cleric", "weft", "Weft"],
+  paladin: ["paladin", "Paladin", "warp", "Warp"],
+  ranger: ["ranger", "Ranger", "shuttle", "Shuttle"],
+  wizard: ["wizard", "Wizard", "oracle", "Oracle"],
+  bard: ["bard", "Bard", "loom", "Loom"],
+  fighter: ["fighter", "Fighter", "tapestry", "Tapestry"],
 }
 
 /** Frozen snapshot of initial builtin name variants at module load time. */

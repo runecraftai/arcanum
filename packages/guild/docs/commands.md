@@ -30,7 +30,7 @@ This page documents each command's purpose, syntax, expected behavior, and the m
 | **Medium** (4–10 files, feature work) | Full plan document with context, objectives, deliverables, TODOs, and verification |
 | **Large** (10+ files, complex feature or refactor) | `spec.md` + `design.md` + `tasks.md`, plus supporting artifacts as needed (Mermaid diagrams, data models, API contracts) |
 
-Wizard produces these via `guild-spec` (writes the spec), `guild-plan` (breaks it into tasks), and `guild-handoff`/`guild-verify` for state management. See [Agents — Wizard](agents.md#wizard-planner) for the full skill-driven model.
+Wizard produces these via `guild-spec` (writes the spec), `guild-plan` (breaks it into tasks), and `guild-handoff`/`guild-verify` for state management. In foreground planning, Wizard also receives a rich handoff payload with goal, summary, open questions, and relevant context. See [Agents — Wizard](agents.md#wizard-planner) for the full skill-driven model.
 
 **Common failure modes**:
 

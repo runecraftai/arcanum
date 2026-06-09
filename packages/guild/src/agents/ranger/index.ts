@@ -8,3 +8,5 @@ export const createRangerAgent: AgentFactory = (model: string): AgentConfig => (
   mode: "all",
 })
 createRangerAgent.mode = "all"
+
+export const createShuttleAgent = createRangerAgent

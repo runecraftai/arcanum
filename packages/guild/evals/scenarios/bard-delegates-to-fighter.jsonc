@@ -1,0 +1,10 @@
+{
+  "id": "bard-delegates-to-fighter",
+  "title": "Bard delegates to Fighter",
+  "agents": ["bard", "fighter"],
+  "turns": [
+    { "turn": 1, "role": "user", "content": "Execute the completed plan." },
+    { "turn": 2, "role": "assistant", "agent": "bard", "content": "I will delegate to fighter for execution.", "mockResponse": "I will delegate to fighter for execution." },
+    { "turn": 3, "role": "assistant", "agent": "fighter", "content": "Executing the plan.", "mockResponse": "Executing the plan." }
+  ]
+}

@@ -33,17 +33,19 @@ describe("WeavePlugin integration", () => {
     expect(keys).toContain("tool.execute.after")
   })
 
-  it("config handler registers all 6 agents with display name keys", async () => {
+  it("config handler registers all 8 agents with display name keys", async () => {
     const agents = createBuiltinAgents()
     const handler = new ConfigHandler({ pluginConfig: defaultConfig, agents })
     const result = await handler.handle({ pluginConfig: defaultConfig, agents })
 
-    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("loom"))
-    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("tapestry"))
-    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("shuttle"))
-    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("pattern"))
-    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("thread"))
-    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("spindle"))
+    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("bard"))
+    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("fighter"))
+    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("ranger"))
+    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("wizard"))
+    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("rogue"))
+    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("warlock"))
+    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("cleric"))
+    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("paladin"))
 
     for (const [, agent] of Object.entries(result.agents)) {
       expect(agent.model).toBeTruthy()
@@ -51,54 +53,53 @@ describe("WeavePlugin integration", () => {
     }
   })
 
-  it("config handler sets defaultAgent to loom display name", async () => {
+  it("config handler sets defaultAgent to bard display name", async () => {
     const agents = createBuiltinAgents()
     const handler = new ConfigHandler({ pluginConfig: defaultConfig, agents })
     const result = await handler.handle({ pluginConfig: defaultConfig, agents })
 
-    expect(result.defaultAgent).toBe(getAgentDisplayName("loom"))
+    expect(result.defaultAgent).toBe(getAgentDisplayName("bard"))
   })
 
   it("config handler applies agent overrides", async () => {
     const overrideModel = "override-model-test"
     const config = WeaveConfigSchema.parse({
-      agents: { loom: { model: overrideModel } },
+      agents: { bard: { model: overrideModel } },
     })
     const agents = createBuiltinAgents({ agentOverrides: config.agents })
     const handler = new ConfigHandler({ pluginConfig: config, agents })
     const result = await handler.handle({ pluginConfig: config, agents })
 
-    const loomKey = getAgentDisplayName("loom")
-    expect(result.agents[loomKey].model).toBe(overrideModel)
+    const bardKey = getAgentDisplayName("bard")
+    expect(result.agents[bardKey].model).toBe(overrideModel)
   })
 
-  it("tool permissions enforced per agent — thread and spindle are read-only", () => {
+  it("tool permissions enforced per agent — rogue and warlock are read-only", () => {
     const agents = createBuiltinAgents()
-    const threadAgent = agents["thread"]
-    const spindleAgent = agents["spindle"]
-    const loomAgent = agents["loom"]
+    const rogueAgent = agents["rogue"]
+    const warlockAgent = agents["warlock"]
+    const bardAgent = agents["bard"]
 
-    expect(threadAgent).toBeDefined()
-    expect(spindleAgent).toBeDefined()
-    expect(loomAgent).toBeDefined()
+    expect(rogueAgent).toBeDefined()
+    expect(warlockAgent).toBeDefined()
+    expect(bardAgent).toBeDefined()
 
-    // Thread and spindle deny write tools (tools is Record<string, boolean>, false = denied)
-    const threadTools = threadAgent.tools as Record<string, boolean> | undefined
-    const spindleTools = spindleAgent.tools as Record<string, boolean> | undefined
-    expect(threadTools?.write).toBe(false)
-    expect(spindleTools?.write).toBe(false)
-    expect(threadTools?.edit).toBe(false)
-    expect(spindleTools?.edit).toBe(false)
+    const rogueTools = rogueAgent.tools as Record<string, boolean> | undefined
+    const warlockTools = warlockAgent.tools as Record<string, boolean> | undefined
+    expect(rogueTools?.write).toBe(false)
+    expect(warlockTools?.write).toBe(false)
+    expect(rogueTools?.edit).toBe(false)
+    expect(warlockTools?.edit).toBe(false)
   })
 
   it("disabled agent excluded from config handler output", async () => {
-    const config = WeaveConfigSchema.parse({ disabled_agents: ["spindle"] })
-    const agents = createBuiltinAgents({ disabledAgents: ["spindle"] })
+    const config = WeaveConfigSchema.parse({ disabled_agents: ["warlock"] })
+    const agents = createBuiltinAgents({ disabledAgents: ["warlock"] })
     const handler = new ConfigHandler({ pluginConfig: config, agents })
     const result = await handler.handle({ pluginConfig: config, agents })
 
-    expect(Object.keys(result.agents)).not.toContain(getAgentDisplayName("spindle"))
-    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("loom"))
+    expect(Object.keys(result.agents)).not.toContain(getAgentDisplayName("warlock"))
+    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("bard"))
     expect(Object.keys(result.agents)).toHaveLength(7)
   })
 
@@ -113,7 +114,6 @@ describe("WeavePlugin integration", () => {
     })
 
     expect(hooks.contextWindowThresholds).toBeNull()
-    // Other hooks should still be enabled
     expect(hooks.writeGuard).not.toBeNull()
   })
 })
@@ -133,72 +133,69 @@ describe("createManagers — builtin display_name override", () => {
 
   it("custom display_name appears as agent key in config handler output", async () => {
     const config = WeaveConfigSchema.parse({
-      agents: { loom: { display_name: "My Loom" } },
+      agents: { bard: { display_name: "My Bard" } },
     })
     const { agents, configHandler } = createManagers({ ctx: mockCtx, pluginConfig: config, continuation: DEFAULT_CONTINUATION_CONFIG })
     const result = await configHandler.handle({ pluginConfig: config, agents })
 
-    expect(Object.keys(result.agents)).toContain("My Loom")
-    expect(Object.keys(result.agents)).not.toContain("Loom (Main Orchestrator)")
+    expect(Object.keys(result.agents)).toContain("My Bard")
+    expect(Object.keys(result.agents)).not.toContain("Bard (Guildmaster)")
   })
 
   it("agents without display_name keep their default display names", async () => {
     const config = WeaveConfigSchema.parse({
-      agents: { loom: { display_name: "My Loom" } },
+      agents: { bard: { display_name: "My Bard" } },
     })
     const { agents, configHandler } = createManagers({ ctx: mockCtx, pluginConfig: config, continuation: DEFAULT_CONTINUATION_CONFIG })
     const result = await configHandler.handle({ pluginConfig: config, agents })
 
-    // Other agents are unchanged
-    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("tapestry"))
-    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("thread"))
-    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("pattern"))
+    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("fighter"))
+    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("rogue"))
+    expect(Object.keys(result.agents)).toContain(getAgentDisplayName("wizard"))
   })
 
   it("getAgentConfigKey resolves custom display name back to config key", async () => {
     const config = WeaveConfigSchema.parse({
-      agents: { loom: { display_name: "My Loom" } },
+      agents: { bard: { display_name: "My Bard" } },
     })
     createManagers({ ctx: mockCtx, pluginConfig: config, continuation: DEFAULT_CONTINUATION_CONFIG })
-    expect(getAgentConfigKey("My Loom")).toBe("loom")
+    expect(getAgentConfigKey("My Bard")).toBe("bard")
   })
 
   it("defaultAgent is updated to custom display name", async () => {
     const config = WeaveConfigSchema.parse({
-      agents: { loom: { display_name: "My Loom" } },
+      agents: { bard: { display_name: "My Bard" } },
     })
     const { agents, configHandler } = createManagers({ ctx: mockCtx, pluginConfig: config, continuation: DEFAULT_CONTINUATION_CONFIG })
     const result = await configHandler.handle({ pluginConfig: config, agents })
 
-    expect(result.defaultAgent).toBe("My Loom")
+    expect(result.defaultAgent).toBe("My Bard")
   })
 
   it("agent description is updated to match custom display name", () => {
     const config = WeaveConfigSchema.parse({
-      agents: { weft: { display_name: "My Reviewer" } },
+      agents: { cleric: { display_name: "My Reviewer" } },
     })
     const { agents } = createManagers({ ctx: mockCtx, pluginConfig: config, continuation: DEFAULT_CONTINUATION_CONFIG })
 
-    expect(agents["weft"]?.description).toBe("My Reviewer")
+    expect(agents["cleric"]?.description).toBe("My Reviewer")
   })
 
   it("setting display_name on a disabled builtin agent does NOT crash", async () => {
     const config = WeaveConfigSchema.parse({
-      disabled_agents: ["weft"],
-      agents: { weft: { display_name: "My Reviewer" } },
+      disabled_agents: ["cleric"],
+      agents: { cleric: { display_name: "My Reviewer" } },
     })
-    // Should not throw
     const { agents, configHandler } = createManagers({ ctx: mockCtx, pluginConfig: config, continuation: DEFAULT_CONTINUATION_CONFIG })
     const result = await configHandler.handle({ pluginConfig: config, agents })
 
-    // Disabled agent should not appear in output regardless of display_name
     expect(Object.keys(result.agents)).not.toContain("My Reviewer")
-    expect(Object.keys(result.agents)).not.toContain("weft")
+    expect(Object.keys(result.agents)).not.toContain("cleric")
   })
 
   it("unicode display name works end-to-end", async () => {
     const config = WeaveConfigSchema.parse({
-      agents: { loom: { display_name: "織機 (メインオーケストレーター)" } },
+      agents: { bard: { display_name: "織機 (メインオーケストレーター)" } },
     })
     const { agents, configHandler } = createManagers({ ctx: mockCtx, pluginConfig: config, continuation: DEFAULT_CONTINUATION_CONFIG })
     const result = await configHandler.handle({ pluginConfig: config, agents })

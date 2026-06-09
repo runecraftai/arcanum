@@ -361,6 +361,7 @@ export function createPluginAdapter(args: {
 
 function isBuiltinChatCommand(command: string): command is BuiltinCommandEnvelopeName {
   return command === "start-work"
+    || command === "start-plan"
     || command === "run-workflow"
     || command === "metrics"
     || command === "token-report"

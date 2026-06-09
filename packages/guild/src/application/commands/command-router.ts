@@ -3,6 +3,8 @@ import { BUILTIN_COMMANDS } from "../../features/builtin-commands/commands"
 import type { CreatedHooks } from "../../hooks/create-hooks"
 import type { RuntimeEffect } from "../../runtime/opencode/effects"
 import { executeMetricsCommand } from "./metrics-command"
+import { executeStartPlanCommand } from "./start-plan-command"
+import { executeStartHandoffCommand } from "./start-handoff-command"
 import { executeTokenReportCommand } from "./token-report-command"
 import { executeGuildHealthCommand } from "./guild-health-command"
 
@@ -25,6 +27,16 @@ export function routeCommandExecuteBefore(input: {
           }),
         },
       ]
+    case "start-plan":
+      return executeStartPlanCommand({
+        sessionId: input.sessionId,
+        argumentsText: input.argumentsText,
+      })
+    case "start-handoff":
+      return executeStartHandoffCommand({
+        sessionId: input.sessionId,
+        argumentsText: input.argumentsText,
+      })
     case "token-report":
       return executeTokenReportCommand(input.directory)
     case "metrics":
