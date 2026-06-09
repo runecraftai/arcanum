@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.17.0
+
+### Minor Changes
+
+- feat(guild): windowed fighter handoff
+
 ## 0.16.2
 
 ### Patch Changes
