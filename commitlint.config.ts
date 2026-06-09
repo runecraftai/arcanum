@@ -7,7 +7,7 @@ const config: UserConfig & { prompt: CzGitOptions } = {
     "scope-enum": [
       2,
       "always",
-      ["summon", "spells", "familiar", "guild", "grimoire", "deps", "release"],
+      ["summon", "spells", "familiar", "guild", "grimoire", "deps", "release", "spawn"],
     ],
     "scope-case": [2, "always", "kebab-case"],
   },
