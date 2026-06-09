@@ -1,12 +1,12 @@
 {
   "name": "@arcanum/spawn",
-  "version": "0.2.0",
+  "version": "0.0.0",
   "description": "Spawn tmux integration: automatically opens subagent panes and renders real-time agent execution with smart layouts",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "spawn": "./dist/bin/spawn.js"
+    "spawn": "dist/bin/spawn.js"
   },
   "files": [
     "dist"
