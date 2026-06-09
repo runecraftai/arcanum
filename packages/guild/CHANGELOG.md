@@ -1,5 +1,13 @@
 # @runecraft/guild
 
+## 0.18.0
+
+### Minor Changes
+
+- fix(guild): restore release build types
+  feat(guild): add agent handoff flow
+  feat(guild): add configurator skill
+
 ## 0.17.0
 
 ### Minor Changes
