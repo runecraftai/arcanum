@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.19.1
+
+### Patch Changes
+
+- fix(guild): deduplicate agents in UI config merge
+
 ## 0.19.0
 
 ### Minor Changes
