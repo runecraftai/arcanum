@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.19.0
+
+### Minor Changes
+
+- feat(guild): reinforce guild skill priority, search delegation, and plan.md artifact
+
 ## 0.18.1
 
 ### Patch Changes
