@@ -83,19 +83,28 @@ export function createPluginAdapter(args: {
       })
       const existingAgents = (config.agent ?? {}) as Record<string, unknown>
       if (Object.keys(existingAgents).length > 0) {
+        // Remove existing agents whose config key matches a Guild agent, preventing
+        // duplicates in the UI (e.g. OpenCode builtin "bard" + Guild "Bard (Guildmaster)").
+        const guildAgentKeys = new Set(
+          Object.keys(result.agents).map((name) => getAgentConfigKey(name)),
+        )
+        const filteredExisting = Object.fromEntries(
+          Object.entries(existingAgents).filter(
+            ([key]) => !guildAgentKeys.has(getAgentConfigKey(key)),
+          ),
+        )
+        const removedCount = Object.keys(existingAgents).length - Object.keys(filteredExisting).length
+
         debug("[config] Merging Guild agents over existing agents", {
           existingCount: Object.keys(existingAgents).length,
+          removedCount,
           guildCount: Object.keys(result.agents).length,
-          existingKeys: Object.keys(existingAgents),
+          remainingExisting: Object.keys(filteredExisting),
         })
-        const collisions = Object.keys(result.agents).filter(key => key in existingAgents)
-        if (collisions.length > 0) {
-          info("[config] Guild agents overriding user-defined agents with same name", {
-            overriddenKeys: collisions,
-          })
-        }
+        config.agent = { ...filteredExisting, ...result.agents }
+      } else {
+        config.agent = { ...result.agents }
       }
-      config.agent = { ...existingAgents, ...result.agents }
 
       const existingCommands = (config.command ?? {}) as Record<string, unknown>
       config.command = { ...existingCommands, ...result.commands }
