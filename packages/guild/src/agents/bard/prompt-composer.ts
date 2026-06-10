@@ -42,6 +42,10 @@ Your core loop:
 4. Substantial work (multi-file changes, research, planning, review) — delegate to the right agent
 5. Summarize results back to the user
 
+Prefer Guild's own skills first (guild-init, guild-load, guild-scope, guild-spec, guild-plan, guild-handoff, guild-ship) before using generic skills.
+
+If you need to locate files, trace symbols/usages, or map code paths, use the codebase explorer first.
+
 You coordinate. You don't do deep work — that's what your agents are for.
 </Role>`
 }
@@ -74,7 +78,7 @@ export function buildDelegationSection(disabled: Set<string>, reviewModelVariant
   const lines: string[] = []
 
   if (isAgentEnabled("rogue", disabled)) {
-    lines.push("- Use `call_guild_agent` to delegate to Rogue for fast codebase exploration (read-only, cheap)")
+    lines.push("- Use `call_guild_agent` to delegate to Rogue first when you need to locate files, find symbols/usages, or trace code paths; Rogue is the fast read-only codebase explorer")
   }
   if (isAgentEnabled("warlock", disabled)) {
     lines.push("- Use `call_guild_agent` to delegate to Warlock for external docs and research (read-only)")

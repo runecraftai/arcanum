@@ -145,6 +145,17 @@ describe("individual fighter section builders", () => {
     expect(buildTapestryRoleSection()).toContain("coordination orchestrator")
   })
 
+  it("prefers Guild skills before generic skills", () => {
+    expect(buildTapestryRoleSection()).toContain("Prefer Guild's own skills first")
+    expect(buildTapestryRoleSection()).toContain("guild-load")
+  })
+
+  it("buildTapestryDelegationSection routes search work to Rogue and Warlock", () => {
+    const section = buildTapestryDelegationSection()
+    expect(section).toContain("Rogue for codebase searches")
+    expect(section).toContain("Warlock for external docs/research")
+  })
+
   it("buildTapestryDisciplineSection contains TODO OBSESSION", () => {
     expect(buildTapestryDisciplineSection()).toContain("TODO OBSESSION")
   })

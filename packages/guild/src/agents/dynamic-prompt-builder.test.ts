@@ -232,6 +232,15 @@ describe("buildCategorySkillsDelegationGuide", () => {
     expect(result).toContain("**⚡ YOUR SKILLS (PRIORITY)**")
     expect(result).toContain("my-skill (user)")
   })
+
+  it("prioritizes guild skills over generic skills", () => {
+    const result = buildCategorySkillsDelegationGuide([], [
+      { name: "guild-load", description: "Load Guild context", location: "builtin" },
+      { name: "generic-skill", description: "Generic exploration", location: "builtin" },
+    ])
+    expect(result).toContain("Guild's built-in skills")
+    expect(result).toContain("generic skills")
+  })
 })
 
 describe("buildProjectContextSection", () => {

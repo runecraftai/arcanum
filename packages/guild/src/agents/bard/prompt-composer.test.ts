@@ -32,6 +32,7 @@ describe("composeBardPrompt", () => {
     expect(prompt).toContain("<PlanWorkflow>")
     expect(prompt).toContain("<ReviewWorkflow>")
     expect(prompt).toContain("<Style>")
+    expect(prompt).toContain("Prefer Guild's own skills first")
   })
 
   it("preserves Warp security language with no disabled agents", () => {
@@ -107,8 +108,14 @@ describe("buildDelegationSection", () => {
   it("clarifies Wizard versus Ranger routing boundary", () => {
     const section = buildDelegationSection(new Set())
     expect(section).toContain("delegate to Wizard for planning, scoping, and work breakdown")
-    expect(section).toContain("guild-scope, guild-spec, guild-plan, guild-handoff")
     expect(section).toContain("domain expertise rather than planning or scoping")
+  })
+
+  it("routes file discovery to Rogue first", () => {
+    const section = buildDelegationSection(new Set())
+    expect(section).toContain("delegate to Rogue first")
+    expect(section).toContain("locate files")
+    expect(section).toContain("trace code paths")
   })
 
   it("excludes rogue when disabled", () => {
@@ -302,6 +309,7 @@ describe("individual section builders", () => {
   it("buildRoleSection contains Loom identity", () => {
     expect(buildBardRoleSection()).toContain("Bard")
     expect(buildBardRoleSection()).toContain("coordinator")
+    expect(buildBardRoleSection()).toContain("locate files")
   })
 
   it("buildDisciplineSection contains work tracking rules", () => {

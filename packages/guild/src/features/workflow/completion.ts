@@ -153,7 +153,9 @@ function checkPlanComplete(context: CompletionContext): CompletionCheckResult {
 
 function resolveSpecArtifactPath(directory: string, planName: string): string | null {
   // .guild/ (canonical) — checked first
+  // plan.md is the primary plan artifact (atomic tasks); state.md is for handoff
   const canonicalCandidates = [
+    join(directory, ".guild", "plans", planName, "plan.md"),
     join(directory, ".guild", "plans", planName, "tasks.md"),
     join(directory, ".guild", "plans", planName, "spec.md"),
     join(directory, ".guild", "plans", planName, "design.md"),
