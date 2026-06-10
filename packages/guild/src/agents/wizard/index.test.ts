@@ -21,6 +21,13 @@ describe("createWizardAgent", () => {
     expect(config.prompt!.length).toBeGreaterThan(0)
   })
 
+  it("documents interactive and automatic modes", () => {
+    const config = createWizardAgent("claude-opus-4")
+    expect(config.prompt).toContain("MODE: interactive")
+    expect(config.prompt).toContain("MODE: automatic")
+    expect(config.prompt).toContain("OpenCode `question` tool")
+  })
+
   it("has no denied tools (full access for research)", () => {
     const config = createWizardAgent("claude-opus-4")
     expect(config.tools).toBeUndefined()

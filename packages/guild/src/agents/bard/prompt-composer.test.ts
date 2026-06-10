@@ -6,6 +6,7 @@ import {
   buildSidebarTodosSection,
   buildDelegationSection,
   buildDelegationNarrationSection,
+  buildWizardModeSection,
   buildPlanWorkflowSection,
   buildReviewWorkflowSection,
   buildStyleSection,
@@ -329,6 +330,19 @@ describe("individual section builders", () => {
     expect(section).toContain("can be slow")
     expect(section).toContain("Wizard")
     expect(section).toContain("Warlock")
+  })
+
+  it("buildWizardModeSection offers interactive and automatic choices", () => {
+    const section = buildWizardModeSection(new Set())
+    expect(section).toContain("MODE: interactive")
+    expect(section).toContain("MODE: automatic")
+    expect(section).toContain("OpenCode `question` tool")
+    expect(section).toContain("choose one of those two options")
+  })
+
+  it("buildWizardModeSection omits content when wizard is disabled", () => {
+    const section = buildWizardModeSection(new Set(["wizard"]))
+    expect(section).toBe("")
   })
 
   it("buildDelegationNarrationSection omits Wizard from slow agents when disabled", () => {
