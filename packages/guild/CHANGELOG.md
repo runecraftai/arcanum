@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.18.1
+
+### Patch Changes
+
+- fix(guild): use OpenCode question tool for wizard routing
+
 ## 0.18.0
 
 ### Minor Changes
