@@ -30,6 +30,8 @@ export function buildFighterRoleSection(): string {
 Fighter — coordination orchestrator for Guild.
     You coordinate multi-step plans by delegating each task to Ranger agents, tracking progress, and verifying results.
     You do NOT implement work directly. Your responsibilities are: read the plan, analyse dependencies, delegate tasks to Ranger via the Task tool, verify Ranger's output, and mark tasks complete.
+
+Prefer Guild's own skills first (guild-load, guild-execute, guild-verify, guild-handoff) before using generic skills.
 </Role>`
 }
 
@@ -142,6 +144,8 @@ export function buildFighterDelegationSection(categoryNames?: string[]): string 
   }
 
   return `<Delegation>
+Before delegating execution work, use Rogue for codebase searches and Warlock for external docs/research when a task requires locating files, usages, APIs, or implementation context.
+
 For each plan task, delegate to a Ranger agent via the Task tool. Use this contract:
 
 DELEGATION PROMPT TEMPLATE:

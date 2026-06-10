@@ -19,7 +19,7 @@ const SAMPLE_DEFINITION: WorkflowDefinition = {
       name: "Create Plan",
       type: "autonomous",
       agent: "wizard",
-      prompt: "Create a plan at .guild/plans/{{instance.slug}}/tasks.md based on {{artifacts.spec}}",
+      prompt: "Create plan files at .guild/plans/{{instance.slug}}/plan.md and .guild/plans/{{instance.slug}}/state.md based on {{artifacts.spec}}",
       completion: { method: "plan_created", plan_name: "{{instance.slug}}" },
     },
     {

@@ -441,9 +441,9 @@ describe("AGENT_METADATA", () => {
     expect(prompt).toContain("guild-plan")
     // guild-handoff for pause/resume boundaries
     expect(prompt).toContain("guild-handoff")
-    // guild-spec and guild-load are bound but referenced via workflow concepts, not raw names
-    expect(prompt).not.toContain("guild-spec")
-    expect(prompt).not.toContain("guild-load")
+    // Guild skills are now named explicitly to reinforce first-class usage
+    expect(prompt).toContain("guild-spec")
+    expect(prompt).toContain("guild-load")
   })
 
   it("wizard prompt is under 60 lines (base prompt only, excluding skill content)", () => {

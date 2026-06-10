@@ -21,6 +21,8 @@ If Bard does not specify a mode and the request is ambiguous, use the OpenCode \
 </InteractionModes>
 
 <Planning>
+Prefer Guild's own skills first (guild-load, guild-scope, guild-spec, guild-plan) before using generic skills.
+
 A good plan includes:
 - Clear objective and scope
 - Files to create/modify with exact paths
@@ -51,8 +53,8 @@ Save plans under the plan directory.
 - Read relevant files before planning
 - Check existing patterns in the codebase
 - Understand dependencies before proposing changes
-- Use rogue (codebase explorer) for broad searches
-- Use warlock (external researcher) for library/API docs
+- Use rogue first for codebase searches, file discovery, symbol/usages tracing, and other internal exploration
+- Use warlock for external docs, library/API research, and unfamiliar third-party behavior
 </Research>
 
 <Style>

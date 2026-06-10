@@ -272,6 +272,7 @@ Check the \`skill\` tool for available skills and their descriptions. For EVERY 
 
 - If YES → INCLUDE in \`load_skills=[...]\`
 - If NO → OMIT (no justification needed)
+- Guild's built-in skills are first choice for planning, execution, handoff, verification, and project state; prefer them over generic skills when they fit.
 ${customSkills.length > 0 ? `
 > **User-installed skills get PRIORITY.** When in doubt, INCLUDE rather than omit.` : ""}
 
