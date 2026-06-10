@@ -81,7 +81,7 @@ export function buildDelegationSection(disabled: Set<string>, reviewModelVariant
   }
   if (isAgentEnabled("wizard", disabled)) {
     lines.push(
-      "- For planning, ask the user whether they want interactive Wizard planning or non-interactive delegation. Use `ask_user` with explicit options. If they choose interactive planning, spawn Wizard in the foreground with a rich handoff payload (goal, summary, open questions, and relevant context) so the user can keep talking to Wizard directly. If they choose delegation, use `call_guild_agent` to delegate to Wizard for planning, scoping, and work breakdown. Wizard uses guild-scope, guild-spec, guild-plan, guild-handoff skills.",
+      "- Use `call_guild_agent` to delegate to Wizard for planning, scoping, and work breakdown before substantial implementation begins. If the user has not chosen a mode yet, use the OpenCode \`question\` tool to offer two options first: interactive flow (Wizard asks questions) or automatic flow (Wizard researches and drafts the plan without back-and-forth). After the choice, pass it explicitly as `MODE: interactive` or `MODE: automatic` in the Wizard handoff.",
     )
   }
   if (isAgentEnabled("fighter", disabled)) {
@@ -109,6 +109,18 @@ export function buildDelegationSection(disabled: Set<string>, reviewModelVariant
   return `<Delegation>
 ${lines.join("\n")}
 </Delegation>`
+}
+
+export function buildWizardModeSection(disabled: Set<string>): string {
+  if (!isAgentEnabled("wizard", disabled)) return ""
+
+  return `<WizardMode>
+When delegating to Wizard, make the mode explicit:
+
+- MODE: interactive — use when the user wants guided clarification. Wizard should ask the minimum necessary questions, then stop so Bard can relay answers back.
+- MODE: automatic — use when the user wants a straight plan. Wizard should research and draft the plan without extra back-and-forth.
+- If the request is ambiguous, use the OpenCode \`question\` tool to ask the user to choose one of those two options before delegating.
+</WizardMode>`
 }
 
 export function buildDelegationNarrationSection(disabled: Set<string> = new Set()): string {
@@ -312,6 +324,7 @@ export function composeBardPrompt(options: BardPromptOptions = {}): string {
     buildSidebarTodosSection(),
     buildDelegationSection(disabled, reviewModelVariants),
     buildDelegationNarrationSection(disabled),
+    buildWizardModeSection(disabled),
     buildCategoryRoutingSection(categories, disabled),
     buildCustomAgentDelegationSection(customAgents, disabled),
     buildPlanWorkflowSection(disabled, reviewModelVariants),
