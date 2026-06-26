@@ -227,5 +227,6 @@ A subagent focused on test strategy, coverage analysis, and quality gates. Denie
 - [Agents](agents.md) — the eight built-in agents and the recommended customization order.
 - [Configuration](configuration.md) — `custom_agents` config reference.
 - [Skills](skills.md) — assigning skills to agents.
+- [Orchestration](orchestration.md) — endorsed patterns and anti-patterns for composing agents (read before wiring a `custom_agents` entry that calls other agents).
 - [prompt_append](prompt-append.md) — appending to built-in agents (not available for custom agents).
 - [Model guide](model-guide.md) — model string format and provider prefixes.

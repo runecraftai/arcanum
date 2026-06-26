@@ -33,6 +33,7 @@ Want to shape agent behavior without replacing the whole system? Start with the 
 | Teach agents new skills or workflows | [Skills](skills.md) |
 | Route work to domain specialists by file pattern | [Categories](categories.md) |
 | Create your own agents with custom behavior | [Custom agents](custom-agents.md) |
+| Pick an orchestration pattern and avoid anti-patterns | [Orchestration](orchestration.md) |
 | Turn off built-in agents or features you don't need | [Disabling features](disabling-features.md) |
 | See all customization options in a single config | [Full example](full-example.md) |
 
@@ -45,6 +46,10 @@ Want to shape agent behavior without replacing the whole system? Start with the 
 - [Workflows — controls](workflows/controls.md) — pause, skip, abort, and resume controls.
 - [Examples — workflows](examples/workflows/) — copy-pasteable workflow definitions.
 - [Troubleshooting](troubleshooting.md) — symptom-based diagnosis for install, config, commands, workflows, and analytics.
+
+## Project state
+
+- [Definition of done](definition-of-done.md) — the project-wide standing bar `guild-verify` and `guild-ship` check against in addition to per-task `tasks.md` criteria.
 
 ## Maintainers
 
