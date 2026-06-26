@@ -24,7 +24,7 @@ This package is the distributable catalog of production-ready skills for the Arc
 
 | Skill | Version | Description | Main Trigger | Docs |
 |-------|---------|-------------|--------------|------|
-| **spec-driven** | 4.1.0 | Full lifecycle dev pipeline — INIT, MAP, QUICK, SPEC, PLAN, BUILD, TEST, VALIDATE, REVIEW, SIMPLIFY, SHIP, PAUSE/RESUME | `/spec` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/spec-driven/README.md) |
+| **spec-driven** | 5.0.0 | Spec-driven planning with 4 adaptive phases (Specify/Design/Tasks/Execute) + independent Verifier (author≠verifier) + self-improving lessons layer | `/spec` | [→ README](https://github.com/runecraft-dev/arcanum/tree/main/packages/spells/skills/spec-driven/README.md) |
 | **git-commit-learning** | 1.0.0 | RPI model: analyze git log for patterns and write AI-learnable commits (Research → Plan → Implement → Verify). PT/EN. | `/commit` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/git-commit-learning/README.md) |
 | **using-agent-skills** | 1.0.0 | Meta-skill: discover and dispatch to the right Arcanum skill for the current task. | `/skill` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/using-agent-skills/README.md) |
 | **idea-refine** | 1.0.0 | Refine raw ideas through divergent/convergent thinking — expand options, stress-test assumptions. | `/plan` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/idea-refine/README.md) |

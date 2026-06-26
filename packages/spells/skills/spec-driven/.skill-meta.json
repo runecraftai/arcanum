@@ -1,14 +1,14 @@
 {
   "name": "spec-driven",
-  "version": "4.1.0",
-  "type": "meta-skill",
-  "description": "Full lifecycle development pipeline — INIT, MAP, QUICK, SPEC, PLAN, BUILD, TEST, VALIDATE, REVIEW, SIMPLIFY, SHIP, PAUSE/RESUME",
-  "phases": ["init", "map", "quick", "spec", "plan", "build", "test", "validate", "review", "simplify", "ship", "pause-resume"],
-  "trigger": "/spec",
+  "version": "5.0.0",
+  "type": "skill",
+  "description": "Feature planning with 4 adaptive phases (Specify, Design, Tasks, Execute) + Verifier (author != verifier) + self-improving lessons layer",
+  "phases": ["specify", "design", "tasks", "execute", "validate", "memory", "lessons"],
+  "trigger": ["/spec", "/explore", "/plan", "/apply"],
   "scope": "public",
   "audience": "development-teams",
   "dependencies": {
     "required": [],
-    "optional": ["mermaid-studio", "codenavi", "learning-opportunities"]
+    "optional": ["mermaid-studio", "codenavi"]
   }
 }
