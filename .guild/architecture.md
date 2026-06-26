@@ -50,6 +50,7 @@
 | `knowledge/decisions.md` | Architectural decisions, rationale, alternatives rejected | on any significant decision |
 | `knowledge/conventions.md` | Coding standards, naming rules, patterns used | on convention discovery |
 | `knowledge/gotchas.md` | Known pitfalls, common mistakes, fix patterns | on encountering or anticipating issues |
+| `knowledge/definition-of-done.md` | Project-wide standing bar (consumed by `guild-verify` and `guild-ship`; complements per-task `tasks.md` criteria) | on quality-bar changes (new lint rule, new security requirement, etc.) |
 
 **Rules**:
 - Durable: written once, referenced many times
@@ -139,7 +140,8 @@ Agents must load context in this order:
 5. .guild/context/state.md
 6. .guild/context/handoff.md
 7. .guild/knowledge/index.md  (then relevant knowledge files)
-8. active .guild/plans/<slug>/notes.md
+8. .guild/knowledge/definition-of-done.md  (project-wide standing bar; read by guild-verify and guild-ship)
+9. active .guild/plans/<slug>/notes.md
 ```
 
 ---
@@ -155,6 +157,7 @@ Agents must load context in this order:
 | "What blockers exist?" | `plans/<slug>/state.md` (plan-local) or `context/state.md` (global) |
 | "What should I do next?" | `plans/<slug>/tasks.md` |
 | "How do I set up this project?" | `context/project.md` |
+| "What is the project-wide quality bar?" | `knowledge/definition-of-done.md` |
 | "What have we learned?" | `knowledge/` files |
 
 ---
