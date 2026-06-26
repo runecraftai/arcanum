@@ -19,7 +19,7 @@ import {
 import { installSkill, updateSkill, removeSkill } from "../skills/installer.js";
 import { resolveSpellsDir } from "../utils/paths.js";
 import { promptGenerateCommands } from "./command-prompt.js";
-import { installCommands } from "../commands/install-commands.js";
+import { installCommands, printCommandsSummary } from "../commands/install-commands.js";
 import type { InstallResult } from "../skills/installer.js";
 import type { SkillMeta } from "../skills/loader.js";
 import type { DetectedAgent } from "../agents/detector.js";
@@ -62,7 +62,7 @@ async function stepSelectAction(state: FlowState): Promise<FlowState> {
   }
   return {
     ...state,
-    step: 3,
+    step: result === "install-commands" ? 7 : 3,
     action: result,
   };
 }
@@ -245,6 +245,17 @@ const actionExecutors: Record<string, ActionExecutor> = {
 };
 
 async function stepExecute(state: FlowState): Promise<FlowState> {
+  if (state.action === "install-commands") {
+    const installedNames = await getInstalledSkillNames(state.selectedAgents);
+    const cmdResult = await installCommands({
+      projectRoot: process.cwd(),
+      installedSkillNames: installedNames,
+    });
+    printCommandsSummary(cmdResult);
+    clack.outro("Done!");
+    throw new Error("COMPLETE");
+  }
+
   const results: InstallResult[] = [];
   const installed: InstalledSkill[] =
     state.action === "update" || state.action === "remove"

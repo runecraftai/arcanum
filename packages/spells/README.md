@@ -47,45 +47,18 @@ This package is the distributable catalog of production-ready skills for the Arc
 
 ---
 
-## 🚀 Installation
+## 📥 Get a Skill
 
-#### npm
+Skills are installed by the **Summon** CLI — it picks the right destination
+for your agent, handles the write, and keeps the install declarative.
+
 ```bash
-npm install @runecraft/spells
+npx @runecraft/summon install
 ```
 
-#### bun
-```bash
-bun add @runecraft/spells
-```
-
-#### pnpm
-```bash
-pnpm add @runecraft/spells
-```
-
-#### yarn
-```bash
-yarn add @runecraft/spells
-```
-
-### Using a Skill
-
-After installation, copy the desired `SKILL.md` file to your agent's skills or rules directory:
-
-**Cursor:**
-```bash
-cp node_modules/@runecraft/spells/skills/spec-driven/SKILL.md .cursor/rules/spec-driven.mdc
-```
-
-**Claude Code:**
-```bash
-cp node_modules/@runecraft/spells/skills/spec-driven/SKILL.md ~/.claude/skills/spec-driven.md
-```
-
-**Other agents:** Refer to your agent's documentation for the correct skills directory path.
-
-For slash command installation, see [@runecraft/summon](https://www.npmjs.com/package/@runecraft/summon) — `summon install-commands` generates `/review`, `/test`, `/ship`, etc. for Claude Code, OpenCode, and Cursor.
+See [@runecraft/summon](https://www.npmjs.com/package/@runecraft/summon) for the
+full reference, including the `install-commands` step that generates `/review`,
+`/test`, `/ship`, etc. for Claude Code, OpenCode, and Cursor.
 
 ---
 

@@ -108,6 +108,10 @@ function printSummary(result: InstallCommandsResult): void {
   }
 }
 
+export function printCommandsSummary(result: InstallCommandsResult): void {
+  printSummary(result);
+}
+
 export default defineCommand({
   meta: {
     name: "install-commands",

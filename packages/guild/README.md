@@ -50,6 +50,63 @@ Restart OpenCode — npm plugins are auto-installed and loaded at startup. No `b
 
 See [docs/configuration.md](https://github.com/runecraftai/arcanum/tree/main/packages/guild/docs/configuration.md) for the full reference.
 
+## 🔁 Workflows
+
+A workflow is a named sequence of steps that orchestrates a multi-step task. Guild ships a workflow engine that supports `interactive`, `autonomous`, and `gate` steps, plus pause/resume/skip/abort controls via natural language.
+
+### Where workflows live
+
+- `.opencode/workflows/<name>.json` — project, committed to the repo
+- `~/.config/opencode/workflows/<name>.json` — personal, machine-local
+
+### A real example: research → plan → implement
+
+This is the workflow you'll reach for most often. It researches the area, scouts the codebase, drafts a plan, gates on your approval, then implements and opens a PR. Source: [`docs/examples/workflows/research-plan-implement.json`](docs/examples/workflows/research-plan-implement.json).
+
+```jsonc
+{
+  "name": "research-plan-implement",
+  "description": "End-to-end feature development: research, scout, plan, approve, implement, PR.",
+  "default_completion": { "method": "user_confirm" },
+  "steps": [
+    { "id": "research",    "type": "autonomous", "prompt": "Use the Warlock researcher to gather external docs and references. Save under .guild/runtime/<feature-slug>/research.md." },
+    { "id": "scout",       "type": "autonomous", "prompt": "Use the Rogue scout to map the existing codebase surface for the feature. Save under .guild/runtime/<feature-slug>/scout.md." },
+    { "id": "plan",        "type": "autonomous", "prompt": "Invoke the Wizard planner. Produce a plan with task breakdown and verification criteria under .guild/plans/<feature-slug>.md.",
+      "completion": { "method": "plan_created" } },
+    { "id": "review-plan", "type": "gate",       "prompt": "Show the plan. The user will edit it inline or approve before implementation." },
+    { "id": "implement",   "type": "autonomous", "prompt": "Drive the plan to completion. Update the plan file's status as each task finishes.",
+      "completion": { "method": "plan_complete" } },
+    { "id": "pr",          "type": "autonomous", "prompt": "Open a pull request. Title: feat: <feature-slug>. Body: summary + plan/scout/research links." }
+  ]
+}
+```
+
+### Step types
+
+| Type | Behavior |
+| --- | --- |
+| `interactive` | Back-and-forth with the user. |
+| `autonomous` | Runs to completion without user input. |
+| `gate` | Pauses for explicit human review. |
+
+### Run a workflow
+
+```text
+/run-workflow research-plan-implement
+```
+
+### While a workflow runs
+
+Type these in the chat to control it: **pause**, **resume**, **skip this step**, **abort**.
+
+### More examples and reference
+
+- [docs/examples/workflows/code-review.json](docs/examples/workflows/code-review.json) — review a PR with Cleric.
+- [docs/examples/workflows/dependency-upgrade.json](docs/examples/workflows/dependency-upgrade.json) — bump a dep, run tests, gate on review.
+- [Workflows — overview](docs/workflows/overview.md) — concepts and execution model.
+- [Workflows — authoring](docs/workflows/authoring.md) — full JSON schema.
+- [Workflows — controls](docs/workflows/controls.md) — pause/resume/skip/abort keywords.
+
 ## Built-in commands
 
 - `/start-work` — hand off a plan to Fighter in a new session/window (Bard stays clean; falls back to in-session execution if spawning is unsupported)
@@ -67,6 +124,8 @@ See [docs/commands.md](https://github.com/runecraftai/arcanum/tree/main/packages
 - **Typecheck**: `bun run typecheck`
 - **Schema**: `bun run schema:config`
 - **Clean**: `bun run clean`
+
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) for how to extend the package.
 
 ## Uninstall
 

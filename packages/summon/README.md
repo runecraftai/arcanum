@@ -48,7 +48,7 @@ The 8 emitted commands (defined in `src/commands/registry.ts`) are: `/plan`, `/r
 - Exits with code 1 and a clear message when no supported runtime is detected.
 - Re-running overwrites idempotently (no duplicates).
 
-**TUI integration:** when run as `summon install` (no subcommand), the TUI flow ends with a "Generate slash commands for installed skills?" prompt that runs the same flow against the just-installed skills.
+**TUI integration:** the `summon` TUI (run with no subcommand) also offers **"Install slash commands"** as a top-level menu action — pick it when you only want to regenerate slash commands without installing new skills. It runs the same flow as the subcommand and skips the skill/method/scope prompts. After `summon install` finishes, the TUI also ends with a "Generate slash commands for installed skills?" prompt that reuses the same flow.
 
 ## Stack
 
