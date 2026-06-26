@@ -147,3 +147,19 @@ vite.config.ts.timestamp-*
 
 # Changeset markdown files (keep config.json)
 .changeset/*.md
+
+# Local planning workspace (not part of public source)
+.specs/
+
+# Guild runtime: ephemeral session data, auto-managed by the agent runtime
+.guild/runtime/
+.guild/plans/
+
+# Backup of .git created during secret-purge / history-rewrites
+.git.bak/
+
+# Local personal agent state (sessions, debug captures, archived data dumps)
+packages/pi-archived-*/agent/sessions/
+packages/pi-archived-*/agent-sessions/
+packages/pi-archived-*/debug-captures/
+packages/pi-archived-*/web-test-captures/
