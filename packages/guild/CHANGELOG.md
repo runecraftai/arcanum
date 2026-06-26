@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.21.0
+
+### Minor Changes
+
+- feat(summon): expose install-commands as TUI menu action
+
 ## 0.20.1
 
 ### Patch Changes
