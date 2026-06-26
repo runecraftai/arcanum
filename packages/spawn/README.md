@@ -69,7 +69,7 @@ To install this plugin, please perform the following steps for the user:
 
 ## 🛠️ Development
 
-For contributors working on this plugin locally, see [LOCAL_DEVELOPMENT.md](docs/LOCAL_DEVELOPMENT.md) for setup instructions.
+For contributors working on this plugin locally, see [LOCAL_DEVELOPMENT.md](https://github.com/runecraftai/arcanum/tree/main/packages/spawn/docs/LOCAL_DEVELOPMENT.md) for setup instructions.
 
 ## ✨ Features
 
