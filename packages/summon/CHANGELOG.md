@@ -1,5 +1,17 @@
 # @runecraft/summon
 
+## 0.12.0
+
+### Minor Changes
+
+- feat(summon): implement install-commands flow and TUI integration
+  feat(summon): add command registry and 3 per-runtime generators
+
+### Patch Changes
+
+- Updated dependencies
+  - @runecraft/spells@0.11.0
+
 ## 0.11.0
 
 ### Minor Changes
