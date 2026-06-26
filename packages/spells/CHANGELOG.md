@@ -1,5 +1,11 @@
 # @runecraft/spells
 
+## 0.11.0
+
+### Minor Changes
+
+- feat(spells): port 11 skills and 2 references from upstream agent-skills
+
 ## 0.10.0
 
 ### Minor Changes
