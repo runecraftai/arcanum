@@ -32,6 +32,32 @@ the agent should follow when this skill is active.
 
 Anything outside the recognized frontmatter keys is ignored by the parser.
 
+## Skill anatomy
+
+Every bundled skill follows the same structure. Authors of new skills SHALL use the same structure; the code review enforces it.
+
+| Section | Purpose |
+| --- | --- |
+| Frontmatter | `name` (required), `description` (required, with bilingual triggers + negative filters), `license`, optional `model`/`tools` |
+| Overview | One paragraph: what this skill does. First sentence states the single most important behaviour. |
+| When to Use | Trigger conditions (what user intent activates this skill) and "Do NOT use for" negative filters. |
+| Primary inputs / outputs | File paths the skill reads and writes. Sub-section of Overview. |
+| Process | Numbered, atomic steps. Each step is one action the agent can complete and verify. |
+| Rationalizations | Table of common excuses agents use to skip Process steps + rebuttals. ≥ 3 rows for skills that include implementation, review, verification, or shipping steps. |
+| Red Flags | Signs the skill is being misapplied or the work is going off the rails. ≥ 2 items per skill. |
+| Verification | Evidence required to claim the skill ran successfully. Names specific commands, file paths, and outputs. **"Seems right" is not evidence.** |
+| See also | Cross-links to related skills and docs. |
+
+### Why this anatomy
+
+The Rationalizations table names the excuses agents use to skip Process steps and rebuts them inline. This is the single biggest behaviour change versus the older thin-shape skills: a skill stops sounding like guidance and starts sounding like a workflow with anti-patterns called out.
+
+The Verification section is the exit gate. Every claim of "the skill ran" must cite a file path, a command, or a runtime observation. The rule **"seems right" is not evidence** is repeated in every skill, verbatim, so the agent cannot miss it.
+
+### Anatomy exceptions
+
+A skill that genuinely has no Process step an agent might want to skip MAY omit the Rationalizations table. The Red Flags and Verification sections SHALL still be present.
+
 ## Where Guild looks for skills
 
 Skills are discovered from four sources, in this order of precedence (highest first):
@@ -53,18 +79,20 @@ The Guild package ships the following skills under `packages/guild/skills/`:
 | Skill | Purpose |
 | --- | --- |
 | `guild-commit-learning` | Capture reusable lessons from a session. |
+| `guild-configurator` | Configure Guild/OpenCode: agents, custom_agents, categories, prompts, skills, validation, and docs. |
 | `guild-execute` | Execute approved tasks with minimal scope and steady progress. |
 | `guild-handoff` | Hand off work between agents with a clean context boundary. |
 | `guild-init` | Initialize a new feature or project context. |
 | `guild-load` | Load existing project context into a new session. |
 | `guild-plan` | Produce a Wizard-style plan for an upcoming change. |
+| `guild-recon` | Explore, trace, and discover codebase patterns before making changes. |
 | `guild-research` | Research external docs and references. |
 | `guild-review` | Run a Cleric-style review pass on completed work. |
 | `guild-scope` | Scope a request before planning. |
 | `guild-security` | Run a Paladin-style security audit. |
 | `guild-ship` | Finalize and ship a completed change. |
 | `guild-spec` | Drive a spec-driven workflow. |
-| `guild-verify` | Verify a change against acceptance criteria. |
+| `guild-verify` | Verify a change against acceptance criteria (per-task and project-wide bar). |
 
 Skills are versioned with the package. New skills land in a Guild release; outdated skills are removed in a release that calls them out.
 
