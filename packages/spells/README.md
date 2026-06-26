@@ -24,26 +24,26 @@ This package is the distributable catalog of production-ready skills for the Arc
 
 | Skill | Version | Description | Main Trigger | Docs |
 |-------|---------|-------------|--------------|------|
-| **spec-driven** | 4.1.0 | Full lifecycle dev pipeline — INIT, MAP, QUICK, SPEC, PLAN, BUILD, TEST, VALIDATE, REVIEW, SIMPLIFY, SHIP, PAUSE/RESUME | `/spec` | [→ README](skills/spec-driven/README.md) |
-| **git-commit-learning** | 1.0.0 | RPI model: analyze git log for patterns and write AI-learnable commits (Research → Plan → Implement → Verify). PT/EN. | `/commit` | [→ README](skills/git-commit-learning/README.md) |
-| **using-agent-skills** | 1.0.0 | Meta-skill: discover and dispatch to the right Arcanum skill for the current task. | `/skill` | [→ README](skills/using-agent-skills/README.md) |
-| **idea-refine** | 1.0.0 | Refine raw ideas through divergent/convergent thinking — expand options, stress-test assumptions. | `/plan` | [→ README](skills/idea-refine/README.md) |
-| **interview-me** | 1.0.0 | One-question-at-a-time interview until ~95% confidence about user intent. | `/interview` | [→ README](skills/interview-me/README.md) |
-| **test-driven-development** | 1.0.0 | TDD with the 80/15/5 pyramid and Beyonce Rule. Fail first, then make it pass. | `/test` | [→ README](skills/test-driven-development/README.md) |
-| **doubt-driven-development** | 1.0.0 | Adversarial review of non-trivial decisions: CLAIM → EXTRACT → DOUBT → RECONCILE → STOP. | `/harden` | [→ README](skills/doubt-driven-development/README.md) |
-| **debugging-and-error-recovery** | 1.0.0 | Five-step root-cause triage: reproduce → localize → reduce → fix → guard. | `/debug` | [→ README](skills/debugging-and-error-recovery/README.md) |
-| **code-review-and-quality** | 1.0.0 | Five-axis code review (correctness, readability, architecture, security, performance) with severity labels. | `/review` | [→ README](skills/code-review-and-quality/README.md) |
-| **code-simplification** | 1.0.0 | Reduce complexity while preserving behavior — Chesterton's Fence, Rule of 500. | `/simplify` | [→ README](skills/code-simplification/README.md) |
-| **security-and-hardening** | 1.0.0 | OWASP Top 10 and a three-tier boundary system for security-first development. | `/security` | [→ README](skills/security-and-hardening/README.md) |
-| **deprecation-and-migration** | 1.0.0 | Retire old systems, APIs, and features; migrate users safely. Treats code as liability. | `/deprecate` | [→ README](skills/deprecation-and-migration/README.md) |
-| **shipping-and-launch** | 1.0.0 | Pre-launch checklist, staged rollout, feature flag lifecycle, monitoring, rollback. | `/ship` | [→ README](skills/shipping-and-launch/README.md) |
+| **spec-driven** | 4.1.0 | Full lifecycle dev pipeline — INIT, MAP, QUICK, SPEC, PLAN, BUILD, TEST, VALIDATE, REVIEW, SIMPLIFY, SHIP, PAUSE/RESUME | `/spec` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/spec-driven/README.md) |
+| **git-commit-learning** | 1.0.0 | RPI model: analyze git log for patterns and write AI-learnable commits (Research → Plan → Implement → Verify). PT/EN. | `/commit` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/git-commit-learning/README.md) |
+| **using-agent-skills** | 1.0.0 | Meta-skill: discover and dispatch to the right Arcanum skill for the current task. | `/skill` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/using-agent-skills/README.md) |
+| **idea-refine** | 1.0.0 | Refine raw ideas through divergent/convergent thinking — expand options, stress-test assumptions. | `/plan` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/idea-refine/README.md) |
+| **interview-me** | 1.0.0 | One-question-at-a-time interview until ~95% confidence about user intent. | `/interview` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/interview-me/README.md) |
+| **test-driven-development** | 1.0.0 | TDD with the 80/15/5 pyramid and Beyonce Rule. Fail first, then make it pass. | `/test` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/test-driven-development/README.md) |
+| **doubt-driven-development** | 1.0.0 | Adversarial review of non-trivial decisions: CLAIM → EXTRACT → DOUBT → RECONCILE → STOP. | `/harden` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/doubt-driven-development/README.md) |
+| **debugging-and-error-recovery** | 1.0.0 | Five-step root-cause triage: reproduce → localize → reduce → fix → guard. | `/debug` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/debugging-and-error-recovery/README.md) |
+| **code-review-and-quality** | 1.0.0 | Five-axis code review (correctness, readability, architecture, security, performance) with severity labels. | `/review` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/code-review-and-quality/README.md) |
+| **code-simplification** | 1.0.0 | Reduce complexity while preserving behavior — Chesterton's Fence, Rule of 500. | `/simplify` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/code-simplification/README.md) |
+| **security-and-hardening** | 1.0.0 | OWASP Top 10 and a three-tier boundary system for security-first development. | `/security` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/security-and-hardening/README.md) |
+| **deprecation-and-migration** | 1.0.0 | Retire old systems, APIs, and features; migrate users safely. Treats code as liability. | `/deprecate` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/deprecation-and-migration/README.md) |
+| **shipping-and-launch** | 1.0.0 | Pre-launch checklist, staged rollout, feature flag lifecycle, monitoring, rollback. | `/ship` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/shipping-and-launch/README.md) |
 
 ## 📚 References
 
 | File | Description |
 |------|-------------|
-| [testing-patterns.md](references/testing-patterns.md) | Common testing patterns across the stack with 80/15/5 pyramid, Beyonce Rule, and 8 anti-patterns. |
-| [definition-of-done.md](references/definition-of-done.md) | Project-wide standing bar that complements per-task acceptance criteria. |
+| [testing-patterns.md](https://github.com/runecraftai/arcanum/tree/main/packages/spells/references/testing-patterns.md) | Common testing patterns across the stack with 80/15/5 pyramid, Beyonce Rule, and 8 anti-patterns. |
+| [definition-of-done.md](https://github.com/runecraftai/arcanum/tree/main/packages/spells/references/definition-of-done.md) | Project-wide standing bar that complements per-task acceptance criteria. |
 
 ---
 
