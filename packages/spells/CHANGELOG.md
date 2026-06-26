@@ -1,5 +1,12 @@
 # @runecraft/spells
 
+## 0.12.0
+
+### Minor Changes
+
+- feat(spells): bump spec-driven to v5.0.0 — 4 phases + Verifier + lessons layer
+  fix(spells): replace relative README links with absolute GitHub URLs
+
 ## 0.11.0
 
 ### Minor Changes
