@@ -35,11 +35,11 @@ Restart OpenCode — npm plugins are auto-installed and loaded at startup. No `b
 
 | If you want to… | Read |
 | --- | --- |
-| Get a working install step-by-step | [docs/getting-started.md](docs/getting-started.md) |
-| Configure agents, skills, and categories | [docs/configuration.md](docs/configuration.md) |
-| See all slash commands | [docs/commands.md](docs/commands.md) |
-| Diagnose a problem | [docs/troubleshooting.md](docs/troubleshooting.md) |
-| Browse the full docs index | [docs/README.md](docs/README.md) |
+| Get a working install step-by-step | [docs/getting-started.md](https://github.com/runecraftai/arcanum/tree/main/packages/guild/docs/getting-started.md) |
+| Configure agents, skills, and categories | [docs/configuration.md](https://github.com/runecraftai/arcanum/tree/main/packages/guild/docs/configuration.md) |
+| See all slash commands | [docs/commands.md](https://github.com/runecraftai/arcanum/tree/main/packages/guild/docs/commands.md) |
+| Diagnose a problem | [docs/troubleshooting.md](https://github.com/runecraftai/arcanum/tree/main/packages/guild/docs/troubleshooting.md) |
+| Browse the full docs index | [docs/README.md](https://github.com/runecraftai/arcanum/tree/main/packages/guild/docs/README.md) |
 
 ## Config at a glance
 
@@ -48,7 +48,7 @@ Restart OpenCode — npm plugins are auto-installed and loaded at startup. No `b
 - **State directory**: `.guild/` (plans, runtime, analytics)
 - **Schema artifact**: `schema/guild-config.schema.json` in this repository and in the published npm package
 
-See [docs/configuration.md](docs/configuration.md) for the full reference.
+See [docs/configuration.md](https://github.com/runecraftai/arcanum/tree/main/packages/guild/docs/configuration.md) for the full reference.
 
 ## Built-in commands
 
@@ -58,7 +58,7 @@ See [docs/configuration.md](docs/configuration.md) for the full reference.
 - `/metrics` — analytics and plan metrics (opt-in)
 - `/token-report` — token usage report across sessions
 
-See [docs/commands.md](docs/commands.md) for syntax, behaviour, and failure modes.
+See [docs/commands.md](https://github.com/runecraftai/arcanum/tree/main/packages/guild/docs/commands.md) for syntax, behaviour, and failure modes.
 
 ## Development
 
