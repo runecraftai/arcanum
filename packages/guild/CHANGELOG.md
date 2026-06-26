@@ -1,5 +1,14 @@
 # @runecraft/guild
 
+## 0.20.0
+
+### Minor Changes
+
+- feat(guild): retrofit 5 remaining skills to new anatomy
+  feat(guild): retrofit 7 workflow-shaped skills to new anatomy
+  feat(guild): implement DoD mechanism in guild-init, guild-verify, and guild-ship
+  feat(guild): retrofit guild-execute skill to anatomy standard
+
 ## 0.19.1
 
 ### Patch Changes
