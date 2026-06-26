@@ -18,6 +18,8 @@ import {
 } from "../skills/discovery.js";
 import { installSkill, updateSkill, removeSkill } from "../skills/installer.js";
 import { resolveSpellsDir } from "../utils/paths.js";
+import { promptGenerateCommands } from "./command-prompt.js";
+import { installCommands } from "../commands/install-commands.js";
 import type { InstallResult } from "../skills/installer.js";
 import type { SkillMeta } from "../skills/loader.js";
 import type { DetectedAgent } from "../agents/detector.js";
@@ -275,6 +277,24 @@ async function stepExecute(state: FlowState): Promise<FlowState> {
   }
 
   await showProgress(results);
+
+  const wantsCommands = await promptGenerateCommands();
+  if (wantsCommands) {
+    const cmdResult = await installCommands({
+      projectRoot: process.cwd(),
+      installedSkillNames: state.installedNames.length > 0
+        ? state.installedNames
+        : state.allSkills.map((s) => s.name),
+    });
+    if (cmdResult.detected.length === 0) {
+      clack.log.warn("No supported runtime detected for slash commands.");
+    } else if (cmdResult.generated.length === 0 && cmdResult.skipped.length > 0) {
+      clack.log.info(`No commands generated. ${cmdResult.skipped.length} skipped.`);
+    } else if (cmdResult.generated.length > 0) {
+      clack.log.success(`Generated ${cmdResult.generated.length} slash command files.`);
+    }
+  }
+
   clack.outro("Done!");
   throw new Error("COMPLETE");
 }
