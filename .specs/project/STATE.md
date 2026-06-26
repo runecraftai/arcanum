@@ -36,6 +36,9 @@
   - Specs: `.specs/archive/2026-06-05-guild-rpg-agent-structural-rename/`
 
 ## Completed & Archived Features
+- `agent-skills-cherrypick` → `.specs/archive/2026-06-26-agent-skills-cherrypick/` (2026-06-26)
+  - Goal: port 11 lifecycle skills + 2 reference checklists from `addyosmani/agent-skills` into `@runecraft/spells`, add a `CommandMapping` registry and 3 per-runtime generators in `@runecraft/summon`, ship `summon install-commands` for Claude Code / OpenCode / Cursor — fully decoupled from `@runecraft/guild`
+  - Status: ✅ All 25 tasks (T01-T25) complete; 22/22 new unit tests pass; `bun run build` passes 3/3; E2E smoke generates 7 Claude + 8 OpenCode + 8 Cursor files correctly; `packages/guild/` untouched
 - `guild-weave-replatform` → `.specs/archive/2026-06-04-guild-weave-replatform/` (2026-06-04)
   - Goal: replace `packages/guild` implementation with `opencode-weave`, preserve legacy guild in archive, and rename public surfaces from weave to guild
   - Status: ✅ All 5 phases complete, build/typecheck pass, 1918/1936 tests pass (18 env-only failures)
