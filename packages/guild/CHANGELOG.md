@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.20.1
+
+### Patch Changes
+
+- fix(guild): replace relative README links with absolute GitHub URLs
+
 ## 0.20.0
 
 ### Minor Changes
