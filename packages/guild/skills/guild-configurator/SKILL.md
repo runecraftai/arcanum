@@ -6,139 +6,114 @@ license: CC-BY-4.0
 
 # guild-configurator
 
-Escopo: orientar e validar configuração do Guild sem mexer em runtime.
+Configure Guild/OpenCode agents, custom_agents, categories, prompts, skills, and docs without touching runtime.
 
-## O que entra
+## Overview
 
-- `agents` — overrides de agentes built-in
-- `custom_agents` — criação e ajuste de agentes novos
-- `categories` — roteamento por categoria e especialização de Ranger
-- `prompt` / `prompt_file` / `prompt_append` — texto de prompt e variações
-- `skills` — associação de skills existentes a agentes
-- validação de `guild-opencode.jsonc` / `guild-opencode.json`
-- documentação de configuração, exemplos e troubleshooting relacionados
+Adjust the configuration surface of Guild/OpenCode — agents, `custom_agents`, categories, `prompt` / `prompt_file` / `prompt_append`, skill assignments, validation, and the docs that describe them. Do not change runtime code in `packages/guild/src/`. Use the four primary flows below to keep changes scoped and verifiable.
 
-## Dependências explícitas
+## When to Use
 
-- `guild-scope` — para classificar a solicitação como tarefa de configuração
-- `guild-load` — para carregar contexto, estado e handoff antes de alterar config
-- `guild-plan` — para quebrar ajustes maiores em passos verificáveis
-- `guild-verify` — para confirmar schema, merge e resultado final
-- `guild-spec` e `guild-handoff` — apenas quando a mudança exigir especificação ou passagem de contexto
+- The request is about Guild/OpenCode configuration, validation, or documentation.
+- The user wants a `custom_agents` entry, a new category, a fix to `guild-opencode.jsonc`, or an update to config docs / examples.
+- The next step is a config change plus its docs, not an app feature or runtime edit.
 
-## Fronteiras
+**Do NOT use for**: app features, runtime logic in `packages/guild/src/`, or non-config tasks outside Guild/OpenCode. Use `guild-spec` for feature specs, `guild-plan` for execution planning, `guild-execute` for implementation, and `guild-verify` for verification.
 
-Esta skill cobre a superfície de configuração do Guild e sua documentação associada.
-Ela não decide implementação interna do app; apenas ajusta como o Guild é configurado,
-validado e documentado.
+## Primary inputs
 
-## Arquitetura da skill
+- `.opencode/guild-opencode.jsonc` (and the fallback `.opencode/guild-opencode.json`)
+- `packages/guild/schema/guild-config.schema.json` — schema for validation
+- `packages/guild/docs/configuration.md` — current configuration reference
+- `packages/guild/docs/custom-agents.md` — custom_agents reference
+- `packages/guild/docs/categories.md` — categories reference
+- `packages/guild/docs/full-example.md` — full config example
+- `packages/guild/docs/troubleshooting.md` — config troubleshooting
+- `.guild/knowledge/decisions.md` — prior config decisions to honour
 
-- **Padrão principal**: workflow sequencial orientado por intenção, com decisão
-  contextual antes de editar qualquer arquivo.
-- **Padrão secundário**: lookup curto em referências auxiliares para mapa de schema,
-  exemplos e validação; o corpo principal não repete o catálogo completo.
-- **Regra de leitura**: carregar referências só quando o tipo de solicitação exigir.
+## Primary outputs
 
-### Quando ler cada referência
+- Updated `.opencode/guild-opencode.jsonc`
+- Updated config docs and examples (when the documented behaviour changes)
+- Updated `packages/guild/schema/guild-config.schema.json` (only on structural change)
 
-- `references/config-map.md`: quando a tarefa mencionar chaves, campos, relação entre
-  conceitos e o formato exato da configuração.
-- `references/validation.md`: quando a tarefa envolver validação, erro de schema,
-  JSONC inválido, inconsistência de tipos ou checagem final.
-- `references/examples.md`: quando a tarefa pedir exemplos, reescrita de docs ou
-  comparação com um fluxo real.
+## Process
 
-### Mapa de progressive disclosure
+1. Confirm the request is in scope (configuration, validation, or documentation of Guild/OpenCode). If not, hand off to `guild-scope` first.
+2. Classify the request into one of the four primary flows below (custom agent, category, fix invalid JSONC, update docs). Each flow has a deterministic sequence.
+3. Read the relevant reference file (`references/config-map.md`, `references/validation.md`, `references/examples.md`) when the request mentions schema keys, validation errors, or examples.
+4. Make the smallest config change that satisfies the request. Stay within the declared scope. Do not reflow unrelated keys.
+5. Validate the file (schema + JSONC syntax) and confirm the change does not break `agents`, `custom_agents`, or `categories` references.
+6. Update docs and examples only when the documented behaviour changed. Do not edit docs for purely local config tweaks.
+7. Update `schema/guild-config.schema.json` only on structural change (new field, removed field, rename, type change, enum, restriction, validation rule). Do not touch the schema for text, examples, or local config fixes.
+8. Update `knowledge/decisions.md` by explicit decision if the change introduces a new config convention.
 
-1. **Nível 1 — SKILL.md**: objetivo, fronteiras, gatilhos, fluxos primários e regras
-   de decisão.
-2. **Nível 2 — referências curtas**: `config-map.md` para mapeamento de configuração
-   e `validation.md` para regras de validação.
-3. **Nível 3 — exemplos**: `examples.md` para casos curtos de uso e troubleshooting.
+## Primary flows
 
-O corpo principal deve bastar para orientar a ação; os detalhes finos ficam fora dele.
+### 1) Add a `custom_agents` entry
 
-## O que não fazer
+1. Confirm the agent's name, role, and target category.
+2. Define the smallest set of fields needed (name, prompt or prompt_file, optional skills, optional category).
+3. If the agent specializes an existing category, link it via `categories` without touching runtime.
+4. Validate the JSONC and update `docs/custom-agents.md` and `full-example.md` if the example flow changed.
 
-- não alterar runtime em `packages/guild/src/`
-- não implementar features do app ou mudar comportamento interno do plugin
-- não editar config do usuário em `~/.config/opencode/` sem pedido explícito
-- não disparar para dúvidas genéricas sobre Guild/OpenCode sem relação com configuração, validação ou documentação
-- não disparar para pedidos fora do domínio Guild/OpenCode, mesmo que mencionem agentes, prompts ou skills de forma genérica
-- não substituir o papel de planning, load, verify ou handoff
-- não virar uma skill genérica para “qualquer coisa do Guild”
+### 2) Create a category
 
-## Fluxos primários
+1. Identify the grouping goal and the agents / `custom_agents` affected.
+2. Define the category and its links to the agents.
+3. Update `docs/categories.md` and the routing examples.
+4. Confirm the new category is consistent with the existing taxonomy (no duplicate, no overlap).
 
-### 1) Adicionar um agente customizado
+### 3) Fix invalid `guild-opencode.jsonc`
 
-- **Gatilhos**: "criar agente customizado", "adicionar custom agent", "novo agente para Guild", "registrar agente novo", "montar um agente", "setup a custom agent", "create a new agent for Guild", "add an agent config".
-- **Sequência**:
-  1. Confirmar nome, papel e categoria alvo do agente.
-  2. Definir `custom_agents` com o menor conjunto de campos necessário.
-  3. Se houver especialização, vincular prompt/skills/categoria sem tocar em runtime.
-  4. Validar o trecho de configuração e atualizar exemplos relacionados.
-- **Resultado esperado**: o novo agente fica descrito em configuração, pronto para ser reconhecido pelo Guild, sem alterar código de execução.
+1. Locate the structural error (missing key, wrong type, problematic comma / comment, inconsistent reference).
+2. Fix only the invalid portion, preserving original intent.
+3. Revalidate syntax and the cross-references between `agents`, `categories`, and prompts.
+4. Update example or troubleshooting docs if the expected format changed.
 
-### 2) Criar uma categoria
+### 4) Update config docs and examples
 
-- **Gatilhos**: "criar category", "nova categoria", "separar por categoria", "rotear por categoria", "organizar por categoria", "set up a category", "create a category for Guild", "group agents by category".
-- **Sequência**:
-  1. Identificar o objetivo de agrupamento e os agentes afetados.
-  2. Definir a categoria e seus vínculos com agentes/custom_agents.
-  3. Ajustar referências de roteamento e documentação da categoria.
-  4. Conferir consistência com o restante da taxonomia existente.
-- **Resultado esperado**: a categoria passa a organizar e roteiar agentes de forma explícita na configuração, sem duplicar lógica de runtime.
+1. Identify which section or example drifted from reality.
+2. Rewrite with focus on the configuration surface, not on runtime.
+3. Keep examples short and aligned with the schema and the four primary flows.
+4. Confirm the doc still distinguishes this skill from `guild-scope`, `guild-load`, `guild-plan`, and `guild-verify`.
 
-### 3) Corrigir `guild-opencode.jsonc` inválido
+## Rationalizations
 
-- **Gatilhos**: "arquivo inválido", "schema quebrado", "jsonc inválido", "falha de validação", "corrigir config", "arrumar a config do OpenCode", "fix the config", "repair invalid JSONC", "lint/config validation failed".
-- **Sequência**:
-  1. Localizar o erro estrutural (chave faltando, tipo incorreto, vírgula/comentário problemático, referência inconsistente).
-  2. Corrigir apenas o trecho inválido, preservando intenção original.
-  3. Revalidar a sintaxe e a coerência entre agentes, categorias e prompts.
-  4. Atualizar exemplo/documentação se o formato esperado mudou.
-- **Resultado esperado**: `guild-opencode.jsonc` volta a validar e representa a configuração pretendida sem alterações desnecessárias.
+| Excuse | Rebuttal |
+| --- | --- |
+| "I'll just edit the config and skip docs." | Step 6 updates docs when behaviour changes. Skipping docs produces drift between config and reference. |
+| "Schema update is overkill for a small change." | Step 7 limits schema edits to structural changes. A small text change should not touch the schema. |
+| "I'll rewrite the whole `guild-opencode.jsonc` for clarity." | Step 4 says smallest change. Reflows hide the actual change in a noisy diff. |
+| "I can edit `packages/guild/src/` while I'm here." | Scope: configuration, not runtime. Step 4 enforces the boundary. |
+| "Validation can wait; I'll ship the config first." | Step 5 validates before declaring done. Unvalidated config is the failure mode this table rebuts. |
+| "I can edit the user's `~/.config/opencode/` to make this work." | Scope: project-level config. The user-level config is the user's; do not edit it without explicit request. |
 
-### 4) Atualizar docs e exemplos de configuração
+## Red Flags
 
-- **Gatilhos**: "atualizar docs", "ajustar exemplo", "sincronizar documentação", "documentar config", "exemplo de uso", "update the docs", "refresh examples", "document the config", "align docs with config".
-- **Sequência**:
-  1. Identificar qual trecho da documentação ou exemplo ficou desatualizado.
-  2. Reescrever com foco em configuração real, não em implementação.
-  3. Manter exemplos curtos, alinhados ao schema e aos fluxos desta skill.
-  4. Garantir que o texto continue distinguindo esta skill de `guild-scope`, `guild-load`, `guild-plan` e `guild-verify`.
-- **Resultado esperado**: docs e exemplos refletem o formato atual da configuração e ajudam a aplicar a skill sem ambiguidade.
+- A change to `packages/guild/src/` was made under the guise of "config".
+- The schema was edited for a non-structural change (text, example, local fix).
+- Docs were updated for a purely local config tweak with no behaviour change.
+- `guild-opencode.jsonc` was rewritten with a noisy reflow that hides the actual change.
+- The user's `~/.config/opencode/` was edited without explicit request.
+- A new `custom_agents` entry duplicates an existing agent or category.
 
-## Arquivos-alvo e regras de edição
+## Verification
 
-### Alvos primários
+The skill is complete when ALL of the following evidence is present:
 
-- `.opencode/guild-opencode.jsonc` (e o fallback `.opencode/guild-opencode.json`)
-- `packages/guild/docs/configuration.md`
-- `packages/guild/docs/custom-agents.md`
-- `packages/guild/docs/categories.md`
-- `packages/guild/docs/full-example.md`
-- `packages/guild/docs/troubleshooting.md`
+- The config change matches one of the four primary flows and follows its sequence.
+- The JSONC validates (schema + syntax). The command + output are captured.
+- Docs and examples are updated only when the documented behaviour changed.
+- The schema is updated only on structural change.
+- `knowledge/decisions.md` records any new config convention (by explicit decision).
+- No `packages/guild/src/` file was modified.
 
-### Quando editar docs
+**"Seems right" is not evidence.** Every claim of "this config is correct" cites the file path, the validation command, and the captured output.
 
-- editar docs quando a mudança alterar a forma correta de configurar, explicar ou validar o Guild
-- editar `full-example.md` quando a configuração exemplificar um fluxo novo ou mudar um campo usado no exemplo
-- editar `troubleshooting.md` quando o sintoma, a causa ou o passo de validação mudar
-- não editar docs por mudanças puramente locais no JSONC, a menos que o comportamento documentado tenha mudado
+## See also
 
-### Quando o schema entra no fluxo
-
-- editar `packages/guild/schema/guild-config.schema.json` somente quando houver mudança estrutural de schema: campo novo, campo removido, rename, tipo, enum, restrição ou regra de validação
-- não tocar no schema para ajuste de texto, exemplo, organização de docs ou correção pontual de config
-- se o schema mudar, revisar junto a documentação afetada e os exemplos que mencionam o campo alterado
-
-### Checklist curto antes de editar
-
-1. Isto é mudança de config, de docs, ou de schema?
-2. O alvo principal é `.opencode/guild-opencode.jsonc`?
-3. Algum doc listado acima ficou desatualizado?
-4. Há mudança estrutural que exige mexer no `guild-config.schema.json`?
-5. A alteração preserva a fronteira: configuração sim, runtime não.
+- [guild-scope](guild-scope) — classifies the request before this skill runs.
+- [guild-load](guild-load) — loads context, state, and handoff before changing config.
+- [guild-plan](guild-plan) — breaks larger config adjustments into verifiable steps.
+- [guild-verify](guild-verify) — confirms schema, merge, and the final result.
