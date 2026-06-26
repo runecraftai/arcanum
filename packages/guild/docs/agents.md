@@ -185,4 +185,5 @@ To prevent a built-in agent from registering, add its name to `disabled_agents`:
 
 - [Configuration](configuration.md) — `agents`, `custom_agents`, and `categories` fields.
 - [Skills](skills.md) — assigning skills to agents.
+- [Orchestration](orchestration.md) — endorsed patterns and anti-patterns for composing agents.
 - [Architecture](architecture.md) — how the agent registry is built at startup.
