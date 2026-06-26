@@ -1,5 +1,11 @@
 # @runecraft/spells
 
+## 0.13.0
+
+### Minor Changes
+
+- feat(summon): expose install-commands as TUI menu action
+
 ## 0.12.0
 
 ### Minor Changes
