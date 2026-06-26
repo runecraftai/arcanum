@@ -1,5 +1,11 @@
 # @runecraft/spells
 
+## 0.11.1
+
+### Patch Changes
+
+- fix(spells): replace relative README links with absolute GitHub URLs
+
 ## 0.11.0
 
 ### Minor Changes
