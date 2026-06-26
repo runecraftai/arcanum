@@ -24,6 +24,34 @@ This compiles `src/cli.ts` into a standalone Bun binary at `dist/summon`.
 
 The install command will prompt for skill selections and destinations (coming soon).
 
+### Install slash commands
+
+Generate slash-command files for detected AI runtimes so users can invoke skills with one keystroke (`/review`, `/test`, `/ship`, etc.).
+
+```bash
+./dist/summon install-commands
+```
+
+Supported runtimes:
+
+| Runtime | Detection markers | Output |
+|---------|-------------------|--------|
+| Claude Code | `.claude/` or `CLAUDE.md` | `.claude/commands/<name>.md` |
+| OpenCode | `.opencode/`, `opencode.json`, or `opencode.jsonc` | `.opencode/commands/<name>.md` |
+| Cursor | `.cursor/` or `.cursorrules` | `.cursor/rules/<name>.mdc` |
+
+The 8 emitted commands (defined in `src/commands/registry.ts`) are: `/plan`, `/review`, `/test`, `/simplify`, `/ship`, `/security`, `/debug`, `/harden`. Each command body loads the corresponding skill.
+
+**Behavior:**
+- Per-runtime built-in collision detection: `/review` is skipped for Claude Code (built-in command) but emitted for OpenCode and Cursor.
+- Skips commands whose target skill is not installed; warns per skip.
+- Exits with code 1 and a clear message when no supported runtime is detected.
+- Re-running overwrites idempotently (no duplicates).
+
+**TUI integration:** when run as `summon install` (no subcommand), the TUI flow ends with a "Generate slash commands for installed skills?" prompt that runs the same flow against the just-installed skills.
+
+## Stack
+
 ## Stack
 
 - **citty**: Lightweight CLI framework with lazy-loaded subcommands
