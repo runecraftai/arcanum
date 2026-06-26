@@ -29,11 +29,6 @@ Execute the task list in `tasks.md` one item at a time, staying within the decla
 - `.guild/plans/<slug>/state.md` — current plan status
 - `.guild/knowledge/conventions.md` — coding standards
 
-## Fallback rules
-
-- Read `.specs/features/<feature>/tasks.md` only if `.guild/plans/<slug>/tasks.md` is absent
-- Write only to `.guild/plans/<slug>/` — never to `.specs/`
-
 ## Process
 
 1. Read `state.md` to confirm the plan is in `in-progress` and identify the next pending task.
