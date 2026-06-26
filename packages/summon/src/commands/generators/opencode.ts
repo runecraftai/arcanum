@@ -1,7 +1,7 @@
 import path from "node:path";
 import fs from "node:fs/promises";
 import type { CommandMapping } from "../registry";
-import type { CommandGenerator } from "../generator";
+import type { CommandGenerator, InstallLocation } from "../generator";
 import { ensureDir, exists } from "../../utils/fs";
 import { resolveAgentPath } from "../../utils/paths";
 
@@ -32,16 +32,26 @@ function renderBody(mapping: CommandMapping): string {
 export const opencodeGenerator: CommandGenerator = {
   runtime: "opencode",
   displayName: "OpenCode",
-  async detect(projectRoot: string): Promise<boolean> {
+  supportedLocations: ["local", "global"],
+  async detectLocal(projectRoot: string): Promise<boolean> {
     return (
       (await projectPathExists(".opencode", projectRoot)) ||
       (await projectPathExists("opencode.json", projectRoot)) ||
-      (await projectPathExists("opencode.jsonc", projectRoot)) ||
-      (await exists(resolveAgentPath("~/.config/opencode/", "global")))
+      (await projectPathExists("opencode.jsonc", projectRoot))
     );
   },
-  async generate(mapping: CommandMapping, projectRoot: string): Promise<string> {
-    const dir = path.join(projectRoot, ".opencode", "commands");
+  async detectGlobal(): Promise<boolean> {
+    return exists(resolveAgentPath("~/.config/opencode/", "global"));
+  },
+  async generate(
+    mapping: CommandMapping,
+    projectRoot: string,
+    location: InstallLocation
+  ): Promise<string> {
+    const dir =
+      location === "global"
+        ? path.join(resolveAgentPath("~/.config/opencode/", "global"), "commands")
+        : path.join(projectRoot, ".opencode", "commands");
     await ensureDir(dir);
     const filePath = path.join(dir, `${mapping.name}.md`);
     const frontmatter = ["---", `description: ${mapping.description}`, "---", ""].join("\n");

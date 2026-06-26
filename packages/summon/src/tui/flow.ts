@@ -19,7 +19,11 @@ import {
 import { installSkill, updateSkill, removeSkill } from "../skills/installer.js";
 import { resolveSpellsDir } from "../utils/paths.js";
 import { promptGenerateCommands } from "./command-prompt.js";
+import { promptProjectRoots } from "./project-prompt.js";
+import { promptCommandLocations } from "./command-location-prompt.js";
 import { installCommands, printCommandsSummary } from "../commands/install-commands.js";
+import { listGenerators } from "../commands/generators.js";
+import type { InstallLocation, SupportedRuntime } from "../commands/generator.js";
 import type { InstallResult } from "../skills/installer.js";
 import type { SkillMeta } from "../skills/loader.js";
 import type { DetectedAgent } from "../agents/detector.js";
@@ -38,6 +42,8 @@ interface FlowState {
   scope?: string;
   spellsDir: string;
   detected: DetectedAgent[];
+  commandProjectRoots: string[];
+  commandLocationByRuntime: Partial<Record<SupportedRuntime, InstallLocation[]>>;
 }
 
 async function stepSelectAgent(state: FlowState): Promise<FlowState> {
@@ -116,7 +122,7 @@ async function stepSelectMethod(state: FlowState): Promise<FlowState> {
     return { ...state, step: 3 };
   }
   const method = result;
-  const nextStep = 5; // always go through scope selection
+  const nextStep = 5;
 
   return {
     ...state,
@@ -161,6 +167,48 @@ async function stepConfirm(state: FlowState): Promise<FlowState> {
   }
 
   return { ...state, step: 7 };
+}
+
+async function stepPickProjectRoots(state: FlowState): Promise<FlowState> {
+  const result = await promptProjectRoots();
+  if (clack.isCancel(result)) {
+    return { ...state, step: 2 };
+  }
+  const roots = result as string[];
+  if (roots.length === 0) {
+    clack.outro("No project roots — aborting.");
+    throw new Error("USER_CANCEL");
+  }
+  return { ...state, step: 8, commandProjectRoots: roots };
+}
+
+async function stepPickCommandLocations(state: FlowState): Promise<FlowState> {
+  const detectedPairs: { gen: ReturnType<typeof listGenerators>[number]; projectRoot: string }[] = [];
+  const gens = listGenerators();
+  for (const projectRoot of state.commandProjectRoots) {
+    for (const gen of gens) {
+      const localHere = await gen.detectLocal(projectRoot);
+      const globalHere = await gen.detectGlobal();
+      if (localHere || globalHere) {
+        detectedPairs.push({ gen, projectRoot });
+      }
+    }
+  }
+
+  const uniqueByRuntime = new Map<SupportedRuntime, ReturnType<typeof listGenerators>[number]>();
+  for (const { gen } of detectedPairs) {
+    uniqueByRuntime.set(gen.runtime as SupportedRuntime, gen);
+  }
+  const detectedForPrompt = Array.from(uniqueByRuntime.values()).map((gen) => ({
+    gen,
+    projectRoot: state.commandProjectRoots[0] ?? "",
+  }));
+
+  const result = await promptCommandLocations(detectedForPrompt);
+  if (clack.isCancel(result)) {
+    return { ...state, step: 7 };
+  }
+  return { ...state, step: 9, commandLocationByRuntime: result as FlowState["commandLocationByRuntime"] };
 }
 
 async function executeInstall(
@@ -244,16 +292,25 @@ const actionExecutors: Record<string, ActionExecutor> = {
   remove: executeRemove,
 };
 
+async function runInstallCommands(state: FlowState): Promise<void> {
+  const installedNames =
+    state.installedNames.length > 0
+      ? state.installedNames
+      : state.allSkills.map((s) => s.name);
+
+  const cmdResult = await installCommands({
+    projectRoots: state.commandProjectRoots,
+    locationByRuntime: state.commandLocationByRuntime,
+    installedSkillNames: installedNames,
+  });
+  printCommandsSummary(cmdResult);
+  clack.outro("Done!");
+  throw new Error("COMPLETE");
+}
+
 async function stepExecute(state: FlowState): Promise<FlowState> {
   if (state.action === "install-commands") {
-    const installedNames = await getInstalledSkillNames(state.selectedAgents);
-    const cmdResult = await installCommands({
-      projectRoot: process.cwd(),
-      installedSkillNames: installedNames,
-    });
-    printCommandsSummary(cmdResult);
-    clack.outro("Done!");
-    throw new Error("COMPLETE");
+    await runInstallCommands(state);
   }
 
   const results: InstallResult[] = [];
@@ -291,11 +348,25 @@ async function stepExecute(state: FlowState): Promise<FlowState> {
 
   const wantsCommands = await promptGenerateCommands();
   if (wantsCommands) {
-    const cmdResult = await installCommands({
-      projectRoot: process.cwd(),
-      installedSkillNames: state.installedNames.length > 0
+    const installedSkillNames =
+      state.installedNames.length > 0
         ? state.installedNames
-        : state.allSkills.map((s) => s.name),
+        : state.allSkills.map((s) => s.name);
+
+    const localMap: Partial<Record<SupportedRuntime, InstallLocation[]>> = {};
+    for (const [rt, locs] of Object.entries(state.commandLocationByRuntime)) {
+      localMap[rt as SupportedRuntime] = locs;
+    }
+    if (Object.keys(localMap).length === 0) {
+      for (const gen of listGenerators()) {
+        localMap[gen.runtime as SupportedRuntime] = ["local"];
+      }
+    }
+
+    const cmdResult = await installCommands({
+      projectRoots: [process.cwd()],
+      locationByRuntime: localMap,
+      installedSkillNames,
     });
     if (cmdResult.detected.length === 0) {
       clack.log.warn("No supported runtime detected for slash commands.");
@@ -317,7 +388,9 @@ const stepHandlers: Record<number, (state: FlowState) => Promise<FlowState>> = {
   4: stepSelectMethod,
   5: stepSelectScope,
   6: stepConfirm,
-  7: stepExecute,
+  7: stepPickProjectRoots,
+  8: stepPickCommandLocations,
+  9: stepExecute,
 };
 
 export async function runInteractiveFlow(): Promise<void> {
@@ -342,6 +415,8 @@ export async function runInteractiveFlow(): Promise<void> {
     selectedSkills: [],
     spellsDir,
     detected,
+    commandProjectRoots: [],
+    commandLocationByRuntime: {},
   };
 
   while (true) {

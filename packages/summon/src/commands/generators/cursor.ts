@@ -1,9 +1,8 @@
 import path from "node:path";
 import fs from "node:fs/promises";
 import type { CommandMapping } from "../registry";
-import type { CommandGenerator } from "../generator";
+import type { CommandGenerator, InstallLocation } from "../generator";
 import { ensureDir, exists } from "../../utils/fs";
-import { resolveAgentPath } from "../../utils/paths";
 
 async function projectPathExists(relPath: string, projectRoot: string): Promise<boolean> {
   return exists(path.join(projectRoot, relPath));
@@ -12,14 +11,21 @@ async function projectPathExists(relPath: string, projectRoot: string): Promise<
 export const cursorGenerator: CommandGenerator = {
   runtime: "cursor",
   displayName: "Cursor",
-  async detect(projectRoot: string): Promise<boolean> {
+  supportedLocations: ["local"],
+  async detectLocal(projectRoot: string): Promise<boolean> {
     return (
       (await projectPathExists(".cursor", projectRoot)) ||
-      (await projectPathExists(".cursorrules", projectRoot)) ||
-      (await exists(resolveAgentPath(".cursor/rules/", "project")))
+      (await projectPathExists(".cursorrules", projectRoot))
     );
   },
-  async generate(mapping: CommandMapping, projectRoot: string): Promise<string> {
+  async detectGlobal(): Promise<boolean> {
+    return false;
+  },
+  async generate(
+    mapping: CommandMapping,
+    projectRoot: string,
+    _location: InstallLocation
+  ): Promise<string> {
     const dir = path.join(projectRoot, ".cursor", "rules");
     await ensureDir(dir);
     const filePath = path.join(dir, `${mapping.name}.mdc`);

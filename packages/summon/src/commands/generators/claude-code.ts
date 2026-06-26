@@ -1,7 +1,7 @@
 import path from "node:path";
 import fs from "node:fs/promises";
 import type { CommandMapping } from "../registry";
-import type { CommandGenerator } from "../generator";
+import type { CommandGenerator, InstallLocation } from "../generator";
 import { ensureDir, exists } from "../../utils/fs";
 import { resolveAgentPath } from "../../utils/paths";
 
@@ -12,15 +12,24 @@ async function projectPathExists(relPath: string, projectRoot: string): Promise<
 export const claudeCodeGenerator: CommandGenerator = {
   runtime: "claude-code",
   displayName: "Claude Code",
-  async detect(projectRoot: string): Promise<boolean> {
+  supportedLocations: ["local", "global"],
+  async detectLocal(projectRoot: string): Promise<boolean> {
     return (
       (await projectPathExists(".claude", projectRoot)) ||
-      (await projectPathExists("CLAUDE.md", projectRoot)) ||
-      (await exists(resolveAgentPath("~/.claude/", "global")))
+      (await projectPathExists("CLAUDE.md", projectRoot))
     );
   },
-  async generate(mapping: CommandMapping, projectRoot: string): Promise<string> {
-    const dir = path.join(projectRoot, ".claude", "commands");
+  async detectGlobal(): Promise<boolean> {
+    return exists(resolveAgentPath("~/.claude/", "global"));
+  },
+  async generate(
+    mapping: CommandMapping,
+    projectRoot: string,
+    location: InstallLocation
+  ): Promise<string> {
+    const base =
+      location === "global" ? resolveAgentPath("~/.claude/", "global") : projectRoot;
+    const dir = path.join(base, ".claude", "commands");
     await ensureDir(dir);
     const filePath = path.join(dir, `${mapping.name}.md`);
     const body = [

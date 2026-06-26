@@ -1,10 +1,18 @@
 import type { CommandMapping } from "./registry";
 
+export type InstallLocation = "local" | "global";
+
 export interface CommandGenerator {
   runtime: string;
   displayName: string;
-  detect(projectRoot: string): Promise<boolean>;
-  generate(mapping: CommandMapping, projectRoot: string): Promise<string>;
+  supportedLocations: InstallLocation[];
+  detectLocal(projectRoot: string): Promise<boolean>;
+  detectGlobal(): Promise<boolean>;
+  generate(
+    mapping: CommandMapping,
+    projectRoot: string,
+    location: InstallLocation
+  ): Promise<string>;
 }
 
 export const SUPPORTED_RUNTIMES = ["claude-code", "opencode", "cursor"] as const;

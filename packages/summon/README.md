@@ -1,65 +1,147 @@
 # Summon
 
-CLI installer for Arcanum agent skills. Currently a scaffold using citty and @clack/prompts.
+Interactive CLI for installing Arcanum agent skills. Built on [citty](https://github.com/unjs/citty) and [@clack/prompts](https://github.com/bombshell-dev/clack).
 
-## Overview
+> Part of the [Arcanum](../../README.md) monorepo. See the root README for the full picture.
 
-**Summon** is the command-line interface for installing and managing Arcanum agent skills. It provides interactive prompts to guide users through the installation process.
-
-**Current Status**: Scaffold — basic CLI structure is in place, but the `install` command prints "not yet implemented".
-
-## Building
+## Install
 
 ```bash
-bun run build
+# One-off, no install needed
+npx @runecraft/summon
+
+# Or globally
+npm install -g @runecraft/summon
+summon
+
+# Or with bun
+bunx @runecraft/summon
 ```
 
-This compiles `src/cli.ts` into a standalone Bun binary at `dist/summon`.
+Requires Node 18+ (works equally well with `npx`, `npm`, `bunx`, or `pnpm dlx`).
 
-## Usage
+## Quickstart
+
+### Install skills (interactive TUI)
 
 ```bash
-./dist/summon install
+npx @runecraft/summon install
 ```
 
-The install command will prompt for skill selections and destinations (coming soon).
+Or just `npx @runecraft/summon` (no subcommand) — same flow.
+
+The wizard walks you through:
+
+1. **Detect agents** — Claude Code, Cursor, OpenCode, Windsurf, Cline, GitHub Copilot, Roo Code, Aider, Kiro. Detected ones are pre-selected.
+2. **Choose action** — Install / Update / Remove / **Install slash commands**.
+3. **Pick skills** from the catalog (multi-select, grouped by category).
+4. **Choose method**:
+   - **Copy** (recommended) — self-contained, works everywhere.
+   - **Symlink** — updates automatically from source (best for development).
+5. **Choose scope**:
+   - **Local** — this project only (writes to `<project>/.agents/skills/<name>/` hub).
+   - **Global** — available everywhere (writes to `~/.config/opencode/skills/<name>/` hub).
+6. **Confirm** the summary, then run.
+
+#### Method × Scope (orthogonal)
+
+`method` and `scope` control different things and are independent choices:
+
+| `method` \ `scope` | `local` | `global` |
+|---|---|---|
+| `copy` | `cp SKILL.md → <agent.installDir>/<name>.md`. Snapshot. `scope` is **ignored**. | Same as `local`. `scope` is **ignored**. |
+| `symlink` | Hub at `<projectRoot>/.agents/skills/<name>/`, agent → hub → `node_modules`. | Hub at `~/.config/opencode/skills/<name>/`, agent → hub → `node_modules`. |
+
+In short: `method` = **how** the file is installed (mechanism). `scope` = **where the symlink hub lives** (only relevant when `method=symlink`; for `copy`, the agent's `installDir` from `agents/registry.ts` is always used).
 
 ### Install slash commands
 
-Generate slash-command files for detected AI runtimes so users can invoke skills with one keystroke (`/review`, `/test`, `/ship`, etc.).
+Generate slash-command files for detected AI runtimes so you can invoke skills with one keystroke (`/plan`, `/review`, `/test`, etc.).
 
 ```bash
-./dist/summon install-commands
+npx @runecraft/summon install-commands
 ```
 
-Supported runtimes:
+The TUI asks you to:
 
-| Runtime | Detection markers | Output |
-|---------|-------------------|--------|
-| Claude Code | `.claude/` or `CLAUDE.md` | `.claude/commands/<name>.md` |
-| OpenCode | `.opencode/`, `opencode.json`, or `opencode.jsonc` | `.opencode/commands/<name>.md` |
-| Cursor | `.cursor/` or `.cursorrules` | `.cursor/rules/<name>.mdc` |
+1. **Pick one or more project roots** (default: current directory). Type extra absolute paths separated by commas to apply in multiple projects at once.
+2. **For each detected runtime, choose a location**:
+   - `local` writes to the project.
+   - `global` writes to `$HOME`.
+3. **Confirm** the targets, then generate.
+
+#### Supported runtimes
+
+| Runtime | Local markers | Global path | Output (local) | Output (global) |
+|---|---|---|---|---|
+| Claude Code | `.claude/`, `CLAUDE.md` | `~/.claude/` | `<project>/.claude/commands/<name>.md` | `~/.claude/commands/<name>.md` |
+| OpenCode | `.opencode/`, `opencode.json`, `opencode.jsonc` | `~/.config/opencode/` | `<project>/.opencode/commands/<name>.md` | `~/.config/opencode/commands/<name>.md` |
+| Cursor | `.cursor/`, `.cursorrules` | _(none)_ | `<project>/.cursor/rules/<name>.mdc` | _(skipped)_ |
 
 The 8 emitted commands (defined in `src/commands/registry.ts`) are: `/plan`, `/review`, `/test`, `/simplify`, `/ship`, `/security`, `/debug`, `/harden`. Each command body loads the corresponding skill.
 
-**Behavior:**
-- Per-runtime built-in collision detection: `/review` is skipped for Claude Code (built-in command) but emitted for OpenCode and Cursor.
-- Skips commands whose target skill is not installed; warns per skip.
-- Exits with code 1 and a clear message when no supported runtime is detected.
-- Re-running overwrites idempotently (no duplicates).
+#### Example output
 
-**TUI integration:** the `summon` TUI (run with no subcommand) also offers **"Install slash commands"** as a top-level menu action — pick it when you only want to regenerate slash commands without installing new skills. It runs the same flow as the subcommand and skips the skill/method/scope prompts. After `summon install` finishes, the TUI also ends with a "Generate slash commands for installed skills?" prompt that reuses the same flow.
+A generated `.opencode/commands/review.md` looks like:
+
+```markdown
+---
+description: Review changes with five-axis critique
+---
+
+Current staged diff:
+
+!`git diff --staged`
+
+Load the `code-review-and-quality` skill and execute its process.
+
+$ARGUMENTS
+```
+
+#### Behavior
+
+- **Built-in collision detection**: `/review` is skipped for Claude Code (it ships a built-in `review` command) but emitted for OpenCode and Cursor.
+- **Missing-skill skip**: commands whose target skill is not installed are skipped with a warning.
+- **Idempotent**: re-running overwrites in place, no duplicates.
+- **No-runtime exit**: if no supported runtime is detected in any chosen project root, the command exits with code 1 and a clear message.
+
+## Commands
+
+| Command | What it does |
+|---|---|
+| `summon` _(no subcommand)_ | Launches the interactive TUI wizard. |
+| `summon install` | Same TUI flow (explicit). |
+| `summon install-commands` | Generate `/plan`, `/review`, `/test`, … for detected runtimes, with TUI picker for projects and per-runtime local/global. |
+| `summon list` | Show installed skills grouped by agent. |
+| `summon update` | Refresh installed skills to the latest catalog. |
+| `summon remove` | Uninstall selected skills from agents. |
+
+**TUI integration:** running `summon install` ends with a prompt **"Generate slash commands for installed skills?"** — answering *yes* reuses the same project + location picker, defaulting to the just-installed skills.
 
 ## Stack
 
-## Stack
-
-- **citty**: Lightweight CLI framework with lazy-loaded subcommands
-- **@clack/prompts**: Interactive terminal prompts with rich formatting
+- **[citty](https://github.com/unjs/citty)** — lightweight CLI framework with lazy-loaded subcommands.
+- **[@clack/prompts](https://github.com/bombshell-dev/clack)** — interactive terminal prompts with rich formatting.
 
 ## Development
 
-Modify `src/cli.ts` for the main entry point and add commands to `src/commands/`.
+```bash
+cd packages/summon
+
+# Run from source (no build needed)
+bun run dev
+
+# Build a Node-compatible binary at dist/summon.js
+bun run build
+
+# Verify the build (catches Bun-only APIs that would break Node)
+bun run build:verify
+
+# Run the test suite
+bun test
+```
+
+Modify `src/cli.ts` for the main entry point, `src/commands/<sub>.ts` for subcommands, and `src/tui/<prompt>.ts` for interactive prompts.
 
 ## Publishing
 
@@ -74,29 +156,24 @@ The build uses Bun's bundler with `--target node` and the published package must
 cd packages/summon
 ```
 
-1. **Bump the version** in `package.json`
-
-2. **Build and verify**
+1. **Bump the version** in `package.json`.
+2. **Build and verify**:
    ```bash
    bun run build && bun run build:verify
    ```
-
-3. **Create the tarball** (resolves `workspace:*` → actual versions)
+3. **Create the tarball** (resolves `workspace:*` → actual versions):
    ```bash
    bun pm pack
    ```
-
-4. **Publish with npm** (using the tarball so workspace deps are resolved)
+4. **Publish with npm** (using the tarball so workspace deps are resolved):
    ```bash
    npm publish runecraft-summon-<VERSION>.tgz --otp <OTP>
    ```
-
-5. **Clean up**
+5. **Clean up**:
    ```bash
    rm runecraft-summon-<VERSION>.tgz
    ```
-
-6. **Verify** the published version works
+6. **Verify** the published version works:
    ```bash
    npx @runecraft/summon@<VERSION>
    ```
