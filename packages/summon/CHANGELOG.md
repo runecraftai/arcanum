@@ -1,5 +1,12 @@
 # @runecraft/summon
 
+## 0.14.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @runecraft/spells@0.14.0
+
 ## 0.14.0
 
 ### Minor Changes
