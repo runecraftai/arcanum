@@ -1,5 +1,11 @@
 # @runecraft/spells
 
+## 0.14.0
+
+### Minor Changes
+
+- feat(spells): add skill-forge meta-skill for creating Agent Skills
+
 ## 0.13.0
 
 ### Minor Changes
