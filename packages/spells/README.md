@@ -37,6 +37,7 @@ This package is the distributable catalog of production-ready skills for the Arc
 | **security-and-hardening** | 1.0.0 | OWASP Top 10 and a three-tier boundary system for security-first development. | `/security` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/security-and-hardening/README.md) |
 | **deprecation-and-migration** | 1.0.0 | Retire old systems, APIs, and features; migrate users safely. Treats code as liability. | `/deprecate` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/deprecation-and-migration/README.md) |
 | **shipping-and-launch** | 1.0.0 | Pre-launch checklist, staged rollout, feature flag lifecycle, monitoring, rollback. | `/ship` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/shipping-and-launch/README.md) |
+| **skill-forge** | 1.0.0 | Meta-skill for creating new Agent Skills end-to-end. Aligned with the open SKILL.md format. 6-phase workflow (Discover → Design → Author → Validate → Optimize → Deliver) with bundled validator and trigger/output eval methodology. | `/forge` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/skill-forge/README.md) |
 
 ## 📚 References
 
