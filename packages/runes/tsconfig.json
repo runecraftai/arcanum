@@ -1,0 +1,14 @@
+{
+  "extends": "@runecraft/grimoire/tsconfig.base.json",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "dist",
+    "outDir": "dist",
+    "rootDir": "src",
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ESNext"],
+    "types": ["bun-types", "node"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "script"]
+}
