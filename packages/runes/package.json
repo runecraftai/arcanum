@@ -35,7 +35,7 @@
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit",
     "test": "bun test",
-    "lint": "biome check src"
+    "lint": "bunx biome check src"
   },
   "keywords": [
     "opencode",
