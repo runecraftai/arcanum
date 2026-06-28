@@ -16,10 +16,12 @@ When making changes that affect public packages, you'll need to create a changes
    ```
 
 2. **Select affected packages** — You'll be prompted to select which packages are affected by your changes:
-     - ✓ `@runecraft/guild` (public)
-     - ✓ `@runecraft/grimoire` (public)
-     - ✓ `@runecraft/summon` (public)
-     - ✗ `@runecraft/familiar` (private — automatically excluded)
+      - ✓ `@runecraft/guild` (public)
+      - ✓ `@runecraft/grimoire` (public)
+      - ✓ `@runecraft/summon` (public)
+      - ✓ `@runecraft/spells` (public)
+      - ✓ `@runecraft/runes` (public)
+      - ✗ `@runecraft/familiar` (private — automatically excluded)
 
 3. **Choose a change type** — Select the appropriate semver bump:
    - `patch` — Bug fixes, small improvements
@@ -82,6 +84,8 @@ Scopes help organize commits by area of change:
 
 - `summon` — `@runecraft/summon` package
 - `spells` — `@runecraft/spells` package
+- `runes` — `@runecraft/runes` package
+- `spawn` — `@runecraft/spawn` package
 - `familiar` — `@runecraft/familiar` package
 - `guild` — `@runecraft/guild` package
 - `grimoire` — `@runecraft/grimoire` package
@@ -131,6 +135,8 @@ If a commit message is invalid, the hook will reject it with details on what's w
 | `@runecraft/grimoire` | Public | Yes | Yes (npm) |
 | `@runecraft/summon` | Public | Yes | Yes (npm) |
 | `@runecraft/spells` | Public | Yes | Yes (npm) |
+| `@runecraft/runes` | Public | Yes | Yes (npm) |
+| `@runecraft/spawn` | Public | Yes | Yes (npm) |
 | `@runecraft/familiar` | **Private** | Yes | No |
 
 - **Built packages** have a `build` script and produce dist/ artifacts
@@ -201,7 +207,7 @@ This ensures they stay in sync during development. The `@changesets/cli` automat
 ### Package Scope
 
 The monorepo uses the `@runecraft` scope for all packages:
-- **`@runecraft`** — guild, grimoire, summon, spells, familiar
+- **`@runecraft`** — guild, grimoire, summon, spells, runes, spawn, familiar
 
 ### Familiar is Excluded
 
