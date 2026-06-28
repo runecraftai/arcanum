@@ -26,6 +26,4 @@ const RunesPlugin: Plugin = async (ctx: PluginInput): Promise<PluginOutput> => {
 };
 
 export default RunesPlugin;
-
-// OpenCode's plugin loader checks module.server first, then module.default.
 export const server = RunesPlugin;

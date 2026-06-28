@@ -164,7 +164,6 @@ export class Repository {
 		if (input.what.length > 4000) {
 			throw new ValidationError("WHAT_TOO_LONG", "what must be at most 4000 characters");
 		}
-		// Validate importance shape but clamp anyway (defense in depth).
 		if (typeof input.importance === "number") {
 			ImportanceSchema.parse(input.importance);
 		}
@@ -202,7 +201,6 @@ export class Repository {
 			return { results: [], total: 0 };
 		}
 
-		// FTS5 MATCH — escape double quotes for safety.
 		const ftsQuery = query.replace(/"/g, '""');
 		const categoryFilter = input.category
 			? "AND m.category = ?"

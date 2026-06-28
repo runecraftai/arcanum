@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { tool } from "@opencode-ai/plugin";
 import type { ToolDeps } from "./types";
+import type { Memory } from "../db/types";
 
 const ContextSchema = z.object({
 	project_slug: z.string().min(1).optional(),
@@ -8,6 +9,11 @@ const ContextSchema = z.object({
 });
 
 export type ContextInput = z.infer<typeof ContextSchema>;
+
+function byImportanceThenRecency(a: Memory, b: Memory): number {
+	if (b.importance !== a.importance) return b.importance - a.importance;
+	return b.created_at - a.created_at;
+}
 
 export function createContextTool(deps: ToolDeps) {
 	return tool({
@@ -20,12 +26,15 @@ export function createContextTool(deps: ToolDeps) {
 			const activeSession = deps.repository.findActiveSession(deps.projectId, "opencode");
 			const recent = deps.repository.recentMemories(deps.projectId, 10);
 
-			const result: {
-				project: { slug: string; root_path: string; remote_url: string | null } | null;
-				current_session: unknown;
-				recent_memories: unknown[];
-				relevant_memories: unknown[];
-			} = {
+			const relevant_memories: Memory[] =
+				input.query && input.query.trim().length > 0
+					? deps.repository
+							.searchMemories({ projectId: deps.projectId, query: input.query, limit: 10 })
+							.results.sort(byImportanceThenRecency)
+							.slice(0, 10)
+					: [];
+
+			return JSON.stringify({
 				project: project
 					? {
 							slug: project.slug,
@@ -35,24 +44,8 @@ export function createContextTool(deps: ToolDeps) {
 					: null,
 				current_session: activeSession,
 				recent_memories: recent,
-				relevant_memories: [],
-			};
-
-			if (input.query && input.query.trim().length > 0) {
-				const { results } = deps.repository.searchMemories({
-					projectId: deps.projectId,
-					query: input.query,
-					limit: 10,
-				});
-				// Order by importance DESC then created_at DESC.
-				results.sort((a, b) => {
-					if (b.importance !== a.importance) return b.importance - a.importance;
-					return b.created_at - a.created_at;
-				});
-				result.relevant_memories = results.slice(0, 10);
-			}
-
-			return JSON.stringify(result);
+				relevant_memories,
+			});
 		},
 	});
 }

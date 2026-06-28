@@ -11,6 +11,12 @@ export interface OpenDatabaseOptions {
 	retryDelayMs?: number;
 }
 
+function spinUntil(deadline: number): void {
+	while (Date.now() < deadline) {
+		Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 1);
+	}
+}
+
 export function openDatabase(dataDir: string, options: OpenDatabaseOptions = {}): Database {
 	const { retryCount = 1, retryDelayMs = 100 } = options;
 	const dbPath = join(dataDir, "runes.db");
@@ -27,12 +33,7 @@ export function openDatabase(dataDir: string, options: OpenDatabaseOptions = {})
 			return db;
 		} catch (error) {
 			lastError = error;
-			if (attempt < retryCount) {
-				const until = Date.now() + retryDelayMs;
-				while (Date.now() < until) {
-					/* spin briefly */
-				}
-			}
+			if (attempt < retryCount) spinUntil(Date.now() + retryDelayMs);
 		}
 	}
 	throw new Error(

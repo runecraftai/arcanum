@@ -1,12 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
-import { homedir } from "node:os";
 import { RunesConfigSchema, type RunesConfig } from "./schema";
 import { resolveConfigPaths } from "../lib/paths";
 
-// Hand-rolled JSONC parser: strips // line comments, /* block comments */,
-// and trailing commas before JSON.parse. We avoid a jsonc-parser dep because
-// the runes config is tiny.
 function stripJsonc(input: string): string {
 	let result = "";
 	let i = 0;
@@ -46,7 +41,6 @@ function stripJsonc(input: string): string {
 		result += ch;
 		i++;
 	}
-	// Strip trailing commas before } or ]
 	result = result.replace(/,(\s*[}\]])/g, "$1");
 	return result;
 }
