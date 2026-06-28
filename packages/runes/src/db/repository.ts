@@ -320,6 +320,40 @@ export class Repository {
 		return rows.map(rowToSession);
 	}
 
+	listProjects(): Project[] {
+		const rows = this.db
+			.prepare("SELECT * FROM projects ORDER BY created_at DESC")
+			.all() as Record<string, unknown>[];
+		return rows.map((r) => ({
+			id: r.id as number,
+			slug: r.slug as string,
+			root_path: r.root_path as string,
+			remote_url: (r.remote_url as string | null) ?? null,
+			created_at: r.created_at as number,
+		}));
+	}
+
+	searchAllProjects(
+		query: string,
+		limit = 20,
+	): Array<Memory & { project_slug: string }> {
+		const ftsQuery = query.replace(/"/g, '""');
+		const rows = this.db
+			.prepare(
+				`SELECT m.*, p.slug AS project_slug FROM memories m
+				 INNER JOIN projects p ON p.id = m.project_id
+				 INNER JOIN memories_fts f ON f.rowid = m.rowid
+				 WHERE memories_fts MATCH ? AND m.soft_deleted = 0
+				 ORDER BY rank
+				 LIMIT ?`,
+			)
+			.all(`"${ftsQuery}"`, limit) as Record<string, unknown>[];
+		return rows.map((r) => ({
+			...rowToMemory(r),
+			project_slug: r.project_slug as string,
+		}));
+	}
+
 	findActiveSession(projectId: number, agent: string): Session | null {
 		const row = this.db
 			.prepare(
