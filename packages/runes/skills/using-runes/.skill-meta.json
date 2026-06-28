@@ -1,0 +1,14 @@
+{
+	"name": "using-runes",
+	"version": "1.0.0",
+	"type": "skill",
+	"description": "Always-active skill for the runes memory plugin — tells the agent when and how to call rune_* tools for cross-session memory.",
+	"phases": ["session-start", "save", "recall", "curate"],
+	"trigger": [],
+	"scope": "public",
+	"audience": "development-teams",
+	"dependencies": {
+		"required": ["@runecraft/runes"],
+		"optional": []
+	}
+}
