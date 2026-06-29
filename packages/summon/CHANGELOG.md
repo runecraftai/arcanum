@@ -1,5 +1,11 @@
 # @runecraft/summon
 
+## 0.15.0
+
+### Minor Changes
+
+- feat(summon): add standalone setup commands and auto-install missing skills
+
 ## 0.14.1
 
 ### Patch Changes
