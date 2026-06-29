@@ -78,7 +78,12 @@ The TUI asks you to:
 | OpenCode | `.opencode/`, `opencode.json`, `opencode.jsonc` | `~/.config/opencode/` | `<project>/.opencode/commands/<name>.md` | `~/.config/opencode/commands/<name>.md` |
 | Cursor | `.cursor/`, `.cursorrules` | _(none)_ | `<project>/.cursor/rules/<name>.mdc` | _(skipped)_ |
 
-The 8 emitted commands (defined in `src/commands/registry.ts`) are: `/plan`, `/review`, `/test`, `/simplify`, `/ship`, `/security`, `/debug`, `/harden`. Each command body loads the corresponding skill.
+The 15 emitted commands (defined in `src/commands/registry.ts`) split into two kinds:
+
+- **Invokers** (8) — `/plan`, `/review`, `/test`, `/simplify`, `/ship`, `/security`, `/debug`, `/harden`. Each command body loads the corresponding skill.
+- **Standalone** (7) — `/setup-graphify`, `/setup-dynamic-context-pruning`, `/setup-markitdown`, `/setup-context7`, `/setup-exa`, `/setup-grep-app`, `/setup-agents-md`. Each command body embeds a one-shot setup prompt directly. No skill is required and they are never skipped because of a missing skill.
+
+Standalone commands live as `src/commands/prompts/*.md` and are inlined into the published bundle at build time.
 
 #### Example output
 
@@ -101,7 +106,9 @@ $ARGUMENTS
 #### Behavior
 
 - **Built-in collision detection**: `/review` is skipped for Claude Code (it ships a built-in `review` command) but emitted for OpenCode and Cursor.
-- **Missing-skill skip**: commands whose target skill is not installed are skipped with a warning.
+- **Auto-install of missing skills**: when an invoker command's target skill is not already installed, `install-commands` copies the skill into the target runtime's skills dir (using `copy` method by default) before generating the command. The summary reports `Installed N/M missing skill(s)`. Set `installMissingSkills: false` from the API to fall back to skip-and-warn.
+- **Missing-skill skip**: only triggered when `installMissingSkills: false` is set, or when the target skill is not in the bundled spells catalog. **Standalone commands are never skipped** — they embed the prompt directly and have no skill to depend on.
+- **Invokers without a skill at runtime**: even with auto-install, an older command file may still point at a skill that was later removed. The generated invoker body includes a fallback line: `If the skill is unavailable, install it first with: \`npx @runecraft/summon install\`.`
 - **Idempotent**: re-running overwrites in place, no duplicates.
 - **No-runtime exit**: if no supported runtime is detected in any chosen project root, the command exits with code 1 and a clear message.
 

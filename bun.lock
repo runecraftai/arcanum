@@ -51,7 +51,7 @@
     },
     "packages/runes": {
       "name": "@runecraft/runes",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "bin": {
         "runes": "dist/bin/runes.js",
       },
@@ -83,19 +83,23 @@
     },
     "packages/spells": {
       "name": "@runecraft/spells",
-      "version": "0.13.0",
+      "version": "0.14.0",
     },
     "packages/summon": {
       "name": "@runecraft/summon",
-      "version": "0.14.0",
+      "version": "0.14.1",
       "bin": {
         "summon": "dist/summon.js",
       },
       "dependencies": {
         "@clack/prompts": "^0.7.0",
-        "@runecraft/spells": "0.13.0",
+        "@runecraft/spells": "0.14.0",
         "citty": "^0.1.6",
         "picocolors": "^1.0.0",
+      },
+      "devDependencies": {
+        "@types/node": "^22.10.0",
+        "bun-types": "^1.3.11",
       },
     },
   },

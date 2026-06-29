@@ -1,8 +1,20 @@
 {
-  "extends": "@runecraftai/grimoire/tsconfig.base.json",
   "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "types": ["bun-types", "node"],
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ESNext"]
   },
   "include": ["src/**/*.ts"]
 }

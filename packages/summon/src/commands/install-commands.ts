@@ -1,30 +1,43 @@
 import { defineCommand } from "citty";
 import * as clack from "@clack/prompts";
 import path from "node:path";
-import { COMMANDS, type CommandMapping } from "./registry";
+import { COMMANDS, type CommandMapping, isStandaloneCommand } from "./registry";
 import { listGenerators, getGenerator } from "./generators";
-import type { CommandGenerator, InstallLocation } from "./generator";
-import { resolveSpellsDir } from "../utils/paths";
+import type { CommandGenerator, InstallLocation, SupportedRuntime } from "./generator";
+import { resolveSpellsDir, resolveHome } from "../utils/paths";
 import { loadSkillCatalog } from "../skills/loader";
+import { installSkill, type InstallMethod, type InstallResult } from "../skills/installer";
 import { exists } from "../utils/fs";
 
 export interface InstallCommandsOptions {
   projectRoots: string[];
-  locationByRuntime: Partial<Record<string, InstallLocation[]>>;
+  locationByRuntime: Partial<Record<SupportedRuntime, InstallLocation[]>>;
   installedSkillNames?: string[];
+  installMissingSkills?: boolean;
+  skillMethod?: InstallMethod;
 }
 
 export interface DetectedTarget {
-  runtime: string;
+  runtime: SupportedRuntime;
   displayName: string;
   projectRoot: string;
   location: InstallLocation;
 }
 
+export interface GeneratedCommand {
+  runtime: SupportedRuntime;
+  command: string;
+  path: string;
+  projectRoot: string;
+  location: InstallLocation;
+  installedSkill?: string;
+}
+
 export interface InstallCommandsResult {
   detected: DetectedTarget[];
-  generated: { runtime: string; command: string; path: string; projectRoot: string; location: InstallLocation }[];
+  generated: GeneratedCommand[];
   skipped: { command: string; reason: string }[];
+  skillInstalls: InstallResult[];
 }
 
 function skillIsInstalled(skillName: string, installed: Set<string>): boolean {
@@ -38,20 +51,50 @@ function isLocationSupported(
   return gen.supportedLocations.includes(location);
 }
 
+type TypedGenerator = CommandGenerator & { runtime: SupportedRuntime };
+
+function getAgentInstallDir(
+  runtime: SupportedRuntime,
+  projectRoot: string,
+  location: InstallLocation
+): string {
+  if (location === "global") {
+    switch (runtime) {
+      case "claude-code":
+        return resolveHome("~/.claude/skills");
+      case "opencode":
+        return resolveHome("~/.config/opencode/skills");
+      case "cursor":
+        return path.join(projectRoot, ".cursor", "skills");
+    }
+  }
+  switch (runtime) {
+    case "claude-code":
+      return path.join(projectRoot, ".claude", "skills");
+    case "opencode":
+      return path.join(projectRoot, ".opencode", "skills");
+    case "cursor":
+      return path.join(projectRoot, ".cursor", "skills");
+  }
+}
+
 export async function installCommands(
   options: InstallCommandsOptions
 ): Promise<InstallCommandsResult> {
   const projectRoots = options.projectRoots.map((r) => path.resolve(r));
   const locationByRuntime = options.locationByRuntime;
+  const installMissingSkills = options.installMissingSkills ?? true;
+  const skillMethod: InstallMethod = options.skillMethod ?? "copy";
   const result: InstallCommandsResult = {
     detected: [],
     generated: [],
     skipped: [],
+    skillInstalls: [],
   };
 
-  const detected: { gen: CommandGenerator; projectRoot: string; location: InstallLocation }[] = [];
+  const detected: { gen: TypedGenerator; projectRoot: string; location: InstallLocation }[] = [];
   for (const projectRoot of projectRoots) {
-    for (const gen of listGenerators()) {
+    for (const gen of listGenerators() as TypedGenerator[]) {
       const locations = locationByRuntime[gen.runtime] ?? [];
       for (const location of locations) {
         if (!isLocationSupported(gen, location)) continue;
@@ -74,10 +117,12 @@ export async function installCommands(
     return result;
   }
 
+  const spellsDir = await resolveSpellsDir();
+  const catalog = await loadSkillCatalog(spellsDir);
+  const catalogByName = new Map(catalog.map((s) => [s.name, s]));
+
   const installed = new Set(options.installedSkillNames ?? []);
-  if (installed.size === 0) {
-    const spellsDir = await resolveSpellsDir();
-    const catalog = await loadSkillCatalog(spellsDir);
+  if (options.installedSkillNames === undefined) {
     for (const skill of catalog) installed.add(skill.name);
   }
 
@@ -91,13 +136,62 @@ export async function installCommands(
         });
         continue;
       }
-      if (!skillIsInstalled(mapping.skill, installed)) {
+      if (isStandaloneCommand(mapping)) {
+        const filePath = await gen.generate(mapping, projectRoot, location);
+        result.generated.push({
+          runtime: gen.runtime,
+          command: mapping.name,
+          path: filePath,
+          projectRoot,
+          location,
+        });
+        continue;
+      }
+      if (skillIsInstalled(mapping.skill!, installed)) {
+        const filePath = await gen.generate(mapping, projectRoot, location);
+        result.generated.push({
+          runtime: gen.runtime,
+          command: mapping.name,
+          path: filePath,
+          projectRoot,
+          location,
+        });
+        continue;
+      }
+      if (!installMissingSkills) {
         result.skipped.push({
           command: mapping.name,
           reason: `target skill "${mapping.skill}" is not installed`,
         });
         continue;
       }
+      const skill = catalogByName.get(mapping.skill!);
+      if (!skill) {
+        result.skipped.push({
+          command: mapping.name,
+          reason: `target skill "${mapping.skill}" is not in the catalog`,
+        });
+        continue;
+      }
+      const agentInstallDir = getAgentInstallDir(gen.runtime, projectRoot, location);
+      const installRes = await installSkill(
+        skill,
+        skill.filePath,
+        agentInstallDir,
+        skillMethod,
+        gen.runtime,
+        projectRoot,
+        location === "global" ? "global" : "project"
+      );
+      result.skillInstalls.push(installRes);
+      if (!installRes.success) {
+        result.skipped.push({
+          command: mapping.name,
+          reason: `install failed for skill "${mapping.skill}": ${installRes.error ?? "unknown error"}`,
+        });
+        continue;
+      }
+      installed.add(skill.name);
       const filePath = await gen.generate(mapping, projectRoot, location);
       result.generated.push({
         runtime: gen.runtime,
@@ -105,6 +199,7 @@ export async function installCommands(
         path: filePath,
         projectRoot,
         location,
+        installedSkill: skill.name,
       });
     }
   }
@@ -130,11 +225,19 @@ function printSummary(result: InstallCommandsResult): void {
       .join(", ")}`
   );
 
+  if (result.skillInstalls.length > 0) {
+    const ok = result.skillInstalls.filter((r) => r.success).length;
+    clack.log.info(
+      `Installed ${ok}/${result.skillInstalls.length} missing skill(s) into target agents.`
+    );
+  }
+
   if (result.generated.length > 0) {
     clack.log.success(`Generated ${result.generated.length} command files:`);
     for (const g of result.generated) {
+      const tag = g.installedSkill ? ` (+ skill ${g.installedSkill})` : "";
       clack.log.info(
-        `  [${g.runtime}/${g.location}] /${g.command} (${g.projectRoot}) → ${g.path}`
+        `  [${g.runtime}/${g.location}] /${g.command} (${g.projectRoot})${tag} → ${g.path}`
       );
     }
   } else {
@@ -183,3 +286,4 @@ export default defineCommand({
 
 export { getGenerator };
 export type { CommandMapping };
+export { getAgentInstallDir };
