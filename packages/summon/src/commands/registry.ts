@@ -1,5 +1,4 @@
 import type { SupportedRuntime } from "./generator";
-import { PROMPTS } from "./prompts";
 
 export interface CommandMapping {
   name: string;
@@ -7,7 +6,6 @@ export interface CommandMapping {
   description: string;
   builtinNames?: Partial<Record<SupportedRuntime, string>>;
   bodyExtras?: string;
-  body?: string;
 }
 
 export const COMMANDS: CommandMapping[] = [
@@ -57,43 +55,4 @@ export const COMMANDS: CommandMapping[] = [
     skill: "doubt-driven-development",
     description: "Adversarial review: CLAIM → EXTRACT → DOUBT → RECONCILE",
   },
-  {
-    name: "setup-graphify",
-    description: "Install Graphify and build a knowledge graph of the current repository",
-    body: PROMPTS.graphify,
-  },
-  {
-    name: "setup-dynamic-context-pruning",
-    description: "Install the OpenCode DCP plugin to auto-prune conversation context",
-    body: PROMPTS.dcp,
-  },
-  {
-    name: "setup-markitdown",
-    description: "Install Microsoft markitdown to read PDFs and Office documents",
-    body: PROMPTS.markitdown,
-  },
-  {
-    name: "setup-context7",
-    description: "Install Upstash Context7 for on-demand, version-specific library docs",
-    body: PROMPTS.context7,
-  },
-  {
-    name: "setup-exa",
-    description: "Install the Exa MCP server for clean, ready-to-use web search",
-    body: PROMPTS.exa,
-  },
-  {
-    name: "setup-grep-app",
-    description: "Install the grep.app MCP server to search real-world code on GitHub",
-    body: PROMPTS.grepApp,
-  },
-  {
-    name: "setup-agents-md",
-    description: "Bootstrap a repo-root AGENTS.md from the operating-principles template",
-    body: PROMPTS.agentsMd,
-  },
 ];
-
-export function isStandaloneCommand(mapping: CommandMapping): boolean {
-  return typeof mapping.body === "string" && mapping.body.length > 0;
-}

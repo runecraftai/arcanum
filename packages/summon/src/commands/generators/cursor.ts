@@ -37,18 +37,9 @@ export const cursorGenerator: CommandGenerator = {
       "---",
       "",
     ];
-    if (mapping.body) {
-      // Standalone: embed the prompt body directly.
-      body.push(`When the user types \`/${mapping.name}\`, execute the following.`);
-      body.push("");
-      body.push(mapping.body);
-      body.push("");
-      body.push("If the user provides arguments, treat them as $ARGUMENTS.");
-    } else {
-      body.push(
-        `When the user types \`/${mapping.name}\`, load the \`${mapping.skill}\` skill and execute its process. If the skill is unavailable, install it first with: \`npx @runecraft/summon install\`. If the user provides arguments, treat them as $ARGUMENTS.`
-      );
-    }
+    body.push(
+      `When the user types \`/${mapping.name}\`, load the \`${mapping.skill}\` skill and execute its process. If the skill is unavailable, install it first with: \`npx @runecraft/summon install\`. If the user provides arguments, treat them as $ARGUMENTS.`
+    );
     await fs.writeFile(filePath, body.join("\n") + "\n", "utf8");
     return filePath;
   },

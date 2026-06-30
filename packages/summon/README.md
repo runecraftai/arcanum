@@ -32,16 +32,18 @@ Or just `npx @runecraft/summon` (no subcommand) — same flow.
 
 The wizard walks you through:
 
-1. **Detect agents** — Claude Code, Cursor, OpenCode, Windsurf, Cline, GitHub Copilot, Roo Code, Aider, Kiro. Detected ones are pre-selected.
-2. **Choose action** — Install / Update / Remove / **Install slash commands**.
-3. **Pick skills** from the catalog (multi-select, grouped by category).
-4. **Choose method**:
-   - **Copy** (recommended) — self-contained, works everywhere.
-   - **Symlink** — updates automatically from source (best for development).
-5. **Choose scope**:
-   - **Local** — this project only (writes to `<project>/.agents/skills/<name>/` hub).
-   - **Global** — available everywhere (writes to `~/.config/opencode/skills/<name>/` hub).
-6. **Confirm** the summary, then run.
+1. **Pick a category** — Skills / Commands / Setup.
+2. **Skills sub-flow:**
+   1. **Detect agents** — Claude Code, Cursor, OpenCode, Windsurf, Cline, GitHub Copilot, Roo Code, Aider, Kiro. Detected ones are pre-selected.
+   2. **Choose action** — Install / Update / Remove.
+   3. **Pick skills** from the catalog (multi-select, grouped by category).
+   4. **Choose method**:
+      - **Copy** (recommended) — self-contained, works everywhere.
+      - **Symlink** — updates automatically from source (best for development).
+   5. **Choose scope**:
+      - **Local** — this project only (writes to `<project>/.agents/skills/<name>/` hub).
+      - **Global** — available everywhere (writes to `~/.config/opencode/skills/<name>/` hub).
+   6. **Confirm** the summary, then run.
 
 #### Method × Scope (orthogonal)
 
@@ -78,12 +80,7 @@ The TUI asks you to:
 | OpenCode | `.opencode/`, `opencode.json`, `opencode.jsonc` | `~/.config/opencode/` | `<project>/.opencode/commands/<name>.md` | `~/.config/opencode/commands/<name>.md` |
 | Cursor | `.cursor/`, `.cursorrules` | _(none)_ | `<project>/.cursor/rules/<name>.mdc` | _(skipped)_ |
 
-The 15 emitted commands (defined in `src/commands/registry.ts`) split into two kinds:
-
-- **Invokers** (8) — `/plan`, `/review`, `/test`, `/simplify`, `/ship`, `/security`, `/debug`, `/harden`. Each command body loads the corresponding skill.
-- **Standalone** (7) — `/setup-graphify`, `/setup-dynamic-context-pruning`, `/setup-markitdown`, `/setup-context7`, `/setup-exa`, `/setup-grep-app`, `/setup-agents-md`. Each command body embeds a one-shot setup prompt directly. No skill is required and they are never skipped because of a missing skill.
-
-Standalone commands live as `src/commands/prompts/*.md` and are inlined into the published bundle at build time.
+The 8 emitted commands (defined in `src/commands/registry.ts`) are **invokers**: `/plan`, `/review`, `/test`, `/simplify`, `/ship`, `/security`, `/debug`, `/harden`. Each command body loads the corresponding skill.
 
 #### Example output
 
@@ -107,10 +104,64 @@ $ARGUMENTS
 
 - **Built-in collision detection**: `/review` is skipped for Claude Code (it ships a built-in `review` command) but emitted for OpenCode and Cursor.
 - **Auto-install of missing skills**: when an invoker command's target skill is not already installed, `install-commands` copies the skill into the target runtime's skills dir (using `copy` method by default) before generating the command. The summary reports `Installed N/M missing skill(s)`. Set `installMissingSkills: false` from the API to fall back to skip-and-warn.
-- **Missing-skill skip**: only triggered when `installMissingSkills: false` is set, or when the target skill is not in the bundled spells catalog. **Standalone commands are never skipped** — they embed the prompt directly and have no skill to depend on.
+- **Missing-skill skip**: triggered when `installMissingSkills: false` is set, or when the target skill is not in the bundled spells catalog.
 - **Invokers without a skill at runtime**: even with auto-install, an older command file may still point at a skill that was later removed. The generated invoker body includes a fallback line: `If the skill is unavailable, install it first with: \`npx @runecraft/summon install\`.`
 - **Idempotent**: re-running overwrites in place, no duplicates.
 - **No-runtime exit**: if no supported runtime is detected in any chosen project root, the command exits with code 1 and a clear message.
+
+### Install external tools (Setup sub-flow)
+
+`@runecraft/summon` used to ship `/setup-*` slash commands that asked the LLM agent to install Graphify, markitdown, MCP servers, and so on. As of v0.16.0, summon installs these tools **directly** — no LLM delegation, no OS-detection by an agent, idempotent.
+
+```bash
+npx @runecraft/summon tools install
+```
+
+The TUI asks:
+
+1. **Scope** — global (user-scope, e.g. `~/.config/opencode/opencode.json` and `npm i -g`) or local (this project, e.g. `./.opencode/opencode.json` and `npm i`).
+2. **Tools** — multi-select from: Graphify, markitdown, OpenCode DCP, Context7, Exa, grep.app, AGENTS.md.
+3. **API keys** (only if relevant) — for Context7/Exa, summon asks for the value but writes a `${ENV_VAR}` reference into `opencode.json` and tells you to set the actual key in your shell profile. The literal key is never persisted in a config file.
+
+You can also drive it from the CLI without the TUI:
+
+```bash
+# Install everything (defaults to global)
+npx @runecraft/summon tools install
+
+# Only some tools, dry-run
+npx @runecraft/summon tools install graphify markitdown --dry-run
+
+# Install into the current project
+npx @runecraft/summon tools install --local
+
+# Just see what's installed vs missing
+npx @runecraft/summon tools list
+```
+
+#### Supported tools
+
+| Tool | Scope | Steps (linux) | Steps (macos) | Notes |
+|---|---|---|---|---|
+| `graphify` | both | `npm i -g graphify` + `opencode.json` MCP entry | same | needs Node 18+ |
+| `markitdown` | global | `apt-get install -y pipx` → `pipx install markitdown` | `brew install pipx` → `pipx install markitdown` | pipx is user-scope; `--local` rejected |
+| `dcp` | global | `opencode plugin @tarquinen/opencode-dcp@latest --global` | same | needs `opencode` CLI |
+| `context7` | both | MCP entry for `npx -y @upstash/context7-mcp` | same | API key via `${CONTEXT7_API_KEY}` |
+| `exa` | both | MCP entry (remote `https://mcp.exa.ai/mcp`) | same | API key via `${EXA_API_KEY}` |
+| `grep-app` | both | MCP entry (remote `https://mcp.grep.app`) | same | no key needed |
+| `agents-md` | local | copy `docs/setup-prompts/agents-template.md` → `./AGENTS.md` | same | appends marker if file exists |
+
+#### Behavior
+
+- **Two-stage detect**: for MCP-backed tools, presence means both the binary (or the `opencode` CLI) **and** the `mcp.<name>` entry in the target `opencode.json`. If only the binary is present, the install proceeds and only adds the missing entry.
+- **Idempotent**: re-running skips what's already present and merges missing entries.
+- **Safe config merge**: when editing `~/.config/opencode/opencode.json` (or the project one), summon reads the file, deep-merges the new `mcp.<name>` entry, and writes the result. Other keys are preserved. If the file is corrupt JSON, summon writes a `.bak` and starts fresh.
+- **API keys never persisted**: the value is asked via masked input, but the written entry is always `${ENV_VAR}` — the literal key never lands in `opencode.json`. Set it in your shell profile to use the tool.
+- **Per-tool failure isolation**: if `markitdown` fails, `graphify` still tries.
+
+#### Manual setup prompts
+
+The original `setup-*.md` instructions are kept under [`docs/setup-prompts/`](./docs/setup-prompts/) for users who prefer to install by hand (CI, non-interactive shells, platforms the installer doesn't know). Each `.md` is the same instructions the LLM used to receive. See [`docs/setup-prompts/README.md`](./docs/setup-prompts/README.md) for the full rationale.
 
 ## Commands
 
@@ -122,6 +173,8 @@ $ARGUMENTS
 | `summon list` | Show installed skills grouped by agent. |
 | `summon update` | Refresh installed skills to the latest catalog. |
 | `summon remove` | Uninstall selected skills from agents. |
+| `summon tools install` | Install external tools (Graphify, markitdown, MCP servers, AGENTS.md) directly. |
+| `summon tools list` | Show external tool install state. |
 
 **TUI integration:** running `summon install` ends with a prompt **"Generate slash commands for installed skills?"** — answering *yes* reuses the same project + location picker, defaulting to the just-installed skills.
 

@@ -11,13 +11,6 @@ async function projectPathExists(relPath: string, projectRoot: string): Promise<
 
 function renderBody(mapping: CommandMapping): string {
   const lines: string[] = [];
-  // Standalone body: skip skill-loading template and git injections.
-  if (mapping.body) {
-    lines.push(mapping.body);
-    lines.push("");
-    lines.push("$ARGUMENTS");
-    return lines.join("\n");
-  }
   if (mapping.name === "review") {
     lines.push("Current staged diff:");
     lines.push("");

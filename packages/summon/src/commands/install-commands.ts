@@ -1,7 +1,7 @@
 import { defineCommand } from "citty";
 import * as clack from "@clack/prompts";
 import path from "node:path";
-import { COMMANDS, type CommandMapping, isStandaloneCommand } from "./registry";
+import { COMMANDS, type CommandMapping } from "./registry";
 import { listGenerators, getGenerator } from "./generators";
 import type { CommandGenerator, InstallLocation, SupportedRuntime } from "./generator";
 import { resolveSpellsDir, resolveHome } from "../utils/paths";
@@ -133,17 +133,6 @@ export async function installCommands(
         result.skipped.push({
           command: mapping.name,
           reason: `collides with built-in command "${builtin}" for ${gen.displayName}`,
-        });
-        continue;
-      }
-      if (isStandaloneCommand(mapping)) {
-        const filePath = await gen.generate(mapping, projectRoot, location);
-        result.generated.push({
-          runtime: gen.runtime,
-          command: mapping.name,
-          path: filePath,
-          projectRoot,
-          location,
         });
         continue;
       }

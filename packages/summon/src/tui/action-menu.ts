@@ -1,9 +1,9 @@
 import * as clack from "@clack/prompts";
 
-export type Action = "install" | "install-commands" | "update" | "remove";
+export type Action = "install" | "update" | "remove";
 
 /**
- * Select action: Install, Install slash commands, Update, or Remove
+ * Select action for the Skills sub-flow: Install, Update, or Remove
  */
 export async function selectAction(): Promise<Action | symbol> {
   clack.note("↑↓ navigate   Enter confirm   Esc back", "Keys");
@@ -12,7 +12,6 @@ export async function selectAction(): Promise<Action | symbol> {
     message: "What would you like to do?",
     options: [
       { value: "install" as const, label: "Install skills", hint: "Add new skills from the catalog" },
-      { value: "install-commands" as const, label: "Install slash commands", hint: "Generate /plan, /review, /test, etc. for your runtime" },
       { value: "update" as const, label: "Update installed skills", hint: "Refresh installed skills to latest versions" },
       { value: "remove" as const, label: "Remove skills", hint: "Uninstall skills from your agents" },
     ],

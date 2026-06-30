@@ -33,17 +33,13 @@ export const claudeCodeGenerator: CommandGenerator = {
     await ensureDir(dir);
     const filePath = path.join(dir, `${mapping.name}.md`);
     const body: string[] = ["---", `description: ${mapping.description}`, "---", ""];
-    if (mapping.body) {
-      body.push(mapping.body);
-    } else {
-      body.push(`Load the \`${mapping.skill}\` skill and execute its process.`);
-      body.push(
-        "If the skill is unavailable, install it first with: `npx @runecraft/summon install`."
-      );
-      if (mapping.bodyExtras) {
-        body.push("");
-        body.push(`> ${mapping.bodyExtras}`);
-      }
+    body.push(`Load the \`${mapping.skill}\` skill and execute its process.`);
+    body.push(
+      "If the skill is unavailable, install it first with: `npx @runecraft/summon install`."
+    );
+    if (mapping.bodyExtras) {
+      body.push("");
+      body.push(`> ${mapping.bodyExtras}`);
     }
     await fs.writeFile(filePath, body.join("\n") + "\n", "utf8");
     return filePath;
