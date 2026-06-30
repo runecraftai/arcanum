@@ -1,5 +1,11 @@
 # @runecraft/summon
 
+## 0.17.0
+
+### Minor Changes
+
+- feat(summon): install external tools directly via 'summon tools install'
+
 ## 0.16.0
 
 ### Minor Changes
