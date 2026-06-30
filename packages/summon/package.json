@@ -1,6 +1,6 @@
 {
   "name": "@runecraft/summon",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "Interactive CLI for installing Arcanum agent skills",
   "license": "MIT",
   "type": "module",
