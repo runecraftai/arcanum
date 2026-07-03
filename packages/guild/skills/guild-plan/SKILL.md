@@ -37,7 +37,7 @@ Read the spec, map each requirement ID to one or more atomic tasks, and order th
 4. For each task row, write: identifier (e.g., `T01`), description, requirement ID(s) it satisfies, verification command (or "manual" with a step), and a status (`pending`).
 5. Use the artifact-scope rule: a small change can use `tasks.md` only; a medium change uses `spec.md` + `tasks.md`; a large change uses `spec.md` + `design.md` + `tasks.md` (+ extras). Match the artifact set to the scope (see `guild-scope`).
 6. Update `state.md` to reflect the new plan status (`planned` or `in-progress` if execution starts immediately).
-7. Save to `.guild/plans/<slug>/tasks.md`. Do NOT write to `.specs/`.
+7. Save to `.guild/plans/<slug>/tasks.md`.
 
 ## Rationalizations
 
@@ -55,7 +55,6 @@ Read the spec, map each requirement ID to one or more atomic tasks, and order th
 - A task row has no verification command (or "see spec" as a placeholder).
 - Tasks are not ordered by dependency (a task depends on one defined after it).
 - Status field is missing or is hardcoded to `done`.
-- The plan references `.specs/` instead of `.guild/plans/<slug>/`.
 
 ## Verification
 

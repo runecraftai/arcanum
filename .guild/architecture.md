@@ -70,10 +70,11 @@
 plans/
   <slug>/
     spec.md        # What to build and why
+    context.md     # User decisions for gray areas (created during discuss phase)
     design.md      # How it fits together (optional)
     tasks.md       # Atomic tasks with verification criteria
     state.md       # Plan-local state (current status, blockers)
-    notes.md       # Scratchpad: findings, decisions, questions
+    validation.md  # Verifier report (PASS/FAIL, per-AC evidence)
   archive/         # Moved plans go here
 ```
 
@@ -86,17 +87,17 @@ plans/
 | file | content | lifecycle |
 |------|---------|-----------|
 | `spec.md` | Feature description, goals, acceptance criteria | Created once, never deleted |
+| `context.md` | User decisions for gray areas, assumptions, scope clarifications | Created during discuss phase, updated as decisions change |
 | `design.md` | Architecture, data models, API shapes, diagrams | Created when needed, updated on major changes |
 | `tasks.md` | Task list with status, linked to spec acceptance criteria | Updated as work progresses |
 | `state.md` | Plan-level status: blocked, in-progress, review, done | Updated at every handoff |
-| `notes.md` | Ephemeral: debug notes, discovery findings, questions | Updated freely, cleared on completion |
+| `validation.md` | Verifier report: PASS/FAIL, per-AC evidence | Written once per verification pass, overwritten on re-verify |
 
 **Rules**:
 - `plans/<slug>` owns all plan-local state
 - `context/state.md` reflects aggregate; `plans/<slug>/state.md` is granular
 - Moving a plan to `archive/` = plan is complete or abandoned
 - Never reference another plan's files directly; use knowledge/ for cross-plan info
-- See `.guild/plans/FORMATS.md` for canonical format rules per file
 
 ---
 
@@ -141,7 +142,7 @@ Agents must load context in this order:
 6. .guild/context/handoff.md
 7. .guild/knowledge/index.md  (then relevant knowledge files)
 8. .guild/knowledge/definition-of-done.md  (project-wide standing bar; read by guild-verify and guild-ship)
-9. active .guild/plans/<slug>/notes.md
+9. active .guild/plans/<slug>/context.md
 ```
 
 ---
@@ -153,7 +154,7 @@ Agents must load context in this order:
 | "What is the current status of this feature?" | `plans/<slug>/state.md` |
 | "What is the overall project status?" | `context/state.md` |
 | "What conventions should I follow?" | `knowledge/conventions.md` |
-| "What did we decide for this feature?" | `plans/<slug>/notes.md` or `knowledge/decisions.md` |
+| "What did we decide for this feature?" | `plans/<slug>/context.md` or `knowledge/decisions.md` |
 | "What blockers exist?" | `plans/<slug>/state.md` (plan-local) or `context/state.md` (global) |
 | "What should I do next?" | `plans/<slug>/tasks.md` |
 | "How do I set up this project?" | `context/project.md` |
@@ -171,7 +172,7 @@ Agents must load context in this order:
 | On blocker discovery | Update `plans/<slug>/state.md` and `context/state.md` |
 | On handoff (end of session) | Write summary to `context/handoff.md`, update `context/state.md` |
 | On plan completion | Move `plans/<slug>/` to `archive/<slug>/` |
-| On learning | Write to `plans/<slug>/notes.md` first; promote to `knowledge/` by decision |
+| On learning | Write to `plans/<slug>/context.md` first; promote to `knowledge/` by decision |
 
 ---
 
@@ -194,12 +195,3 @@ Agents must load context in this order:
 - Referencing `plans/other-slug/` files directly (use `knowledge/` instead)
 - Editing `archive/` files (audit trail corruption)
 - Creating `plans/<slug>/state.v2.md` variants (single source of truth)
-
----
-
-## Migration notes
-
-- Legacy `.specs/` and `.notebook/` are **fallback only**
-- Read them when `context/` or `knowledge/` is empty or stale
-- Never write to legacy directories
-- Prefer importing relevant content to `.guild/` over referencing legacy indefinitely

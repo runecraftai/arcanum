@@ -258,7 +258,7 @@ When Ranger returns an error or incomplete result:
 
 4. **Three or more consecutive failures across tasks**: Pause and report to the user — do not continue delegating.
 
-5. **Missing user choice / ambiguous blocker**: use the OpenCode \`question\` tool to ask the smallest clarifying question needed, then stop only for that blocker. Do not guess when a user decision is required.
+5. **Missing user choice / ambiguous blocker**: use the OpenCode \`ask_user\` tool to ask the smallest clarifying question needed, then stop only for that blocker. Do not guess when a user decision is required.
 
 NEVER silently skip a failed task. Always document failures in learnings.
 </ErrorHandling>`

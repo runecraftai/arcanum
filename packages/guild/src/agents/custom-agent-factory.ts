@@ -26,6 +26,7 @@ const KNOWN_TOOL_NAMES = new Set([
   "webfetch",
   "todowrite",
   "ask_user",
+  "question",
   "skill",
   "apply_patch",
 ])

@@ -12,7 +12,7 @@ Choose the lightest artifact set that still fits the work.
 
 ## Overview
 
-Classify the incoming request into a scope (init, feature, quick task, handoff) and pick the artifact set that matches. The classification drives which skills run next and which files get created. Point all new artifacts at `.guild/`; legacy `.specs/` is read-only fallback.
+Classify the incoming request into a scope (init, feature, quick task, handoff) and pick the artifact set that matches. The classification drives which skills run next and which files get created.
 
 ## When to Use
 
@@ -37,14 +37,33 @@ Classify the incoming request into a scope (init, feature, quick task, handoff) 
 5. Write a one-line scope decision to `.guild/plans/<slug>/state.md` (create the directory) so the next skill has a starting point.
 6. Do not create historical migration work as part of scope selection. If the request is a migration, the scope is `feature` and the migration is the feature.
 
-## Scope → artifact mapping
+## Scope → artifact mapping (auto-sizing)
 
-| scope | primary path | fallback path | artifact set |
-|-------|--------------|---------------|--------------|
-| Init | `.guild/context/project.md`, `.guild/context/roadmap.md` | `.specs/project/*` | `context/` files only |
-| Feature | `.guild/plans/<slug>/` | `.specs/features/<feature>/*` | `spec.md` + `tasks.md` (medium) or `spec.md` + `design.md` + `tasks.md` (large) |
-| Quick task | `.guild/plans/<slug>/tasks.md` | `.specs/quick/<nnn-slug>/*` | `tasks.md` only (small) |
-| Handoff | `.guild/context/handoff.md`, `.guild/context/state.md` | `.specs/project/HANDOFF.md` | `context/` files only |
+The complexity determines the depth:
+
+| Scope | What | Artifact set |
+|-------|------|--------------|
+| **Small** | ≤3 files, one sentence | `tasks.md` only |
+| **Medium** | Clear feature, <10 tasks | `spec.md` + `tasks.md` |
+| **Large** | Multi-component feature | `spec.md` + `design.md` + `tasks.md` |
+| **Complex** | Ambiguity, new domain | `spec.md` + `context.md` + `design.md` + `tasks.md` + `validation.md` |
+
+**Rules:**
+- Spec and tasks are always required — you always need to know WHAT and DO it
+- Design is skipped when the change is straightforward (no architectural decisions, no new patterns)
+- Context (user decisions for gray areas) is triggered when the feature has any implicit-requirement dimension (persistence/state, external calls, auth, payments, concurrency, state transitions)
+- Validation (verifier report) is triggered for Large/Complex scopes after execution
+
+**Scope-specific paths:**
+
+| scope | primary path | artifact set |
+|-------|-------------|--------------|
+| Init | `.guild/context/project.md`, `.guild/context/roadmap.md` | `context/` files only |
+| Feature | `.guild/plans/<slug>/` | sized per table above |
+| Quick task | `.guild/plans/<slug>/tasks.md` | `tasks.md` only (small) |
+| Handoff | `.guild/context/handoff.md`, `.guild/context/state.md` | `context/` files only |
+
+**Safety valve:** Even when Tasks is skipped for Small scope, execution starts by listing atomic steps. If that listing reveals >5 steps or complex dependencies, stop and create a formal `tasks.md`.
 
 ## Rationalizations
 
@@ -54,13 +73,13 @@ Classify the incoming request into a scope (init, feature, quick task, handoff) 
 | "I'll add tasks later, just start coding." | Step 4 picks the artifact set up front. `tasks.md` is the contract for `guild-execute`; a missing `tasks.md` blocks execution. |
 | "The slug can be `My Feature`, it's just a name." | Step 3 requires lowercase, hyphenated slugs. Spaces and uppercase break shell and config tooling. |
 | "Migrations are housekeeping, not a feature." | Step 6 says migrations are features. Housekeeping without a plan produces ad-hoc edits with no audit trail. |
-| "I can re-decide scope mid-plan." | Re-deciding is allowed (update `state.md` and `notes.md`) but the initial decision is what `guild-plan` and `guild-execute` consume. |
+| "I can re-decide scope mid-plan." | Re-deciding is allowed (update `state.md`) but the initial decision is what `guild-plan` and `guild-execute` consume. |
 
 ## Red Flags
 
 - A plan directory created with a non-lowercase or non-hyphenated slug.
 - `state.md` missing or empty (no scope decision recorded).
-- The artifact set chosen does not match the scope (e.g., a "feature" with only `notes.md`).
+- The artifact set chosen does not match the scope (e.g., a "feature" with only `state.md`).
 - A migration request was classified as a quick task.
 - A new plan reuses a slug already present in `.guild/plans/`.
 
@@ -71,7 +90,6 @@ The skill is complete when ALL of the following evidence is present:
 - A scope classification is recorded (init, feature, quick task, handoff).
 - A slug is chosen that is lowercase, hyphenated, and unique across `.guild/plans/`.
 - The artifact set is recorded in `.guild/plans/<slug>/state.md`.
-- No content was written to `.specs/`.
 
 **"Seems right" is not evidence.** Every claim of "this is scoped correctly" cites the scope table row and the file path that records the decision.
 

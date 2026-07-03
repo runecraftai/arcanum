@@ -41,7 +41,7 @@ Drive a structured spec workflow that produces `spec.md` with problem statement,
 7. Assign traceable requirement IDs (e.g., `REQ-001`, `REQ-002`) to each acceptance criterion. The same IDs flow into `tasks.md`.
 8. Capture edge cases as a bulleted list. Each edge case states the input and the expected behaviour.
 9. Define success criteria as a checklist. A success criterion is observable (a command, a file, a metric).
-10. Save to `.guild/plans/<slug>/spec.md`. Do NOT write to `.specs/`.
+10. Save to `.guild/plans/<slug>/spec.md`.
 
 ## Rationalizations
 
@@ -59,7 +59,6 @@ Drive a structured spec workflow that produces `spec.md` with problem statement,
 - Goals and out-of-scope overlap (a goal that is also out-of-scope).
 - User stories lack acceptance criteria or `so that <benefit>`.
 - Success criteria are not observable (e.g., "code is clean").
-- `spec.md` references `.specs/` instead of `.guild/plans/<slug>/`.
 
 ## Verification
 
@@ -69,7 +68,6 @@ The skill is complete when ALL of the following evidence is present:
 - Every acceptance criterion has a traceable `REQ-NNN` ID.
 - Every success criterion is observable (a command, a file path, or a metric).
 - `tasks.md` (when produced) reuses the same `REQ-NNN` IDs.
-- No content was written to `.specs/`.
 
 **"Seems right" is not evidence.** Every claim of "this feature is specified" cites the file path and the section that was written.
 

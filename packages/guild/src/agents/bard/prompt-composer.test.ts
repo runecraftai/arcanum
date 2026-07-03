@@ -344,7 +344,7 @@ describe("individual section builders", () => {
     const section = buildWizardModeSection(new Set())
     expect(section).toContain("MODE: interactive")
     expect(section).toContain("MODE: automatic")
-    expect(section).toContain("OpenCode `question` tool")
+    expect(section).toContain("OpenCode `ask_user` tool")
     expect(section).toContain("choose one of those two options")
   })
 

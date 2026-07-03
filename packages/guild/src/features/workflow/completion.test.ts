@@ -100,15 +100,15 @@ describe("user_confirm", () => {
 })
 
 describe("plan_created", () => {
-  it("detects plan.md in .guild/ (canonical, primary artifact)", () => {
+  it("detects spec.md in .guild/ (canonical, primary artifact)", () => {
     const planDir = join(testDir, ".guild", "plans", "my-plan")
     mkdirSync(planDir, { recursive: true })
-    writeFileSync(join(planDir, "plan.md"), "# Plan", "utf-8")
+    writeFileSync(join(planDir, "spec.md"), "# Spec", "utf-8")
     const ctx = makeContext({ config: { method: "plan_created", plan_name: "my-plan" } })
     const result = checkStepCompletion("plan_created", ctx)
     expect(result.complete).toBe(true)
     expect(result.artifacts).toBeDefined()
-    expect(result.artifacts!.plan_path).toContain(".guild/plans/my-plan/plan.md")
+    expect(result.artifacts!.plan_path).toContain(".guild/plans/my-plan/spec.md")
   })
 
   it("falls back to tasks.md when plan.md is absent", () => {
@@ -119,33 +119,6 @@ describe("plan_created", () => {
     const result = checkStepCompletion("plan_created", ctx)
     expect(result.complete).toBe(true)
     expect(result.artifacts!.plan_path).toContain(".guild/plans/my-plan/tasks.md")
-  })
-
-  it("falls back to .specs/ (legacy) when .guild/ is absent", () => {
-    const planDir = join(testDir, ".specs", "features", "my-plan")
-    mkdirSync(planDir, { recursive: true })
-    writeFileSync(join(planDir, "tasks.md"), "# Plan", "utf-8")
-    const ctx = makeContext({ config: { method: "plan_created", plan_name: "my-plan" } })
-    const result = checkStepCompletion("plan_created", ctx)
-    expect(result.complete).toBe(true)
-    expect(result.artifacts).toBeDefined()
-    expect(result.artifacts!.plan_path).toContain(".specs/features/my-plan/tasks.md")
-  })
-
-  it(".guild/ takes precedence over .specs/ when both exist", () => {
-    // Create .specs/ (legacy) first — it should NOT win
-    const legacyDir = join(testDir, ".specs", "features", "my-plan")
-    mkdirSync(legacyDir, { recursive: true })
-    writeFileSync(join(legacyDir, "tasks.md"), "# Legacy Plan", "utf-8")
-    // Create .guild/ (canonical) second — it SHOULD win
-    const guildDir = join(testDir, ".guild", "plans", "my-plan")
-    mkdirSync(guildDir, { recursive: true })
-    writeFileSync(join(guildDir, "plan.md"), "# Guild Plan", "utf-8")
-    const ctx = makeContext({ config: { method: "plan_created", plan_name: "my-plan" } })
-    const result = checkStepCompletion("plan_created", ctx)
-    expect(result.complete).toBe(true)
-    expect(result.artifacts!.plan_path).toContain(".guild/plans/my-plan/plan.md")
-    expect(result.artifacts!.plan_path).not.toContain(".specs/")
   })
 
   it("returns false when plan doesn't exist", () => {

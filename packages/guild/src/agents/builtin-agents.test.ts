@@ -394,7 +394,7 @@ describe("AGENT_METADATA", () => {
     expect(prompt).not.toContain("LARGE (10+ files")
     // Inline question tool rules consolidated into a concise pointer
     expect(prompt).not.toContain("Iteration cadence")
-    expect(prompt).toContain("**Question tool**")
+    expect(prompt).toContain("**ask_user tool**")
     expect(prompt).toContain("**Artifact scope**")
     expect(prompt).toContain("**Plan structure**")
     expect(prompt).toContain("**Pause/resume**")

@@ -25,7 +25,7 @@ describe("createWizardAgent", () => {
     const config = createWizardAgent("claude-opus-4")
     expect(config.prompt).toContain("MODE: interactive")
     expect(config.prompt).toContain("MODE: automatic")
-    expect(config.prompt).toContain("OpenCode `question` tool")
+    expect(config.prompt).toContain("OpenCode `ask_user` tool")
   })
 
   it("routes codebase searches to Rogue and external research to Warlock", () => {

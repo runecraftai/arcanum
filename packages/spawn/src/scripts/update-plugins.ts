@@ -141,7 +141,7 @@ function installLatest(plugins: string[]): void {
     const normalized = normalizePluginName(plugin);
     if (!normalized) continue;
     const target = `${normalized}@latest`;
-    spawnSync(npmCmd, ['install', '-g', target], { stdio: 'ignore' });
+    spawnSync(npmCmd, ['install', '-g', target, '--prefer-online', '--no-audit', '--no-fund'], { stdio: 'ignore' });
   }
 }
 

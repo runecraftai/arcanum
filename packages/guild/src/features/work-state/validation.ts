@@ -67,15 +67,17 @@ export function validatePlan(planPath: string, projectDir: string): ValidationRe
 
 /**
  * Extract the text content of a top-level H2 section (## Heading).
- * Returns everything from the line after the heading up to (but not including)
- * the next `## ` heading, or end of file.
+ * Case-insensitive heading match. Returns everything from the line after
+ * the heading up to (but not including) the next `## ` heading, or end of file.
  */
 function extractSection(content: string, heading: string): string | null {
   const lines = content.split("\n")
+  const headingText = heading.replace(/^#+\s*/, "").trim().toLowerCase()
   let startIdx = -1
 
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].trim() === heading) {
+    const line = lines[i].trim()
+    if (line.startsWith("##") && line.replace(/^#+\s*/, "").trim().toLowerCase() === headingText) {
       startIdx = i + 1
       break
     }
@@ -92,9 +94,14 @@ function extractSection(content: string, heading: string): string | null {
   return sectionLines.join("\n")
 }
 
-/** Check whether a section heading exists in the content */
+/** Check whether a section heading (case-insensitive, with flexible leading space) exists in the content */
 function hasSection(content: string, heading: string): boolean {
-  return content.split("\n").some((line) => line.trim() === heading)
+  const pattern = new RegExp(`^#+\\s*${escapeRegex(heading.slice(2).trim())}`, "im")
+  return pattern.test(content)
+}
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 }
 
 // ─── 1. Structure ─────────────────────────────────────────────────────────────
@@ -186,26 +193,18 @@ function validateCheckboxes(
 
       const body = bodyLines.join("\n")
 
-      // Check for sub-fields (with or without trailing colon)
-      if (!(/\*\*What\*\*/.test(body))) {
+      // Check for sub-fields — suggest but don't require each individually
+      const missingFields: string[] = []
+      if (!(/\*\*What\*\*/.test(body))) missingFields.push("**What**")
+      if (!(/\*\*Files\*\*/.test(body))) missingFields.push("**Files**")
+      if (!(/\*\*Acceptance\*\*/.test(body))) missingFields.push("**Acceptance**")
+      if (/\*\*(?:Summary|Description|Task|Goal)\*\*/.test(body) && missingFields.length === 0) {
+        // Alternative naming found — skip warning
+      } else if (missingFields.length > 0) {
         warnings.push({
           severity: "warning",
           category: "checkboxes",
-          message: `${taskLabel} is missing **What** sub-field`,
-        })
-      }
-      if (!(/\*\*Files\*\*/.test(body))) {
-        warnings.push({
-          severity: "warning",
-          category: "checkboxes",
-          message: `${taskLabel} is missing **Files** sub-field`,
-        })
-      }
-      if (!(/\*\*Acceptance\*\*/.test(body))) {
-        warnings.push({
-          severity: "warning",
-          category: "checkboxes",
-          message: `${taskLabel} is missing **Acceptance** sub-field`,
+          message: `${taskLabel} may be missing sub-fields: ${missingFields.join(", ")}. Consider adding structured What/Files/Acceptance fields.`,
         })
       }
     }

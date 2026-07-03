@@ -258,9 +258,9 @@ describe("individual fighter section builders", () => {
     expect(section).toContain("report to the user")
   })
 
-  it("buildTapestryErrorHandlingSection uses the OpenCode question tool for blockers", () => {
+  it("buildTapestryErrorHandlingSection uses the OpenCode ask_user tool for blockers", () => {
     const section = buildTapestryErrorHandlingSection()
-    expect(section).toContain("OpenCode `question` tool")
+    expect(section).toContain("OpenCode `ask_user` tool")
     expect(section).toContain("ambiguous blocker")
   })
 })

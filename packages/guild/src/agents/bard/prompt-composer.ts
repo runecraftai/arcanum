@@ -85,7 +85,7 @@ export function buildDelegationSection(disabled: Set<string>, reviewModelVariant
   }
   if (isAgentEnabled("wizard", disabled)) {
     lines.push(
-      "- Use `call_guild_agent` to delegate to Wizard for planning, scoping, and work breakdown before substantial implementation begins. If the user has not chosen a mode yet, use the OpenCode \`question\` tool to offer two options first: interactive flow (Wizard asks questions) or automatic flow (Wizard researches and drafts the plan without back-and-forth). After the choice, pass it explicitly as `MODE: interactive` or `MODE: automatic` in the Wizard handoff.",
+      "- Use `call_guild_agent` to delegate to Wizard for planning, scoping, and work breakdown before substantial implementation begins. If the user has not chosen a mode yet, use the OpenCode \`ask_user\` tool to offer two options first: interactive flow (Wizard asks questions) or automatic flow (Wizard researches and drafts the plan without back-and-forth). After the choice, pass it explicitly as `MODE: interactive` or `MODE: automatic` in the Wizard handoff.",
     )
   }
   if (isAgentEnabled("fighter", disabled)) {
@@ -123,7 +123,7 @@ When delegating to Wizard, make the mode explicit:
 
 - MODE: interactive — use when the user wants guided clarification. Wizard should ask the minimum necessary questions, then stop so Bard can relay answers back.
 - MODE: automatic — use when the user wants a straight plan. Wizard should research and draft the plan without extra back-and-forth.
-- If the request is ambiguous, use the OpenCode \`question\` tool to ask the user to choose one of those two options before delegating.
+- If the request is ambiguous, use the OpenCode \`ask_user\` tool to ask the user to choose one of those two options before delegating.
 </WizardMode>`
 }
 
@@ -186,7 +186,7 @@ export function buildPlanWorkflowSection(disabled: Set<string>, reviewModelVaria
   steps.push(`${resumeStepNum}. RESUME: \`/start-work\` also resumes interrupted work (guild-handoff tracks state)`)
 
   const finishStepNum = steps.length + 1
-  steps.push(`${finishStepNum}. HANDOFF: At the end of planning, use the question tool to offer next actions: start Fighter execution, return to Bard, continue refining, or ask for review where relevant`)
+  steps.push(`${finishStepNum}. HANDOFF: At the end of planning, use the \`ask_user\` tool to offer next actions: start Fighter execution, return to Bard, continue refining, or ask for review where relevant`)
 
   return `<PlanWorkflow>
 Plans are executed by Fighter, not Bard. Tell the user to run \`/start-work\` to begin.

@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, unlinkSync, writeFileSync } from "fs"
 import { execSync } from "child_process"
-import { basename, join } from "path"
+import { basename, extname, join } from "path"
 import type { PlanProgress, SessionRuntimeState, WorkState } from "../../features/work-state/types"
 import { PLANS_DIR, SESSION_RUNTIME_DIR, GUILD_DIR, WORK_STATE_FILE } from "../../features/work-state/constants"
 
@@ -105,12 +105,24 @@ export function findPlansInFs(directory: string): string[] {
       return []
     }
 
-    return readdirSync(plansDir)
-      .filter((entry) => entry.endsWith(".md"))
-      .map((entry) => {
-        const fullPath = join(plansDir, entry)
-        return { path: fullPath, mtime: statSync(fullPath).mtimeMs }
-      })
+    const results: { path: string; mtime: number }[] = []
+
+    function walk(dir: string): void {
+      const entries = readdirSync(dir, { withFileTypes: true })
+      for (const entry of entries) {
+        const fullPath = join(dir, entry.name)
+        if (entry.isDirectory()) {
+          if (entry.name === "archive") continue
+          walk(fullPath)
+        } else if (entry.isFile() && extname(entry.name) === ".md") {
+          results.push({ path: fullPath, mtime: statSync(fullPath).mtimeMs })
+        }
+      }
+    }
+
+    walk(plansDir)
+
+    return results
       .sort((left, right) => right.mtime - left.mtime)
       .map((entry) => entry.path)
   } catch {

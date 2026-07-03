@@ -152,32 +152,15 @@ function checkPlanComplete(context: CompletionContext): CompletionCheckResult {
 }
 
 function resolveSpecArtifactPath(directory: string, planName: string): string | null {
-  // .guild/ (canonical) — checked first
-  // plan.md is the primary plan artifact (atomic tasks); state.md is for handoff
+  // .guild/ (canonical) — spec.md is the primary plan artifact, tasks.md is the execution artifact
   const canonicalCandidates = [
-    join(directory, ".guild", "plans", planName, "plan.md"),
-    join(directory, ".guild", "plans", planName, "tasks.md"),
     join(directory, ".guild", "plans", planName, "spec.md"),
+    join(directory, ".guild", "plans", planName, "tasks.md"),
     join(directory, ".guild", "plans", planName, "design.md"),
     join(directory, ".guild", "plans", planName, "state.md"),
   ]
 
   for (const candidate of canonicalCandidates) {
-    if (existsSync(candidate)) {
-      return candidate
-    }
-  }
-
-  // .specs/* (legacy fallback) — checked second
-  const legacyCandidates = [
-    join(directory, ".specs", "features", planName, "tasks.md"),
-    join(directory, ".specs", "features", planName, "spec.md"),
-    join(directory, ".specs", "features", planName, "design.md"),
-    join(directory, ".specs", "quick", planName, "TASK.md"),
-    join(directory, ".specs", "project", `${planName}.md`),
-  ]
-
-  for (const candidate of legacyCandidates) {
     if (existsSync(candidate)) {
       return candidate
     }
