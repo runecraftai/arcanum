@@ -1,5 +1,11 @@
 # @arcanum/spawn
 
+## 0.0.4
+
+### Patch Changes
+
+- fix(guild): enforce ask_user tool, bypass install cache, align plan format
+
 ## 0.0.3
 
 ### Patch Changes
