@@ -3,6 +3,7 @@ import { z } from "zod"
 import { zodToJsonSchema } from "zod-to-json-schema"
 
 import { GuildConfigSchema } from "./schema"
+import { getKnownModels } from "../agents/model-resolution"
 
 export type JsonSchemaObject = Record<string, unknown>
 
@@ -22,13 +23,8 @@ export const GUILD_CONFIG_JSON_SCHEMA_FALLBACK_TARGET = "draft-2020-12"
 export const SAFE_RELATIVE_PATH_PATTERN =
   "^(?![\\\\/])(?![A-Za-z]:[\\\\/])(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
 export const SAFE_RELATIVE_PATH_DESCRIPTION =
-  "Relative directory path only. Absolute paths, leading backslashes/UNC paths, and '..' traversal segments are rejected at runtime."
+   "Relative directory path only. Absolute paths, leading backslashes/UNC paths, and '..' traversal segments are rejected at runtime."
 
-/**
- * Root-level metadata contract shared by the config schema generator, tests,
- * and docs. The public schema URL is versioned so editors can reference the
- * published npm package without copying the file.
- */
 export function getGuildConfigJsonSchemaMetadata(version: string) {
   return {
     $schema: GUILD_CONFIG_JSON_SCHEMA_DRAFT,
@@ -119,12 +115,73 @@ function annotateSafeRelativePathArray(root: JsonSchemaObject, value: unknown) {
   const items = asObject(schema?.items)
   if (!items) return
 
-  // Intentional in-place post-processing: createBaseGuildConfigJsonSchema()
-  // returns a fresh schema object, resolveJsonSchemaRef(root, value) resolves the
-  // referenced array node for us, and mutating items directly keeps wizard and
-  // appendDescription(items, ...) attached to that final resolved schema branch.
   items.pattern = SAFE_RELATIVE_PATH_PATTERN
   appendDescription(items, SAFE_RELATIVE_PATH_DESCRIPTION)
+}
+
+function injectModelExamples(schema: JsonSchemaObject, knownModels: string[]) {
+  const rootDefinition = resolveJsonSchemaRef(
+    schema,
+    { $ref: `#/$defs/${GUILD_CONFIG_JSON_SCHEMA_ROOT_NAME}` },
+  )
+  const rootProps = asObject(rootDefinition?.properties)
+  if (!rootProps) return
+
+  const agentsSchema = resolveJsonSchemaRef(schema, rootProps.agents)
+  const agentsAdditionalProps = asObject(agentsSchema?.additionalProperties)
+  if (agentsAdditionalProps) {
+    const agentProps = asObject(agentsAdditionalProps.properties)
+    if (agentProps) {
+      const modelSchema = asObject(agentProps.model)
+      if (modelSchema?.type === "string") {
+        modelSchema.examples = knownModels
+      }
+      const fallbackSchema = resolveJsonSchemaRef(schema, agentProps.fallback_models)
+      const fallbackItems = asObject(fallbackSchema?.items)
+      if (fallbackItems?.type === "string") {
+        fallbackItems.examples = knownModels
+      }
+      const reviewSchema = resolveJsonSchemaRef(schema, agentProps.review_models)
+      const reviewItems = asObject(reviewSchema?.items)
+      if (reviewItems?.type === "string") {
+        reviewItems.examples = knownModels
+      }
+    }
+  }
+
+  const customAgentsSchema = resolveJsonSchemaRef(schema, rootProps.custom_agents)
+  const customAgentsAdditionalProps = asObject(customAgentsSchema?.additionalProperties)
+  if (customAgentsAdditionalProps) {
+    const customAgentProps = asObject(customAgentsAdditionalProps.properties)
+    if (customAgentProps) {
+      const modelSchema = asObject(customAgentProps.model)
+      if (modelSchema?.type === "string") {
+        modelSchema.examples = knownModels
+      }
+      const fallbackSchema = resolveJsonSchemaRef(schema, customAgentProps.fallback_models)
+      const fallbackItems = asObject(fallbackSchema?.items)
+      if (fallbackItems?.type === "string") {
+        fallbackItems.examples = knownModels
+      }
+    }
+  }
+
+  const categoriesSchema = resolveJsonSchemaRef(schema, rootProps.categories)
+  const categoriesAdditionalProps = asObject(categoriesSchema?.additionalProperties)
+  if (categoriesAdditionalProps) {
+    const categoryProps = asObject(categoriesAdditionalProps.properties)
+    if (categoryProps) {
+      const modelSchema = asObject(categoryProps.model)
+      if (modelSchema?.type === "string") {
+        modelSchema.examples = knownModels
+      }
+      const fallbackSchema = resolveJsonSchemaRef(schema, categoryProps.fallback_models)
+      const fallbackItems = asObject(fallbackSchema?.items)
+      if (fallbackItems?.type === "string") {
+        fallbackItems.examples = knownModels
+      }
+    }
+  }
 }
 
 function postProcessGuildConfigJsonSchema(schema: JsonSchemaObject) {
@@ -141,13 +198,12 @@ function postProcessGuildConfigJsonSchema(schema: JsonSchemaObject) {
   const workflowProperties = asObject(workflows?.properties)
   annotateSafeRelativePathArray(schema, workflowProperties?.directories)
 
+  const knownModels = getKnownModels()
+  injectModelExamples(schema, knownModels)
+
   return schema
 }
 
-/**
- * Applies the repository's agreed root metadata contract to a generated
- * Guild config schema object. Pure so scripts and tests can share it.
- */
 export function generateGuildConfigJsonSchema({ version }: GenerateGuildConfigJsonSchemaOptions): JsonSchemaObject {
   const schema = createBaseGuildConfigJsonSchema()
 

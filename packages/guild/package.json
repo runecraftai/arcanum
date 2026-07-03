@@ -33,7 +33,7 @@
     "verify:publish": "bun run script/verify.ts --publish",
     "smoke-install": "bun run script/smoke-install.ts",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "bun run verify:publish && bun run smoke-install",
+    "prepublishOnly": "bun run schema:config && bun run verify:publish && bun run smoke-install",
     "test": "bun test",
     "eval": "bun run script/eval.ts",
     "eval:smoke": "bun run script/eval.ts --suite prompt-smoke",

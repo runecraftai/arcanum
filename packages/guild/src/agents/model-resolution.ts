@@ -70,6 +70,25 @@ export const AGENT_MODEL_REQUIREMENTS: Record<GuildAgentName, AgentModelRequirem
   },
 }
 
+export function getKnownModels(): string[] {
+  const seen = new Set<string>()
+  const models: string[] = []
+
+  for (const agent of Object.values(AGENT_MODEL_REQUIREMENTS)) {
+    for (const entry of agent.fallbackChain) {
+      for (const provider of entry.providers) {
+        const qualified = `${provider}/${entry.model}`
+        if (!seen.has(qualified)) {
+          seen.add(qualified)
+          models.push(qualified)
+        }
+      }
+    }
+  }
+
+  return models
+}
+
 export type ResolveAgentModelOptions = {
   availableModels: Set<string>
   agentMode: AgentMode

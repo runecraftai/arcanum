@@ -16,19 +16,49 @@
             "type": "object",
             "properties": {
               "model": {
-                "type": "string"
+                "type": "string",
+                "examples": [
+                  "anthropic/claude-opus-4.6",
+                  "anthropic/claude-opus-4",
+                  "openai/gpt-5",
+                  "anthropic/claude-sonnet-4.6",
+                  "anthropic/claude-sonnet-4",
+                  "anthropic/claude-haiku-4.5",
+                  "anthropic/claude-haiku-4",
+                  "google/gemini-3-flash"
+                ]
               },
               "fallback_models": {
                 "type": "array",
                 "items": {
-                  "type": "string"
+                  "type": "string",
+                  "examples": [
+                    "anthropic/claude-opus-4.6",
+                    "anthropic/claude-opus-4",
+                    "openai/gpt-5",
+                    "anthropic/claude-sonnet-4.6",
+                    "anthropic/claude-sonnet-4",
+                    "anthropic/claude-haiku-4.5",
+                    "anthropic/claude-haiku-4",
+                    "google/gemini-3-flash"
+                  ]
                 }
               },
               "review_models": {
                 "type": "array",
                 "items": {
                   "type": "string",
-                  "pattern": "^[a-zA-Z0-9_-]+\\/[a-zA-Z0-9._-]+$"
+                  "pattern": "^[a-zA-Z0-9_-]+\\/[a-zA-Z0-9._-]+$",
+                  "examples": [
+                    "anthropic/claude-opus-4.6",
+                    "anthropic/claude-opus-4",
+                    "openai/gpt-5",
+                    "anthropic/claude-sonnet-4.6",
+                    "anthropic/claude-sonnet-4",
+                    "anthropic/claude-haiku-4.5",
+                    "anthropic/claude-haiku-4",
+                    "google/gemini-3-flash"
+                  ]
                 }
               },
               "variant": {
@@ -111,7 +141,17 @@
                 "type": "string"
               },
               "model": {
-                "type": "string"
+                "type": "string",
+                "examples": [
+                  "anthropic/claude-opus-4.6",
+                  "anthropic/claude-opus-4",
+                  "openai/gpt-5",
+                  "anthropic/claude-sonnet-4.6",
+                  "anthropic/claude-sonnet-4",
+                  "anthropic/claude-haiku-4.5",
+                  "anthropic/claude-haiku-4",
+                  "google/gemini-3-flash"
+                ]
               },
               "display_name": {
                 "type": "string"
@@ -127,7 +167,17 @@
               "fallback_models": {
                 "type": "array",
                 "items": {
-                  "type": "string"
+                  "type": "string",
+                  "examples": [
+                    "anthropic/claude-opus-4.6",
+                    "anthropic/claude-opus-4",
+                    "openai/gpt-5",
+                    "anthropic/claude-sonnet-4.6",
+                    "anthropic/claude-sonnet-4",
+                    "anthropic/claude-haiku-4.5",
+                    "anthropic/claude-haiku-4",
+                    "google/gemini-3-flash"
+                  ]
                 }
               },
               "category": {
@@ -220,12 +270,32 @@
                 "type": "string"
               },
               "model": {
-                "type": "string"
+                "type": "string",
+                "examples": [
+                  "anthropic/claude-opus-4.6",
+                  "anthropic/claude-opus-4",
+                  "openai/gpt-5",
+                  "anthropic/claude-sonnet-4.6",
+                  "anthropic/claude-sonnet-4",
+                  "anthropic/claude-haiku-4.5",
+                  "anthropic/claude-haiku-4",
+                  "google/gemini-3-flash"
+                ]
               },
               "fallback_models": {
                 "type": "array",
                 "items": {
-                  "type": "string"
+                  "type": "string",
+                  "examples": [
+                    "anthropic/claude-opus-4.6",
+                    "anthropic/claude-opus-4",
+                    "openai/gpt-5",
+                    "anthropic/claude-sonnet-4.6",
+                    "anthropic/claude-sonnet-4",
+                    "anthropic/claude-haiku-4.5",
+                    "anthropic/claude-haiku-4",
+                    "google/gemini-3-flash"
+                  ]
                 }
               },
               "variant": {
@@ -456,8 +526,8 @@
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://unpkg.com/@runecraft/guild@0.17.0/schema/guild-config.schema.json",
+  "$id": "https://unpkg.com/@runecraft/guild@0.21.0/schema/guild-config.schema.json",
   "title": "Guild Config",
   "description": "Configuration for the @runecraft/guild OpenCode plugin. Runtime loading accepts JSONC, while the generated schema artifact is plain JSON Schema.",
-  "x-guild-version": "0.17.0"
+  "x-guild-version": "0.21.0"
 }
