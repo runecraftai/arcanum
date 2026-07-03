@@ -1,5 +1,12 @@
 # @runecraft/guild
 
+## 0.22.0
+
+### Minor Changes
+
+- feat(guild): add model intellisense to schema and auto-regenerate on publish
+  fix(guild): enforce ask_user tool, bypass install cache, align plan format
+
 ## 0.21.0
 
 ### Minor Changes
