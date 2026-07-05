@@ -19,7 +19,6 @@ interface TrackedSession {
   createdAt: number;
   lastSeenAt: number;
   missingSince?: number;
-  idleSince?: number;
 }
 
 interface SessionCreatedEvent {
@@ -195,20 +194,11 @@ export class TmuxSessionManager {
       for (const [sessionId, tracked] of this.sessions.entries()) {
         const status = allStatuses[sessionId];
 
-        const isIdle = status?.type === 'idle';
-        const idleFor = tracked.idleSince ? now - tracked.idleSince : 0;
-
         if (status) {
           tracked.lastSeenAt = now;
           tracked.missingSince = undefined;
-          tracked.idleSince = isIdle ? tracked.idleSince ?? now : undefined;
         } else if (!tracked.missingSince) {
           tracked.missingSince = now;
-          tracked.idleSince = undefined;
-        }
-
-        if (!isIdle) {
-          tracked.idleSince = undefined;
         }
 
         const missingTooLong =
@@ -217,9 +207,7 @@ export class TmuxSessionManager {
 
         const isTimedOut = now - tracked.createdAt > SESSION_TIMEOUT_MS;
 
-        if (isIdle && idleFor >= SESSION_MISSING_GRACE_MS) {
-          sessionsToClose.push({ id: sessionId, reason: 'idle' });
-        } else if (missingTooLong) {
+        if (missingTooLong) {
           sessionsToClose.push({ id: sessionId, reason: 'missing_too_long' });
         } else if (isTimedOut) {
           sessionsToClose.push({ id: sessionId, reason: 'timeout' });
