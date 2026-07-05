@@ -282,9 +282,12 @@ function buildFreshContext(
 ): string {
   const shaLine = startSha ? `\n**Start SHA**: ${startSha}` : ""
   const dirLine = directory ? `\n**Working directory**: \`${directory}\`` : ""
+  const sessionStart = new Date().toISOString()
   return `## Starting Plan: ${planName}
 **Plan file**: \`${planPath}\`
 **Progress**: ${progress.completed}/${progress.total} tasks completed${shaLine}${dirLine}
+**Session started**: ${sessionStart}
+**Tasks remaining**: ${progress.total - progress.completed}
 
 Read the plan file now and begin executing from the first unchecked \`- [ ]\` task.
 
@@ -306,10 +309,13 @@ function buildResumeContext(
   const remaining = progress.total - progress.completed
   const shaLine = startSha ? `\n**Start SHA**: ${startSha}` : ""
   const dirLine = directory ? `\n**Working directory**: \`${directory}\`` : ""
+  const sessionStart = new Date().toISOString()
   return `## Resuming Plan: ${planName}
 **Plan file**: \`${planPath}\`
 **Progress**: ${progress.completed}/${progress.total} tasks completed
 **Status**: RESUMING — continuing from where the previous session left off.${shaLine}${dirLine}
+**Session resumed**: ${sessionStart}
+**Tasks remaining**: ${remaining}
 
 Read the plan file now and continue from the first unchecked \`- [ ]\` task.
 
