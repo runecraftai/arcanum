@@ -1,5 +1,11 @@
 # @arcanum/spawn
 
+## 0.0.5
+
+### Patch Changes
+
+- fix(spawn): remove idle-based session cleanup from TmuxSessionManager
+
 ## 0.0.4
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @runecraft/guild
 
+## 0.23.0
+
+### Minor Changes
+
+- fix(guild): add session timestamp and tasks remaining to start-work context
+  feat(guild): add guild_compact_context tool for proactive context checkpointing
+
 ## 0.22.0
 
 ### Minor Changes
