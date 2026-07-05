@@ -167,6 +167,11 @@ export const WorkflowConfigSchema = z.object({
   directories: z.array(SafeRelativePathSchema).optional(),
 })
 
+export const ToolsConfigSchema = z.object({
+  /** Enable or disable the guild_compact_context tool. Default: true. */
+  compact_context: z.boolean().optional(),
+})
+
 export const GuildConfigSchema = z.object({
   $schema: z.string().optional(),
   agents: AgentOverridesSchema.optional(),
@@ -184,6 +189,8 @@ export const GuildConfigSchema = z.object({
   tmux: TmuxConfigSchema.optional(),
   experimental: ExperimentalConfigSchema.optional(),
   workflows: WorkflowConfigSchema.optional(),
+  /** Fine-grained tool enable/disable flags. */
+  tools: ToolsConfigSchema.optional(),
   /** Log level for Guild's structured logger. Overrides GUILD_LOG_LEVEL env var. */
   log_level: z.enum(["DEBUG", "INFO", "WARN", "ERROR"]).optional(),
 })
@@ -204,5 +211,6 @@ export type ContinuationConfig = z.infer<typeof ContinuationConfigSchema>
 export type TmuxConfig = z.infer<typeof TmuxConfigSchema>
 export type ExperimentalConfig = z.infer<typeof ExperimentalConfigSchema>
 export type WorkflowConfig = z.infer<typeof WorkflowConfigSchema>
+export type ToolsConfig = z.infer<typeof ToolsConfigSchema>
 export type GuildConfig = z.infer<typeof GuildConfigSchema>
 export type WeaveConfig = GuildConfig

@@ -43,7 +43,9 @@ function buildWarningMessage(usagePct: number): string {
   const pct = (usagePct * 100).toFixed(0)
   return `⚠️ Context window at ${pct}%. Consider wrapping up the current task or spawning a background agent for remaining work.
 
-Update the sidebar: use todowrite to create or update a todo (in_progress, high priority): "Context: ${pct}% — wrap up soon"`
+Update the sidebar: use todowrite to create or update a todo (in_progress, high priority): "Context: ${pct}% — wrap up soon"
+
+Use \`guild_compact_context\` to checkpoint your work now.`
 }
 
 function buildRecoveryMessage(state: ContextWindowState, usagePct: number): string {
@@ -56,7 +58,9 @@ IMMEDIATE ACTION REQUIRED:
 3. If work remains: spawn a background agent or ask the user to continue in a new session
 4. Do NOT attempt large new tasks — wrap up gracefully
 
-Update the sidebar: use todowrite to create a todo (in_progress, high priority): "CONTEXT ${pct}% — save & stop"`
+Update the sidebar: use todowrite to create a todo (in_progress, high priority): "CONTEXT ${pct}% — save & stop"
+
+Immediately call \`guild_compact_context({ session_id: "${state.sessionId}" })\` to preserve ownership context before compaction.`
 }
 
 export function createContextWindowMonitor(thresholds?: ContextWindowThresholds) {

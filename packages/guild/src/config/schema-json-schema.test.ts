@@ -70,6 +70,7 @@ describe("generateGuildConfigJsonSchema", () => {
       "tmux",
       "experimental",
       "workflows",
+      "tools",
       "log_level",
     ])
 

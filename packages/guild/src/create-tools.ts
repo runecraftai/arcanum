@@ -4,6 +4,7 @@ import type { ToolsRecord } from "./plugin/types"
 import type { LoadedSkill } from "./features/skill-loader/types"
 import type { ResolveSkillsFn } from "./agents/agent-builder"
 import { loadSkills, createSkillResolver } from "./features/skill-loader"
+import { createCompactContextTool } from "./tools/compact-context"
 
 export interface ToolsResult {
   tools: ToolsRecord
@@ -26,9 +27,15 @@ export async function createTools(options: {
 
   const resolveSkillsFn = createSkillResolver(skillResult)
 
-  // Tools come from OpenCode's tool system — Guild registers an empty record
-  // and relies on the config pipeline (ConfigHandler) to apply tool permissions
   const tools: ToolsRecord = {}
+
+  // Register guild_compact_context unless explicitly disabled via config
+  if (pluginConfig.tools?.compact_context !== false) {
+    tools.guild_compact_context = createCompactContextTool({
+      directory: ctx.directory,
+      client: ctx.client,
+    })
+  }
 
   return {
     tools,

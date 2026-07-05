@@ -1,0 +1,18 @@
+{
+  "id": "prompt-compact-context-tool-available",
+  "title": "Fighter prompt includes guild_compact_context tool",
+  "phase": "prompt",
+  "target": {
+    "kind": "builtin-agent-prompt",
+    "agent": "fighter"
+  },
+  "executor": {
+    "kind": "prompt-render"
+  },
+  "evaluators": [
+    {
+      "kind": "contains-all",
+      "patterns": ["guild_compact_context"]
+    }
+  ]
+}
