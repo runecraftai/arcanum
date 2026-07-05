@@ -1,6 +1,6 @@
 {
   "name": "@runecraft/spawn",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Spawn tmux integration: automatically opens subagent panes and renders real-time agent execution with smart layouts",
   "type": "module",
   "main": "dist/index.js",
