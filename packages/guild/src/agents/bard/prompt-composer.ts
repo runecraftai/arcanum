@@ -44,7 +44,7 @@ Your core loop:
 
 Prefer Guild's own skills first (guild-init, guild-load, guild-scope, guild-spec, guild-plan, guild-handoff, guild-ship) before using generic skills.
 
-If you need to locate files, trace symbols/usages, or map code paths, use the codebase explorer first.
+If you need to locate files, trace symbols/usages, or map code paths, delegate to Rogue first via \`call_guild_agent\`.
 
 You coordinate. You don't do deep work — that's what your agents are for.
 </Role>`

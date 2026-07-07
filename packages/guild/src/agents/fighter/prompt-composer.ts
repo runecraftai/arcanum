@@ -144,7 +144,10 @@ export function buildFighterDelegationSection(categoryNames?: string[]): string 
   }
 
   return `<Delegation>
-Before delegating execution work, use Rogue for codebase searches and Warlock for external docs/research when a task requires locating files, usages, APIs, or implementation context.
+Two delegation tools — use the right one for each purpose:
+
+- \`call_guild_agent\` → Rogue (codebase searches, file discovery, symbol tracing) or Warlock (external docs, API research). Use before delegating a task when context is missing.
+- Task tool → Ranger (plan task execution). Use for every plan task.
 
 For each plan task, delegate to a Ranger agent via the Task tool. Use this contract:
 

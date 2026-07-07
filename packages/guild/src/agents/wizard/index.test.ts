@@ -30,8 +30,8 @@ describe("createWizardAgent", () => {
 
   it("routes codebase searches to Rogue and external research to Warlock", () => {
     const config = createWizardAgent("claude-opus-4")
-    expect(config.prompt).toContain("Use rogue first for codebase searches")
-    expect(config.prompt).toContain("Use warlock for external docs")
+    expect(config.prompt).toContain("call_guild_agent` to delegate to Rogue first for codebase searches")
+    expect(config.prompt).toContain("call_guild_agent` to delegate to Warlock for external docs")
   })
 
   it("prefers Guild skills before generic skills", () => {

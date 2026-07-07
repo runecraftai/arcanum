@@ -152,8 +152,8 @@ describe("individual fighter section builders", () => {
 
   it("buildTapestryDelegationSection routes search work to Rogue and Warlock", () => {
     const section = buildTapestryDelegationSection()
-    expect(section).toContain("Rogue for codebase searches")
-    expect(section).toContain("Warlock for external docs/research")
+    expect(section).toContain("Rogue (codebase searches")
+    expect(section).toContain("Warlock (external docs")
   })
 
   it("buildTapestryDisciplineSection contains TODO OBSESSION", () => {

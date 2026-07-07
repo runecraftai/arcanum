@@ -53,8 +53,8 @@ Save plans under the plan directory.
 - Read relevant files before planning
 - Check existing patterns in the codebase
 - Understand dependencies before proposing changes
-- Use rogue first for codebase searches, file discovery, symbol/usages tracing, and other internal exploration
-- Use warlock for external docs, library/API research, and unfamiliar third-party behavior
+- Use \`call_guild_agent\` to delegate to Rogue first for codebase searches, file discovery, symbol/usages tracing, and other internal exploration
+- Use \`call_guild_agent\` to delegate to Warlock for external docs, library/API research, and unfamiliar third-party behavior
 </Research>
 
 <Style>
