@@ -21,11 +21,55 @@ Guild is a multi-agent orchestration plugin for OpenCode. It provides a cohesive
 
 ## Install
 
-Guild is published on [npm](https://www.npmjs.com/package/@runecraft/guild).
+### 🤖 Let an LLM do it (Recommended)
+
+Paste this into any LLM agent (OpenCode, Claude Code, Cursor, etc.):
+
+```text
+Install the guild plugin by following: https://raw.githubusercontent.com/runecraftai/arcanum/main/packages/guild/README.md
+```
+
+<details>
+<summary><b>Instructions for LLM Agents</b></summary>
+
+To install this plugin, please perform the following steps for the user:
+
+1.  **Configure OpenCode:**
+    Add `"@runecraft/guild"` to the `plugin` array in the user's config file (usually `~/.config/opencode/opencode.json`).
+
+    ```json
+    {
+      "plugin": [
+        "@runecraft/guild"
+      ]
+    }
+    ```
+
+2.  **Finalize:**
+    Tell the user: **"Installation complete! Please restart OpenCode — the plugin is auto-installed and loaded at startup."**
+
+</details>
+
+### 👤 For Humans (Manual)
+
+Add `"@runecraft/guild"` to the `plugin` array in your `~/.config/opencode/opencode.json`:
 
 ```json
 {
-  "plugin": ["@runecraft/guild"]
+  "plugin": [
+    "@runecraft/guild"
+  ]
+}
+```
+
+If you already have other plugins configured, just append it to the array:
+
+```json
+{
+  "plugin": [
+    "some-other-plugin",
+    "@runecraft/guild"
+  ]
 }
 ```
 

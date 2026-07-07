@@ -23,24 +23,18 @@ Install the spawn plugin by following: https://raw.githubusercontent.com/runecra
 
 To install this plugin, please perform the following steps for the user:
 
-1.  **Install the NPM package globally:**
-    ```bash
-    npm install -g spawn
-    ```
-    *Note: This installer automatically configures the user's shell (Bash/Zsh/Fish/PowerShell) to use the smart wrapper.*
-
-2.  **Configure OpenCode:**
-    Add `"spawn"` to the `plugin` array in the user's config file (usually `~/.config/opencode/opencode.json`).
+1.  **Configure OpenCode:**
+    Add `"@runecraft/spawn"` to the `plugin` array in the user's config file (usually `~/.config/opencode/opencode.json`).
 
     ```json
     {
       "plugin": [
-        "spawn"
+        "@runecraft/spawn"
       ]
     }
     ```
 
-3.  **Verify & Finalize:**
+2.  **Verify & Finalize:**
     *   Check if `tmux` is installed on the system. If not, advise the user to install it (e.g., `brew install tmux`, `sudo apt install tmux`, or `winget install tmux`).
     *   Tell the user: **"Installation complete! Please restart your terminal and run `opencode` to see the tmux integration in action."**
 
@@ -48,24 +42,30 @@ To install this plugin, please perform the following steps for the user:
 
 ### 👤 For Humans (Manual)
 
-1.  **Install via NPM:**
-    ```bash
-    npm install -g spawn
-    ```
-    *The installer automatically configures your shell to use the smart wrapper.*
+Add `"@runecraft/spawn"` to the `plugin` array in your `~/.config/opencode/opencode.json`:
 
-2.  **Enable the Plugin:**
-    Add `"spawn"` to your `~/.config/opencode/opencode.json`:
-    ```json
-    {
-      "plugin": [
-        "spawn"
-      ]
-    }
-    ```
+```json
+{
+  "plugin": [
+    "@runecraft/spawn"
+  ]
+}
+```
 
-3.  **Run OpenCode:**
-    Restart your terminal and type `opencode`. The plugin handles the rest!
+If you already have other plugins configured, just append it to the array:
+
+```json
+{
+  "plugin": [
+    "some-other-plugin",
+    "@runecraft/spawn"
+  ]
+}
+```
+
+Restart your terminal and type `opencode`. The plugin handles the rest!
+
+> **Note:** Make sure `tmux` is installed on your system (`brew install tmux`, `sudo apt install tmux`, or `winget install tmux`).
 
 ## 🛠️ Development
 

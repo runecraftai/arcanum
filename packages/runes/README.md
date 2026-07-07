@@ -4,12 +4,55 @@ Persistent cross-session memory for OpenCode agents. Runes is a thin, native plu
 
 ## Install
 
-Two lines:
+### 🤖 Let an LLM do it (Recommended)
 
-```jsonc
-// ~/.config/opencode/opencode.json
+Paste this into any LLM agent (OpenCode, Claude Code, Cursor, etc.):
+
+```text
+Install the runes plugin by following: https://raw.githubusercontent.com/runecraftai/arcanum/main/packages/runes/README.md
+```
+
+<details>
+<summary><b>Instructions for LLM Agents</b></summary>
+
+To install this plugin, please perform the following steps for the user:
+
+1.  **Configure OpenCode:**
+    Add `"@runecraft/runes"` to the `plugin` array in the user's config file (usually `~/.config/opencode/opencode.json`).
+
+    ```json
+    {
+      "plugin": [
+        "@runecraft/runes"
+      ]
+    }
+    ```
+
+2.  **Finalize:**
+    Tell the user: **"Installation complete! Please restart OpenCode — the first session will auto-create the data dir and migrate the schema."**
+
+</details>
+
+### 👤 For Humans (Manual)
+
+Add `"@runecraft/runes"` to the `plugin` array in your `~/.config/opencode/opencode.json`:
+
+```json
 {
-  "plugin": ["@runecraft/runes"]
+  "plugin": [
+    "@runecraft/runes"
+  ]
+}
+```
+
+If you already have other plugins configured, just append it to the array:
+
+```json
+{
+  "plugin": [
+    "some-other-plugin",
+    "@runecraft/runes"
+  ]
 }
 ```
 
