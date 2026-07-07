@@ -20,10 +20,38 @@
       "model": "anthropic/claude-haiku-4-5"
     },
     "rogue": {
-      "model": "opencode/deepseek-v4-flash-free"
+      "model": "lmstudio/qwen/qwen3.5-9b",
+      "fallback_models": [
+        "lmstudio/google/gemma-4-12b-qat",
+        "lmstudio/google/gemma-4-e4b",
+        "opencode/deepseek-v4-flash-free"
+      ],
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": false,
+        "task": false,
+        "webfetch": false,
+        "websearch": false,
+        "todowrite": false,
+        "call_guild_agent": false
+      }
     },
     "warlock": {
-      "model": "opencode/deepseek-v4-flash-free"
+      "model": "lmstudio/qwen/qwen3.5-9b",
+      "fallback_models": [
+        "lmstudio/google/gemma-4-12b-qat",
+        "lmstudio/google/gemma-4-e4b",
+        "opencode/deepseek-v4-flash-free"
+      ],
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": false,
+        "task": false,
+        "todowrite": false,
+        "call_guild_agent": false
+      }
     }
   }
 }
