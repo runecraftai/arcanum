@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.23.1
+
+### Patch Changes
+
+- fix(guild): clarify call_guild_agent vs Task tool delegation in bard, fighter, wizard prompts
+
 ## 0.23.0
 
 ### Minor Changes
