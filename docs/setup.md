@@ -125,6 +125,34 @@ pip install graphifyy[sql]
 
 > **Tip:** `AGENTS.md` and Graphify complement each other. `AGENTS.md` is better for high-level project guidance; the graph is better for detailed structural context.
 
+### Step 1.3 — OKF Knowledge Wiki
+
+Maintain a persistent, living knowledge base alongside your codebase using [Google's Open Knowledge Format (OKF)](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) — a pattern popularized by [Andrej Karpathy's LLM wiki idea](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).
+
+Instead of agents blindly reading large numbers of files, they query a curated set of interlinked markdown files that capture architecture decisions, conventions, and known pitfalls. The knowledge compounds over time and is versionable in git.
+
+**If you use Guild**, run `guild-init` in your project — it scaffolds the OKF bundle automatically under `.guild/knowledge/`:
+
+```
+.guild/knowledge/
+├── index.md        # Bundle root — agents start here
+├── decisions.md    # Architectural decisions log
+├── conventions.md  # Coding standards and patterns
+└── gotchas.md      # Known pitfalls and fix patterns
+```
+
+**If you don't use Guild**, create the same structure manually and add this instruction to your `AGENTS.md`:
+
+```markdown
+## Knowledge Base
+
+For any question about the codebase, first navigate the knowledge base at `.guild/knowledge/index.md`.
+Use specific paths from the index instead of reading multiple raw files.
+Update the relevant knowledge file whenever you discover a new convention, decision, or pitfall.
+```
+
+> **Tip:** Graphify (Step 1.2) and the OKF wiki complement each other. Graphify gives agents a structural graph of relationships; the OKF wiki gives them curated, human-verified understanding. Use both.
+
 ---
 
 ## Step 2: Give Your Agent Tools (MCPs)
