@@ -1,5 +1,11 @@
 # @arcanum/spawn
 
+## 0.0.6
+
+### Patch Changes
+
+- fix(spawn): close pane immediately on session.deleted event
+
 ## 0.0.5
 
 ### Patch Changes
