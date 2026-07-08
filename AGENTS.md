@@ -6,15 +6,15 @@ Instructions for any AI agent working in this repository.
 
 Arcanum is a TypeScript/Bun monorepo that ships AI tooling for the OpenCode editor. Core artifacts:
 
-| Package | Description |
-| --- | --- |
-| `@runecraft/guild` | Multi-agent orchestration plugin (8 RPG-themed agents, hooks, evals, analytics) |
-| `@runecraft/runes` | Persistent cross-session memory plugin (SQLite-backed, 10 agent tools) |
-| `@runecraft/spells` | Agent skill scrolls (SKILL.md files for Cursor, Claude, Copilot) |
-| `@runecraft/summon` | CLI installer for spells |
-| `@runecraft/spawn` | tmux subagent pane manager plugin |
-| `@runecraft/grimoire` | Shared Biome + TypeScript base configs |
-| `@runecraft/familiar` | Internal Pi multi-agent runtime (private, not published) |
+| Package               | Description                                                                     |
+| --------------------- | ------------------------------------------------------------------------------- |
+| `@runecraft/guild`    | Multi-agent orchestration plugin (8 RPG-themed agents, hooks, evals, analytics) |
+| `@runecraft/runes`    | Persistent cross-session memory plugin (SQLite-backed, 10 agent tools)          |
+| `@runecraft/spells`   | Agent skill scrolls (SKILL.md files for Cursor, Claude, Copilot)                |
+| `@runecraft/summon`   | CLI installer for spells                                                        |
+| `@runecraft/spawn`    | tmux subagent pane manager plugin                                               |
+| `@runecraft/grimoire` | Shared Biome + TypeScript base configs                                          |
+| `@runecraft/familiar` | Internal Pi multi-agent runtime (private, not published)                        |
 
 ## Repository structure
 
@@ -88,17 +88,20 @@ Add a changeset file for any user-facing change: `bun run changeset`. Patch for 
 ## Tool permissions
 
 **Allowed without asking:**
+
 - Read and edit files under `packages/`, `.guild/`, `docs/`, `.changeset/`
 - Run `bun test`, `bun run lint`, `bun run build`
 - Run `bun run commit` / `bun run changeset`
 
 **Ask before proceeding:**
+
 - Modifying `turbo.json`, `package.json` (root), `.github/workflows/`
 - Adding new dependencies to any package
 - Modifying `packages/grimoire/` (affects all packages)
 - Any change to `packages/familiar/` (private, sensitive)
 
 **Not allowed:**
+
 - `git reset --hard`, `git checkout --`, or mass deletion
 - Committing, pushing, or creating PRs unless explicitly requested
 - Publishing packages (`bun run changeset:publish`) unless explicitly requested
@@ -108,11 +111,11 @@ Add a changeset file for any user-facing change: `bun run changeset`. Patch for 
 
 Each package has its own `AGENTS.md` with package-specific rules. Read it before editing that package:
 
-| Package | Rules file |
-| --- | --- |
-| `packages/runes/` | `packages/runes/AGENTS.md` |
-| `packages/guild/` | `packages/guild/AGENTS.md` |
-| `packages/spawn/` | `packages/spawn/AGENTS.md` |
+| Package              | Rules file                    |
+| -------------------- | ----------------------------- |
+| `packages/runes/`    | `packages/runes/AGENTS.md`    |
+| `packages/guild/`    | `packages/guild/AGENTS.md`    |
+| `packages/spawn/`    | `packages/spawn/AGENTS.md`    |
 | `packages/familiar/` | `packages/familiar/CLAUDE.md` |
 
 ## Known constraints
@@ -137,3 +140,9 @@ Before marking any task complete:
 ## Escalation
 
 If you cannot proceed without a decision outside your permitted scope, stop and describe the blocker clearly. Do not assume or guess at architectural decisions — ask.
+
+## Knowledge Base
+
+For any question about the codebase, first navigate the knowledge base at `.guild/knowledge/index.md`.
+Use specific paths from the index instead of reading multiple raw files.
+Update the relevant knowledge file whenever you discover a new convention, decision, or pitfall.
