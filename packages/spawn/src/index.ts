@@ -62,18 +62,13 @@ const Spawn: Plugin = async (ctx) => {
 
   const tmuxSessionManager = new TmuxSessionManager(ctx, tmuxConfig, serverUrl);
 
+  const handleEvent = tmuxSessionManager.createEventHandler();
+
   return {
     name: 'spawn',
 
     event: async (input) => {
-      await tmuxSessionManager.onSessionCreated(
-        input.event as {
-          type: string;
-          properties?: {
-            info?: { id?: string; parentID?: string; title?: string };
-          };
-        },
-      );
+      await handleEvent(input as { event: { type: string; properties?: unknown } });
     },
   };
 };

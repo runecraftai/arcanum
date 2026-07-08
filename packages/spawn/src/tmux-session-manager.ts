@@ -26,6 +26,15 @@ interface SessionCreatedEvent {
   properties?: { info?: { id?: string; parentID?: string; title?: string } };
 }
 
+interface SessionDeletedEvent {
+  type: string;
+  properties?: {
+    info?: { id?: string };
+    sessionID?: string;
+    sessionId?: string;
+  };
+}
+
 export class TmuxSessionManager {
   private client: OpencodeClient;
   private tmuxConfig: TmuxConfig;
@@ -286,11 +295,34 @@ export class TmuxSessionManager {
     }
   }
 
+  async onSessionDeleted(event: SessionDeletedEvent): Promise<void> {
+    if (!this.enabled) return;
+    if (event.type !== 'session.deleted') return;
+
+    const props = event.properties;
+    const sessionId =
+      props?.info?.id ?? props?.sessionID ?? props?.sessionId ?? '';
+
+    if (!sessionId) return;
+
+    if (this.sessions.has(sessionId)) {
+      log('[tmux-session-manager] session.deleted event received, closing pane immediately', {
+        sessionId,
+      });
+      await this.closeSession(sessionId, 'session.deleted');
+    }
+  }
+
   createEventHandler(): (input: {
     event: { type: string; properties?: unknown };
   }) => Promise<void> {
     return async (input) => {
-      await this.onSessionCreated(input.event as SessionCreatedEvent);
+      const event = input.event as SessionCreatedEvent & SessionDeletedEvent;
+      if (event.type === 'session.created') {
+        await this.onSessionCreated(event);
+      } else if (event.type === 'session.deleted') {
+        await this.onSessionDeleted(event);
+      }
     };
   }
 

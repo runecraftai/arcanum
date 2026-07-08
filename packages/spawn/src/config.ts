@@ -24,7 +24,7 @@ export const TmuxConfigSchema = z.object({
   reaper_interval_ms: z.number().default(30000),
   reaper_min_zombie_checks: z.number().default(3),
   reaper_grace_period_ms: z.number().default(5000),
-  session_missing_grace_ms: z.number().default(30000),
+  session_missing_grace_ms: z.number().default(10000),
   
   // Auto self-destruct for abandoned servers
   reaper_auto_self_destruct: z.boolean().default(true),
@@ -53,7 +53,7 @@ export const PluginConfigSchema = z.object({
   reaper_interval_ms: z.number().default(30000),
   reaper_min_zombie_checks: z.number().default(3),
   reaper_grace_period_ms: z.number().default(5000),
-  session_missing_grace_ms: z.number().default(30000),
+  session_missing_grace_ms: z.number().default(10000),
 
   // Auto self-destruct for abandoned servers
   reaper_auto_self_destruct: z.boolean().default(true),
@@ -68,4 +68,6 @@ export type PluginConfig = z.infer<typeof PluginConfigSchema>;
 
 export const POLL_INTERVAL_MS = 2000;
 export const SESSION_TIMEOUT_MS = 10 * 60 * 1000;
-export const SESSION_MISSING_GRACE_MS = POLL_INTERVAL_MS * 15;
+// Fallback grace period for poll-based detection (session.deleted event is the primary path).
+// 5 ticks × 2 s = 10 s — enough to survive transient HTTP blips without keeping dead panes open.
+export const SESSION_MISSING_GRACE_MS = POLL_INTERVAL_MS * 5;
