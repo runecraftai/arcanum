@@ -163,3 +163,8 @@ packages/pi-archived-*/agent/sessions/
 packages/pi-archived-*/agent-sessions/
 packages/pi-archived-*/debug-captures/
 packages/pi-archived-*/web-test-captures/
+
+# Graphify knowledge-graph output (rebuilt locally; not committed)
+**/graphify-out/
+.graphify*
+!.graphifyignore

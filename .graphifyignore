@@ -1,9 +1,23 @@
-# .graphifyignore
+# .graphifyignore — files graphify should NOT index.
+# (.gitignore is also respected automatically; this only adds more exclusions.)
+# Syntax matches .gitignore, including ! negation.
+
+# vendor / dependency noise
 vendor/
 node_modules/
+
+# build / output dirs
+bin/
+obj/
 dist/
-*.generated.py
-# keep graph outputs, skip heavy/local-only files
-graphify-out/cache/            # optional: commit for shared extraction speed, skip to keep repo small
-graphify-out/manifest.json     # mtime-based, invalid after git clone — always gitignore this
-graphify-out/cost.json         # local token tracking, not useful to share
+build/
+.next/
+.nuxt/
+
+# minified assets
+*.min.*
+
+# graphify's own local-only outputs (don't re-index the generated graph)
+graphify-out/cache/
+graphify-out/manifest.json
+graphify-out/cost.json
