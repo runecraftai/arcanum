@@ -93,7 +93,7 @@ You can also add a **per-repository** instructions file at the repo root (e.g. `
 
 ### Step 1.2 — Graphify (Knowledge Graph)
 
-[Graphify](https://github.com/safishamsi/graphify) builds a structural knowledge graph of your repository, giving your agent richer context about how the codebase is organized.
+[Graphify](https://github.com/Graphify-Labs/graphify) builds a structural knowledge graph of your repository, giving your agent richer context about how the codebase is organized.
 
 > **Warning:** Close memory-intensive applications before running. Processing a large repo can use 6 GB+ of RAM.
 
@@ -105,23 +105,23 @@ Goal: Install Graphify globally and initialize a knowledge graph for this reposi
 Instructions:
 1. If this is a git repository, append `**/graphify-out/` and `.graphify*` to `.gitignore` (create if missing). Skip lines that already exist.
 2. Install Graphify globally (user-scope, not per-repo) following the latest instructions at:
-   https://github.com/safishamsi/graphify
-   Detect my OS and use the matching commands. On failure, print the exact error and proposed fix before retrying.
-3. Register Graphify as an MCP/tool in your agent's global config so it is always active.
-4. Initialize Graphify for the current repository and rebuild `graphify-out` from scratch.
+   https://github.com/Graphify-Labs/graphify
+   Detect my OS and use the matching commands (uv, pipx, or pip). On failure, print the exact error and proposed fix before retrying.
+3. Register the Graphify skill with my AI coding assistant:
+   - Since I'm using OpenCode, run: `graphify opencode install`
+   - For other agents, check the platform table at:
+     https://github.com/Graphify-Labs/graphify#make-your-assistant-always-use-the-graph
+     and run the matching `graphify <platform> install` command
+4. Initialize Graphify for the current repository and rebuild `graphify-out` from scratch with `/graphify .` (or `graphify .` on Windows/PowerShell).
 5. Exclude vendor/build/minified noise (node_modules, bin, obj, dist, build, .next, .nuxt, *.min.*, packages, vendor). Add or update the Graphify ignore config accordingly.
 6. After completion, print:
    - the number of indexed files/nodes/edges
    - the Graphify version and install path
    - every config file changed
-   - how to query the graph from your agent.
-
-pip install --upgrade graphifyy
-pip install graphifyy[sql]
-/graphify .
+   - how to query the graph from my agent (e.g. `graphify query "<question>"`, `graphify path <A> <B>`, `graphify explain <concept>`).
 ```
 
-**Verify**: Your agent should be able to answer structural questions about the codebase using the graph.
+**Verify**: Your agent should be able to answer structural questions using queries like `graphify query "how does auth work?"` or `graphify path "UserService" "DatabasePool"`.
 
 > **Tip:** `AGENTS.md` and Graphify complement each other. `AGENTS.md` is better for high-level project guidance; the graph is better for detailed structural context.
 
