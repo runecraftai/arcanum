@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.23.2
+
+### Patch Changes
+
+- fix(guild): wire fallback_models to runtime failover and strip native subagents
+
 ## 0.23.1
 
 ### Patch Changes
