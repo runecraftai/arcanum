@@ -8,8 +8,9 @@ import { randomUUID } from "node:crypto"
 import type { TrustedInjectedPromptMetadata } from "./trusted-message-state"
 import { classifyOpenAIFailoverError } from "../../application/failover/openai-error-classifier"
 import { canAttemptFailover, markFailoverAttempted } from "../../application/failover/failover-guard"
-import { getNextFallbackModel } from "../../agents/model-resolution"
+import { getNextFallbackModel, type FallbackEntry } from "../../agents/model-resolution"
 import { logFailoverEvent, log } from "../../shared/log"
+import type { AgentConfig } from "@opencode-ai/sdk"
 
 const REVIEWER_FANOUT_SENTINEL = "<!-- guild:reviewer-fanout -->"
 const reviewerFanOutSeenByClient = new WeakMap<object, Set<string>>()
@@ -33,8 +34,9 @@ export async function applyRuntimeEffects(args: {
   pausePlan?: () => void
   pauseWorkflow?: (reason: string) => void
   availableModels?: Set<string>
+  agents?: Record<string, AgentConfig>
 }): Promise<void> {
-  const { effects, output, client, tracker, recordInjectedPrompt, pausePlan, pauseWorkflow, availableModels } = args
+  const { effects, output, client, tracker, recordInjectedPrompt, pausePlan, pauseWorkflow, availableModels, agents } = args
   const sessionClient = client ? createSessionClient(client) : null
 
   // Track the current model per session (from trackModel analytics events)
@@ -117,8 +119,11 @@ export async function applyRuntimeEffects(args: {
               throw error
             }
 
+            const agentFallbackChain: FallbackEntry[] | undefined = (
+              agents?.[effect.agent ?? ""] as { fallbackChain?: FallbackEntry[] } | undefined
+            )?.fallbackChain
             const nextModel = effect.agent
-              ? getNextFallbackModel(effect.agent, currentModel, availableModels ?? new Set())
+              ? getNextFallbackModel(effect.agent, currentModel, availableModels ?? new Set(), agentFallbackChain)
               : null
 
             if (!nextModel) {

@@ -22,6 +22,16 @@ import type { BuiltinCommandEnvelopeName } from "./protocol"
 import { buildEnabledAgentKeys } from "./enabled-agent-keys"
 import type { TrustedInjectedPromptKind } from "./trusted-message-state"
 
+/** OpenCode native subagent config keys — stripped during merge so Guild agents always win. */
+const OPENCODE_NATIVE_SUBAGENT_KEYS = new Set([
+	"explore",
+	"plan",
+	"build",
+	"title",
+	"summary",
+	"compaction",
+])
+
 export function createPluginAdapter(args: {
   pluginConfig: GuildConfig
   hooks: CreatedHooks
@@ -85,22 +95,27 @@ export function createPluginAdapter(args: {
       if (Object.keys(existingAgents).length > 0) {
         // Remove existing agents whose config key matches a Guild agent, preventing
         // duplicates in the UI (e.g. OpenCode builtin "bard" + Guild "Bard (Guildmaster)").
-        const guildAgentKeys = new Set(
-          Object.keys(result.agents).map((name) => getAgentConfigKey(name)),
-        )
-        const filteredExisting = Object.fromEntries(
-          Object.entries(existingAgents).filter(
-            ([key]) => !guildAgentKeys.has(getAgentConfigKey(key)),
-          ),
-        )
-        const removedCount = Object.keys(existingAgents).length - Object.keys(filteredExisting).length
+         const guildAgentKeys = new Set(
+           Object.keys(result.agents).map((name) => getAgentConfigKey(name)),
+         )
+         const filteredExisting = Object.fromEntries(
+           Object.entries(existingAgents).filter(
+             ([key]) => !guildAgentKeys.has(getAgentConfigKey(key))
+               && !OPENCODE_NATIVE_SUBAGENT_KEYS.has(key.toLowerCase()),
+           ),
+         )
+         const removedCount = Object.keys(existingAgents).length - Object.keys(filteredExisting).length
+         const nativeSubagentRemoved = Object.keys(existingAgents).filter(
+           (key) => OPENCODE_NATIVE_SUBAGENT_KEYS.has(key.toLowerCase()),
+         ).length
 
-        debug("[config] Merging Guild agents over existing agents", {
-          existingCount: Object.keys(existingAgents).length,
-          removedCount,
-          guildCount: Object.keys(result.agents).length,
-          remainingExisting: Object.keys(filteredExisting),
-        })
+         debug("[config] Merging Guild agents over existing agents", {
+           existingCount: Object.keys(existingAgents).length,
+           removedCount,
+           nativeSubagentRemoved,
+           guildCount: Object.keys(result.agents).length,
+           remainingExisting: Object.keys(filteredExisting),
+         })
         config.agent = { ...filteredExisting, ...result.agents }
       } else {
         config.agent = { ...result.agents }
@@ -181,6 +196,7 @@ export function createPluginAdapter(args: {
         tracker,
         recordInjectedPrompt,
         availableModels,
+        agents,
         pausePlan: directory ? () => {
           pauseWork(directory)
           info("[work-continuation] Auto-paused: user message received during active plan", { sessionId: sessionID })
@@ -215,10 +231,10 @@ export function createPluginAdapter(args: {
       if (tracker && hooks.analyticsEnabled && sessionId && input.agent) {
         effects.push({ type: "trackAnalytics", event: { kind: "setAgentName", sessionId, agent: input.agent } } as const)
       }
-      if (tracker && hooks.analyticsEnabled && sessionId && input.model?.id) {
-        effects.push({ type: "trackAnalytics", event: { kind: "trackModel", sessionId, modelId: input.model.id } } as const)
-      }
-      await applyRuntimeEffects({ effects, tracker })
+       if (tracker && hooks.analyticsEnabled && sessionId && input.model?.id) {
+         effects.push({ type: "trackAnalytics", event: { kind: "trackModel", sessionId, modelId: input.model.id } } as const)
+       }
+       await applyRuntimeEffects({ effects, tracker, agents })
     },
 
     handleEvent: async (input: { event: { type: string; properties?: unknown } }) => {
@@ -247,6 +263,7 @@ export function createPluginAdapter(args: {
         tracker,
         recordInjectedPrompt,
         availableModels,
+        agents,
         pauseWorkflow: directory ? () => handlePauseExecutionEffect({
           effectReason: "User interrupt",
           directory,
@@ -443,12 +460,24 @@ function getDeletedSessionId(event: { type: string; properties?: unknown }): str
  * Models are in the format `provider/model` (e.g. `anthropic/claude-sonnet-4.6`).
  */
 function buildAvailableModels(agents: Record<string, AgentConfig>): Set<string> {
-  const models = new Set<string>()
-  for (const agent of Object.values(agents)) {
-    const model = agent.model
-    if (typeof model === "string" && model.length > 0) {
-      models.add(model)
-    }
-  }
-  return models
+	const models = new Set<string>()
+	for (const agent of Object.values(agents)) {
+		const model = agent.model
+		if (typeof model === "string" && model.length > 0) {
+			models.add(model)
+		}
+
+		const chain = agent.fallbackChain
+		if (Array.isArray(chain)) {
+			for (const entry of chain as Array<{ providers: string[]; model: string }>) {
+				for (const provider of entry.providers) {
+					models.add(`${provider}/${entry.model}`)
+				}
+				if (entry.model && entry.providers.length === 0) {
+					models.add(entry.model)
+				}
+			}
+		}
+	}
+	return models
 }

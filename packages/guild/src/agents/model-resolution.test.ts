@@ -287,4 +287,48 @@ describe("getNextFallbackModel", () => {
     const result = getNextFallbackModel("fighter", "anthropic/claude-sonnet-4.6", available)
     expect(result).toBe("openai/gpt-5")
   })
+
+  it("uses custom fallback chain when provided as 4th argument", () => {
+    // Custom chain: google/gemini-3-pro -> openai/gpt-5
+    const customChain = [
+      { providers: ["google"], model: "gemini-3-pro" },
+      { providers: ["openai"], model: "gpt-5" },
+    ]
+    const available = new Set(["google/gemini-3-pro", "openai/gpt-5"])
+    const result = getNextFallbackModel("bard", "google/gemini-3-pro", available, customChain)
+    expect(result).toBe("openai/gpt-5")
+  })
+
+  it("skips unavailable models in custom chain", () => {
+    // Custom chain: google/gemini-3-pro -> openai/gpt-5 -> anthropic/claude-opus-4
+    // Only gpt-5 and claude-opus-4 are available
+    const customChain = [
+      { providers: ["google"], model: "gemini-3-pro" },
+      { providers: ["openai"], model: "gpt-5" },
+      { providers: ["anthropic"], model: "claude-opus-4" },
+    ]
+    const available = new Set(["openai/gpt-5", "anthropic/claude-opus-4"])
+    const result = getNextFallbackModel("fighter", "google/gemini-3-pro", available, customChain)
+    expect(result).toBe("openai/gpt-5")
+  })
+
+  it("returns null when custom chain is exhausted", () => {
+    // Custom chain: google/gemini-3-pro -> openai/gpt-5
+    // gpt-5 is the last model in custom chain
+    const customChain = [
+      { providers: ["google"], model: "gemini-3-pro" },
+      { providers: ["openai"], model: "gpt-5" },
+    ]
+    const available = new Set(["google/gemini-3-pro", "openai/gpt-5"])
+    const result = getNextFallbackModel("wizard", "openai/gpt-5", available, customChain)
+    expect(result).toBeNull()
+  })
+
+  it("falls back to native chain when custom chain is null", () => {
+    // Explicitly pass null as custom chain — should use native chain
+    // bard chain: anthropic/claude-opus-4.6 -> anthropic/claude-opus-4 -> openai/gpt-5
+    const available = new Set(["anthropic/claude-opus-4.6", "anthropic/claude-opus-4", "openai/gpt-5"])
+    const result = getNextFallbackModel("bard", "anthropic/claude-opus-4.6", available, null)
+    expect(result).toBe("anthropic/claude-opus-4")
+  })
 })

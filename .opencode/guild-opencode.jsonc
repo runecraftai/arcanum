@@ -20,11 +20,12 @@
       "model": "anthropic/claude-haiku-4-5"
     },
     "rogue": {
-      "model": "lmstudio/qwen/qwen3.5-9b",
+      "model": "qwen/qwen3.5-9b",
       "fallback_models": [
-        "lmstudio/google/gemma-4-12b-qat",
-        "lmstudio/google/gemma-4-e4b",
-        "opencode/deepseek-v4-flash-free"
+        "google/gemma-4-12b-qat",
+        "google/gemma-4-e4b",
+        "opencode/deepseek-v4-flash-free",
+        "anthropic/claude-haiku-4-5"
       ],
       "tools": {
         "write": false,
@@ -38,11 +39,12 @@
       }
     },
     "warlock": {
-      "model": "lmstudio/qwen/qwen3.5-9b",
+      "model": "qwen/qwen3.5-9b",
       "fallback_models": [
-        "lmstudio/google/gemma-4-12b-qat",
-        "lmstudio/google/gemma-4-e4b",
-        "opencode/deepseek-v4-flash-free"
+        "google/gemma-4-12b-qat",
+        "google/gemma-4-e4b",
+        "opencode/deepseek-v4-flash-free",
+        "anthropic/claude-haiku-4-5"
       ],
       "tools": {
         "write": false,

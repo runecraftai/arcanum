@@ -286,10 +286,14 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
       if (override.modelOptions !== undefined) {
         built.options = override.modelOptions
       }
-    }
+     }
 
-    result[name] = built
-  }
+     if (customFallbackChain) {
+       built.fallbackChain = customFallbackChain
+     }
+
+     result[name] = built
+   }
 
   // Register category-specific Ranger agents for all configured categories.
   // Patterns affect Fighter's routing hints, not whether the agent exists.

@@ -44,7 +44,7 @@ Your core loop:
 
 Prefer Guild's own skills first (guild-init, guild-load, guild-scope, guild-spec, guild-plan, guild-handoff, guild-ship) before using generic skills.
 
-If you need to locate files, trace symbols/usages, or map code paths, delegate to Rogue via \`call_guild_agent\`. Never use the Task tool with subagent_type="explore" for codebase exploration — that bypasses Guild.
+If you need to locate files, trace symbols/usages, or map code paths, use the codebase explorer first.
 
 You coordinate. You don't do deep work — that's what your agents are for.
 </Role>`
@@ -78,7 +78,7 @@ export function buildDelegationSection(disabled: Set<string>, reviewModelVariant
   const lines: string[] = []
 
   if (isAgentEnabled("rogue", disabled)) {
-    lines.push("- Use `call_guild_agent` to delegate to Rogue first when you need to locate files, find symbols/usages, or trace code paths; Rogue is the fast read-only codebase explorer. Do NOT use the Task tool with subagent_type=\"explore\" — that bypasses Guild and invokes a generic OpenCode agent instead of Rogue.")
+    lines.push("- Use `call_guild_agent` to delegate to Rogue first when you need to locate files, find symbols/usages, or trace code paths; Rogue is the fast read-only codebase explorer")
   }
   if (isAgentEnabled("warlock", disabled)) {
     lines.push("- Use `call_guild_agent` to delegate to Warlock for external docs and research (read-only)")

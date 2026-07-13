@@ -70,6 +70,32 @@ describe("createBuiltinAgents", () => {
     })
   })
 
+  it("stores fallbackChain on agents with fallback_models override", () => {
+    const agents = createBuiltinAgents({
+      agentOverrides: {
+        bard: {
+          fallback_models: ["anthropic/claude-opus-4.6", "openai/gpt-4"],
+        },
+      },
+    })
+    const bard = agents["bard"] as { fallbackChain?: unknown } | undefined
+    expect(bard?.fallbackChain).toBeDefined()
+    expect(Array.isArray(bard?.fallbackChain)).toBe(true)
+    expect((bard?.fallbackChain as Array<unknown>).length).toBe(2)
+  })
+
+  it("does not set fallbackChain on agents without fallback_models override", () => {
+    const agents = createBuiltinAgents({
+      agentOverrides: {
+        fighter: {
+          model: "anthropic/claude-opus-4.6",
+        },
+      },
+    })
+    const fighter = agents["fighter"] as { fallbackChain?: unknown } | undefined
+    expect(fighter?.fallbackChain).toBeUndefined()
+  })
+
   it("binds approved guild skills to builtin agents", () => {
     const agents = createBuiltinAgents()
 

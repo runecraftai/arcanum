@@ -129,13 +129,14 @@ export function buildCustomAgent(
     hasPrompt: !!prompt,
   })
 
-  // Build the agent config
-  const agentConfig: AgentConfigWithOptions = {
-    model,
-    prompt: prompt || undefined,
-    description: config.description ?? displayName,
-    mode,
-  }
+	// Build the agent config
+	const agentConfig: AgentConfigWithOptions = {
+		model,
+		prompt: prompt || undefined,
+		description: config.description ?? displayName,
+		mode,
+		fallbackChain: customFallbackChain,
+	}
 
   if (config.temperature !== undefined) agentConfig.temperature = config.temperature
   if (config.top_p !== undefined) agentConfig.top_p = config.top_p

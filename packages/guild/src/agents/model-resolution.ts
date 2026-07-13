@@ -181,12 +181,13 @@ export function resolveAgentModel(agentName: string, options: ResolveAgentModelO
  * fallback chain).
  */
 export function getNextFallbackModel(
-  agentName: string,
-  failedModel: string,
-  availableModels: Set<string>,
+	agentName: string,
+	failedModel: string,
+	availableModels: Set<string>,
+	customFallbackChain?: FallbackEntry[] | null,
 ): string | null {
-  const requirement = AGENT_MODEL_REQUIREMENTS[agentName as GuildAgentName] as AgentModelRequirement | undefined
-  const fallbackChain = requirement?.fallbackChain
+	const requirement = AGENT_MODEL_REQUIREMENTS[agentName as GuildAgentName] as AgentModelRequirement | undefined
+	const fallbackChain = customFallbackChain ?? requirement?.fallbackChain
   if (!fallbackChain) return null
 
   let foundFailed = false
