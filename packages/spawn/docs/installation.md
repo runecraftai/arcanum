@@ -5,56 +5,39 @@ Follow these steps to install and configure the **spawn** plugin.
 ## Prerequisites
 
 - **OpenCode** installed and configured
-- **tmux** installed (`brew install tmux` or `apt install tmux`)
-- **Bun** runtime installed (`curl -fsSL https://bun.sh/install | bash`)
+- **tmux 2.6+** installed — see platform commands below:
+  - macOS: `brew install tmux`
+  - Ubuntu/Debian: `sudo apt install tmux`
+  - Arch: `sudo pacman -S tmux`
+  - Fedora/RHEL: `sudo dnf install tmux`
+  - Windows (WSL): `sudo apt install tmux` inside your WSL distro
+  - Windows (native): `winget install tmux`
+- Verify: `tmux -V`
 
-## Automatic Installation (Recommended)
+## Installation
 
-Run this one-liner in your terminal:
+Add `"@runecraft/spawn"` to the `plugin` array in your OpenCode config (`~/.config/opencode/opencode.json`):
 
-```bash
-git clone https://github.com/runecraftai/arcanum.git ~/Code/spawn && \
-cd ~/Code/spawn && \
-bun install && \
-bun run build
+```json
+{
+  "plugin": [
+    "@runecraft/spawn"
+  ]
+}
 ```
 
-Then reload your shell configuration:
+If you already have other plugins configured, append it to the array:
 
-```bash
-source ~/.zshrc  # or ~/.bashrc
+```json
+{
+  "plugin": [
+    "some-other-plugin",
+    "@runecraft/spawn"
+  ]
+}
 ```
 
-## Manual Installation
-
-3. **Clone the repository**
-   ```bash
-   mkdir -p ~/Code
-   cd ~/Code
-   git clone https://github.com/AnganSamadder/spawn.git
-   cd spawn
-   ```
-
-2. **Install dependencies**
-   ```bash
-   bun install
-   ```
-   *Note: This automatically sets up the shell alias and wrapper script.*
-
-3. **Build the plugin**
-   ```bash
-   bun run build
-   ```
-
-4. **Register the plugin**
-    Add the plugin path to your OpenCode config (`~/.config/opencode/opencode.json`):
-    ```json
-    {
-      "plugin": [
-        "/Users/YOUR_USERNAME/Code/spawn"
-      ]
-    }
-    ```
+Restart your terminal and run `opencode`. The plugin handles the rest.
 
 ## Verification
 

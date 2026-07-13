@@ -8,6 +8,23 @@ An [OpenCode](https://opencode.ai) plugin that provides **smart tmux integration
 - **Cross-Platform**: Full support for **macOS**, **Linux**, and **Windows** (via PowerShell or WSL).
 - **Crash Fix**: Includes fix for subagent lifecycle crash — `beforeExit` handler removed, poll errors non-fatal, shutdown guards added.
 
+## Prerequisites
+
+Spawn requires **tmux** to be installed and running on your system. OpenCode must also be installed.
+
+| Platform | Install command |
+|----------|----------------|
+| macOS | `brew install tmux` |
+| Ubuntu / Debian | `sudo apt install tmux` |
+| Arch Linux | `sudo pacman -S tmux` |
+| Fedora / RHEL | `sudo dnf install tmux` |
+| Windows (WSL) | `sudo apt install tmux` inside your WSL distro |
+| Windows (native) | `winget install tmux` (requires Windows 11 / winget) |
+
+Verify the install: `tmux -V` — you need tmux **2.6+** for all layout features to work correctly.
+
+> **Windows note:** Native Windows support runs via PowerShell or WSL. For the best experience, use WSL2 with a Linux distro and install tmux there.
+
 ## Installation
 
 ### 🤖 Let an LLM do it (Recommended)

@@ -32,6 +32,7 @@ This is not a framework. It is a craft.
 | [**Summon**](./packages/summon/)     | `@runecraft/summon`     | The summoning circle — CLI that invokes and installs spells into any project   | Active      |
 | [**Runes**](./packages/runes/)       | `@runecraft/runes`      | Carved sigils — OpenCode plugin that gives agents durable, per-repo memory     | Active      |
 | [**Grimoire**](./packages/grimoire/) | `@runecraft/grimoire`   | Shared sigils — Biome and TypeScript configs inherited by every package        | Active      |
+| [**Spawn**](./packages/spawn/)       | `@runecraft/spawn`      | Summoned panes — OpenCode plugin that opens tmux panes for each subagent       | Active      |
 | [**Guild**](./packages/guild/)       | `@runecraft/guild`      | Party charters — multi-agent swarm and orchestration configurations            | Placeholder |
 | [**Familiar**](./packages/familiar/) | `@runecraftai/familiar` | A bound familiar — internal Pi multi-agent runtime, not published              | Internal    |
 
