@@ -12,15 +12,31 @@ This page documents each command's purpose, syntax, expected behavior, and the m
 
 **Behavior**:
 
-1. **Detect and resolve.** The command router parses `/start-work` and resolves the target plan (explicit name, most recent incomplete, or prompts for selection among multiple incomplete plans).
+1. **Detect and resolve.** The command router (in `start-work-hook.ts`) parses `/start-work` and resolves the target plan using deterministic routing:
+   - If `[plan-name]` is explicit, match it against available plans.
+   - If no name given and work state exists, resume the active plan.
+   - If no name given and no active work, discover incomplete plans:
+     - If exactly one incomplete plan exists, auto-select it.
+     - If multiple incomplete plans exist, list them and ask the user to specify one.
+     - If no incomplete plans exist, tell the user to create a plan with Wizard.
 2. **Validate.** The plan is checked for structural validity before execution begins. Invalid plans return an error and ask the user to fix the file — execution is blocked.
-3. **Spawn Fighter in a new session.** Guild attempts to open Fighter in a new session/window and seeds it with the plan context (plan path, progress, sidebar todo instructions). Bard stays active in the original window.
-4. **Fallback.** If session spawning is unsupported or fails, Guild falls back to an in-place agent switch with a clear message: *"Could not open Fighter in new window. Running in current session instead."* No extra confirmation is required — the user is informed and execution proceeds.
-5. **Workflow guard.** If a workflow is currently active, `/start-work` presents options to pause the workflow, abort it, or cancel — it does not start execution while a workflow is running.
+3. **Create or refresh plan state.** When a plan is selected (fresh or resumed), `plan-state-writer.ts` writes `.guild/plans/<slug>/state.md` with status, progress, and next action. This happens automatically at plan creation and resume boundaries.
+4. **Spawn Fighter in a new session.** Guild attempts to open Fighter in a new session/window and seeds it with the plan context (plan path, progress, sidebar todo instructions). Bard stays active in the original window.
+5. **Fallback.** If session spawning is unsupported or fails, Guild falls back to an in-place agent switch with a clear message: *"Could not open Fighter in new window. Running in current session instead."* No extra confirmation is required — the user is informed and execution proceeds.
+6. **Workflow guard.** If a workflow is currently active, `/start-work` presents options to pause the workflow, abort it, or cancel — it does not start execution while a workflow is running.
 
 **Bard stays active**: The original Bard session remains interactive throughout. You can ask follow-up questions, check status, or issue other commands while Fighter executes in its window. This is the clean-window model.
 
 **Fighter receives**: The plan file path, progress snapshot (`N/M tasks done`), working directory, and instructions to restore the sidebar todo state from the first unchecked task.
+
+**Plan state file**: When a plan is selected for execution (fresh or resumed), `.guild/plans/<slug>/state.md` is created or refreshed with:
+- **Status**: `in-progress` (or custom status if set by `guild-handoff`)
+- **Blocker**: `None` (or a description if set by `guild-handoff`)
+- **Next Action**: `Continue to next unchecked task` (or custom action)
+- **Progress**: Current task count from the plan file
+- **Last Updated**: Today's date
+
+See [Plan State Lifecycle](plan-state-lifecycle.md) for the full write path and lifecycle moments.
 
 **What Wizard generates** (artifact-scope rule): Plans live at `.guild/plans/<slug>/`. Wizard always generates the artifact set appropriate to the task scope using the `guild-scope` skill:
 

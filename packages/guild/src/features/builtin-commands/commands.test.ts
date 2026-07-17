@@ -2,6 +2,7 @@ import { describe, it, expect } from "bun:test"
 import { BUILTIN_COMMANDS } from "./commands"
 import { START_WORK_TEMPLATE } from "./templates/start-work"
 import { START_PLAN_TEMPLATE } from "./templates/start-plan"
+import { START_HANDOFF_TEMPLATE } from "./templates/start-handoff"
 
 describe("BUILTIN_COMMANDS", () => {
   it("has start-work command", () => {
@@ -128,5 +129,99 @@ describe("START_WORK_TEMPLATE — delegation semantics", () => {
 
   it("does not tell Tapestry to write code or run commands directly", () => {
     expect(START_WORK_TEMPLATE).not.toContain("write code, run commands, create files")
+  })
+})
+
+describe("Agent routing — deterministic command-to-agent mapping", () => {
+  it("/start-work always routes to fighter", () => {
+    expect(BUILTIN_COMMANDS["start-work"].agent).toBe("fighter")
+  })
+
+  it("/start-plan always routes to wizard", () => {
+    expect(BUILTIN_COMMANDS["start-plan"].agent).toBe("wizard")
+  })
+
+  it("/start-handoff always routes to bard", () => {
+    expect(BUILTIN_COMMANDS["start-handoff"].agent).toBe("bard")
+  })
+
+  it("all commands have a defined agent", () => {
+    for (const [name, cmd] of Object.entries(BUILTIN_COMMANDS)) {
+      expect(cmd.agent).toBeDefined()
+      expect(typeof cmd.agent).toBe("string")
+      expect(cmd.agent.length).toBeGreaterThan(0)
+    }
+  })
+
+  it("agent routing is consistent across multiple accesses", () => {
+    const agent1 = BUILTIN_COMMANDS["start-work"].agent
+    const agent2 = BUILTIN_COMMANDS["start-work"].agent
+    expect(agent1).toBe(agent2)
+    expect(agent1).toBe("fighter")
+  })
+})
+
+describe("START_HANDOFF_TEMPLATE — chooser surface", () => {
+  it("has start-handoff command", () => {
+    expect(BUILTIN_COMMANDS["start-handoff"]).toBeDefined()
+  })
+
+  it("start-handoff targets bard agent", () => {
+    expect(BUILTIN_COMMANDS["start-handoff"].agent).toBe("bard")
+  })
+
+  it("start-handoff has a description", () => {
+    expect(BUILTIN_COMMANDS["start-handoff"].description).toBeTruthy()
+  })
+
+  it("start-handoff has name matching its key", () => {
+    expect(BUILTIN_COMMANDS["start-handoff"].name).toBe("start-handoff")
+  })
+
+  it("start-handoff template contains required placeholders", () => {
+    const template = BUILTIN_COMMANDS["start-handoff"].template
+    expect(template).toContain("$SESSION_ID")
+    expect(template).toContain("$ARGUMENTS")
+    expect(template).toContain("$TIMESTAMP")
+  })
+
+  it("start-handoff template contains session-context tag", () => {
+    const template = BUILTIN_COMMANDS["start-handoff"].template
+    expect(template).toContain("<session-context>")
+    expect(template).toContain("</session-context>")
+  })
+
+  it("start-handoff template contains command-instruction tag", () => {
+    const template = BUILTIN_COMMANDS["start-handoff"].template
+    expect(template).toContain("<command-instruction>")
+    expect(template).toContain("</command-instruction>")
+  })
+
+  it("start-handoff template references Bard", () => {
+    expect(BUILTIN_COMMANDS["start-handoff"].template).toContain("Bard")
+  })
+
+  it("start-handoff template references Wizard", () => {
+    expect(BUILTIN_COMMANDS["start-handoff"].template).toContain("Wizard")
+  })
+
+  it("start-handoff template references Fighter", () => {
+    expect(BUILTIN_COMMANDS["start-handoff"].template).toContain("Fighter")
+  })
+
+  it("start-handoff template mentions planning for Wizard", () => {
+    expect(BUILTIN_COMMANDS["start-handoff"].template).toContain("planning")
+  })
+
+  it("start-handoff template mentions execution for Fighter", () => {
+    expect(BUILTIN_COMMANDS["start-handoff"].template).toContain("execution")
+  })
+
+  it("start-handoff template mentions delegation for Bard", () => {
+    expect(BUILTIN_COMMANDS["start-handoff"].template).toContain("delegation")
+  })
+
+  it("start-handoff has argument hint", () => {
+    expect(BUILTIN_COMMANDS["start-handoff"].argumentHint).toBeDefined()
   })
 })

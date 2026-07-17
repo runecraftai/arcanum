@@ -9,7 +9,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from "bun:test"
-import { mkdirSync, mkdtempSync, writeFileSync, readFileSync, rmSync } from "fs"
+import { mkdirSync, mkdtempSync, writeFileSync, readFileSync, rmSync, existsSync } from "fs"
 import { join } from "path"
 import { tmpdir } from "os"
 
@@ -607,6 +607,57 @@ describe("Integration: createHooks wired workflow", () => {
     expect(hooks.verificationReminderEnabled).toBe(false)
     // Others should still be active
     expect(hooks.rangerMdOnlyEnabled).toBe(true)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Plan-State Lifecycle: state.md creation and refresh
+// Note: Detailed state.md tests are in plan-execution.test.ts
+// These tests verify the lifecycle integration
+// ---------------------------------------------------------------------------
+
+describe("Plan-State Lifecycle: state.md creation and refresh", () => {
+  it("plan execution creates work state that tracks session IDs", () => {
+    const planPath = createPlanFile(
+      "state-lifecycle-test",
+      makeValidPlanContent("- [ ] Task 1\n- [ ] Task 2"),
+    )
+
+    handleStartWork({
+      promptText: makeStartWorkPrompt(),
+      sessionId: "sess_1",
+      directory: testDir,
+    })
+
+    const state = readWorkState(testDir)
+    expect(state).not.toBeNull()
+    expect(state!.plan_name).toBe("state-lifecycle-test")
+    expect(state!.session_ids).toEqual(["sess_1"])
+  })
+
+  it("plan resume appends session ID to work state", () => {
+    const planPath = createPlanFile(
+      "resume-lifecycle-test",
+      makeValidPlanContent("- [ ] Task 1\n- [ ] Task 2\n- [ ] Task 3"),
+    )
+
+    // Start work
+    handleStartWork({
+      promptText: makeStartWorkPrompt(),
+      sessionId: "sess_1",
+      directory: testDir,
+    })
+
+    // Resume with new session
+    handleStartWork({
+      promptText: makeStartWorkPrompt(),
+      sessionId: "sess_2",
+      directory: testDir,
+    })
+
+    const state = readWorkState(testDir)
+    expect(state!.session_ids).toContain("sess_1")
+    expect(state!.session_ids).toContain("sess_2")
   })
 })
 

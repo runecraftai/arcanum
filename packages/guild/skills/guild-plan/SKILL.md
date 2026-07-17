@@ -26,7 +26,7 @@ Read the spec, map each requirement ID to one or more atomic tasks, and order th
 
 - `.guild/plans/<slug>/spec.md` — feature requirements with `REQ-NNN` IDs
 - `.guild/plans/<slug>/tasks.md` — target artifact
-- `.guild/plans/<slug>/state.md` — current plan status
+- `.guild/plans/<slug>/state.md` — current plan status (created automatically when plan is selected for execution via `/start-work`)
 - `.guild/knowledge/conventions.md` — coding standards
 
 ## Process
@@ -36,7 +36,7 @@ Read the spec, map each requirement ID to one or more atomic tasks, and order th
 3. Order tasks by dependency: prerequisites first, parallel-safe tasks grouped, and integration / wiring tasks last.
 4. For each task row, write: identifier (e.g., `T01`), description, requirement ID(s) it satisfies, verification command (or "manual" with a step), and a status (`pending`).
 5. Use the artifact-scope rule: a small change can use `tasks.md` only; a medium change uses `spec.md` + `tasks.md`; a large change uses `spec.md` + `design.md` + `tasks.md` (+ extras). Match the artifact set to the scope (see `guild-scope`).
-6. Update `state.md` to reflect the new plan status (`planned` or `in-progress` if execution starts immediately).
+6. **Do not manually update `state.md` during planning.** The state file is created automatically when the plan is selected for execution via `/start-work`. If you need to update plan status during planning (e.g., mark as `planned`), use the `guild-handoff` skill to capture that in `context/handoff.md` instead.
 7. Save to `.guild/plans/<slug>/tasks.md`.
 
 ## Rationalizations
@@ -55,6 +55,7 @@ Read the spec, map each requirement ID to one or more atomic tasks, and order th
 - A task row has no verification command (or "see spec" as a placeholder).
 - Tasks are not ordered by dependency (a task depends on one defined after it).
 - Status field is missing or is hardcoded to `done`.
+- `state.md` was manually updated during planning (it should only be created/updated when the plan is selected for execution via `/start-work`).
 
 ## Verification
 
@@ -64,7 +65,7 @@ The skill is complete when ALL of the following evidence is present:
 - Every task row has: identifier, description, requirement ID(s), verification command, status.
 - Every `REQ-NNN` ID in `spec.md` is covered by at least one task row.
 - Tasks are ordered by dependency (no row depends on a row defined later).
-- `state.md` reflects the post-planning status.
+- `state.md` is **not** manually updated during planning (it will be created automatically when the plan is selected for execution).
 
 **"Seems right" is not evidence.** Every claim of "this feature is planned" cites the file path and the rows that were written.
 

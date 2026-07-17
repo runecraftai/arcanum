@@ -47,11 +47,19 @@ When in doubt, start with `/guild-health`. It prints the loaded config files, th
 
 **Symptom**: `/start-work` reports that no plan was found or returns an error.
 
-1. Confirm a plan was generated. Plans live in `.guild/plans/<slug>/` (canonical). The directory should contain at least `spec.md` and `state.md`.
+1. Confirm a plan was generated. Plans live in `.guild/plans/<slug>/` (canonical). The directory should contain at least `spec.md` (or a concise plan document for small scopes).
 2. If you have not generated a plan yet, ask the **Wizard** agent to plan the work first, then run `/start-work`.
 3. If you supplied a plan name, verify the spelling matches the slug in `.guild/plans/<slug>/`.
 4. Confirm you are running OpenCode from the project root that contains `.guild/`.
-5. **Legacy fallback**: If `.guild/plans/<slug>/` does not exist but `.specs/features/<slug>/` does, Guild reads from the legacy path as a fallback. The canonical path always takes priority if both exist. See [`.guild/architecture.md`](.guild/architecture.md) for the full fallback order.
+5. **Plan selection**: `/start-work` uses deterministic routing to select a plan:
+   - If you provide a plan name, it matches against available plans.
+   - If no name given and work state exists, it resumes the active plan.
+   - If no name given and no active work, it discovers incomplete plans:
+     - Single plan → auto-selected.
+     - Multiple plans → listed for you to choose.
+     - No plans → tells you to create one with Wizard.
+6. **State file**: `.guild/plans/<slug>/state.md` is created automatically when a plan is selected for execution. You should not manually create it during planning.
+7. **Legacy fallback**: If `.guild/plans/<slug>/` does not exist but `.specs/features/<slug>/` does, Guild reads from the legacy path as a fallback. The canonical path always takes priority if both exist. See [`.guild/architecture.md`](.guild/architecture.md) for the full fallback order.
 
 ## `/run-workflow` not finding a workflow
 

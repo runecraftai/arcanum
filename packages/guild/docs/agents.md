@@ -70,9 +70,9 @@ The interactive planning specialist. Wizard works directly with the user in a vi
 
 Infer scope from request complexity, implied file count, and whether multiple layers (backend, frontend, infra) are involved. When in doubt, go one level richer — a medium task treated as small produces inadequate plans.
 
-**Handoff**: When the plan is ready, Wizard uses the question tool to offer next actions: start Fighter execution, return to Bard, continue refining, or review where relevant. Wizard can also return control to Bard with a concise summary via `guild-handoff`.
+**Handoff**: When the plan is ready, Wizard uses the question tool to offer next actions: start Fighter execution via `/start-work`, return to Bard, continue refining, or review where relevant. Wizard can also return control to Bard with a concise summary via `guild-handoff`.
 
-Plans are written to `.guild/plans/<slug>/`. See [`.guild/architecture.md`](.guild/architecture.md) for the full layout.
+Plans are written to `.guild/plans/<slug>/`. See [Plan State Lifecycle](plan-state-lifecycle.md) for when `.guild/plans/<slug>/state.md` is created and updated. See [`.guild/architecture.md`](.guild/architecture.md) for the full layout.
 
 ### Rogue (Scout) — subagent
 

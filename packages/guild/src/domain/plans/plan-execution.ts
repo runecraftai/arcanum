@@ -1,6 +1,7 @@
 import { projectExecutionTransition, type ExecutionLeaseRepository } from "../session/execution-lease"
 import type { WorkState } from "../../features/work-state/types"
 import type { PlanRepository } from "./plan-repository"
+import { refreshPlanState } from "./plan-state-writer"
 
 export function createFreshPlanExecution(args: {
   planRepository: PlanRepository
@@ -13,6 +14,8 @@ export function createFreshPlanExecution(args: {
   args.planRepository.clearWorkState(args.directory)
   const state = args.planRepository.createWorkState(args.planPath, args.sessionId, args.agent, args.directory)
   args.planRepository.writeWorkState(args.directory, state)
+
+  refreshPlanState(args.planRepository, args.directory, state)
 
   if (args.executionLeaseRepository) {
     const projection = projectExecutionTransition({
@@ -50,6 +53,10 @@ export function resumePlanExecution(args: {
 
   args.planRepository.resumeWork(args.directory)
   const resumedState = args.planRepository.readWorkState(args.directory)
+
+  if (resumedState) {
+    refreshPlanState(args.planRepository, args.directory, resumedState)
+  }
 
   if (args.executionLeaseRepository && resumedState) {
     const executorAgent = resumedState.agent ?? "fighter"
