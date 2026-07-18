@@ -100,7 +100,7 @@ describe("WeavePlugin integration", () => {
 
     expect(Object.keys(result.agents)).not.toContain(getAgentDisplayName("warlock"))
     expect(Object.keys(result.agents)).toContain(getAgentDisplayName("bard"))
-    expect(Object.keys(result.agents)).toHaveLength(7)
+    expect(Object.keys(result.agents)).toHaveLength(14)
   })
 
   it("disabled hook not created — context-window-monitor disabled", async () => {

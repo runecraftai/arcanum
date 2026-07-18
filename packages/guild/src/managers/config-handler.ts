@@ -100,6 +100,10 @@ export class ConfigHandler {
 
       const displayName = getAgentDisplayName(name)
       result[displayName] = merged
+
+      if (name !== displayName) {
+        result[name] = merged
+      }
     }
 
     return result
