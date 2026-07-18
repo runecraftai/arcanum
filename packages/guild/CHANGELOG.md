@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.23.3
+
+### Patch Changes
+
+- fix(guild): restore config-key alias registration for Task subagent_type
+
 ## 0.23.2
 
 ### Patch Changes
