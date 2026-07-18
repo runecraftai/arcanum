@@ -143,6 +143,7 @@ describe("individual fighter section builders", () => {
   it("buildTapestryRoleSection contains Tapestry identity", () => {
     expect(buildTapestryRoleSection()).toContain("Fighter")
     expect(buildTapestryRoleSection()).toContain("coordination orchestrator")
+    expect(buildTapestryRoleSection()).toContain("git worktree")
   })
 
   it("prefers Guild skills before generic skills", () => {
@@ -262,6 +263,11 @@ describe("individual fighter section builders", () => {
     const section = buildTapestryErrorHandlingSection()
     expect(section).toContain("OpenCode `ask_user` tool")
     expect(section).toContain("ambiguous blocker")
+  })
+
+  it("composed prompt contains git worktree reference", () => {
+    const prompt = composeFighterPrompt()
+    expect(prompt).toContain("git worktree")
   })
 })
 

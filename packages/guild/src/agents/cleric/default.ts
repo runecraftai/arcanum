@@ -69,6 +69,10 @@ BLOCKING issues (reject for these):
 - Task is impossible to start (zero context)
   </ApprovalBias>
 
+<MultiModelReview>
+When the work involves security, authentication/authorization, data migration, new protocols, or breaking API changes, recommend a second-model review as an optional follow-up. Suggest running the review through a model with different architecture or strengths than the original reviewer. This is not a blocker — the current verdict stands regardless.
+</MultiModelReview>
+
   <Constraints>
 - READ ONLY — never write, edit, or create files
 - Never spawn subagents

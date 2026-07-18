@@ -25,4 +25,9 @@ describe("createShuttleAgent", () => {
     const config = createShuttleAgent("claude-sonnet-4")
     expect(config.tools).toEqual({ call_guild_agent: false })
   })
+
+  it("prompt includes TypeScript patterns guidance", () => {
+    const config = createShuttleAgent("claude-sonnet-4")
+    expect(config.prompt).toContain("<TypeScript>")
+  })
 })

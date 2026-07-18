@@ -2,29 +2,49 @@
   "$schema": "../packages/guild/schema/guild-config.schema.json",
   "agents": {
     "bard": {
-      "model": "anthropic/claude-sonnet-4-6"
+      "model": "anthropic/claude-sonnet-5",
+      "fallback_models": [
+        "opencode-go/deepseek-v4-pro",
+        "opencode/nemotron-3-ultra-free"
+      ]
     },
     "wizard": {
-      "model": "opencode-go/deepseek-v4-pro"
+      "model": "anthropic/claude-sonnet-5",
+      "fallback_models": [
+        "opencode-go/deepseek-v4-pro"
+      ]
     },
     "fighter": {
-      "model": "anthropic/claude-haiku-4-5"
-    },
-    "cleric": {
-      "model": "anthropic/claude-haiku-4-5"
-    },
-    "paladin": {
-      "model": "opencode-go/kimi-k2.6"
+      "model": "opencode-go/deepseek-v4-pro",
+      "fallback_models": [
+        "opencode/nemotron-3-ultra-free",
+        "anthropic/claude-sonnet-5"
+      ]
     },
     "ranger": {
-      "model": "anthropic/claude-haiku-4-5"
+      "model": "opencode-go/deepseek-v4-pro",
+      "fallback_models": [
+        "opencode-go/deepseek-v4-flash",
+        "anthropic/claude-sonnet-5"
+      ]
+    },
+    "cleric": {
+      "model": "opencode-go/deepseek-v4-pro",
+      "fallback_models": [
+        "opencode/nemotron-3-ultra-free",
+        "anthropic/claude-sonnet-5"
+      ]
+    },
+    "paladin": {
+      "model": "opencode-go/deepseek-v4-pro",
+      "fallback_models": [
+        "anthropic/claude-sonnet-5"
+      ]
     },
     "rogue": {
-      "model": "qwen/qwen3.5-9b",
+      "model": "opencode/deepseek-v4-flash-free",
       "fallback_models": [
-        "google/gemma-4-12b-qat",
-        "google/gemma-4-e4b",
-        "opencode/deepseek-v4-flash-free",
+        "opencode-go/mimo-v2.5",
         "anthropic/claude-haiku-4-5"
       ],
       "tools": {
@@ -39,11 +59,9 @@
       }
     },
     "warlock": {
-      "model": "qwen/qwen3.5-9b",
+      "model": "opencode/deepseek-v4-flash-free",
       "fallback_models": [
-        "google/gemma-4-12b-qat",
-        "google/gemma-4-e4b",
-        "opencode/deepseek-v4-flash-free",
+        "opencode-go/mimo-v2.5",
         "anthropic/claude-haiku-4-5"
       ],
       "tools": {

@@ -40,4 +40,14 @@ describe("createRogueAgent", () => {
     const config = createRogueAgent("grok-code-fast")
     expect(config.tools?.["call_guild_agent"]).toBe(false)
   })
+
+  it("has guild-recon in skills", () => {
+    const config = createRogueAgent("grok-code-fast")
+    expect(config.skills).toContain("guild-recon")
+  })
+
+  it("references guild-recon in prompt", () => {
+    const config = createRogueAgent("grok-code-fast")
+    expect(config.prompt).toInclude("guild-recon")
+  })
 })

@@ -4,7 +4,7 @@ Harden code against vulnerabilities with the OWASP Top 10 and a three-tier bound
 
 | Field | Value |
 |-------|-------|
-| Version | 1.0.0 |
+| Version | 1.1.0 |
 | Trigger | `/security`, "security audit", "OWASP", "three-tier boundary", "least privilege" |
 | PT trigger | `/segurança`, "auditoria de segurança", "privilégio mínimo" |
 

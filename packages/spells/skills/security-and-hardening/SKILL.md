@@ -389,6 +389,9 @@ container.textContent = await llm.reply(userMessage);
 
 ```markdown
 ### Authentication
+**Authentication** verifies who you are (login, sessions, tokens). **Authorization** verifies what you're allowed to do (permissions, roles, ownership). Authentication must come first, but authorization must check every action regardless.
+- [ ] Authentication failures default to denied (fail-safely, not fail-open)
+- [ ] Account lockout / rate limiting resists brute force and credential stuffing
 - [ ] Passwords hashed with bcrypt/scrypt/argon2 (salt rounds ≥ 12)
 - [ ] Session tokens are httpOnly, secure, sameSite
 - [ ] Login has rate limiting

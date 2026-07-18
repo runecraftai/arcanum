@@ -83,6 +83,16 @@ The complexity determines the depth:
 - A migration request was classified as a quick task.
 - A new plan reuses a slug already present in `.guild/plans/`.
 
+## Plan Delta
+
+When an existing plan's scope changes after initial classification — enlarged, shrunk, or reclassified — record the delta in `state.md` so future readers understand why the plan shifted:
+
+- **Delta format**: Date (ISO 8601), what changed, why the change was made, who approved (or "self-approved" if solo).
+- **Record location**: Append to `.guild/plans/<slug>/state.md` under a `## Plan Deltas` subheading.
+- **Supplement, not replace**: The delta supplements the original scope decision — it does not overwrite it. The original classification remains visible for audit.
+
+**A scope change without a recorded delta leaves the plan history incomplete.**
+
 ## Verification
 
 The skill is complete when ALL of the following evidence is present:

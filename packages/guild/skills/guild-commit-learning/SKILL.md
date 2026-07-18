@@ -47,7 +47,8 @@ Route every finding to the right destination: plan-local notes, the project-wide
 2. Use the decision tree below to pick the destination. Cross-cutting findings require an explicit promotion step.
 3. Apply the promotion criteria before promoting. If the finding does not meet all four criteria, leave it in `notes.md`.
 4. After any promotion, update `knowledge/index.md` to reflect the new entry.
-5. Shape commit messages: conventional-commits scope, intent, scope, and validation in the body. Link to `.guild/plans/<slug>/` artifacts in extended descriptions.
+5. Date every promoted knowledge entry with `YYYY-MM-DD` so future readers can assess currency.
+6. Shape commit messages: conventional-commits scope, intent, scope, and validation in the body. Link to `.guild/plans/<slug>/` artifacts in extended descriptions.
 
 ## Knowledge promotion rules
 
@@ -56,6 +57,7 @@ Route every finding to the right destination: plan-local notes, the project-wide
 3. **Promote** by explicit decision (explicitly decide it belongs in `knowledge/`).
 4. **Index** — update `knowledge/index.md` on every addition.
 5. **Never** overwrite a plan's local decisions with knowledge decisions.
+6. **Separate Facts** (verified against the repo, with file/path citations) **from Inferences** (assumptions not yet verified). Mark inferences explicitly.
 
 ## Promotion criteria
 
@@ -65,6 +67,10 @@ A finding qualifies for promotion when **all** are true:
 - A future agent working on an unrelated plan would benefit from knowing it.
 - It is not already documented elsewhere in `knowledge/`.
 - It has enough context to be useful without the original plan.
+
+## Archiving
+
+When a `knowledge/*.md` file exceeds 500 lines, move the oldest ~20% of entries to `knowledge/archive/<filename>-YYYY-MM-DD.md`. Leave a tombstone comment in the original file pointing to the archive. Update `knowledge/index.md` to reflect the archive entry. This keeps knowledge files navigable without losing history.
 
 ## Rationalizations
 

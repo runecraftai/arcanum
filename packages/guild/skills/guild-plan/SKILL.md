@@ -29,6 +29,16 @@ Read the spec, map each requirement ID to one or more atomic tasks, and order th
 - `.guild/plans/<slug>/state.md` — current plan status
 - `.guild/knowledge/conventions.md` — coding standards
 
+## Readiness Gate
+
+Before beginning the planning process, verify the following prerequisites exist. If any are missing, stop and guide the user to the prerequisite skill — do not proceed to plan without them.
+
+- **spec.md exists and has REQ-NNN IDs**: Read `.guild/plans/<slug>/spec.md` and confirm it contains at least one `REQ-NNN` requirement ID. If it is missing or has no traceable IDs, direct the user to run `guild-spec` first.
+- **Scope is classified in state.md**: Read `.guild/plans/<slug>/state.md` and confirm it contains a scope decision (`init`, `feature`, `quick task`, `handoff`). If `state.md` is missing or has no scope classification, direct the user to run `guild-scope` first.
+- **Slug is valid**: Confirm the slug is lowercase, hyphenated, and unique across `.guild/plans/`. If the slug is invalid or collides with an existing plan, direct the user to run `guild-scope` first.
+
+When all three gates pass, proceed to the Process steps below. When one or more gates fail, report which gate failed and which skill to run — do not attempt to create the missing artifacts inline.
+
 ## Process
 
 1. Read `spec.md` and capture the full set of `REQ-NNN` IDs.

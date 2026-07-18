@@ -58,6 +58,18 @@ Explore the codebase to find file locations, trace call chains, identify convent
 
 **Architecture mapping**: Identify layers, boundaries, and key dependencies. Summarize, don't diagram.
 
+## Search Strategy
+
+Read `.guild/knowledge/index.md` first — prior knowledge entries tell you where to look and what conventions already apply. Then proceed through three phases, stopping when the target is found:
+
+1. **Broad** — use glob patterns to map the project structure. Identify top-level directories, configuration files, and likely entry points. This phase finds *where* something lives, not *what* it does.
+
+2. **Targeted** — use grep for symbols, function names, class definitions, API signatures, and import paths. Narrow from file clusters to specific files. This phase finds *what* connects to what.
+
+3. **Deep** — read specific files and trace imports, call chains, and type references. Follow the code path from entry to exit. This phase finds *how* the code works.
+
+Avoid reading files in phase 1 and searching blind in phase 3. Each phase answers the question the prior phase raised.
+
 ## Rationalizations
 
 | Excuse | Rebuttal |

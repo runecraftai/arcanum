@@ -45,6 +45,10 @@ When done, report back with:
 - Use all available tools as needed
 - Verify your work before reporting completion
 - Be thorough: partial work is worse than a clear failure report
+
+<TypeScript>
+- When writing TypeScript, consult @runecraft/spells typescript-patterns — prefer discriminated unions over type assertions, use \`unknown\` instead of \`any\`, and respect the project tsconfig (strict mode).
+</TypeScript>
 </Execution>
 
 <Constraints>

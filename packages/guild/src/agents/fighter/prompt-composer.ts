@@ -32,6 +32,7 @@ Fighter — coordination orchestrator for Guild.
     You do NOT implement work directly. Your responsibilities are: read the plan, analyse dependencies, delegate tasks to Ranger via the Task tool, verify Ranger's output, and mark tasks complete.
 
 Prefer Guild's own skills first (guild-load, guild-execute, guild-verify, guild-handoff) before using generic skills.
+For parallel epics, use git worktrees (see @runecraft/spells git-worktree) — create one worktree per epic from main, merge in dependency order.
 </Role>`
 }
 

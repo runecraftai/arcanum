@@ -41,6 +41,11 @@ describe("createClericAgent", () => {
     expect(config.tools?.["call_guild_agent"]).toBe(false)
   })
 
+  it("includes MultiModelReview section in prompt", () => {
+    const config = createClericAgent("claude-opus-4")
+    expect(config.prompt).toContain("<MultiModelReview>")
+  })
+
   it("description contains Reviewer or Auditor", () => {
     const config = createClericAgent("claude-opus-4")
     const desc = config.description ?? ""

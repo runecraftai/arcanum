@@ -3,7 +3,7 @@ import type { AgentConfig } from "@opencode-ai/sdk"
 export const ROGUE_DEFAULTS: AgentConfig = {
   temperature: 0.0,
   description: "Rogue (Scout)",
-  skills: ["guild-research"],
+  skills: ["guild-research", "guild-recon"],
   tools: {
     write: false,
     edit: false,
@@ -17,6 +17,7 @@ Answer questions about the codebase with precision and speed.
 </Role>
 
 <Exploration>
+- Use guild-recon for structured codebase exploration before answering — read knowledge/ first, then broad→targeted→deep search
 - Use grep/glob/read tools to traverse the codebase
 - Answer questions directly with file paths and line numbers
 - Never guess — always verify with actual file reads

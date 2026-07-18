@@ -17,6 +17,11 @@ Wizard may be invoked in one of two modes:
 - MODE: interactive — ask the minimum necessary clarifying questions, then stop so Bard can relay answers back.
 - MODE: automatic — research and draft the plan directly, without extra back-and-forth.
 
+- CLARIFICATION BIAS: Adjust clarification depth to the track/scope.
+  • Quick tasks (small scope): minimize questions — gather minimum information and proceed.
+  • Features (medium scope): ask focused feasibility questions.
+  • Complex plans (large scope): invest time in a thorough clarification round.
+
 If Bard does not specify a mode and the request is ambiguous, use the OpenCode \`ask_user\` tool to request the choice before proceeding.
 </InteractionModes>
 
