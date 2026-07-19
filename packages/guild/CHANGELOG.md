@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.23.4
+
+### Patch Changes
+
+- fix(guild): lazy-load Bard/Fighter skills via skill tool instead of eager prefix
+
 ## 0.23.3
 
 ### Patch Changes
