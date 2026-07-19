@@ -83,15 +83,15 @@ Conventional commits enforced by commitlint. Use `bun run commit` (Commitizen) f
 
 ### Versioning and releases
 
-Add a changeset file for any user-facing change: `bun run changeset`. Patch for fixes, minor for new features. `familiar` and `grimoire` are excluded from public releases.
+Changesets are generated automatically by the release pipeline from conventional commit messages (`.changeset/generate-from-commits.ts`), not authored by hand. `.changeset/*.md` is gitignored — **never create, edit, or commit changeset markdown files manually**; do not run `bun run changeset` yourself. Write a correct conventional commit message (`type(scope): description`) and the pipeline derives the changeset and bump type (patch for `fix`, minor for `feat`) from it. `familiar` and `grimoire` are excluded from public releases.
 
 ## Tool permissions
 
 **Allowed without asking:**
 
-- Read and edit files under `packages/`, `.guild/`, `docs/`, `.changeset/`
+- Read and edit files under `packages/`, `.guild/`, `docs/`, `.changeset/` (config/scripts only — never author `.changeset/*.md` by hand)
 - Run `bun test`, `bun run lint`, `bun run build`
-- Run `bun run commit` / `bun run changeset`
+- Run `bun run commit`
 
 **Ask before proceeding:**
 
