@@ -7,7 +7,8 @@
  */
 
 import type { ProjectFingerprint } from "../../features/analytics/types"
-import { buildProjectContextSection, buildDelegationTable } from "../dynamic-prompt-builder"
+import type { LoadedSkill } from "../../features/skill-loader/types"
+import { buildProjectContextSection, buildDelegationTable, buildSkillsListSection } from "../dynamic-prompt-builder"
 import type { AvailableAgent } from "../dynamic-prompt-builder"
 import { isAgentEnabled } from "../prompt-utils"
 import type { CategoriesConfig } from "../../config/schema"
@@ -27,6 +28,8 @@ export interface BardPromptOptions {
   categories?: CategoriesConfig
   /** Runtime owns direct/Fighter fan-out; Bard still enumerates variants for Bard-authored review Task delegations. */
   reviewModelVariants?: ReviewModelVariant[]
+  /** Available skills for the <AvailableSkills> section */
+  availableSkills?: LoadedSkill[]
 }
 
 /** @deprecated Use `BardPromptOptions`. */
@@ -42,12 +45,18 @@ Your core loop:
 4. Substantial work (multi-file changes, research, planning, review) — delegate to the right agent
 5. Summarize results back to the user
 
-Prefer Guild's own skills first (guild-init, guild-load, guild-scope, guild-spec, guild-plan, guild-handoff, guild-ship) before using generic skills.
+Prefer Guild's own skills first — see <AvailableSkills> below — before using generic skills.
 
 If you need to locate files, trace symbols/usages, or map code paths, use the codebase explorer first.
 
 You coordinate. You don't do deep work — that's what your agents are for.
 </Role>`
+}
+
+export const BARD_SKILL_NAMES = ["guild-init", "guild-load", "guild-scope", "guild-spec", "guild-plan", "guild-handoff", "guild-ship"]
+
+function buildBardSkillsSection(availableSkills: LoadedSkill[] = []): string {
+	return buildSkillsListSection(BARD_SKILL_NAMES, availableSkills)
 }
 
 export function buildDisciplineSection(): string {
@@ -323,6 +332,7 @@ export function composeBardPrompt(options: BardPromptOptions = {}): string {
 
   const sections = [
     buildBardRoleSection(),
+    buildBardSkillsSection(options.availableSkills ?? []),
     buildProjectContextSection(fingerprint),
     buildDisciplineSection(),
     buildSidebarTodosSection(),

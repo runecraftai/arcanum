@@ -1,4 +1,5 @@
 import { describe, it, expect } from "bun:test"
+import type { LoadedSkill } from "../../features/skill-loader/types"
 import {
   composeFighterPrompt,
   buildTapestryRoleSection,
@@ -148,7 +149,6 @@ describe("individual fighter section builders", () => {
 
   it("prefers Guild skills before generic skills", () => {
     expect(buildTapestryRoleSection()).toContain("Prefer Guild's own skills first")
-    expect(buildTapestryRoleSection()).toContain("guild-load")
   })
 
   it("buildTapestryDelegationSection routes search work to Rogue and Warlock", () => {
@@ -439,5 +439,46 @@ describe("composeFighterPrompt with categories", () => {
     expect(delegationSection).toContain('subagent_type="ranger"')
     expect(delegationSection).not.toContain("ranger-backend")
     expect(delegationSection).not.toContain("ranger-{category}")
+  })
+})
+
+describe("composeFighterPrompt with availableSkills", () => {
+  function skill(name: string, overrides: Partial<LoadedSkill> = {}): LoadedSkill {
+    return { name, description: `Description for ${name}`, content: `Content for ${name}`, scope: "builtin", ...overrides }
+  }
+
+  it("renders descriptions for matched skill names", () => {
+    const prompt = composeFighterPrompt({
+      availableSkills: [skill("guild-load", { description: "Load context." })],
+    })
+    expect(prompt).toContain("`guild-load` — Load context.")
+  })
+
+  it("renders bare name for git-worktree with no matching entry", () => {
+    const prompt = composeFighterPrompt({
+      availableSkills: [skill("guild-load", { description: "Load context." })],
+    })
+    const afterRole = prompt.indexOf("</Role>") + "</Role>".length
+    const skillsSection = prompt.slice(
+      prompt.indexOf("<AvailableSkills>", afterRole),
+      prompt.indexOf("</AvailableSkills>"),
+    )
+    // git-worktree is in FIGHTER_SKILL_NAMES but not in availableSkills
+    expect(skillsSection).toContain("- `git-worktree`")
+    // It should be a bare bullet with no description
+    const gitLine = skillsSection.split("\n").find((l) => l.includes("git-worktree"))
+    expect(gitLine).not.toContain("—")
+  })
+
+  it("<AvailableSkills> appears directly after <Role> and before <Invariant>", () => {
+    const prompt = composeFighterPrompt({
+      availableSkills: [skill("guild-execute", { description: "Execute tasks." })],
+    })
+    const roleEnd = prompt.indexOf("</Role>")
+    const skillsStart = prompt.indexOf("<AvailableSkills>", roleEnd)
+    const skillsEnd = prompt.indexOf("</AvailableSkills>")
+    const invariantStart = prompt.indexOf("<Invariant>")
+    expect(skillsStart).toBeGreaterThan(roleEnd)
+    expect(skillsEnd).toBeLessThan(invariantStart)
   })
 })

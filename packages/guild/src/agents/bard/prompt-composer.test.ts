@@ -14,6 +14,7 @@ import {
   buildCategoryRoutingSection,
 } from "./prompt-composer"
 import type { ProjectFingerprint } from "../../features/analytics/types"
+import type { LoadedSkill } from "../../features/skill-loader/types"
 import type { AvailableAgent } from "../dynamic-prompt-builder"
 
 describe("composeBardPrompt", () => {
@@ -669,13 +670,18 @@ describe("Bard prompt skill references", () => {
   })
 
   it("Bard prompt references skill names for Wizard's planning workflow", () => {
-    // Bard references skill names to point to Wizard skill behavior without restating full workflow.
-    // Skill content is prepended when the agent is created with resolveSkills (tested in builtin-agents.test.ts).
+    // Skills are now listed in the <AvailableSkills> section and loaded on demand
+    // via the skill tool — eager prepending was removed (see builtin-agents.test.ts).
     const prompt = composeBardPrompt()
     expect(prompt).toContain("guild-scope")
     expect(prompt).toContain("guild-spec")
     expect(prompt).toContain("guild-plan")
     expect(prompt).toContain("guild-handoff")
+    // Lazy skill loading: skill names appear in <AvailableSkills> section
+    expect(prompt).toContain("<AvailableSkills>")
+    expect(prompt).toContain("`guild-init`")
+    // Eager skill file content is NOT present in the prompt
+    expect(prompt).not.toContain("OKF v0.1")
   })
 })
 
@@ -744,5 +750,41 @@ describe("Bard session boundary semantics", () => {
     expect(prompt).not.toContain("switch to Fighter")
     expect(prompt).not.toContain("switchAgent")
     expect(prompt).toContain("/start-work")
+  })
+})
+
+describe("composeBardPrompt with availableSkills", () => {
+  function skill(name: string, overrides: Partial<LoadedSkill> = {}): LoadedSkill {
+    return { name, description: `Description for ${name}`, content: `Content for ${name}`, scope: "builtin", ...overrides }
+  }
+
+  it("renders descriptions for matched skill names", () => {
+    const prompt = composeBardPrompt({
+      availableSkills: [skill("guild-init", { description: "Init workflow." })],
+    })
+    expect(prompt).toContain("`guild-init` — Init workflow.")
+  })
+
+  it("renders bare names for skill names not in availableSkills", () => {
+    const prompt = composeBardPrompt({
+      availableSkills: [skill("guild-init", { description: "Init workflow." })],
+    })
+    // guild-load is in BARD_SKILL_NAMES but not in the availableSkills list above
+    expect(prompt).toContain("- `guild-load`")
+    // It should NOT have a description because we didn't provide one
+    const guildLoadLine = prompt.split("\n").find((l) => l.includes("guild-load"))
+    expect(guildLoadLine).not.toContain("—")
+  })
+
+  it("<AvailableSkills> appears directly after <Role> and before <Discipline>", () => {
+    const prompt = composeBardPrompt({
+      availableSkills: [skill("guild-plan", { description: "Plan work." })],
+    })
+    const roleEnd = prompt.indexOf("</Role>")
+    const skillsStart = prompt.indexOf("<AvailableSkills>", roleEnd)
+    const skillsEnd = prompt.indexOf("</AvailableSkills>")
+    const disciplineStart = prompt.indexOf("<Discipline>")
+    expect(skillsStart).toBeGreaterThan(roleEnd)
+    expect(skillsEnd).toBeLessThan(disciplineStart)
   })
 })

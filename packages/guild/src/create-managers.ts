@@ -5,6 +5,7 @@ import type { ResolvedContinuationConfig } from "./config/continuation"
 import type { ResolveSkillsFn } from "./agents/agent-builder"
 import type { ProjectFingerprint } from "./features/analytics/types"
 import type { AvailableAgent } from "./agents/dynamic-prompt-builder"
+import type { LoadedSkill } from "./features/skill-loader/types"
 import { ConfigHandler } from "./managers/config-handler"
 import { BackgroundManager } from "./managers/background-manager"
 import { SkillMcpManager } from "./managers/skill-mcp-manager"
@@ -30,10 +31,11 @@ export function createManagers(options: {
   pluginConfig: GuildConfig
   continuation: ResolvedContinuationConfig
   resolveSkills?: ResolveSkillsFn
+  availableSkills?: LoadedSkill[]
   fingerprint?: ProjectFingerprint | null
   configDir?: string
 }): GuildManagers {
-  const { pluginConfig, continuation, resolveSkills, fingerprint, configDir } = options
+  const { pluginConfig, continuation, resolveSkills, availableSkills, fingerprint, configDir } = options
   const disabledAgentKeys = normalizeAgentKeys(pluginConfig.disabled_agents)
   const normalizedAgentOverrides = normalizeAgentOverrides(pluginConfig.agents)
 
@@ -58,6 +60,7 @@ export function createManagers(options: {
     agentOverrides: normalizedAgentOverrides,
     categories: pluginConfig.categories,
     resolveSkills,
+    availableSkills,
     fingerprint,
     customAgentMetadata,
     continuation,

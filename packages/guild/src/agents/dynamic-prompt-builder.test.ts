@@ -10,9 +10,21 @@ import {
   buildDelegationTable,
   buildCategorySkillsDelegationGuide,
   buildProjectContextSection,
+  buildSkillsListSection,
 } from "./dynamic-prompt-builder"
 import type { AvailableAgent, AvailableSkill, AvailableCategory } from "./dynamic-prompt-builder"
 import type { ProjectFingerprint } from "../features/analytics/types"
+import type { LoadedSkill } from "../features/skill-loader/types"
+
+function makeSkill(name: string, overrides: Partial<LoadedSkill> = {}): LoadedSkill {
+  return {
+    name,
+    description: `Description for ${name}`,
+    content: `Content for ${name}`,
+    scope: "builtin",
+    ...overrides,
+  }
+}
 
 function makeAgent(name: string, overrides: Partial<AvailableAgent["metadata"]> = {}): AvailableAgent {
   return {
@@ -364,5 +376,39 @@ describe("buildProjectContextSection", () => {
     }
     const result = buildProjectContextSection(fp)
     expect(result).not.toContain("Platform")
+  })
+})
+
+describe("buildSkillsListSection", () => {
+  it("returns empty string for empty skillNames input", () => {
+    expect(buildSkillsListSection([], [])).toBe("")
+  })
+
+  it("renders known skill with description", () => {
+    const skills = [makeSkill("guild-plan", { description: "Plan work." })]
+    const result = buildSkillsListSection(["guild-plan"], skills)
+    expect(result).toContain("<AvailableSkills>")
+    expect(result).toContain("`guild-plan` — Plan work.")
+    expect(result).toContain("Use the `skill` tool")
+  })
+
+  it("renders unknown skill name as bare bullet with no description", () => {
+    const result = buildSkillsListSection(["unknown-skill"], [])
+    expect(result).toContain("- `unknown-skill`")
+    expect(result).not.toContain("—")
+  })
+
+  it("preserves order of skillNames input, not availableSkills order", () => {
+    const skills = [
+      makeSkill("z-skill"),
+      makeSkill("a-skill"),
+      makeSkill("m-skill"),
+    ]
+    const result = buildSkillsListSection(["m-skill", "a-skill", "z-skill"], skills)
+    const mPos = result.indexOf("`m-skill`")
+    const aPos = result.indexOf("`a-skill`")
+    const zPos = result.indexOf("`z-skill`")
+    expect(mPos).toBeLessThan(aPos)
+    expect(aPos).toBeLessThan(zPos)
   })
 })

@@ -15,6 +15,7 @@ import type { ResolvedContinuationConfig } from "../config/continuation"
 import type { ResolveSkillsFn } from "./agent-builder"
 import type { ProjectFingerprint } from "../features/analytics/types"
 import type { AvailableAgent } from "./dynamic-prompt-builder"
+import type { LoadedSkill } from "../features/skill-loader/types"
 import { buildReviewModelVariantAgent, buildReviewModelVariants } from "./review-model-variants"
 import { getAgentConfigKey } from "../shared/agent-display-names"
 import { debug } from "../shared/log"
@@ -38,6 +39,8 @@ export interface CreateBuiltinAgentsOptions {
   customAgentMetadata?: AvailableAgent[]
   /** Resolved continuation config for prompt-aware agents */
   continuation?: ResolvedContinuationConfig
+  /** Pre-loaded skills for injection into Bard and Fighter agent prompts */
+  availableSkills?: LoadedSkill[]
 }
 
 const AGENT_FACTORIES: Record<GuildAgentName, AgentFactory> = {
@@ -204,6 +207,7 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
     fingerprint,
     customAgentMetadata,
     continuation,
+    availableSkills,
   } = options
 
   const disabledSet = new Set(disabledAgents.map((name) => getAgentConfigKey(name)))
@@ -250,9 +254,9 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
     // so their prompts conditionally omit references to disabled agents
     let built: AgentConfigWithOptions
     if (name === "bard") {
-      built = createBardAgentWithOptions(resolvedModel, disabledSet, fingerprint, customAgentMetadata, categories, reviewModelVariants)
+      built = createBardAgentWithOptions(resolvedModel, disabledSet, fingerprint, customAgentMetadata, categories, reviewModelVariants, availableSkills)
     } else if (name === "fighter") {
-      built = createFighterAgentWithOptions(resolvedModel, disabledSet, continuation, categories, reviewModelVariants)
+      built = createFighterAgentWithOptions(resolvedModel, disabledSet, continuation, categories, reviewModelVariants, availableSkills)
     } else {
       built = buildAgent(factory, resolvedModel, {
         categories,
@@ -260,14 +264,6 @@ export function createBuiltinAgents(options: CreateBuiltinAgentsOptions = {}): R
         resolveSkills,
         disabledAgents: disabledSet,
       })
-    }
-
-    const builtinSkills = Array.isArray(built.skills) ? built.skills : undefined
-    if ((name === "bard" || name === "fighter") && builtinSkills?.length && resolveSkills) {
-      const skillContent = resolveSkills(builtinSkills, disabledSkills)
-      if (skillContent) {
-        built.prompt = skillContent + (built.prompt ? "\n\n" + built.prompt : "")
-      }
     }
 
     if (override) {

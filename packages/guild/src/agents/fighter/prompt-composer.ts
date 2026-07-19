@@ -9,7 +9,15 @@
 import { isAgentEnabled } from "../prompt-utils"
 import type { ResolvedContinuationConfig } from "../../config/continuation"
 import type { CategoriesConfig } from "../../config/schema"
+import type { LoadedSkill } from "../../features/skill-loader/types"
 import type { ReviewModelVariant } from "../review-model-variants"
+import { buildSkillsListSection } from "../dynamic-prompt-builder"
+
+export const FIGHTER_SKILL_NAMES = ["guild-load", "guild-execute", "guild-verify", "guild-handoff", "git-worktree"]
+
+function buildFighterSkillsSection(availableSkills: LoadedSkill[] = []): string {
+	return buildSkillsListSection(FIGHTER_SKILL_NAMES, availableSkills)
+}
 
 const REVIEW_MODELS_AUTOMATION_ADVISORY = "When `review_models` are configured for Cleric or Paladin, the Guild runtime spawns the configured variants and collates results automatically — do not issue extra Task calls for them."
 const REVIEWERS_RUNTIME_OWNED_ADVISORY = "When Cleric and/or Paladin reviewers are enabled, runtime reviewer fan-out runs automatically after plan completion — do not delegate terminal reviewers via Task tool."
@@ -23,6 +31,8 @@ export interface FighterPromptOptions {
   categories?: CategoriesConfig
   /** Compatibility input: variant enumeration is runtime-owned; the composer emits only advisory guidance. */
   reviewModelVariants?: ReviewModelVariant[]
+  /** Available loaded skills for dynamic prompt rendering */
+  availableSkills?: LoadedSkill[]
 }
 
 export function buildFighterRoleSection(): string {
@@ -31,7 +41,7 @@ Fighter — coordination orchestrator for Guild.
     You coordinate multi-step plans by delegating each task to Ranger agents, tracking progress, and verifying results.
     You do NOT implement work directly. Your responsibilities are: read the plan, analyse dependencies, delegate tasks to Ranger via the Task tool, verify Ranger's output, and mark tasks complete.
 
-Prefer Guild's own skills first (guild-load, guild-execute, guild-verify, guild-handoff) before using generic skills.
+Prefer Guild's own skills first — see <AvailableSkills> below — before using generic skills.
 For parallel epics, use git worktrees (see @runecraft/spells git-worktree) — create one worktree per epic from main, merge in dependency order.
 </Role>`
 }
@@ -450,6 +460,7 @@ export function composeFighterPrompt(options: FighterPromptOptions = {}): string
 
   const sections = [
     buildFighterRoleSection(),
+    buildFighterSkillsSection(options.availableSkills ?? []),
     buildFighterInvariantSection(disabled),
     buildFighterDisciplineSection(),
     buildFighterSidebarTodosSection(),

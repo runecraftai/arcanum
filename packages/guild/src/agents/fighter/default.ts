@@ -1,10 +1,10 @@
 import type { AgentConfig } from "@opencode-ai/sdk"
-import { composeFighterPrompt } from "./prompt-composer"
+import { composeFighterPrompt, FIGHTER_SKILL_NAMES } from "./prompt-composer"
 
 export const FIGHTER_DEFAULTS: AgentConfig = {
   temperature: 0.1,
   description: "Fighter (Execution Lead)",
-  skills: ["guild-load", "guild-execute", "guild-verify", "guild-handoff", "git-worktree"],
+  skills: FIGHTER_SKILL_NAMES,
   tools: {
     call_guild_agent: true,
     task: true,

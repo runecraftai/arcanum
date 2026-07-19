@@ -1,4 +1,5 @@
 import type { AgentPromptMetadata } from "./types"
+import type { LoadedSkill } from "../features/skill-loader/types"
 import type { ProjectFingerprint } from "../features/analytics/types"
 
 export interface AvailableAgent {
@@ -292,6 +293,25 @@ task(
 \`\`\`typescript
 task(category="...", load_skills=[], run_in_background=false, prompt="...")  // Empty load_skills without justification
 \`\`\``
+}
+
+export function buildSkillsListSection(
+	skillNames: string[],
+	availableSkills: LoadedSkill[] = [],
+): string {
+	if (skillNames.length === 0) return ""
+	const byName = new Map(availableSkills.map((s) => [s.name, s]))
+	const lines = skillNames.map((name) => {
+		const desc = byName.get(name)?.description?.trim()
+		return desc ? `- \`${name}\` — ${desc}` : `- \`${name}\``
+	})
+	return `<AvailableSkills>
+${lines.join("\n")}
+
+Use the \`skill\` tool to load a skill's full instructions when a task's
+domain matches one of these before acting or delegating. Guild's built-in
+skills take priority over generic skills.
+</AvailableSkills>`
 }
 
 /**

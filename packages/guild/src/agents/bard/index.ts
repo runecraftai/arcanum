@@ -4,6 +4,7 @@ import type { AvailableAgent } from "../dynamic-prompt-builder"
 import type { ProjectFingerprint } from "../../features/analytics/types"
 import type { CategoriesConfig } from "../../config/schema"
 import type { ReviewModelVariant } from "../review-model-variants"
+import type { LoadedSkill } from "../../features/skill-loader/types"
 import { BARD_DEFAULTS } from "./default"
 import { composeBardPrompt } from "./prompt-composer"
 
@@ -20,10 +21,11 @@ export function createBardAgentWithOptions(
   customAgents?: AvailableAgent[],
   categories?: CategoriesConfig,
   reviewModelVariants?: ReviewModelVariant[],
+  availableSkills?: LoadedSkill[],
 ): AgentConfig {
   return {
     ...BARD_DEFAULTS,
-    prompt: composeBardPrompt({ disabledAgents, fingerprint, customAgents, categories, reviewModelVariants }),
+    prompt: composeBardPrompt({ disabledAgents, fingerprint, customAgents, categories, reviewModelVariants, availableSkills }),
     model,
     mode: "primary",
   }

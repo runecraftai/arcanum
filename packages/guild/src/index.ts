@@ -36,6 +36,7 @@ const GuildPlugin: Plugin = async (ctx) => {
     pluginConfig,
     continuation,
     resolveSkills: toolsResult.resolveSkillsFn,
+    availableSkills: toolsResult.availableSkills,
     fingerprint,
     configDir,
   })

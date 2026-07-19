@@ -3,6 +3,7 @@ import type { ResolvedContinuationConfig } from "../../config/continuation"
 import type { CategoriesConfig } from "../../config/schema"
 import type { AgentFactory } from "../types"
 import type { ReviewModelVariant } from "../review-model-variants"
+import type { LoadedSkill } from "../../features/skill-loader/types"
 import { FIGHTER_DEFAULTS } from "./default"
 import { composeFighterPrompt } from "./prompt-composer"
 
@@ -18,11 +19,12 @@ export function createFighterAgentWithOptions(
   continuation?: ResolvedContinuationConfig,
   categories?: CategoriesConfig,
   reviewModelVariants?: ReviewModelVariant[],
+  availableSkills?: LoadedSkill[],
 ): AgentConfig {
   return {
     ...FIGHTER_DEFAULTS,
     tools: { ...FIGHTER_DEFAULTS.tools },
-    prompt: composeFighterPrompt({ disabledAgents, continuation, categories, reviewModelVariants }),
+    prompt: composeFighterPrompt({ disabledAgents, continuation, categories, reviewModelVariants, availableSkills }),
     model,
     mode: "primary",
   }

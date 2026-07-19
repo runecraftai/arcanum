@@ -1,5 +1,6 @@
 import { describe, it, expect } from "bun:test"
 import { createBuiltinAgents, AGENT_METADATA } from "./builtin-agents"
+import type { LoadedSkill } from "../features/skill-loader/types"
 
 const ALL_AGENT_NAMES = ["bard", "fighter", "ranger", "wizard", "rogue", "warlock", "cleric", "paladin"]
 
@@ -113,6 +114,7 @@ describe("createBuiltinAgents", () => {
       "guild-execute",
       "guild-verify",
       "guild-handoff",
+      "git-worktree",
     ])
     expect(agents.wizard?.skills).toEqual(["guild-load", "guild-scope", "guild-spec", "guild-plan"])
     expect(agents.rogue?.skills).toEqual(["guild-research"])
@@ -127,7 +129,11 @@ describe("createBuiltinAgents", () => {
       resolveSkills: (skillNames) => `SKILLS:${skillNames.join(",")}`,
     })
 
-    expect(agents.bard?.prompt).toContain("SKILLS:guild-init,guild-load,guild-scope,guild-spec,guild-plan,guild-handoff,guild-ship")
+    // Bard uses lazy skill loading via <AvailableSkills> — no eager SKILLS: prefix
+    expect(agents.bard?.prompt).not.toContain("SKILLS:")
+    // Fighter uses lazy skill loading via <AvailableSkills> — no eager SKILLS: prefix
+    expect(agents.fighter?.prompt).not.toContain("SKILLS:")
+    // Wizard still eagerly prepends via buildAgent path (non-Bard/Fighter agents)
     expect(agents.wizard?.prompt).toContain("SKILLS:guild-load,guild-scope,guild-spec,guild-plan")
   })
 
@@ -650,5 +656,17 @@ describe("AGENT_METADATA", () => {
       },
     })
     expect(agents["ranger"]?.mode).toBe("all")
+  })
+
+  it("availableSkills flows through to bard and fighter prompts with correct descriptions", () => {
+    const agents = createBuiltinAgents({
+      availableSkills: [
+        { name: "guild-plan", description: "Plan work.", content: "...", scope: "builtin" },
+        { name: "guild-load", description: "Load context.", content: "...", scope: "builtin" },
+      ],
+    })
+    expect(agents.bard?.prompt).toContain("`guild-plan` — Plan work.")
+    expect(agents.bard?.prompt).toContain("`guild-load` — Load context.")
+    expect(agents.fighter?.prompt).toContain("`guild-load` — Load context.")
   })
 })
