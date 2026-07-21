@@ -1,5 +1,11 @@
 # @runecraft/guild
 
+## 0.24.0
+
+### Minor Changes
+
+- feat(guild): add guild-workflows builtin skill
+
 ## 0.23.4
 
 ### Patch Changes

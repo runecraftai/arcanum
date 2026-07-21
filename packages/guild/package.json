@@ -1,6 +1,6 @@
 {
   "name": "@runecraft/guild",
-  "version": "0.23.4",
+  "version": "0.24.0",
   "description": "Guild — multi-agent orchestration plugin for OpenCode",
   "author": "Arcanum",
   "license": "MIT",
