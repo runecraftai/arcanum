@@ -20,6 +20,7 @@ const EXPECTED_BUILTIN_SKILLS = [
   "guild-ship",
   "guild-spec",
   "guild-verify",
+  "guild-workflows",
 ]
 
 describe("builtin skill catalog", () => {
