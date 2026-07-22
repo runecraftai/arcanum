@@ -147,6 +147,12 @@ describe("buildDelegationSection", () => {
     expect(section).toContain("Delegate aggressively")
   })
 
+  it("warns that subagent_type is case-sensitive for Ranger delegation", () => {
+    const section = buildDelegationSection(new Set())
+    expect(section).toContain('subagent_type="ranger"')
+    expect(section).toContain("case-sensitive")
+  })
+
   it("mentions visible Weft review variants when configured", () => {
     const section = buildDelegationSection(new Set(), [
       {

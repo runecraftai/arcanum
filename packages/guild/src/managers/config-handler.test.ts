@@ -57,6 +57,27 @@ describe("ConfigHandler", () => {
     expect(result.agents["rogue"]).toBeDefined()
   })
 
+  it("registers a capitalized-first-letter alias for every builtin agent (Task subagent_type case-mismatch fix)", async () => {
+    const handler = new ConfigHandler({ pluginConfig: {} })
+    const allBuiltins: Record<string, AgentConfig> = {
+      bard: { model: "m" }, fighter: { model: "m" }, ranger: { model: "m" },
+      wizard: { model: "m" }, rogue: { model: "m" }, warlock: { model: "m" },
+      cleric: { model: "m" }, paladin: { model: "m" },
+    }
+
+    const result = await handler.handle({
+      pluginConfig: {},
+      agents: allBuiltins,
+      availableTools: [],
+    })
+
+    for (const name of Object.keys(allBuiltins)) {
+      const capitalized = name.charAt(0).toUpperCase() + name.slice(1)
+      expect(result.agents[capitalized]).toBeDefined()
+      expect(result.agents[capitalized]).toEqual(result.agents[name])
+    }
+  })
+
   it("sets defaultAgent to bard display name", async () => {
     const handler = new ConfigHandler({ pluginConfig: {} })
 

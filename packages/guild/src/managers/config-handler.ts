@@ -104,6 +104,11 @@ export class ConfigHandler {
       if (name !== displayName) {
         result[name] = merged
       }
+
+      const capitalizedAlias = name.charAt(0).toUpperCase() + name.slice(1)
+      if (capitalizedAlias !== displayName && capitalizedAlias !== name && !result[capitalizedAlias]) {
+        result[capitalizedAlias] = merged
+      }
     }
 
     return result

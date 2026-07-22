@@ -102,7 +102,7 @@ export function buildDelegationSection(disabled: Set<string>, reviewModelVariant
   }
   if (isAgentEnabled("ranger", disabled)) {
       lines.push(
-        "- Use the Task tool to delegate to Ranger (subagent_type=\"Ranger (Specialist)\") for category-specific specialist work when the main need is domain expertise rather than planning or scoping",
+        "- Use the Task tool to delegate to Ranger (subagent_type=\"ranger\") for category-specific specialist work when the main need is domain expertise rather than planning or scoping. subagent_type is case-sensitive — always lowercase (e.g. \"ranger\", not \"Ranger\").",
       )
   }
   if (isAgentEnabled("cleric", disabled)) {

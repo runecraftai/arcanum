@@ -229,6 +229,14 @@ describe("individual fighter section builders", () => {
     expect(section).toContain("ranger")
   })
 
+  it("warns that subagent_type is case-sensitive (both category and non-category branches)", () => {
+    const noCategorySection = buildTapestryDelegationSection()
+    expect(noCategorySection).toContain("case-sensitive")
+
+    const categorySection = buildTapestryDelegationSection(["frontend"])
+    expect(categorySection).toContain("case-sensitive")
+  })
+
   it("buildTapestryDelegationSection contains delegation contract fields", () => {
     const section = buildTapestryDelegationSection()
     expect(section).toContain("What")

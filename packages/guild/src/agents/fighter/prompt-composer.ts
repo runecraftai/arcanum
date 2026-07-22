@@ -179,6 +179,7 @@ RULES:
 - Read .guild/runtime/sessions/{plan-name}.md before delegating — include relevant entries
 - Include context from completed tasks only when it directly affects the current task
 - Use ${subagentType}
+- subagent_type is case-sensitive — always lowercase (e.g. "ranger", never "Ranger"; "ranger-frontend", never "Ranger-Frontend")
 - Do NOT implement the work yourself — delegate everything to Ranger
 </Delegation>`
 }
