@@ -125,6 +125,40 @@ Only after all consumers have migrated:
 5. Celebrate — removing code is an achievement
 ```
 
+## Migration Tracking
+
+Track migration consumers deterministically using `scripts/migration_tracker.py`. This avoids ad-hoc checklists and keeps consumer status visible across sessions.
+
+### WRITE — record consumer state
+
+When the consumer list is first enumerated during [The Deprecation Decision](#the-deprecation-decision), add each consumer:
+
+```bash
+python3 scripts/migration_tracker.py add-consumer --slug <slug> --consumer <name> --status <pending|migrating|done>
+```
+
+As each consumer completes migration in [Step 3: Migrate Incrementally](#step-3-migrate-incrementally), mark it:
+
+```bash
+python3 scripts/migration_tracker.py mark-migrated --slug <slug> --consumer <name> --note <text>
+```
+
+### READ — query migration progress
+
+```bash
+# Aggregate counts (pending / migrating / done)
+python3 scripts/migration_tracker.py status --slug <slug>
+
+# List consumers that still need migration
+python3 scripts/migration_tracker.py list-pending --slug <slug>
+```
+
+Read status before [Step 4: Remove the Old System](#step-4-remove-the-old-system) to confirm zero pending consumers.
+
+### Fallback when code execution is unavailable
+
+Some harnesses cannot run Python. Only then: maintain `.migrations/<slug>/STATUS.md` by hand, tracking consumer name, status, and migration notes. **This path is degraded**: hand bookkeeping is the failure mode this tool exists to avoid, so prefer the script wherever a code tool exists. State once in chat that you are in the no-script fallback so the user knows accounting is best-effort.
+
 ## Migration Patterns
 
 ### Strangler Pattern

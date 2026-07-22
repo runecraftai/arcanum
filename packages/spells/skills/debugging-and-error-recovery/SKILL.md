@@ -176,6 +176,42 @@ npm run build
 npm run dev  # Verify in browser
 ```
 
+## Deterministic Triage-State Tracking
+
+Use `scripts/triage_state.py` to record the session lifecycle — one WRITE per triage step, READ on recovery, Fallback when code execution is unavailable.
+
+### WRITE — start, log-step, close
+
+Call `start` at Step 1 (Reproduce) to initialize the session:
+
+```bash
+python3 scripts/triage_state.py start --session-id <id> --description "<text>"
+```
+
+After completing each triage step (Steps 1–6), record the progress:
+
+```bash
+python3 scripts/triage_state.py log-step --session-id <id> --step <step-name> --note "<text>"
+```
+
+Call `close` after Step 6 (Verify End-to-End) to mark the session resolved:
+
+```bash
+python3 scripts/triage_state.py close --session-id <id>
+```
+
+### READ — recover state
+
+To inspect the state of an ongoing or interrupted session:
+
+```bash
+python3 scripts/triage_state.py show --session-id <id>
+```
+
+### Fallback when code execution is unavailable
+
+Some harnesses cannot run Python. Only then: maintain `.debug/<session-id>/TRIAGE.md` by hand, recording each step as it completes. State once in chat that you are in the no-script fallback so the user knows accounting is best-effort.
+
 ## Error-Specific Patterns
 
 ### Test Failure Triage
