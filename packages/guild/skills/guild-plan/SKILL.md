@@ -49,6 +49,24 @@ When all three gates pass, proceed to the Process steps below. When one or more 
 6. Update `state.md` to reflect the new plan status (`planned` or `in-progress` if execution starts immediately).
 7. Save to `.guild/plans/<slug>/tasks.md`.
 
+## Parallel Groups (optional)
+
+When a plan contains tasks that are genuinely independent — no shared files, no cross-group ordering dependency — the planner can declare parallel groups at the bottom of `tasks.md` to signal that these tasks can run concurrently:
+
+```
+## Parallel Groups
+- **group-a**: T01, T02
+- **group-b**: T05, T06
+```
+
+**When to declare groups**: Every task in a group must touch a file-touch set that is disjoint from every other group's tasks, and no task in one group may depend on another group's output (ordering-free). At least two groups with at least one task each must exist.
+
+**When NOT to declare groups**: Any file touched by two or more groups; any task that depends on another group's output; fewer than two groups total; or no declared groups at all (sequential execution remains the default and is completely unaffected).
+
+**Planner responsibility**: Independence is declared by the planner at planning time based on file-touch-overlap analysis — it is not inferred automatically by the executor at runtime. The declaration is a signal to the executor, not a guarantee that must be runtime-verified.
+
+Groups do not change the task-row format or numbering — each task still carries its identifier, description, requirement IDs, verification command, and status. Ordering within a group follows the same dependency rules as ordering across ungrouped tasks.
+
 ## Rationalizations
 
 | Excuse | Rebuttal |
