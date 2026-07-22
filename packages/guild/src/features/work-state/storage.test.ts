@@ -12,6 +12,7 @@ import {
   getPlanProgress,
   getPlanName,
   getHeadSha,
+  getBranch,
   pauseWork,
   resumeWork,
 } from "./storage"
@@ -156,6 +157,23 @@ describe("createWorkState", () => {
     const state = createWorkState("/path/plan.md", "sess_1", "fighter", testDir)
     expect(state.start_sha).toBeUndefined()
   })
+
+  it("includes start_branch when directory is a git repo", () => {
+    const state = createWorkState("/path/plan.md", "sess_1", "fighter", process.cwd())
+    expect(state.start_branch).toBeDefined()
+    expect(typeof state.start_branch).toBe("string")
+    expect(state.start_branch!.length).toBeGreaterThan(0)
+  })
+
+  it("omits start_branch when directory is not provided", () => {
+    const state = createWorkState("/path/plan.md", "sess_1", "fighter")
+    expect(state.start_branch).toBeUndefined()
+  })
+
+  it("omits start_branch when directory is not a git repo", () => {
+    const state = createWorkState("/path/plan.md", "sess_1", "fighter", testDir)
+    expect(state.start_branch).toBeUndefined()
+  })
 })
 
 describe("getHeadSha", () => {
@@ -169,6 +187,20 @@ describe("getHeadSha", () => {
   it("returns undefined for a non-git directory", () => {
     const sha = getHeadSha(testDir)
     expect(sha).toBeUndefined()
+  })
+})
+
+describe("getBranch", () => {
+  it("returns the current branch for a git repo", () => {
+    const branch = getBranch(process.cwd())
+    expect(branch).toBeDefined()
+    expect(typeof branch).toBe("string")
+    expect(branch!.length).toBeGreaterThan(0)
+  })
+
+  it("returns undefined for a non-git directory", () => {
+    const branch = getBranch(testDir)
+    expect(branch).toBeUndefined()
   })
 })
 

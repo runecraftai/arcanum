@@ -10,6 +10,7 @@ export interface PlanRepository {
   getPlanProgress(planPath: string): PlanProgress
   getPlanName(planPath: string): string
   getHeadSha(directory: string): string | undefined
+  getBranch(directory: string): string | undefined
   pauseWork(directory: string): boolean
   resumeWork(directory: string): boolean
 }

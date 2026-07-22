@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from "bun:test"
+import { execFileSync } from "child_process"
 import { mkdirSync, mkdtempSync, writeFileSync, rmSync } from "fs"
 import { join } from "path"
 import { tmpdir } from "os"
@@ -362,6 +363,215 @@ describe("handleStartWork", () => {
       })
 
       expect(result.contextInjection).toContain("All Plans Complete")
+    })
+  })
+
+  describe("precondition checks", () => {
+    function initGitRepo(dir: string): void {
+      execFileSync("git", ["init"], { cwd: dir })
+      execFileSync("git", ["config", "user.email", "test@test.com"], { cwd: dir })
+      execFileSync("git", ["config", "user.name", "Test"], { cwd: dir })
+    }
+
+    function initialCommit(dir: string): void {
+      writeFileSync(join(dir, ".gitignore"), ".guild/\n", "utf-8")
+      writeFileSync(join(dir, "initial.txt"), "initial", "utf-8")
+      execFileSync("git", ["add", "."], { cwd: dir })
+      execFileSync("git", ["commit", "-m", "init"], { cwd: dir })
+    }
+
+    function getCurrentBranch(dir: string): string {
+      return execFileSync("git", ["rev-parse", "--abbrev-ref", "HEAD"], {
+        cwd: dir,
+        encoding: "utf-8",
+      }).trim()
+    }
+
+    describe("fresh start — git dirty-tree check", () => {
+      it("warns about uncommitted changes on fresh start with explicit plan", () => {
+        initGitRepo(testDir)
+        initialCommit(testDir)
+        createPlanFile(
+          "git-plan",
+          validPlanContent(
+            "- [ ] 1. Task\n  **What**: Do it\n  **Files**: src/a.ts (new)\n  **Acceptance**: Works"
+          )
+        )
+        // Dirty the tree: modify a tracked file
+        writeFileSync(join(testDir, "initial.txt"), "modified", "utf-8")
+
+        const result = handleStartWork({
+          promptText: makePrompt("git-plan"),
+          sessionId: "sess_dirty",
+          directory: testDir,
+        })
+
+        expect(result.contextInjection).toContain("Uncommitted Changes Detected")
+        expect(result.contextInjection).toContain("Starting Plan: git-plan")
+      })
+
+      it("no warning for clean tree on fresh start with explicit plan", () => {
+        initGitRepo(testDir)
+        initialCommit(testDir)
+        createPlanFile(
+          "clean-plan",
+          validPlanContent(
+            "- [ ] 1. Task\n  **What**: Do it\n  **Files**: src/a.ts (new)\n  **Acceptance**: Works"
+          )
+        )
+
+        const result = handleStartWork({
+          promptText: makePrompt("clean-plan"),
+          sessionId: "sess_clean",
+          directory: testDir,
+        })
+
+        expect(result.contextInjection).not.toContain("Uncommitted Changes Detected")
+        expect(result.contextInjection).toContain("Starting Plan: clean-plan")
+      })
+
+      it("no crash and no warning for non-git directory on fresh start", () => {
+        createPlanFile(
+          "non-git-plan",
+          validPlanContent(
+            "- [ ] 1. Task\n  **What**: Do it\n  **Files**: src/a.ts (new)\n  **Acceptance**: Works"
+          )
+        )
+
+        const result = handleStartWork({
+          promptText: makePrompt("non-git-plan"),
+          sessionId: "sess_nogit",
+          directory: testDir,
+        })
+
+        expect(result.contextInjection).not.toContain("Uncommitted Changes")
+        expect(result.contextInjection).toContain("Starting Plan: non-git-plan")
+      })
+
+      it("warns about uncommitted changes on auto-select with single incomplete plan", () => {
+        initGitRepo(testDir)
+        initialCommit(testDir)
+        createPlanFile(
+          "auto-plan",
+          validPlanContent(
+            "- [ ] 1. Task\n  **What**: Do it\n  **Files**: src/a.ts (new)\n  **Acceptance**: Works"
+          )
+        )
+        // Dirty the tree: modify a tracked file
+        writeFileSync(join(testDir, "initial.txt"), "modified", "utf-8")
+
+        const result = handleStartWork({
+          promptText: makePrompt(),
+          sessionId: "sess_auto",
+          directory: testDir,
+        })
+
+        expect(result.contextInjection).toContain("Uncommitted Changes Detected")
+        expect(result.contextInjection).toContain("Starting Plan: auto-plan")
+      })
+    })
+
+    describe("resume — branch mismatch check", () => {
+      it("no warning when current branch matches start_branch", () => {
+        initGitRepo(testDir)
+        initialCommit(testDir)
+        const planPath = createPlanFile(
+          "resume-same",
+          validPlanContent(
+            "- [ ] 1. Task\n  **What**: Do it\n  **Files**: src/a.ts (new)\n  **Acceptance**: Works"
+          )
+        )
+        const state = createWorkState(planPath, "sess_old", "fighter", testDir)
+        writeWorkState(testDir, state)
+
+        const result = handleStartWork({
+          promptText: makePrompt(),
+          sessionId: "sess_new",
+          directory: testDir,
+        })
+
+        expect(result.contextInjection).toContain("Resuming Plan: resume-same")
+        expect(result.contextInjection).not.toContain("Branch Changed")
+      })
+
+      it("warns when current branch differs from start_branch", () => {
+        initGitRepo(testDir)
+        initialCommit(testDir)
+        const planPath = createPlanFile(
+          "resume-diff",
+          validPlanContent(
+            "- [ ] 1. Task\n  **What**: Do it\n  **Files**: src/a.ts (new)\n  **Acceptance**: Works"
+          )
+        )
+        const currentBranch = getCurrentBranch(testDir)
+        // Manually construct state with a different start_branch
+        const state = {
+          active_plan: planPath,
+          started_at: new Date().toISOString(),
+          session_ids: ["sess_old"],
+          plan_name: "resume-diff",
+          agent: "fighter",
+          start_branch: "other-branch",
+        }
+        writeWorkState(testDir, state)
+
+        const result = handleStartWork({
+          promptText: makePrompt(),
+          sessionId: "sess_new",
+          directory: testDir,
+        })
+
+        expect(result.contextInjection).toContain("Branch Changed Since Plan Start")
+        expect(result.contextInjection).toContain("other-branch")
+        expect(result.contextInjection).toContain(currentBranch)
+      })
+
+      it("no crash and no warning when work state has no start_branch", () => {
+        const planPath = createPlanFile(
+          "resume-nobranch",
+          validPlanContent(
+            "- [ ] 1. Task\n  **What**: Do it\n  **Files**: src/a.ts (new)\n  **Acceptance**: Works"
+          )
+        )
+        const state = {
+          active_plan: planPath,
+          started_at: new Date().toISOString(),
+          session_ids: ["sess_old"],
+          plan_name: "resume-nobranch",
+          agent: "fighter",
+          // start_branch intentionally omitted — simulates pre-existing plan
+        }
+        writeWorkState(testDir, state)
+
+        const result = handleStartWork({
+          promptText: makePrompt(),
+          sessionId: "sess_new",
+          directory: testDir,
+        })
+
+        expect(result.contextInjection).toContain("Resuming Plan: resume-nobranch")
+        expect(result.contextInjection).not.toContain("Branch Changed")
+      })
+    })
+
+    describe("discovery — multiple plans with dirty tree", () => {
+      it("lists multiple plans without dirty-tree warning", () => {
+        initGitRepo(testDir)
+        initialCommit(testDir)
+        createPlanFile("plan-a", "- [ ] Task 1\n- [ ] Task 2\n")
+        createPlanFile("plan-b", "- [ ] Task 1\n- [x] Task 2\n")
+        // Dirty the tree
+        writeFileSync(join(testDir, "initial.txt"), "modified", "utf-8")
+
+        const result = handleStartWork({
+          promptText: makePrompt(),
+          sessionId: "sess_multi",
+          directory: testDir,
+        })
+
+        expect(result.contextInjection).toContain("Multiple Plans Found")
+        expect(result.contextInjection).not.toContain("Uncommitted Changes Detected")
+      })
     })
   })
 })

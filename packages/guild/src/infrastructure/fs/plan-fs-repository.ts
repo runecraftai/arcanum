@@ -4,6 +4,7 @@ import {
   clearWorkStateFromFs,
   createWorkStateRecord,
   findPlansInFs,
+  getBranchFromFs,
   getHeadShaFromFs,
   getPlanNameFromPath,
   getPlanProgressFromFs,
@@ -24,6 +25,7 @@ export function createPlanFsRepository(): PlanRepository {
     getPlanProgress: getPlanProgressFromFs,
     getPlanName: getPlanNameFromPath,
     getHeadSha: getHeadShaFromFs,
+    getBranch: getBranchFromFs,
     pauseWork: pauseWorkInFs,
     resumeWork: resumeWorkInFs,
   }

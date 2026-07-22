@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, unlinkSync, writeFileSync } from "fs"
-import { execSync } from "child_process"
+import { execFileSync, execSync } from "child_process"
 import { basename, extname, join } from "path"
 import type { PlanProgress, SessionRuntimeState, WorkState } from "../../features/work-state/types"
 import { PLANS_DIR, SESSION_RUNTIME_DIR, GUILD_DIR, WORK_STATE_FILE } from "../../features/work-state/constants"
@@ -73,6 +73,7 @@ export function appendSessionIdInFs(directory: string, sessionId: string): WorkS
 
 export function createWorkStateRecord(planPath: string, sessionId: string, agent?: string, directory?: string): WorkState {
   const startSha = directory ? getHeadShaFromFs(directory) : undefined
+  const startBranch = directory ? getBranchFromFs(directory) : undefined
 
   return {
     active_plan: planPath,
@@ -81,6 +82,7 @@ export function createWorkStateRecord(planPath: string, sessionId: string, agent
     plan_name: getPlanNameFromPath(planPath),
     ...(agent !== undefined ? { agent } : {}),
     ...(startSha !== undefined ? { start_sha: startSha } : {}),
+    ...(startBranch !== undefined ? { start_branch: startBranch } : {}),
   }
 }
 
@@ -93,6 +95,19 @@ export function getHeadShaFromFs(directory: string): string | undefined {
     }).trim()
 
     return sha || undefined
+  } catch {
+    return undefined
+  }
+}
+
+export function getBranchFromFs(directory: string): string | undefined {
+  try {
+    const branch = execFileSync("git", ["rev-parse", "--abbrev-ref", "HEAD"], {
+      cwd: directory,
+      encoding: "utf-8",
+    }).trim()
+
+    return branch || undefined
   } catch {
     return undefined
   }

@@ -48,6 +48,8 @@ export interface WorkState {
   agent?: string
   /** Git HEAD SHA at the time work started (absent if not a git repo) */
   start_sha?: string
+  /** Git branch name at the time work started (absent if not a git repo) */
+  start_branch?: string
   /** Whether work has been paused by a user interrupt; continuation is suppressed while true */
   paused?: boolean
   /** The `completed` count from getPlanProgress() at the time of the last continuation prompt */

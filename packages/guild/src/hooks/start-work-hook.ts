@@ -3,6 +3,8 @@
  * creates/updates work state, and returns context for injection into the prompt.
  */
 
+import { execFileSync } from "child_process"
+
 import { validatePlan } from "../features/work-state"
 import type { ValidationResult } from "../features/work-state"
 import { createPlanFsRepository } from "../infrastructure/fs/plan-fs-repository"
@@ -68,12 +70,13 @@ export function handleStartWork(input: StartWorkInput): StartWorkResult {
         }
       }
       const resumedState = PlanService.resumeExecution(directory, sessionId) ?? existingState
-      const resumeContext = buildResumeContext(resumedState.active_plan, resumedState.plan_name, progress, resumedState.start_sha, directory)
+      let resumeContext = buildResumeContext(resumedState.active_plan, resumedState.plan_name, progress, resumedState.start_sha, directory)
       if (validation.warnings.length > 0) {
-        return {
-          switchAgent: "fighter",
-          contextInjection: `${resumeContext}\n\n### Validation Warnings\n${formatValidationResults(validation)}`,
-        }
+        resumeContext += `\n\n### Validation Warnings\n${formatValidationResults(validation)}`
+      }
+      const branchWarning = checkBranchMismatch(directory, existingState.start_branch)
+      if (branchWarning) {
+        resumeContext += `\n\n${branchWarning}`
       }
       return {
         switchAgent: "fighter",
@@ -114,6 +117,53 @@ Starting plan execution will conflict with the active workflow — both systems 
 - **Proceed anyway** — the workflow will be paused and can be resumed with \`/run-workflow\` after the plan completes
 - **Abort the workflow first** — cancel the workflow, then start the plan
 - **Cancel** — don't start the plan, continue with the workflow`
+}
+
+/**
+ * Check whether the git working tree is dirty (has uncommitted changes).
+ * Returns a markdown warning string if dirty, or null if clean or not a git repo.
+ */
+function checkGitTreeDirty(directory: string): string | null {
+	try {
+		const output = execFileSync("git", ["status", "--porcelain"], {
+			cwd: directory,
+			encoding: "utf-8",
+		})
+		if (output.trim() === "") return null
+
+		return `## Uncommitted Changes Detected
+
+The working tree has uncommitted changes. Surface this to the user before proceeding — the changes may be unrelated to this plan.
+`
+	} catch {
+		return null
+	}
+}
+
+/**
+ * Check whether the current git branch differs from the expected branch.
+ * Returns a markdown warning string if mismatch, or null if matching, not a git repo, or no expected branch.
+ */
+function checkBranchMismatch(directory: string, expectedBranch: string | undefined): string | null {
+	if (expectedBranch === undefined) return null
+
+	try {
+		const currentBranch = execFileSync("git", ["rev-parse", "--abbrev-ref", "HEAD"], {
+			cwd: directory,
+			encoding: "utf-8",
+		}).trim()
+
+		if (currentBranch !== expectedBranch) {
+			return `## Branch Changed Since Plan Start
+
+This plan was started on branch \`${expectedBranch}\`, but the current branch is \`${currentBranch}\`. Confirm with the user this is intentional before proceeding.
+`
+		}
+
+		return null
+	} catch {
+		return null
+	}
 }
 
 /**
@@ -166,18 +216,21 @@ function handleExplicitPlan(
       }
   }
 
+  const dirtyTreeWarning = checkGitTreeDirty(directory)
+
   const state = PlanService.createExecution(directory, matched, sessionId, "fighter")
 
   const freshContext = buildFreshContext(matched, PlanService.getPlanName(matched), progress, state.start_sha, directory)
+  let context = freshContext
+  if (dirtyTreeWarning) {
+    context = `${dirtyTreeWarning}\n\n${context}`
+  }
   if (validation.warnings.length > 0) {
-    return {
-      switchAgent: "fighter",
-      contextInjection: `${freshContext}\n\n### Validation Warnings\n${formatValidationResults(validation)}`,
-    }
+    context = `${context}\n\n### Validation Warnings\n${formatValidationResults(validation)}`
   }
   return {
     switchAgent: "fighter",
-    contextInjection: freshContext,
+    contextInjection: context,
   }
 }
 
@@ -189,6 +242,7 @@ function handlePlanDiscovery(
   sessionId: string,
   directory: string,
 ): StartWorkResult {
+
   if (allPlans.length === 0) {
       return {
         switchAgent: "fighter",
@@ -220,18 +274,21 @@ function handlePlanDiscovery(
       }
     }
 
+    const dirtyTreeWarning = checkGitTreeDirty(directory)
+
     const state = PlanService.createExecution(directory, plan, sessionId, "fighter")
 
     const freshContext = buildFreshContext(plan, PlanService.getPlanName(plan), progress, state.start_sha, directory)
+    let context = freshContext
+    if (dirtyTreeWarning) {
+      context = `${dirtyTreeWarning}\n\n${context}`
+    }
     if (validation.warnings.length > 0) {
-      return {
-        switchAgent: "fighter",
-        contextInjection: `${freshContext}\n\n### Validation Warnings\n${formatValidationResults(validation)}`,
-      }
+      context = `${context}\n\n### Validation Warnings\n${formatValidationResults(validation)}`
     }
     return {
       switchAgent: "fighter",
-      contextInjection: freshContext,
+      contextInjection: context,
     }
   }
 

@@ -50,6 +50,14 @@ export function getHeadSha(directory: string): string | undefined {
 }
 
 /**
+ * Get the current git branch of the repo at the given directory.
+ * Returns undefined if not a git repo or git is unavailable.
+ */
+export function getBranch(directory: string): string | undefined {
+  return Repository.getBranch(directory)
+}
+
+/**
  * Find all plan files in .guild/plans/, sorted by modification time (newest first).
  * Returns absolute paths.
  */
