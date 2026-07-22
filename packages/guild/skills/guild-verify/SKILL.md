@@ -37,7 +37,7 @@ Run the smallest useful test set first, capture command output, and confirm the 
 2. Read `tasks.md` and capture the verification criteria for the current plan.
 3. Read `spec.md` acceptance criteria; map them to the task rows.
 4. Run the smallest useful test set first; capture full command output.
-5. Run lint and typecheck for the affected package; capture output.
+5. Call `guild_verify_gate` (with the affected `package_path`) as the mechanical evidence-gathering step; use its structured `checks` array as the captured output referenced by steps 6–7.
 6. Per-task check: confirm every task is `done` with verification evidence recorded inline. If any task lacks evidence, mark it `blocked` and stop.
 7. Project-wide check: read `.guild/knowledge/definition-of-done.md` (if present) and confirm every bar item is met for the current change. If absent, log a note in `plans/<slug>/notes.md` (`DoD project-wide bar: empty/absent; skipped`) and continue with per-task only.
 8. If a project-wide bar item cannot be verified from the current change, mark it `unable to verify` in `notes.md` — do NOT auto-pass.

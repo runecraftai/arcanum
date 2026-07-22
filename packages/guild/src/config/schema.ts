@@ -170,6 +170,8 @@ export const WorkflowConfigSchema = z.object({
 export const ToolsConfigSchema = z.object({
   /** Enable or disable the guild_compact_context tool. Default: true. */
   compact_context: z.boolean().optional(),
+  /** Enable or disable the guild_verify_gate tool. Default: true. */
+  verify_gate: z.boolean().optional(),
 })
 
 export const GuildConfigSchema = z.object({

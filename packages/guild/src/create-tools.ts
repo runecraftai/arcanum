@@ -5,6 +5,7 @@ import type { LoadedSkill } from "./features/skill-loader/types"
 import type { ResolveSkillsFn } from "./agents/agent-builder"
 import { loadSkills, createSkillResolver } from "./features/skill-loader"
 import { createCompactContextTool } from "./tools/compact-context"
+import { createVerifyGateTool } from "./tools/verify-gate"
 
 export interface ToolsResult {
   tools: ToolsRecord
@@ -34,6 +35,12 @@ export async function createTools(options: {
     tools.guild_compact_context = createCompactContextTool({
       directory: ctx.directory,
       client: ctx.client,
+    })
+  }
+
+  if (pluginConfig.tools?.verify_gate !== false) {
+    tools.guild_verify_gate = createVerifyGateTool({
+      directory: ctx.directory,
     })
   }
 

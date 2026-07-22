@@ -69,6 +69,7 @@ Current tools and their config keys:
 | Tool file | Config key | Tool name |
 | --- | --- | --- |
 | `compact-context.ts` | `tools.compact_context` | `guild_compact_context` |
+| `verify-gate.ts` | `tools.verify_gate` | `guild_verify_gate` |
 
 ## Evals
 
