@@ -1,9 +1,12 @@
 ---
 name: guild-scope
 description: >
-  Classify the work into init, feature, or plan scope. Use to choose which
-  `.guild/` artifacts are appropriate and how deep the planning should go.
+  Classify the work into init, feature, or plan scope. Use when a new request arrives and
+  the artifact set is not yet chosen — picks which `.guild/` artifacts are appropriate and
+  how deep the planning should go.
 license: CC-BY-4.0
+metadata:
+  version: 1.0.0
 ---
 
 # guild-scope
@@ -41,12 +44,13 @@ Classify the incoming request into a scope (init, feature, quick task, handoff) 
 
 The complexity determines the depth:
 
-| Scope | What | Artifact set |
-|-------|------|--------------|
-| **Small** | ≤3 files, one sentence | `tasks.md` only |
-| **Medium** | Clear feature, <10 tasks | `spec.md` + `tasks.md` |
-| **Large** | Multi-component feature | `spec.md` + `design.md` + `tasks.md` |
-| **Complex** | Ambiguity, new domain | `spec.md` + `context.md` + `design.md` + `tasks.md` + `validation.md` |
+| Scope | What | Flow | Artifact set |
+|-------|------|------|--------------|
+| **Small** | ≤3 files, one sentence | chore | `tasks.md` only |
+| **Medium** | Clear feature, <10 tasks | feature | `spec.md` + `tasks.md` |
+| **Large** | Multi-component feature | feature | `spec.md` + `design.md` + `tasks.md` |
+| **Complex** | Ambiguity, new domain | feature | `spec.md` + `context.md` + `design.md` + `tasks.md` + `validation.md` |
+| **Hotfix** | Production incident or user-blocking bug under time pressure | hotfix | `tasks.md` (incident-derived) + `state.md` (incident note) — no spec/design |
 
 **Rules:**
 - Spec and tasks are always required — you always need to know WHAT and DO it
@@ -64,6 +68,18 @@ The complexity determines the depth:
 | Handoff | `.guild/context/handoff.md`, `.guild/context/state.md` | `context/` files only |
 
 **Safety valve:** Even when Tasks is skipped for Small scope, execution starts by listing atomic steps. If that listing reveals >5 steps or complex dependencies, stop and create a formal `tasks.md`.
+
+## Hotfix flow
+
+The hotfix flow is for production incidents and user-blocking bugs under time pressure. It bypasses spec/design ceremony but is NOT a free pass on verification or safety.
+
+**Hotfix-vs-chore decision rule:** A request is a hotfix when there is active production impact, user-blocking severity, or explicit time pressure. Any other non-urgent small change stays `chore` — size alone does not make something a hotfix.
+
+**Verification gate still applies:** The hotfix flow does not exempt the change from verification. The plan cannot be marked done until `guild-verify` has run and passed. Once the `verify_gate` tool is available (config key `tools.verify_gate`), it should be used as the deterministic gate; until then, fall back to running `guild-verify` manually.
+
+**Safety valve unchanged:** The existing safety valve — "if listing reveals >5 steps or complex dependencies, stop and create a formal `tasks.md`" — applies unchanged to hotfix. Urgency does not override this valve.
+
+**Repo-level escalation rules still apply:** Hotfix does not bypass repo-level escalation rules (e.g., `packages/familiar/` requires "ask before proceeding" per the root `AGENTS.md`). Hotfix skips planning ceremony, not permission gates.
 
 ## Rationalizations
 
@@ -102,6 +118,15 @@ The skill is complete when ALL of the following evidence is present:
 - The artifact set is recorded in `.guild/plans/<slug>/state.md`.
 
 **"Seems right" is not evidence.** Every claim of "this is scoped correctly" cites the scope table row and the file path that records the decision.
+
+## Example
+
+**User says**: "Production login is down, users can't sign in — need a fix now."
+
+- Scope: **Hotfix** (active production impact, user-blocking severity)
+- Flow: `hotfix`
+- Artifact set: `tasks.md` (incident-derived) + `state.md` (incident note)
+- Verification: `guild-verify` still runs before the plan is marked done — hotfix does not exempt it.
 
 ## See also
 
