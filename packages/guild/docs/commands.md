@@ -22,6 +22,8 @@ This page documents each command's purpose, syntax, expected behavior, and the m
 
 **Fighter receives**: The plan file path, progress snapshot (`N/M tasks done`), working directory, and instructions to restore the sidebar todo state from the first unchecked task.
 
+**Parallel execution (opt-in, experimental)**: If `tasks.md` declares a `## Parallel Groups` section (independent, non-overlapping groups of tasks written by Wizard during `guild-plan`), Fighter executes those groups concurrently in separate git worktrees, verifying and merging each group one at a time before cleaning up. Plans without a `## Parallel Groups` section execute sequentially as before — this is unaffected unless the plan explicitly opts in.
+
 **What Wizard generates** (artifact-scope rule): Plans live at `.guild/plans/<slug>/`. Wizard always generates the artifact set appropriate to the task scope using the `guild-scope` skill:
 
 | Scope | Artifacts |

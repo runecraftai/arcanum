@@ -24,7 +24,7 @@ The central team lead. Bard understands intent, makes routing decisions, and coo
 
 **When to use directly**: high-level planning, system design, or any task that needs full multi-agent orchestration. Bard also accepts the `ultrawork` keyword for maximum effort, parallel agents, and deep execution.
 
-**Planning and execution split**: Bard decides whether to invoke Wizard (planning) or jump straight to Fighter (execution of an existing plan). Bard can either delegate Wizard non-interactively or start a foreground Wizard planning session with a rich handoff payload. In foreground planning, the user continues speaking directly with Wizard. When planning is done, Wizard uses the question tool to offer next actions and can hand back to Bard via `guild-handoff`.
+**Planning and execution split**: Bard decides whether to invoke Wizard (planning) or jump straight to Fighter (execution of an existing plan). Bard can either delegate Wizard non-interactively or spawn Wizard in a new session/window with a rich handoff payload — the original Bard window stays clean and available, mirroring Fighter's session boundary below. If session spawning is unsupported or fails, Bard falls back to continuing the planning conversation in the current session with a clear message: *"Could not open Wizard planning session. Continuing in current session instead."* In foreground planning, the user continues speaking directly with Wizard. When planning is done, Wizard uses the question tool to offer next actions and can hand back to Bard via `guild-handoff`.
 
 ### Fighter (Execution Lead) — `all`
 
@@ -50,6 +50,8 @@ The interactive planning specialist. Wizard works directly with the user in a vi
 
 **Interactive planning loop**: Wizard uses the question tool when requirements are ambiguous. For every question, Wizard presents 2–4 explicit options with tradeoffs so you can make an informed choice. Wizard waits for the answer — it does not assume or pick defaults silently. Related questions are combined to reduce back-and-forth without sacrificing clarity.
 
+**Session boundary**: When Bard spawns Wizard for foreground planning, Wizard runs in a separate session/window — the original Bard window stays clean and available for other work. If spawning a new session is not supported or fails, Wizard's planning conversation continues in the current session instead, with a clear user-visible fallback message. Wizard can also be invoked directly as a primary agent for ad-hoc planning.
+
 **Skill-driven artifact generation**: Wizard does not carry long inline workflow rules. Instead, it loads the following skills at startup to drive its behavior:
 
 | Skill | Role |
@@ -70,7 +72,7 @@ The interactive planning specialist. Wizard works directly with the user in a vi
 
 Infer scope from request complexity, implied file count, and whether multiple layers (backend, frontend, infra) are involved. When in doubt, go one level richer — a medium task treated as small produces inadequate plans.
 
-**Handoff**: When the plan is ready, Wizard uses the question tool to offer next actions: start Fighter execution, return to Bard, continue refining, or review where relevant. Wizard can also return control to Bard with a concise summary via `guild-handoff`.
+**Handoff**: When the plan is ready in an interactive Wizard session (not in Bard's automatic/non-interactive delegation mode), Wizard asks a final confirmation question — "Is there anything to add, change, or refine before we finalize?" — with options to mark the plan complete, keep refining, or return to Bard. Marking complete signals plan completion internally so the session can hand off cleanly. Wizard can also return control to Bard with a concise summary via `guild-handoff`.
 
 Plans are written to `.guild/plans/<slug>/`. See [`.guild/architecture.md`](.guild/architecture.md) for the full layout.
 

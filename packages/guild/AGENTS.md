@@ -70,6 +70,8 @@ Current tools and their config keys:
 | --- | --- | --- |
 | `compact-context.ts` | `tools.compact_context` | `guild_compact_context` |
 | `verify-gate.ts` | `tools.verify_gate` | `guild_verify_gate` |
+| `archive-plan.ts` | `tools.archive_plan` | `guild_archive_plan` |
+| `spawn-wizard.ts` | `tools.spawn_wizard` | `guild_spawn_wizard` |
 
 ## Evals
 
