@@ -1,5 +1,19 @@
 # @runecraft/guild
 
+## 0.25.0
+
+### Minor Changes
+
+- feat(guild): interactive Wizard spawn with retry, correlation, and return-handoff
+  feat(guild): spawn Fighter in new session with retry and fallback
+  feat(guild): add trio-format plan discovery and guild_archive_plan tool
+  fix(guild): add explicit terminal hand-back directive for Fighter after plan completion
+  feat(guild): add opt-in parallel worktree execution to guild-plan and guild-execute skills
+  feat(guild): add git-tree-dirty and branch-mismatch checks to start-work-hook
+  feat(guild): add hotfix flow branching to guild-scope
+  feat(guild): add guild_verify_gate tool
+  fix(guild): register capitalized subagent_type alias for all builtin agents
+
 ## 0.24.0
 
 ### Minor Changes

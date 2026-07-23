@@ -1,5 +1,11 @@
 # @runecraft/spells
 
+## 0.15.0
+
+### Minor Changes
+
+- feat(spells): add deterministic harness scripts for debugging and migration skills
+
 ## 0.14.0
 
 ### Minor Changes
