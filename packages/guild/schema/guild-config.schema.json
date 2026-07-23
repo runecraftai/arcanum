@@ -517,6 +517,12 @@
           "properties": {
             "compact_context": {
               "type": "boolean"
+            },
+            "verify_gate": {
+              "type": "boolean"
+            },
+            "archive_plan": {
+              "type": "boolean"
             }
           },
           "additionalProperties": false
@@ -535,8 +541,8 @@
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://unpkg.com/@runecraft/guild@0.22.0/schema/guild-config.schema.json",
+  "$id": "https://unpkg.com/@runecraft/guild@0.24.0/schema/guild-config.schema.json",
   "title": "Guild Config",
   "description": "Configuration for the @runecraft/guild OpenCode plugin. Runtime loading accepts JSONC, while the generated schema artifact is plain JSON Schema.",
-  "x-guild-version": "0.22.0"
+  "x-guild-version": "0.24.0"
 }

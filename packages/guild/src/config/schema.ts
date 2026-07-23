@@ -172,6 +172,8 @@ export const ToolsConfigSchema = z.object({
   compact_context: z.boolean().optional(),
   /** Enable or disable the guild_verify_gate tool. Default: true. */
   verify_gate: z.boolean().optional(),
+  /** Enable or disable the guild_archive_plan tool. Default: true. */
+  archive_plan: z.boolean().optional(),
 })
 
 export const GuildConfigSchema = z.object({

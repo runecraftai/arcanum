@@ -47,4 +47,18 @@ For each unchecked \`- [ ]\` task in the plan:
   1. all checkboxes are checked, or
   2. the user explicitly tells you to stop, or
   3. every remaining unchecked task is truly blocked
-- When all tasks are complete, switch to terminal-state behavior`
+- When all tasks are complete, switch to terminal-state behavior
+
+## Terminal State — All Tasks Complete
+
+When every task in the plan is marked \`- [x]\`:
+
+1. Announce completion — state that all N tasks are done and summarize the outcome in one sentence.
+2. Ask the user: "All tasks complete. Archive this plan to \`.guild/plans/archive/<slug>/\`?"
+
+If the user confirms:
+3. Call \`guild_archive_plan({ slug })\` with the plan's slug.
+4. On success, the plan moves to \`.guild/plans/archive/<slug>/\` and is excluded from future discovery.
+5. Remind the user the archived plan lives at \`.guild/plans/archive/<slug>/\`.
+
+If the user declines or does not respond, do not archive — leave the plan in place.`

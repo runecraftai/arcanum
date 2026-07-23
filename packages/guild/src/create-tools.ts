@@ -4,6 +4,7 @@ import type { ToolsRecord } from "./plugin/types"
 import type { LoadedSkill } from "./features/skill-loader/types"
 import type { ResolveSkillsFn } from "./agents/agent-builder"
 import { loadSkills, createSkillResolver } from "./features/skill-loader"
+import { createArchivePlanTool } from "./tools/archive-plan"
 import { createCompactContextTool } from "./tools/compact-context"
 import { createVerifyGateTool } from "./tools/verify-gate"
 
@@ -42,6 +43,10 @@ export async function createTools(options: {
     tools.guild_verify_gate = createVerifyGateTool({
       directory: ctx.directory,
     })
+  }
+
+  if (pluginConfig.tools?.archive_plan !== false) {
+    tools.guild_archive_plan = createArchivePlanTool({ directory: ctx.directory })
   }
 
   return {

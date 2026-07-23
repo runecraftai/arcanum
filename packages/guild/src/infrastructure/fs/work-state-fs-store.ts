@@ -1,8 +1,10 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, unlinkSync, writeFileSync } from "fs"
 import { execFileSync, execSync } from "child_process"
-import { basename, extname, join } from "path"
+import { basename, dirname, extname, join } from "path"
 import type { PlanProgress, SessionRuntimeState, WorkState } from "../../features/work-state/types"
 import { PLANS_DIR, SESSION_RUNTIME_DIR, GUILD_DIR, WORK_STATE_FILE } from "../../features/work-state/constants"
+
+const CANONICAL_TRIO_FILES = ["tasks.md", "spec.md", "design.md", "state.md"] as const
 
 const UncheckedRegex = /^[-*]\s*\[\s*\]/gm
 const CheckedRegex = /^[-*]\s*\[[xX]\]/gm
@@ -113,6 +115,14 @@ export function getBranchFromFs(directory: string): string | undefined {
   }
 }
 
+function resolveCanonicalTrioInDir(dir: string): string | null {
+  for (const name of CANONICAL_TRIO_FILES) {
+    const p = join(dir, name)
+    if (existsSync(p)) return p
+  }
+  return null
+}
+
 export function findPlansInFs(directory: string): string[] {
   const plansDir = join(directory, PLANS_DIR)
   try {
@@ -128,6 +138,13 @@ export function findPlansInFs(directory: string): string[] {
         const fullPath = join(dir, entry.name)
         if (entry.isDirectory()) {
           if (entry.name === "archive") continue
+          if (dir === plansDir) {
+            const canonical = resolveCanonicalTrioInDir(fullPath)
+            if (canonical) {
+              results.push({ path: canonical, mtime: statSync(canonical).mtimeMs })
+              continue
+            }
+          }
           walk(fullPath)
         } else if (entry.isFile() && extname(entry.name) === ".md") {
           results.push({ path: fullPath, mtime: statSync(fullPath).mtimeMs })
@@ -168,6 +185,10 @@ export function getPlanProgressFromFs(planPath: string): PlanProgress {
 }
 
 export function getPlanNameFromPath(planPath: string): string {
+  const filename = basename(planPath)
+  if ((CANONICAL_TRIO_FILES as readonly string[]).includes(filename)) {
+    return basename(dirname(planPath))
+  }
   return basename(planPath, ".md")
 }
 

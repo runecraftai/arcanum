@@ -3,6 +3,8 @@ import { execFileSync } from "child_process"
 import { mkdirSync, mkdtempSync, writeFileSync, rmSync } from "fs"
 import { join } from "path"
 import { tmpdir } from "os"
+import { createPlanFsRepository } from "../infrastructure/fs/plan-fs-repository"
+import { createPlanService } from "../domain/plans/plan-service"
 import { handleStartWork, formatValidationResults } from "./start-work-hook"
 import { PLANS_DIR } from "../features/work-state/constants"
 import { writeWorkState, createWorkState, readWorkState } from "../features/work-state/storage"
@@ -281,6 +283,70 @@ describe("handleStartWork", () => {
       expect(result.contextInjection).toContain("TODOs")
       // Work state IS created
       expect(readWorkState(testDir)).not.toBeNull()
+    })
+
+    it("finds a trio-format plan by slug name", () => {
+      const trioDir = join(testDir, PLANS_DIR, "trio-plan")
+      mkdirSync(trioDir, { recursive: true })
+      writeFileSync(
+        join(trioDir, "tasks.md"),
+        validPlanContent("- [ ] 1. Task\n  **What**: Do it\n  **Files**: src/a.ts (new)\n  **Acceptance**: Works"),
+        "utf-8"
+      )
+      writeFileSync(join(trioDir, "spec.md"), "# Spec\n", "utf-8")
+      writeFileSync(join(trioDir, "state.md"), "# State\n", "utf-8")
+
+      const result = handleStartWork({
+        promptText: makePrompt("trio-plan"),
+        sessionId: "sess_1",
+        directory: testDir,
+      })
+
+      expect(result.contextInjection).toContain("Starting Plan: trio-plan")
+      expect(result.contextInjection).not.toContain("Plan Not Found")
+    })
+
+    it("discovers a trio-format plan during auto-selection", () => {
+      const trioDir = join(testDir, PLANS_DIR, "solo-trio")
+      mkdirSync(trioDir, { recursive: true })
+      writeFileSync(
+        join(trioDir, "tasks.md"),
+        validPlanContent("- [ ] 1. Task\n  **What**: Do it\n  **Files**: src/a.ts (new)\n  **Acceptance**: Works"),
+        "utf-8"
+      )
+      writeFileSync(join(trioDir, "spec.md"), "# Spec\n", "utf-8")
+      writeFileSync(join(trioDir, "state.md"), "# State\n", "utf-8")
+
+      const result = handleStartWork({
+        promptText: makePrompt(),
+        sessionId: "sess_1",
+        directory: testDir,
+      })
+
+      expect(result.contextInjection).toContain("Starting Plan: solo-trio")
+    })
+
+    it("finds plan by slug name without ambiguity from the slug dir", () => {
+      const trioDir = join(testDir, PLANS_DIR, "target-slug")
+      mkdirSync(trioDir, { recursive: true })
+      writeFileSync(
+        join(trioDir, "tasks.md"),
+        validPlanContent("- [ ] 1. Task\n  **What**: Do it\n  **Files**: src/a.ts (new)\n  **Acceptance**: Works"),
+        "utf-8"
+      )
+      writeFileSync(join(trioDir, "spec.md"), "# Spec\n", "utf-8")
+      writeFileSync(join(trioDir, "state.md"), "# State\n", "utf-8")
+
+      const planRepository = createPlanFsRepository()
+      const planService = createPlanService(planRepository)
+      const allPlans = planService.findPlans(testDir)
+      const matched = planService.matchPlanByName(allPlans, "target-slug")
+
+      expect(matched).not.toBeNull()
+      if (matched) {
+        const name = planService.getPlanName(matched)
+        expect(name).toBe("target-slug")
+      }
     })
   })
 
