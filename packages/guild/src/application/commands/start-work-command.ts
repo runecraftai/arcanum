@@ -1,19 +1,6 @@
 import type { RuntimeEffect } from "../../runtime/opencode/effects"
 import type { RuntimeChatMessageInput } from "../policy/runtime-policy"
 
-export interface StartWorkResult {
-  /** Whether the command was handled */
-  handled: boolean
-  /** Context to inject into the prompt (plan path, progress, instructions) */
-  contextInjection: string | null
-  /** Plan path for spawning a Fighter session (null means use fallback in-place switch) */
-  planPath: string | null
-  /** Plan name for display */
-  planName: string | null
-  /** Progress snapshot */
-  progress: { total: number; completed: number } | null
-}
-
 export function executeStartWorkCommand(input: {
   hooks: RuntimeChatMessageInput["hooks"]
   promptText: string

@@ -681,7 +681,7 @@ describe("createPluginInterface", () => {
     // A new session should have been created for Fighter
     // Check via sessionCreateCalls array (not jest mocks since we use bun:test)
     expect(mockClient.sessionCreateCalls).toHaveLength(1)
-    expect(mockClient.sessionCreateCalls[0].title).toContain("Fighter:")
+    expect(mockClient.sessionCreateCalls[0].title).toContain("Fighter -")
     expect(mockClient.sessionCreateCalls[0].agent).toBe("Fighter (Execution Lead)")
 
 // The Fighter session should receive the plan context

@@ -289,39 +289,65 @@ export async function applyRuntimeEffects(args: {
 
         const { planName, progress, contextInjection } = effect
         const fighterAgent = getAgentDisplayName("fighter")
-        const sessionTitle = `Fighter: ${planName}`
+        const sessionTitle = `Fighter - ${planName}`
 
         log("[guild:spawnFighterSession] Creating new Fighter session", {
           planName,
           progress: `${progress.completed}/${progress.total}`,
         })
 
+        let fighterSessionId: string
+
+        // Step 1: Create session
         try {
-          // Create a new Fighter session
-          const fighterSessionId = await sessionClient.createSession({
+          fighterSessionId = await sessionClient.createSession({
             title: sessionTitle,
             agent: fighterAgent,
           })
+        } catch (createError) {
+          const errorMessage = createError instanceof Error ? createError.message : String(createError)
+          console.error(`[guild:ERROR] spawnFighterSession create failed: ${errorMessage}`)
+          log("[guild:spawnFighterSession] Session creation failed, falling back", { error: errorMessage })
+          applySpawnFighterFallback(output, fighterAgent, contextInjection)
+          break
+        }
 
-          log("[guild:spawnFighterSession] Fighter session created", {
+        if (!fighterSessionId) {
+          log("[guild:spawnFighterSession] Null session ID, falling back", { planName })
+          applySpawnFighterFallback(output, fighterAgent, contextInjection)
+          break
+        }
+
+        log("[guild:spawnFighterSession] Fighter session created", {
+          fighterSessionId,
+          planName,
+        })
+
+        // Step 2: Seed session with plan context (retry once on failure)
+        const seeded = await seedSessionWithRetry(
+          sessionClient,
+          fighterSessionId,
+          contextInjection,
+          fighterAgent,
+          planName,
+        )
+
+        if (!seeded) {
+          log("[guild:spawnFighterSession] Prompt injection failed after retry, falling back", {
             fighterSessionId,
             planName,
           })
+          applySpawnFighterFallback(output, fighterAgent, contextInjection)
+          break
+        }
 
-          // Seed the Fighter session with the plan context
-          await sessionClient.promptAsync({
-            sessionId: fighterSessionId,
-            parts: [{ type: "text", text: contextInjection }],
-            agent: fighterAgent,
-          })
+        log("[guild:spawnFighterSession] Plan context seeded to Fighter session", {
+          fighterSessionId,
+          planName,
+        })
 
-          log("[guild:spawnFighterSession] Plan context seeded to Fighter session", {
-            fighterSessionId,
-            planName,
-          })
-
-          // Inject a handoff notification into the originating Bard session
-          const handoffMessage = `
+        // Inject a handoff notification into the originating Bard session
+        const handoffMessage = `
 
 ---
 
@@ -329,42 +355,12 @@ export async function applyRuntimeEffects(args: {
 
 The Fighter session is now executing the plan independently. You can continue here or switch to the Fighter session to monitor progress.`
 
-          if (output?.parts) {
-            appendToTextParts(output.parts, handoffMessage, "\n\n---\n")
-          }
-
-          // Notify the originating session about the spawn (for UX tracking)
-          recordInjectedPrompt?.(effect.sessionId, `[spawn:Fighter:${fighterSessionId}:${planName}]`)
-        } catch (error) {
-          // On failure, surface clear fallback error and continue with current behavior
-          const errorMessage = error instanceof Error ? error.message : String(error)
-          console.error(`[guild:ERROR] spawnFighterSession failed: ${errorMessage}`)
-
-          // Fall back to in-place agent switch
-          log("[guild:spawnFighterSession] Falling back to in-place switch", { error: errorMessage })
-
-          // Append error context to the current session
-          if (output?.parts) {
-            const fallbackNotice = `
-
----
-
-**Session spawn failed:** Could not create a new Fighter session (${errorMessage}).
-
-Fighter will continue in the current session instead.`
-            appendToTextParts(output.parts, fallbackNotice, "\n\n---\n")
-          }
-
-          // Still switch to Fighter in-place as fallback
-          if (output?.message) {
-            output.message.agent = fighterAgent
-          }
-
-          // Inject context to the current session
-          if (output?.parts) {
-            appendToTextParts(output.parts, contextInjection, "\n\n")
-          }
+        if (output?.parts) {
+          appendToTextParts(output.parts, handoffMessage, "\n\n---\n")
         }
+
+        // Notify the originating session about the spawn (for UX tracking)
+        recordInjectedPrompt?.(effect.sessionId, `[spawn:Fighter:${fighterSessionId}:${planName}]`)
 
         break
       }
@@ -432,4 +428,63 @@ function appendToTextParts(parts: Array<{ type: string; text?: string }>, text: 
   }
 
   parts.push({ type: "text", text })
+}
+
+type EffectOutput = {
+  message?: Record<string, unknown>
+  parts?: Array<{ type: string; text?: string }>
+}
+
+const FIGHTER_SPAWN_FALLBACK_MESSAGE =
+  "\n\n---\n\n**Could not open Fighter in new window. Running in current session instead.**"
+
+function applySpawnFighterFallback(
+  output: EffectOutput | undefined,
+  fighterAgent: string,
+  contextInjection: string,
+): void {
+  if (output?.parts) {
+    appendToTextParts(output.parts, FIGHTER_SPAWN_FALLBACK_MESSAGE, "\n\n---\n")
+    appendToTextParts(output.parts, contextInjection, "\n\n")
+  }
+  if (output?.message) {
+    output.message.agent = fighterAgent
+  }
+}
+
+async function seedSessionWithRetry(
+  sessionClient: NonNullable<ReturnType<typeof createSessionClient>>,
+  sessionId: string,
+  text: string,
+  agent: string,
+  planName: string,
+): Promise<boolean> {
+  try {
+    await sessionClient.promptAsync({
+      sessionId,
+      parts: [{ type: "text", text }],
+      agent,
+    })
+    return true
+  } catch (promptError) {
+    const errorMessage = promptError instanceof Error ? promptError.message : String(promptError)
+    log("[guild:spawnFighterSession] Prompt injection failed, retrying", {
+      sessionId,
+      planName,
+      error: errorMessage,
+    })
+
+    try {
+      await sessionClient.promptAsync({
+        sessionId,
+        parts: [{ type: "text", text }],
+        agent,
+      })
+      return true
+    } catch (retryError) {
+      const retryMessage = retryError instanceof Error ? retryError.message : String(retryError)
+      console.error(`[guild:ERROR] spawnFighterSession prompt injection failed after retry: ${retryMessage}`)
+      return false
+    }
+  }
 }

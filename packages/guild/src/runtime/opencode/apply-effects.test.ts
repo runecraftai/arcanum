@@ -339,7 +339,7 @@ describe("spawnFighterSession effect", () => {
 
     // Session should be created
     expect(client.session.create).toHaveBeenCalledTimes(1)
-    expect(createCalls[0].title).toContain("Fighter:")
+    expect(createCalls[0].title).toContain("Fighter -")
     expect(createCalls[0].title).toContain("my-feature")
 
     // Fighter session should be seeded with context
@@ -396,8 +396,7 @@ describe("spawnFighterSession effect", () => {
     expect(output.parts[0].text).toContain("Starting Plan: fail-plan")
 
     // Fallback error notice should be present
-    expect(output.parts[0].text).toContain("Session spawn failed")
-    expect(output.parts[0].text).toContain("quota exceeded")
+    expect(output.parts[0].text).toContain("Could not open Fighter in new window")
   })
 
   it("appends handoff notification as a new text part when no existing text part", async () => {
@@ -496,7 +495,7 @@ describe("spawnFighterSession effect", () => {
 
     // Fallback should still apply
     expect(output.message.agent).toBe("Fighter (Execution Lead)")
-    expect(output.parts[0].text).toContain("Session spawn failed")
+    expect(output.parts[0].text).toContain("Could not open Fighter in new window")
   })
 
   it("old same-window mutation is gone: agent stays as Bard when session creation succeeds", async () => {

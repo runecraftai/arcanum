@@ -64,7 +64,7 @@ describe("E2E: /start-work runtime flow", () => {
 
     // A new session should have been created for Fighter
     expect(host.client.sessionCreateCalls).toHaveLength(1)
-    expect(host.client.sessionCreateCalls[0].title).toContain("Fighter:")
+    expect(host.client.sessionCreateCalls[0].title).toContain("Fighter -")
     expect(host.client.sessionCreateCalls[0].title).toContain("my-feature")
     expect(host.client.sessionCreateCalls[0].agent).toBe(getAgentDisplayName("fighter"))
 
@@ -122,8 +122,7 @@ describe("E2E: /start-work runtime flow", () => {
     expect(host.getCurrentAgent("sess-fail-1")).toBe(getAgentDisplayName("fighter"))
 
     // The output should contain the fallback notice
-    expect(output.parts[0].text).toContain("Session spawn failed")
-    expect(output.parts[0].text).toContain("quota exceeded")
+    expect(output.parts[0].text).toContain("Could not open Fighter in new window")
 
     // No new session should have been created (since it failed)
     expect(host.client.sessionCreateCalls).toHaveLength(0)
@@ -249,7 +248,7 @@ describe("E2E: /start-work runtime flow", () => {
 
     // A new session should have been created for Fighter
     expect(host.client.sessionCreateCalls).toHaveLength(1)
-    expect(host.client.sessionCreateCalls[0].title).toContain("Fighter:")
+    expect(host.client.sessionCreateCalls[0].title).toContain("Fighter -")
     expect(host.client.sessionCreateCalls[0].agent).toBe(getAgentDisplayName("fighter"))
 
     // The Fighter session should receive the plan context
@@ -302,8 +301,7 @@ describe("E2E: /start-work runtime flow", () => {
     expect(host.getCurrentAgent("sess-fallback-1")).toBe(getAgentDisplayName("fighter"))
 
     // Fallback notice should be present
-    expect(output.parts[0].text).toContain("Session spawn failed")
-    expect(output.parts[0].text).toContain("quota exceeded")
+    expect(output.parts[0].text).toContain("Could not open Fighter in new window")
 
     // No new session should have been created
     expect(host.client.sessionCreateCalls).toHaveLength(0)

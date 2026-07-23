@@ -10,10 +10,12 @@ export interface SessionClient {
 export function createSessionClient(client: PluginContext["client"]): SessionClient {
   return {
     async createSession(input) {
-      const response = await client.session.create({
-        body: { title: input.title, ...(input.agent ? { agent: input.agent } : {}) },
-      })
-      const sessionId = extractSessionId(response)
+      const body: Record<string, unknown> = { title: input.title }
+      if (input.agent) {
+        body.agent = input.agent
+      }
+      const response = await client.session.create({ body })
+      const sessionId = extractSessionId(unwrapResponseData(response))
       if (!sessionId) {
         throw new Error(`Failed to create session: ${input.title}`)
       }
@@ -43,9 +45,18 @@ export function createSessionClient(client: PluginContext["client"]): SessionCli
   }
 }
 
-function extractSessionId(response: unknown): string | null {
-  if (!isRecord(response)) return null
-  const id = response.id
+function unwrapResponseData(response: unknown): unknown {
+  if (!isRecord(response)) {
+    return response
+  }
+  return "data" in response ? response.data : response
+}
+
+function extractSessionId(value: unknown): string | null {
+  if (!isRecord(value)) {
+    return null
+  }
+  const id = value.id
   return typeof id === "string" && id.length > 0 ? id : null
 }
 

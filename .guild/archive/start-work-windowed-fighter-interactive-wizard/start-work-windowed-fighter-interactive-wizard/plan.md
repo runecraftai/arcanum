@@ -172,7 +172,7 @@ Make plan generation and plan execution first-class, separate Guild orchestratio
 
   This pattern can be reused for Fighter session spawning with appropriate error handling.
 
-- [ ] 2. Design the windowed Fighter orchestration path
+- [x] 2. Design the windowed Fighter orchestration path
   **What**: Add the runtime plumbing needed to create a new session/window for Fighter, seed it with the selected plan, and keep the Bard session as the UX entrypoint instead of the execution target; on failure, surface a clear fallback error and continue with the current behavior.
   **Files**: `packages/guild/src/runtime/opencode/effects.ts`, `packages/guild/src/runtime/opencode/apply-effects.ts`, `packages/guild/src/infrastructure/opencode/session-client.ts`, `packages/guild/src/application/commands/start-work-command.ts`
   **Acceptance**: `/start-work` can be modeled as a spawn-and-handoff operation rather than an in-place agent switch.
