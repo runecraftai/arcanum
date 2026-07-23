@@ -9,7 +9,7 @@
       ]
     },
     "wizard": {
-      "model": "anthropic/claude-sonnet-5",
+      "model": "anthropic/claude-opus-4-8",
       "fallback_models": [
         "opencode-go/deepseek-v4-pro"
       ]
@@ -29,7 +29,7 @@
       ]
     },
     "cleric": {
-      "model": "opencode-go/deepseek-v4-pro",
+      "model": "anthropic/claude-opus-4-8",
       "fallback_models": [
         "opencode/nemotron-3-ultra-free",
         "anthropic/claude-sonnet-5"

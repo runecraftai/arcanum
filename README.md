@@ -1,9 +1,5 @@
 <p align="center">
-  <img src="./assets/hero/runecraft-hero.png" alt="Runecraft" width="320" />
-</p>
-
-<p align="center">
-  <em>The forge where modern wizards bind their craft.</em>
+  <img src="./assets/readme/hero.svg" width="100%" alt="Arcanum: five OpenCode packages — Spells, Summon, Runes, Guild, and Spawn — shelved as artifacts in one Bun workspace monorepo">
 </p>
 
 <p align="center">
@@ -12,40 +8,45 @@
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-22c55e" alt="MIT License" /></a>
 </p>
 
----
-
-## The Arcanum
-
-Every age has its wizards. Ours write TypeScript.
-
-**Arcanum** is the central vault of the [Runecraft](https://github.com/runecraft) ecosystem — a monorepo where ancient sigils meet modern silicon. Here, skills are spells studied by AI agents, configurations are grimoires shared across the codebase, and the command line is the circle of summoning. Each package is an artifact: forged with intent, bound to a purpose, ready to be conjured into any project.
-
-This is not a framework. It is a craft.
-
----
-
 ## Artifacts
 
-| Artifact                             | Package                 | Bound Essence                                                                  | Status      |
-| ------------------------------------ | ----------------------- | ------------------------------------------------------------------------------ | ----------- |
-| [**Spells**](./packages/spells/)     | `@runecraft/spells`     | Skill scrolls — SKILL.md files studied by AI agents to learn specialized rites | Active      |
-| [**Summon**](./packages/summon/)     | `@runecraft/summon`     | The summoning circle — CLI that invokes and installs spells into any project   | Active      |
-| [**Runes**](./packages/runes/)       | `@runecraft/runes`      | Carved sigils — OpenCode plugin that gives agents durable, per-repo memory     | Active      |
-| [**Grimoire**](./packages/grimoire/) | `@runecraft/grimoire`   | Shared sigils — Biome and TypeScript configs inherited by every package        | Active      |
-| [**Spawn**](./packages/spawn/)       | `@runecraft/spawn`      | Summoned panes — OpenCode plugin that opens tmux panes for each subagent       | Active      |
-| [**Guild**](./packages/guild/)       | `@runecraft/guild`      | Party charters — multi-agent swarm and orchestration configurations            | Placeholder |
-| [**Familiar**](./packages/familiar/) | `@runecraftai/familiar` | A bound familiar — internal Pi multi-agent runtime, not published              | Internal    |
+Five independent packages, each installable on its own — none of them require the others.
 
----
+| Artifact                             | Package                 | What it does                                                                | Status    |
+| ------------------------------------ | ------------------------ | ---------------------------------------------------------------------------- | --------- |
+| [**Spells**](./packages/spells/)     | [`@runecraft/spells`](https://www.npmjs.com/package/@runecraft/spells)     | 17 `SKILL.md` files AI agents load as specialized instructions               | Published |
+| [**Summon**](./packages/summon/)     | [`@runecraft/summon`](https://www.npmjs.com/package/@runecraft/summon)     | Interactive CLI that installs Spells (and other tools) into any project      | Published |
+| [**Runes**](./packages/runes/)       | [`@runecraft/runes`](https://www.npmjs.com/package/@runecraft/runes)       | OpenCode plugin giving agents durable, SQLite-backed, per-repo memory        | Published |
+| [**Guild**](./packages/guild/)       | [`@runecraft/guild`](https://www.npmjs.com/package/@runecraft/guild)       | OpenCode plugin: 8 RPG-themed agents, workflows, and orchestration hooks     | Published |
+| [**Spawn**](./packages/spawn/)       | [`@runecraft/spawn`](https://www.npmjs.com/package/@runecraft/spawn)       | OpenCode plugin that opens a live tmux pane for every subagent               | Published |
+| [Grimoire](./packages/grimoire/)     | `@runecraft/grimoire`    | Shared Biome + TypeScript configs, inherited by every package above          | Internal  |
+| [Familiar](./packages/familiar/)     | `@runecraftai/familiar`  | Internal Pi multi-agent runtime — private, not published                     | Internal  |
 
-## Quickstart
+## What this is
+
+**Arcanum** is the monorepo behind the [Runecraft](https://github.com/runecraftai) family of [OpenCode](https://opencode.ai) tooling. It's a Bun workspace, not a framework: each package above ships and versions independently on npm, and picking one doesn't pull in the rest.
+
+## Why five separate packages
+
+Memory, orchestration, skill definitions, installation, and terminal visibility are different concerns with different lifecycles — Runes changes on a different cadence than Spawn, and a user who only wants persistent memory shouldn't have to install an 8-agent orchestration layer to get it. Splitting them keeps each package's surface area small enough to reason about, test, and version on its own.
+
+## How it works
+
+- **[Bun](https://bun.sh) workspaces** link `packages/*` together for local development; published packages resolve `workspace:*` to real semver ranges via `bun pm pack`.
+- **[Turborepo](https://turbo.build) v2** orchestrates `build`/`lint`/`test` across packages with caching and dependency-aware ordering.
+- **Conventional commits → [Changesets](https://github.com/changesets/changesets)**: a commit like `feat(runes): add stats tool` is turned into a changeset automatically by `.changeset/generate-from-commits.ts`, which drives the version bump and changelog on release. `.changeset/*.md` files are never hand-authored.
+- **[Biome](https://biomejs.dev)**, configured once in `@runecraft/grimoire` and inherited by every other package, enforces one lint/format standard monorepo-wide.
+
+## How to use
+
+Working in this monorepo:
 
 ```bash
 bun install
 bun run build
 ```
 
-Common incantations:
+Common commands:
 
 ```bash
 bunx turbo lint
@@ -53,15 +54,18 @@ bunx turbo test
 bunx turbo build
 ```
 
----
+Using one artifact in your own project — you don't need this repo at all, just install the package:
 
-## Stack
+```bash
+npx @runecraft/summon install       # browse and install skills
+```
 
-- **[Bun](https://bun.sh) workspaces** — native package linking and runtime
-- **[Turborepo](https://turbo.build) v2** — task orchestration with caching and parallelization
-- **[Changesets](https://github.com/changesets/changesets)** — independent semver versioning per artifact
-- **[Biome](https://biomejs.dev)** — unified lint and format, configured via grimoire
+Each package's own README ([guild](./packages/guild/), [runes](./packages/runes/), [spells](./packages/spells/), [summon](./packages/summon/), [spawn](./packages/spawn/)) has the full install and usage instructions for that artifact specifically.
 
----
+## Contributing
 
-[CONTRIBUTING](./CONTRIBUTING.md) &nbsp;·&nbsp; [Architecture](./.specs/) &nbsp;·&nbsp; [MIT](./LICENSE)
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the changeset-free commit workflow (changesets are generated from conventional commits, not written by hand) and the automated release pipeline. Architecture notes live under [`.specs/`](./.specs/).
+
+## License
+
+[MIT](./LICENSE)

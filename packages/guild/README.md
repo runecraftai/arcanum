@@ -1,23 +1,34 @@
 <p align="center">
-  <img src="assets/weave_logo.png" alt="Guild" width="400">
+  <img src="assets/readme/hero.svg" width="100%" alt="Guild: 8 RPG-themed agents — Bard, Fighter, Wizard, Rogue, Warlock, Cleric, Ranger, Paladin — orchestrated for OpenCode">
 </p>
 
-# Guild
+Guild is a multi-agent orchestration plugin for [OpenCode](https://opencode.ai). It registers 8 role-scoped agents, a hooks pipeline, a workflow engine, and an analytics recorder, so a task moves through planning → execution → review without you manually switching agents.
 
-Guild is a multi-agent orchestration plugin for OpenCode. It provides a cohesive framework for coordinating agents, tools, and skills into structured workflows. By delegating complex tasks to specialized agents and monitoring execution state through hooks, Guild ensures reliable and efficient project development.
+## The roster
 
-## Highlights
+| Agent | Mode | Role |
+| --- | --- | --- |
+| **Bard** (Guildmaster) | `primary` | Default landing agent. Understands intent, routes to Wizard or Fighter, coordinates the plan → execute cycle. |
+| **Fighter** (Execution Lead) | `all` | Drives todo-list execution of an existing plan. Launched by `/start-work` in a separate session so Bard's window stays clean. |
+| **Wizard** (Planner) | `all` | Interactive planning loop — asks clarifying questions with 2–4 explicit options, never assumes. Never writes implementation code. |
+| **Ranger** (Specialist) | `all` | Generic worker; becomes a per-category `ranger-<name>` agent when you define `categories` in config, routed by file-path pattern. |
+| **Rogue** (Scout) | `subagent` | Read-only codebase explorer — grep/glob/read only, the cheapest agent, for context gathering before an edit. |
+| **Warlock** (Researcher) | `subagent` | External documentation lookups with source citations. |
+| **Cleric** (Reviewer) | `subagent` | Reviews completed work with a critical but fair eye; rejects only for true blocking issues. |
+| **Paladin** (Security) | `subagent` | Audits changes touching auth, crypto, tokens, or input handling. |
 
-- **8 specialized agents** designed for specific roles in the development lifecycle.
-- **Interactive planning** — Wizard works directly with you in a visible loop, asking clarifying questions and presenting explicit options before producing a plan. Wizard uses a skill-driven model: `guild-scope`, `guild-spec`, `guild-plan`, `guild-handoff`, and `guild-verify` handle artifact generation, task decomposition, and state management.
-- **Clean-window execution** — `/start-work` launches Fighter in a separate session/window; your Bard session stays clean and available. Falls back gracefully if spawning is unsupported.
-- **Artifact-scope rule** — plans are as detailed as the task warrants: concise single-doc for small fixes, full spec+design+tasks for complex features.
-- **Category-based task dispatch** to route work to domain-optimized models and configurations.
-- **Skill system** for injecting domain-specific expertise that modifies agent behavior via prompt orchestration.
-- **Background agent management** for parallel asynchronous sub-agent execution with concurrency control.
-- **Context window monitoring** to track token usage and suggest recovery strategies when limits are approached.
-- **Tool permissions** enforced per-agent to ensure safety and prevent unauthorized file modifications.
-- **JSONC configuration** supporting comments and trailing commas with hierarchical user and project-level merging.
+Full behavior and delegation rules for each agent: [docs/agents.md](docs/agents.md).
+
+## Why not just prompt a general agent
+
+A single general-purpose agent conflates planning, execution, and review into one context, which makes it hard to keep a plan stable while implementation is underway. Guild separates those concerns into agents with different tool permissions and different jobs — Wizard is not allowed to write code, Rogue is not allowed to write anything, Fighter runs in its own session so a long execution doesn't crowd out the planning conversation you started in Bard. Routing between them is handled by hooks and skills, not manual agent-switching.
+
+## How it works
+
+- **Hooks pipeline** (`src/hooks/`) reacts to session lifecycle events — `start-work`, context-window monitoring, compaction recovery, write guards — each one togglable via config.
+- **Skill-driven planning** — Wizard loads `guild-scope`, `guild-spec`, `guild-plan`, `guild-handoff`, and `guild-verify` at startup instead of carrying long inline rules, and generates an artifact set sized to the task: a single plan doc for a quick fix, or plan + `design.md` + `tasks.md` for a complex feature.
+- **Workflow engine** — a named JSON sequence of `interactive`, `autonomous`, and `gate` steps, controllable mid-run via **pause**, **resume**, **skip this step**, **abort**.
+- **Category-based dispatch** — Fighter routes work to domain-specific `ranger-<category>` agents by glob pattern, so different parts of a codebase can use different models.
 
 ## Install
 

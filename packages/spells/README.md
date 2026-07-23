@@ -1,26 +1,15 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Package-%40runecraft%2Fspells-blue?style=for-the-badge" alt="package badge" />
-  <img src="https://img.shields.io/badge/Skills-Catalog-green?style=for-the-badge" alt="catalog" />
-   <img src="https://img.shields.io/badge/Version-0.11.0-purple?style=for-the-badge" alt="version" />
+  <img src="assets/readme/hero.svg" width="100%" alt="Spells: a catalog of 17 SKILL.md scrolls with slash-command triggers, for Claude Code, Cursor, OpenCode, and GitHub Copilot">
 </p>
-
-<h1 align="center">🪄 @runecraft/spells</h1>
 
 <p align="center">
-  <strong>Agent skill definitions for Arcanum. Markdown skills consumed by AI coding agents to perform specialized tasks.</strong>
+  <a href="https://www.npmjs.com/package/@runecraft/spells"><img src="https://img.shields.io/npm/v/@runecraft/spells?label=npm&color=c9a24a" alt="npm version" /></a>
+  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-22c55e" alt="MIT License" /></a>
 </p>
 
----
+`SKILL.md` files loaded by AI coding agents (Claude Code, Cursor, GitHub Copilot, OpenCode, and others) as custom instructions. Each one teaches an agent how to run a specific, multi-phase workflow — planning, testing, review, security, deprecation, shipping — with the same precision each time instead of ad-hoc prompting.
 
-## ✨ What Is This?
-
-Skills are `SKILL.md` markdown files loaded by AI agents (Claude, Cursor, GitHub Copilot, Opencode, and others) as custom instructions. Think of them as specialized rulesets that teach agents how to execute complex, multi-phase workflows with precision and clarity.
-
-This package is the distributable catalog of production-ready skills for the Arcanum ecosystem. Each skill encodes battle-tested processes for software development phases: planning, specification, implementation, testing, review, and deployment.
-
----
-
-## 📦 Available Skills
+## Available Skills
 
 | Skill | Version | Description | Main Trigger | Docs |
 |-------|---------|-------------|--------------|------|
@@ -42,81 +31,55 @@ This package is the distributable catalog of production-ready skills for the Arc
 | **shipping-and-launch** | 1.0.0 | Pre-launch checklist, staged rollout, feature flag lifecycle, monitoring, rollback. | `/ship` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/shipping-and-launch/README.md) |
 | **skill-forge** | 1.0.0 | Meta-skill for creating new Agent Skills end-to-end. Aligned with the open SKILL.md format. 6-phase workflow (Discover → Design → Author → Validate → Optimize → Deliver) with bundled validator and trigger/output eval methodology. | `/forge` | [→ README](https://github.com/runecraftai/arcanum/tree/main/packages/spells/skills/skill-forge/README.md) |
 
-## 📚 References
+## References
 
 | File | Description |
 |------|-------------|
 | [testing-patterns.md](https://github.com/runecraftai/arcanum/tree/main/packages/spells/references/testing-patterns.md) | Common testing patterns across the stack with 80/15/5 pyramid, Beyonce Rule, and 8 anti-patterns. |
 | [definition-of-done.md](https://github.com/runecraftai/arcanum/tree/main/packages/spells/references/definition-of-done.md) | Project-wide standing bar that complements per-task acceptance criteria. |
 
----
+## Why a SKILL.md instead of a longer system prompt
 
-## 📥 Get a Skill
+A system prompt has to hold everything all the time, so it either stays generic or grows until it's expensive and hard to steer. A skill is loaded only when its trigger matches the task, and it's a plain file you can read, diff, and version — the same TDD process doesn't need to be re-explained by hand in every project's prompt.
 
-Skills are installed by the **Summon** CLI — it picks the right destination
-for your agent, handles the write, and keeps the install declarative.
+## How it works
+
+```text
+@runecraft/spells/
+├── skills/
+│   ├── spec-driven/SKILL.md          # the 17 skills, one directory each
+│   ├── test-driven-development/SKILL.md
+│   ├── code-review-and-quality/SKILL.md
+│   └── ...                           # each with SKILL.md + optional references/
+└── references/                       # shared docs: testing-patterns.md, definition-of-done.md
+```
+
+Each skill is a `SKILL.md` file — the core agent instructions — plus, optionally, a `references/` folder the agent loads on demand as it works through a phase, instead of front-loading everything at once.
+
+## How to use
+
+Skills are installed by the **Summon** CLI, which picks the right destination directory for your detected agent(s):
 
 ```bash
 npx @runecraft/summon install
 ```
 
-See [@runecraft/summon](https://www.npmjs.com/package/@runecraft/summon) for the
-full reference, including the `install-commands` step that generates `/review`,
-`/test`, `/ship`, etc. for Claude Code, OpenCode, and Cursor.
+See [@runecraft/summon](https://www.npmjs.com/package/@runecraft/summon) for the full reference, including `install-commands`, which generates `/review`, `/test`, `/ship`, etc. as real slash commands for Claude Code, OpenCode, and Cursor.
 
----
-
-## 📁 Package Anatomy
-
-```
-@runecraft/spells/
-├── package.json
-├── README.md
-├── skills/
-│   ├── spec-driven/                 (15 skills total)
-│   │   ├── SKILL.md
-│   │   ├── README.md
-│   │   └── references/
-│   ├── git-commit-learning/
-│   ├── git-worktree/
-│   ├── using-agent-skills/
-│   ├── idea-refine/
-│   ├── interview-me/
-│   ├── memory-management/
-│   ├── doubt-driven-development/
-│   ├── test-driven-development/
-│   ├── typescript-patterns/
-│   ├── debugging-and-error-recovery/
-│   ├── code-review-and-quality/
-│   ├── code-simplification/
-│   ├── security-and-hardening/
-│   ├── deprecation-and-migration/
-│   └── shipping-and-launch/
-└── references/
-    ├── testing-patterns.md
-    └── definition-of-done.md
-```
-
-Each skill contains a `SKILL.md` file — the core agent instructions — and (optionally) a `references/` folder with detailed documentation for each phase. Agents load references on-demand as they execute the workflow.
-
----
-
-## 🤖 Compatibility
+## Compatibility
 
 | Agent | Status |
 |-------|--------|
 | Claude Code | ✅ Tested |
 | Cursor | ✅ Tested |
-| Opencode | ✅ Tested |
+| OpenCode | ✅ Tested |
 | GitHub Copilot | ✅ Tested |
 | Antigravity (Gemini) | ✅ Tested |
 
 Works with any agent that supports custom instructions, skills, or rules directories.
 
----
-
-## 📄 License
+## License
 
 MIT
 
-<p align="center"><sub>Part of the <a href="https://github.com/runecraft-dev/arcanum">Arcanum</a> ecosystem</sub></p>
+<p align="center"><sub>Part of the <a href="https://github.com/runecraftai/arcanum">Arcanum</a> monorepo</sub></p>

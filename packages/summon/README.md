@@ -1,26 +1,30 @@
-# Summon
+<p align="center">
+  <img src="assets/readme/hero.svg" width="100%" alt="Summon: interactive CLI terminal transcript showing the install wizard — pick category, detect agents, choose method and scope">
+</p>
 
-Interactive CLI for installing Arcanum agent skills. Built on [citty](https://github.com/unjs/citty) and [@clack/prompts](https://github.com/bombshell-dev/clack).
+<p align="center">
+  <a href="https://www.npmjs.com/package/@runecraft/summon"><img src="https://img.shields.io/npm/v/@runecraft/summon?label=npm&color=c9a24a" alt="npm version" /></a>
+  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-22c55e" alt="MIT License" /></a>
+</p>
 
-> Part of the [Arcanum](../../README.md) monorepo. See the root README for the full picture.
+Interactive CLI for installing [Arcanum](../../README.md) agent skills — and, as of v0.16.0, external tools like Graphify and Context7 — into any project. Built on [citty](https://github.com/unjs/citty) and [@clack/prompts](https://github.com/bombshell-dev/clack).
 
-## Install
+## What it does
 
-```bash
-# One-off, no install needed
-npx @runecraft/summon
+`summon` detects which coding agents you have (Claude Code, Cursor, OpenCode, Windsurf, Cline, GitHub Copilot, Roo Code, Aider, Kiro), walks you through picking skills from the [`@runecraft/spells`](https://www.npmjs.com/package/@runecraft/spells) catalog, and writes them to the right directory for each detected agent — no manual copying of `SKILL.md` files.
 
-# Or globally
-npm install -g @runecraft/summon
-summon
+## Why not just copy the files by hand
 
-# Or with bun
-bunx @runecraft/summon
-```
+Every agent expects skills in a different directory with a different naming convention — `.claude/skills/`, `.cursor/rules/`, `.agents/skills/`, and so on — and that mapping changes as agents add support. `summon` owns the mapping in [`agents/registry.ts`](./src/agents/registry.ts) so you pick a skill once and it lands correctly for whichever agents you actually have installed, instead of hand-copying files into the wrong place.
 
-Requires Node 18+ (works equally well with `npx`, `npm`, `bunx`, or `pnpm dlx`).
+## How it works
 
-## Quickstart
+- **Method vs. scope are orthogonal** — `method` (`copy` or `symlink`) is *how* the file lands; `scope` (`local` or `global`) is *where the symlink hub lives*, and is ignored entirely when `method=copy`.
+- **`copy`** — self-contained snapshot, `cp SKILL.md → <agent.installDir>/<name>.md`. Works everywhere, doesn't update automatically.
+- **`symlink`** — hub at `.agents/skills/<name>/` (local) or `~/.config/opencode/skills/<name>/` (global), agent points at the hub, hub points at `node_modules`. Updates automatically — best for developing on the skills themselves.
+- **Idempotent** — re-running any command overwrites in place; no duplicates.
+
+## How to use
 
 ### Install skills (interactive TUI)
 
@@ -28,7 +32,7 @@ Requires Node 18+ (works equally well with `npx`, `npm`, `bunx`, or `pnpm dlx`).
 npx @runecraft/summon install
 ```
 
-Or just `npx @runecraft/summon` (no subcommand) — same flow.
+Or just `npx @runecraft/summon` (no subcommand) — same flow. Works equally well with `npm install -g @runecraft/summon`, `bunx @runecraft/summon`, or `pnpm dlx`. Requires Node 18+.
 
 The wizard walks you through:
 

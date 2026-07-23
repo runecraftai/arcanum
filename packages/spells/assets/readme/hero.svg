@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-labelledby="title desc">
+  <title id="title">Spells — agent skill scrolls for Arcanum</title>
+  <desc id="desc">A catalog of SKILL.md scrolls, each with a slash-command trigger, spanning planning, testing, review, security, and shipping.</desc>
+
+  <rect width="1200" height="400" rx="20" fill="#0b0d10"/>
+  <g stroke="#ffffff" stroke-opacity="0.045">
+    <line x1="0" y1="40" x2="1200" y2="40"/>
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="220" x2="1200" y2="220"/>
+    <line x1="0" y1="340" x2="1200" y2="340"/>
+  </g>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+    <text x="60" y="58" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="2.5" fill="#c9a24a">SKILL LIBRARY &#183; SKILL.MD</text>
+    <text x="60" y="126" font-size="60" font-weight="700" fill="#ede7d8">Spells</text>
+    <text x="60" y="164" font-size="20" fill="#8b8f97">
+      <tspan x="60" dy="0">Markdown instructions any</tspan>
+      <tspan x="60" dy="28">coding agent studies to run a</tspan>
+      <tspan x="60" dy="28">proven, multi-phase workflow.</tspan>
+    </text>
+    <text x="60" y="368" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="13" fill="#8b8f97">Claude Code &#183; Cursor &#183; OpenCode &#183; Copilot</text>
+  </g>
+
+  <!-- Catalog panel -->
+  <g transform="translate(480,40)">
+    <rect width="680" height="340" rx="14" fill="#14171b" stroke="#262b31" stroke-width="1.5"/>
+    <text x="24" y="34" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" letter-spacing="2" fill="#c9a24a">SKILL CATALOG &#8212; 17 SCROLLS</text>
+    <line x1="24" y1="50" x2="656" y2="50" stroke="#262b31" stroke-width="1"/>
+
+    <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+      <!-- Row 1 -->
+      <g transform="translate(24,60)">
+        <g stroke="#c9a24a" stroke-width="1.8" fill="none" stroke-linecap="round">
+          <rect x="2" y="6" width="14" height="5" rx="2.5"/>
+          <circle cx="2" cy="8.5" r="2.2"/>
+          <circle cx="16" cy="8.5" r="2.2"/>
+        </g>
+        <text x="30" y="13" font-size="17" font-weight="700" fill="#ede7d8">spec-driven</text>
+        <text x="632" y="13" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#c9a24a" text-anchor="end">/spec</text>
+      </g>
+      <line x1="24" y1="98" x2="656" y2="98" stroke="#262b31" stroke-width="1"/>
+
+      <!-- Row 2 -->
+      <g transform="translate(24,108)">
+        <g stroke="#c9a24a" stroke-width="1.8" fill="none" stroke-linecap="round">
+          <rect x="2" y="6" width="14" height="5" rx="2.5"/>
+          <circle cx="2" cy="8.5" r="2.2"/>
+          <circle cx="16" cy="8.5" r="2.2"/>
+        </g>
+        <text x="30" y="13" font-size="17" font-weight="700" fill="#ede7d8">test-driven-development</text>
+        <text x="632" y="13" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#c9a24a" text-anchor="end">/test</text>
+      </g>
+      <line x1="24" y1="146" x2="656" y2="146" stroke="#262b31" stroke-width="1"/>
+
+      <!-- Row 3 -->
+      <g transform="translate(24,156)">
+        <g stroke="#c9a24a" stroke-width="1.8" fill="none" stroke-linecap="round">
+          <rect x="2" y="6" width="14" height="5" rx="2.5"/>
+          <circle cx="2" cy="8.5" r="2.2"/>
+          <circle cx="16" cy="8.5" r="2.2"/>
+        </g>
+        <text x="30" y="13" font-size="17" font-weight="700" fill="#ede7d8">code-review-and-quality</text>
+        <text x="632" y="13" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#c9a24a" text-anchor="end">/review</text>
+      </g>
+      <line x1="24" y1="194" x2="656" y2="194" stroke="#262b31" stroke-width="1"/>
+
+      <!-- Row 4 -->
+      <g transform="translate(24,204)">
+        <g stroke="#c9a24a" stroke-width="1.8" fill="none" stroke-linecap="round">
+          <rect x="2" y="6" width="14" height="5" rx="2.5"/>
+          <circle cx="2" cy="8.5" r="2.2"/>
+          <circle cx="16" cy="8.5" r="2.2"/>
+        </g>
+        <text x="30" y="13" font-size="17" font-weight="700" fill="#ede7d8">debugging-and-error-recovery</text>
+        <text x="632" y="13" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#c9a24a" text-anchor="end">/debug</text>
+      </g>
+      <line x1="24" y1="242" x2="656" y2="242" stroke="#262b31" stroke-width="1"/>
+
+      <!-- Row 5 -->
+      <g transform="translate(24,252)">
+        <g stroke="#c9a24a" stroke-width="1.8" fill="none" stroke-linecap="round">
+          <rect x="2" y="6" width="14" height="5" rx="2.5"/>
+          <circle cx="2" cy="8.5" r="2.2"/>
+          <circle cx="16" cy="8.5" r="2.2"/>
+        </g>
+        <text x="30" y="13" font-size="17" font-weight="700" fill="#ede7d8">security-and-hardening</text>
+        <text x="632" y="13" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#c9a24a" text-anchor="end">/security</text>
+      </g>
+      <line x1="24" y1="290" x2="656" y2="290" stroke="#262b31" stroke-width="1"/>
+
+      <!-- Row 6 -->
+      <g transform="translate(24,300)">
+        <g stroke="#c9a24a" stroke-width="1.8" fill="none" stroke-linecap="round">
+          <rect x="2" y="6" width="14" height="5" rx="2.5"/>
+          <circle cx="2" cy="8.5" r="2.2"/>
+          <circle cx="16" cy="8.5" r="2.2"/>
+        </g>
+        <text x="30" y="13" font-size="17" font-weight="700" fill="#ede7d8">shipping-and-launch</text>
+        <text x="632" y="13" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#c9a24a" text-anchor="end">/ship</text>
+      </g>
+    </g>
+  </g>
+</svg>

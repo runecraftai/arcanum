@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-labelledby="title desc">
+  <title id="title">Runes — persistent cross-session memory plugin for OpenCode</title>
+  <desc id="desc">A tablet inscribed with the 8 memory categories: decisions, corrections, project rules, architecture, constraints, config values, naming, and learnings.</desc>
+
+  <rect width="1200" height="400" rx="20" fill="#0b0d10"/>
+  <g stroke="#ffffff" stroke-opacity="0.045">
+    <line x1="0" y1="40" x2="1200" y2="40"/>
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="340" x2="1200" y2="340"/>
+  </g>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+    <text x="60" y="58" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="2.5" fill="#c9a24a">OPENCODE PLUGIN &#183; PERSISTENT MEMORY</text>
+    <text x="60" y="126" font-size="60" font-weight="700" fill="#ede7d8">Runes</text>
+    <text x="60" y="164" font-size="20" fill="#8b8f97">
+      <tspan x="60" dy="0">Durable, per-repo memory —</tspan>
+      <tspan x="60" dy="28">decisions, corrections, and</tspan>
+      <tspan x="60" dy="28">conventions recalled across</tspan>
+      <tspan x="60" dy="28">every session.</tspan>
+    </text>
+    <text x="60" y="368" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="13" fill="#8b8f97">SQLite + FTS5 &#183; Node 22+ &#183; 10 tools</text>
+  </g>
+
+  <!-- Tablet -->
+  <g transform="translate(480,40)">
+    <rect width="680" height="340" rx="14" fill="#14171b" stroke="#262b31" stroke-width="1.5"/>
+    <text x="24" y="34" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" letter-spacing="2" fill="#c9a24a">MEMORY CATEGORIES</text>
+
+    <g stroke="#262b31" stroke-width="1">
+      <line x1="24" y1="60" x2="656" y2="60"/>
+      <line x1="182" y1="60" x2="182" y2="340"/>
+      <line x1="340" y1="60" x2="340" y2="340"/>
+      <line x1="498" y1="60" x2="498" y2="340"/>
+      <line x1="24" y1="200" x2="656" y2="200"/>
+    </g>
+
+    <!-- helper rune icon reused per cell -->
+    <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12.5" letter-spacing="0.5" fill="#ede7d8" text-anchor="middle">
+      <!-- Row 1 -->
+      <g transform="translate(103,105)">
+        <line x1="0" y1="-16" x2="0" y2="4" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="-8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <text y="30">DECISIONS</text>
+      </g>
+      <g transform="translate(261,105)">
+        <line x1="0" y1="-16" x2="0" y2="4" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="-8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <text y="30">CORRECTIONS</text>
+      </g>
+      <g transform="translate(419,105)">
+        <line x1="0" y1="-16" x2="0" y2="4" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="-8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <text y="30">PROJECT_RULES</text>
+      </g>
+      <g transform="translate(577,105)">
+        <line x1="0" y1="-16" x2="0" y2="4" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="-8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <text y="30">ARCHITECTURE</text>
+      </g>
+      <!-- Row 2 -->
+      <g transform="translate(103,245)">
+        <line x1="0" y1="-16" x2="0" y2="4" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="-8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <text y="30">CONSTRAINTS</text>
+      </g>
+      <g transform="translate(261,245)">
+        <line x1="0" y1="-16" x2="0" y2="4" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="-8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <text y="30">CONFIG_VALUES</text>
+      </g>
+      <g transform="translate(419,245)">
+        <line x1="0" y1="-16" x2="0" y2="4" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="-8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <text y="30">NAMING</text>
+      </g>
+      <g transform="translate(577,245)">
+        <line x1="0" y1="-16" x2="0" y2="4" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="-8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-16" x2="8" y2="-9" stroke="#c9a24a" stroke-width="2" stroke-linecap="round"/>
+        <text y="30">LEARNINGS</text>
+      </g>
+    </g>
+  </g>
+</svg>

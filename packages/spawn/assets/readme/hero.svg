@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-labelledby="title desc">
+  <title id="title">Spawn — tmux subagent pane manager for OpenCode</title>
+  <desc id="desc">Three configurable tmux layouts: main-vertical, tiled, and main-horizontal, each tiling one pane per subagent.</desc>
+
+  <rect width="1200" height="400" rx="20" fill="#0b0d10"/>
+  <g stroke="#ffffff" stroke-opacity="0.045">
+    <line x1="0" y1="40" x2="1200" y2="40"/>
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="220" x2="1200" y2="220"/>
+    <line x1="0" y1="340" x2="1200" y2="340"/>
+  </g>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+    <text x="60" y="58" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="2.5" fill="#c9a24a">OPENCODE PLUGIN &#183; TMUX</text>
+    <text x="60" y="126" font-size="60" font-weight="700" fill="#ede7d8">Spawn</text>
+    <text x="60" y="164" font-size="20" fill="#8b8f97">
+      <tspan x="60" dy="0">Every subagent gets a live</tspan>
+      <tspan x="60" dy="28">tmux pane — spawned, streamed,</tspan>
+      <tspan x="60" dy="28">and closed automatically.</tspan>
+    </text>
+    <text x="60" y="368" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="13" fill="#8b8f97">tmux 2.6+ &#183; macOS &#183; Linux &#183; Windows</text>
+  </g>
+
+  <text x="480" y="34" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" letter-spacing="2" fill="#c9a24a">CONFIGURABLE LAYOUTS</text>
+
+  <!-- main-vertical (default) -->
+  <g transform="translate(480,50)">
+    <rect width="213" height="290" rx="12" fill="#14171b" stroke="#262b31" stroke-width="1.5"/>
+    <g transform="translate(20,20)" stroke="#c9a24a" stroke-width="2" fill="none">
+      <rect x="0" y="0" width="104" height="200" rx="4"/>
+      <rect x="112" y="0" width="61" height="61" rx="4"/>
+      <rect x="112" y="69" width="61" height="61" rx="4"/>
+      <rect x="112" y="138" width="61" height="61" rx="4"/>
+    </g>
+    <text x="20" y="254" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#ede7d8">main-vertical</text>
+    <text x="20" y="274" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11.5" letter-spacing="1" fill="#c9a24a">DEFAULT</text>
+  </g>
+
+  <!-- tiled -->
+  <g transform="translate(713,50)">
+    <rect width="213" height="290" rx="12" fill="#14171b" stroke="#262b31" stroke-width="1.5"/>
+    <g transform="translate(20,20)" stroke="#c9a24a" stroke-width="2" fill="none">
+      <rect x="0" y="0" width="82.5" height="96" rx="4"/>
+      <rect x="90.5" y="0" width="82.5" height="96" rx="4"/>
+      <rect x="0" y="104" width="82.5" height="96" rx="4"/>
+      <rect x="90.5" y="104" width="82.5" height="96" rx="4"/>
+    </g>
+    <text x="20" y="254" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#ede7d8">tiled</text>
+    <text x="20" y="274" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11.5" letter-spacing="1" fill="#8b8f97">4+ SUBAGENTS</text>
+  </g>
+
+  <!-- main-horizontal -->
+  <g transform="translate(946,50)">
+    <rect width="213" height="290" rx="12" fill="#14171b" stroke="#262b31" stroke-width="1.5"/>
+    <g transform="translate(20,20)" stroke="#c9a24a" stroke-width="2" fill="none">
+      <rect x="0" y="0" width="173" height="120" rx="4"/>
+      <rect x="0" y="128" width="52.3" height="72" rx="4"/>
+      <rect x="60.3" y="128" width="52.3" height="72" rx="4"/>
+      <rect x="120.6" y="128" width="52.3" height="72" rx="4"/>
+    </g>
+    <text x="20" y="254" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#ede7d8">main-horizontal</text>
+    <text x="20" y="274" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11.5" letter-spacing="1" fill="#8b8f97">WIDE TERMINALS</text>
+  </g>
+</svg>
