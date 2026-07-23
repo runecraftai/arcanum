@@ -40,8 +40,8 @@ describe("createWizardAgent", () => {
     expect(config.prompt).toContain("guild-load")
   })
 
-  it("has no denied tools (full access for research)", () => {
+  it("denies guild_spawn_wizard tool (Bard-only)", () => {
     const config = createWizardAgent("claude-opus-4")
-    expect(config.tools).toBeUndefined()
+    expect(config.tools?.guild_spawn_wizard).toBe(false)
   })
 })

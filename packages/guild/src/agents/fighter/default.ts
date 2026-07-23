@@ -8,6 +8,7 @@ export const FIGHTER_DEFAULTS: AgentConfig = {
   tools: {
     call_guild_agent: true,
     task: true,
+    guild_spawn_wizard: false,
   },
   prompt: composeFighterPrompt(),
 }

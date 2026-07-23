@@ -21,9 +21,9 @@ describe("createShuttleAgent", () => {
     expect(config.prompt!.length).toBeGreaterThan(0)
   })
 
-  it("denies only call_guild_agent", () => {
+  it("denies call_guild_agent and guild_spawn_wizard", () => {
     const config = createShuttleAgent("claude-sonnet-4")
-    expect(config.tools).toEqual({ call_guild_agent: false })
+    expect(config.tools).toEqual({ call_guild_agent: false, guild_spawn_wizard: false })
   })
 
   it("prompt includes TypeScript patterns guidance", () => {

@@ -21,9 +21,9 @@ describe("createBardAgent", () => {
     expect(config.prompt!.length).toBeGreaterThan(0)
   })
 
-  it("has no denied tools (full access)", () => {
+  it("has guild_spawn_wizard in tool policy (Bard-only)", () => {
     const config = createBardAgent("claude-opus-4")
-    expect(config.tools).toBeUndefined()
+    expect(config.tools?.guild_spawn_wizard).toBe(true)
   })
 
   it("PlanWorkflow review step is not marked optional", () => {
@@ -224,5 +224,109 @@ describe("createBardAgentWithOptions", () => {
       metadata: { category: "utility", cost: "CHEAP", triggers: [{ domain: "Test", trigger: "test" }] },
     }])
     expect(config.mode).toBe("primary")
+  })
+})
+
+describe("wizard mode non-regression — automatic path produces no new effects", () => {
+  it("Bard prompt only permits guild_spawn_wizard tool (no other wizard tools)", () => {
+    const config = createBardAgent("claude-opus-4")
+    const tools = config.tools ?? {}
+    // Only guild_spawn_wizard should be set explicitly
+    const toolKeys = Object.keys(tools)
+    expect(toolKeys).toContain("guild_spawn_wizard")
+    expect(tools.guild_spawn_wizard).toBe(true)
+    // No other wizard-specific tools
+    expect(toolKeys).not.toContain("spawnWizardSession")
+    expect(toolKeys).not.toContain("wizardReturnHandoff")
+  })
+
+  it("Bard prompt never mentions effect type names (spawnWizardSession, wizardReturnHandoff)", () => {
+    const config = createBardAgent("claude-opus-4")
+    const prompt = config.prompt as string
+    expect(prompt).not.toContain("spawnWizardSession")
+    expect(prompt).not.toContain("wizardReturnHandoff")
+  })
+
+  it("WizardMode section maps interactive → guild_spawn_wizard and automatic → call_guild_agent", () => {
+    const config = createBardAgent("claude-opus-4")
+    const prompt = config.prompt as string
+    const wizardMode = prompt.slice(
+      prompt.indexOf("<WizardMode>"),
+      prompt.indexOf("</WizardMode>"),
+    )
+
+    // Interactive mode uses guild_spawn_wizard
+    const interactiveLine = wizardMode.split("\n").find((l) => l.includes("MODE: interactive"))
+    expect(interactiveLine).toBeDefined()
+    expect(interactiveLine).toContain("guild_spawn_wizard")
+    expect(interactiveLine).not.toContain("call_guild_agent")
+
+    // Automatic mode uses call_guild_agent
+    const automaticLine = wizardMode.split("\n").find((l) => l.includes("MODE: automatic"))
+    expect(automaticLine).toBeDefined()
+    expect(automaticLine).toContain("call_guild_agent")
+    expect(automaticLine).not.toContain("guild_spawn_wizard")
+  })
+
+  it("Delegation section distinguishes interactive vs automatic flows for Wizard delegation", () => {
+    const config = createBardAgent("claude-opus-4")
+    const prompt = config.prompt as string
+    const delegation = prompt.slice(
+      prompt.indexOf("<Delegation>"),
+      prompt.indexOf("</Delegation>"),
+    )
+
+    // Find Wizard-related delegation line
+    const wizardLine = delegation.split("\n").find((l) => l.includes("Delegate to Wizard"))
+    expect(wizardLine).toBeDefined()
+    expect(wizardLine).toContain("interactive flow")
+    expect(wizardLine).toContain("automatic flow")
+    expect(wizardLine).toContain("guild_spawn_wizard")
+    expect(wizardLine).toContain("call_guild_agent")
+    // Must offer user choice before delegating
+    expect(wizardLine).toContain("ask_user")
+    expect(wizardLine).toContain("WizardMode")
+  })
+
+  it("automatic mode guidance never mentions guild_spawn_wizard or interactive session spawning", () => {
+    const config = createBardAgent("claude-opus-4")
+    const prompt = config.prompt as string
+    const wizardMode = prompt.slice(
+      prompt.indexOf("<WizardMode>"),
+      prompt.indexOf("</WizardMode>"),
+    )
+
+    // Automatic line should not use guild_spawn_wizard
+    // And should not mention "separate session" or "spawn"
+    const automaticLine = wizardMode.split("\n").find((l) => l.includes("MODE: automatic"))
+    expect(automaticLine).not.toContain("guild_spawn_wizard")
+    expect(automaticLine).not.toContain("separate")
+
+    // The interactive line should be the only one mentioning guild_spawn_wizard
+    const allGuildSpawnWizardMentions = wizardMode.split("\n").filter((l) => l.includes("guild_spawn_wizard"))
+    // Should only appear in the interactive mode line
+    expect(allGuildSpawnWizardMentions).toHaveLength(1)
+    expect(allGuildSpawnWizardMentions[0]).toContain("MODE: interactive")
+  })
+
+  it("call_guild_agent is the ONLY tool named for automatic Wizard delegation", () => {
+    const config = createBardAgent("claude-opus-4")
+    const prompt = config.prompt as string
+
+    // count mentions: call_guild_agent vs guild_spawn_wizard in automatic context
+    const wizardMode = prompt.slice(
+      prompt.indexOf("<WizardMode>"),
+      prompt.indexOf("</WizardMode>"),
+    )
+
+    // In automatic line, ONLY call_guild_agent should appear (not guild_spawn_wizard)
+    const automaticLine = wizardMode.split("\n").find((l) => l.includes("MODE: automatic"))
+    expect(automaticLine).toContain("call_guild_agent")
+    expect(automaticLine).not.toContain("guild_spawn_wizard")
+
+    // In interactive line, ONLY guild_spawn_wizard should appear (not call_guild_agent)
+    const interactiveLine = wizardMode.split("\n").find((l) => l.includes("MODE: interactive"))
+    expect(interactiveLine).toContain("guild_spawn_wizard")
+    expect(interactiveLine).not.toContain("call_guild_agent")
   })
 })

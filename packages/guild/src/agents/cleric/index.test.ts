@@ -41,6 +41,11 @@ describe("createClericAgent", () => {
     expect(config.tools?.["call_guild_agent"]).toBe(false)
   })
 
+  it("denies guild_spawn_wizard tool (Bard-only)", () => {
+    const config = createClericAgent("claude-opus-4")
+    expect(config.tools?.["guild_spawn_wizard"]).toBe(false)
+  })
+
   it("includes MultiModelReview section in prompt", () => {
     const config = createClericAgent("claude-opus-4")
     expect(config.prompt).toContain("<MultiModelReview>")

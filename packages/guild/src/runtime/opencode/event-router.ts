@@ -13,6 +13,7 @@ import type { RuntimePolicyFlags } from "../../application/orchestration/session
 import { doesSessionOwnExecution } from "../../application/orchestration/execution-coordinator"
 import { createExecutionLeaseFsStore } from "../../infrastructure/fs/execution-lease-fs-store"
 import type { TrustedInjectedPromptKind } from "./trusted-message-state"
+import { sessionCreationCorrelator, WIZARD_PLAN_COMPLETE_SENTINEL } from "./apply-effects"
 
 export interface EventRouterState {
   lastAssistantMessageText: Map<string, string>
@@ -64,6 +65,7 @@ export async function routeRuntimeEvent(input: {
     if (event.type === "session.created") {
       const evt = event as { type: string; properties: { info: { id: string } } }
       hooks.firstMessageVariant.markSessionCreated(evt.properties.info.id)
+      sessionCreationCorrelator.resolveNext(evt.properties.info.id)
     }
     if (event.type === "session.deleted") {
       const evt = event as { type: string; properties?: { sessionID?: string; sessionId?: string; info?: { id?: string } } }
@@ -167,6 +169,20 @@ export async function routeRuntimeEvent(input: {
     const part = evt.properties?.part
     if (part?.type === "text" && part.sessionID && part.text) {
       state.lastAssistantMessageText.set(part.sessionID, part.text)
+      if (part.text.includes(WIZARD_PLAN_COMPLETE_SENTINEL)) {
+        const originatingSessionId = sessionCreationCorrelator.getOriginatingSessionId(part.sessionID)
+        if (originatingSessionId) {
+          effects.push({
+            type: "wizardReturnHandoff",
+            originatingSessionId,
+            planSummary: "Plan complete",
+          })
+        } else {
+          warn("[event-router] WIZARD_PLAN_COMPLETE_SENTINEL detected but no session mapping found for wizard session", {
+            sessionID: part.sessionID,
+          })
+        }
+      }
     }
   }
 

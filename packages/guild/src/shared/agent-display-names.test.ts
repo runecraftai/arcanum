@@ -26,9 +26,9 @@ describe("getAgentDisplayName", () => {
   })
 
   it("performs case-insensitive lookup", () => {
-    expect(getAgentDisplayName("LOOM")).toBe("Bard (Guildmaster)")
-    expect(getAgentDisplayName("Loom")).toBe("Bard (Guildmaster)")
-    expect(getAgentDisplayName("Thread")).toBe("Rogue (Scout)")
+    expect(getAgentDisplayName("BARD")).toBe("Bard (Guildmaster)")
+    expect(getAgentDisplayName("Bard")).toBe("Bard (Guildmaster)")
+    expect(getAgentDisplayName("ROGUE")).toBe("Rogue (Scout)")
   })
 })
 

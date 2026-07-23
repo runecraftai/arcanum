@@ -535,7 +535,7 @@ describe("spawnFighterSession effect", () => {
 })
 
 describe("spawnWizardSession effect", () => {
-  it("creates a new Wizard session and seeds it with plan context", async () => {
+  it("falls back to deterministic path when TUI is unavailable, creating session and seeding", async () => {
     const createCalls: Array<{ title: string; agent?: string }> = []
     const promptAsyncCalls: Array<{ sessionId: string; text: string; agent?: string }> = []
     let sessionCounter = 0
@@ -569,13 +569,151 @@ describe("spawnWizardSession effect", () => {
       client: client as never,
     })
 
-    expect(client.session.create).toHaveBeenCalledTimes(1)
+    // Preflight create + fallback create = 2 calls
+    expect(client.session.create).toHaveBeenCalledTimes(2)
     expect(createCalls[0].title).toContain("Wizard:")
     expect(createCalls[0].title).toContain("dashboard redesign")
+    expect(createCalls[1].title).toContain("Wizard:")
+    expect(createCalls[1].title).toContain("dashboard redesign")
+
+    // Fallback seeded the session
     expect(client.session.promptAsync).toHaveBeenCalledTimes(1)
     expect(promptAsyncCalls[0].agent).toBe("Wizard (Planner)")
+
+    // Agent stays unchanged in originating session
     expect(output.message.agent).toBe("Bard (Guildmaster)")
-    expect(output.parts[0].text).toContain("Wizard session spawned")
+
+    // Fallback notification about background planning
+    expect(output.parts[0].text).toContain("Wizard planning started in background")
+  })
+
+  it("appends fallback notification as a new text part when no existing text part", async () => {
+    const client = {
+      session: {
+        create: mock(async () => ({ id: "wizard-sess-2" })),
+        promptAsync: mock(async () => {}),
+      },
+    }
+
+    const output = {
+      message: { agent: "Bard (Guildmaster)" },
+      parts: [{ type: "image", text: undefined }],
+    }
+
+    await applyRuntimeEffects({
+      effects: [{
+        type: "spawnWizardSession",
+        sessionId: "bard-session-2",
+        title: "image-test",
+        contextInjection: "## Starting Plan: image-test",
+      }],
+      output,
+      client: client as never,
+    })
+
+    expect(output.parts).toHaveLength(2)
+    expect(output.parts[1].type).toBe("text")
+    expect(output.parts[1].text).toContain("Wizard planning started in background")
+  })
+
+  it("records injected prompt metadata for session spawn tracking", async () => {
+    const client = {
+      session: {
+        create: mock(async () => ({ id: "wizard-sess-3" })),
+        promptAsync: mock(async () => {}),
+      },
+    }
+
+    const recorded: Array<{ sessionId: string; text: string }> = []
+
+    await applyRuntimeEffects({
+      effects: [{
+        type: "spawnWizardSession",
+        sessionId: "bard-session-3",
+        title: "track-test",
+        contextInjection: "## Starting Plan: track-test",
+      }],
+      output: { parts: [{ type: "text", text: "" }] },
+      client: client as never,
+      recordInjectedPrompt: (sessionId, text) => recorded.push({ sessionId, text }),
+    })
+
+    expect(recorded).toHaveLength(1)
+    expect(recorded[0].sessionId).toBe("bard-session-3")
+    expect(recorded[0].text).toContain("[spawn:Wizard:")
+    expect(recorded[0].text).toContain("track-test")
+  })
+
+  it("handles non-Error exceptions gracefully during preflight creation", async () => {
+    const client = {
+      session: {
+        create: mock(async () => {
+          throw "string error"
+        }),
+        promptAsync: mock(async () => {}),
+      },
+    }
+
+    const output = {
+      message: { agent: "Bard (Guildmaster)" },
+      parts: [{ type: "text", text: "test" }],
+    }
+
+    await expect(
+      applyRuntimeEffects({
+        effects: [{
+          type: "spawnWizardSession",
+          sessionId: "bard-session-4",
+          title: "string-error",
+          contextInjection: "## Starting Plan: string-error",
+        }],
+        output,
+        client: client as never,
+      }),
+    ).resolves.toBeUndefined()
+
+    expect(output.message.agent).toBe("Wizard (Planner)")
+    expect(output.parts[0].text).toContain("Could not open Wizard planning session")
+  })
+
+  it("falls back to inline agent switch when both primary and fallback paths fail", async () => {
+    let createCallCount = 0
+    const client = {
+      session: {
+        create: mock(async () => {
+          createCallCount++
+          // Preflight succeeds, but fallback path create fails
+          if (createCallCount >= 2) {
+            throw new Error("Quota exceeded")
+          }
+          return { id: `wizard-sess-fallback-fail-${createCallCount}` }
+        }),
+        promptAsync: mock(async () => {}),
+      },
+    }
+
+    const output = {
+      message: { agent: "Bard (Guildmaster)" },
+      parts: [{ type: "text", text: "test" }],
+    }
+
+    await applyRuntimeEffects({
+      effects: [{
+        type: "spawnWizardSession",
+        sessionId: "bard-session-5",
+        title: "fail-fallback",
+        contextInjection: "## Starting Plan: fail-fallback",
+      }],
+      output,
+      client: client as never,
+    })
+
+    // Both preflight and fallback create attempted
+    expect(createCallCount).toBe(2)
+
+    // Final fallback: inline agent switch + context injection
+    expect(output.message.agent).toBe("Wizard (Planner)")
+    expect(output.parts[0].text).toContain("Could not open Wizard planning session")
   })
 })
 
@@ -1036,5 +1174,90 @@ describe("failover structured logging", () => {
     expect(d.agent).toBe("bard")
     expect(d.reason).toBeNull()
     uninstall()
+  })
+})
+
+describe("wizardReturnHandoff effect", () => {
+  it("restores Bard agent then injects plan summary via promptAsync", async () => {
+    const promptAsyncCalls: Array<{ path: { id: string }; body: { parts: Array<{ type: string; text?: string }>; agent?: string } }> = []
+    const recorded: Array<{ sessionId: string; text: string; metadata?: { kind: string } }> = []
+
+    const client = {
+      session: {
+        promptAsync: mock(async (input: { path: { id: string }; body: { parts: Array<{ type: string; text?: string }>; agent?: string } }) => {
+          promptAsyncCalls.push(input)
+        }),
+      },
+    }
+
+    await applyRuntimeEffects({
+      effects: [{
+        type: "wizardReturnHandoff",
+        originatingSessionId: "bard-session-99",
+        planSummary: "3 tasks planned: auth refactor, DB migration, UI overhaul",
+      }],
+      client: client as never,
+      recordInjectedPrompt: (sessionId, text, metadata) => {
+        recorded.push({ sessionId, text, metadata: metadata as { kind: string } | undefined })
+      },
+    })
+
+    // Two calls: restoreAgent first, then promptAsync
+    expect(promptAsyncCalls).toHaveLength(2)
+
+    // First call: restoreAgent (restore Bard)
+    expect(promptAsyncCalls[0].path.id).toBe("bard-session-99")
+    expect(promptAsyncCalls[0].body.agent).toBe("Bard (Guildmaster)")
+    expect(promptAsyncCalls[0].body.parts).toEqual([])
+
+    // Second call: promptAsync with plan summary
+    expect(promptAsyncCalls[1].path.id).toBe("bard-session-99")
+    expect(promptAsyncCalls[1].body.agent).toBe("Bard (Guildmaster)")
+    expect(promptAsyncCalls[1].body.parts[0].text).toContain("Wizard planning complete")
+    expect(promptAsyncCalls[1].body.parts[0].text).toContain("3 tasks planned")
+    expect(promptAsyncCalls[1].body.parts[0].text).toContain("/start-work")
+
+    // Metadata recorded
+    expect(recorded).toHaveLength(1)
+    expect(recorded[0].sessionId).toBe("bard-session-99")
+    expect(recorded[0].text).toBe("3 tasks planned: auth refactor, DB migration, UI overhaul")
+    expect(recorded[0].metadata?.kind).toBe("wizard-return-handoff")
+  })
+
+  it("dedupes second wizardReturnHandoff invocation by originatingSessionId", async () => {
+    const promptAsyncCalls: Array<{ path: { id: string }; body: { parts: Array<{ type: string; text?: string }>; agent?: string } }> = []
+
+    const client = {
+      session: {
+        promptAsync: mock(async (input: { path: { id: string }; body: { parts: Array<{ type: string; text?: string }>; agent?: string } }) => {
+          promptAsyncCalls.push(input)
+        }),
+      },
+    }
+
+    const effect = {
+      type: "wizardReturnHandoff" as const,
+      originatingSessionId: "bard-session-dedup",
+      planSummary: "Duplicate test plan",
+    }
+
+    await applyRuntimeEffects({ effects: [effect], client: client as never })
+    await applyRuntimeEffects({ effects: [effect], client: client as never })
+
+    // Only 2 calls total (restoreAgent + promptAsync from first invocation; second is a no-op)
+    expect(promptAsyncCalls).toHaveLength(2)
+  })
+
+  it("skips when sessionClient is unavailable (no client)", async () => {
+    // No client provided — should not throw
+    await expect(
+      applyRuntimeEffects({
+        effects: [{
+          type: "wizardReturnHandoff",
+          originatingSessionId: "bard-session-no-client",
+          planSummary: "No client plan",
+        }],
+      }),
+    ).resolves.toBeUndefined()
   })
 })

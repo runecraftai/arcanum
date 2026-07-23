@@ -11,6 +11,7 @@ export type RuntimeEffect =
   | AppendCommandOutputEffect
   | SpawnFighterSessionEffect
   | SpawnWizardSessionEffect
+  | WizardReturnHandoffEffect
 
 export interface SwitchAgentEffect {
   type: "switchAgent"
@@ -99,4 +100,12 @@ export interface SpawnWizardSessionEffect {
   title: string
   /** Full context to seed the Wizard session */
   contextInjection: string
+}
+
+export interface WizardReturnHandoffEffect {
+  type: "wizardReturnHandoff"
+  /** The originating Bard session ID to wake */
+  originatingSessionId: string
+  /** Summary of the completed plan */
+  planSummary: string
 }

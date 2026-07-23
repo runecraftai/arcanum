@@ -10,11 +10,21 @@ import type { TrustedInjectedPromptMetadata } from "./trusted-message-state"
 import { classifyOpenAIFailoverError } from "../../application/failover/openai-error-classifier"
 import { canAttemptFailover, markFailoverAttempted } from "../../application/failover/failover-guard"
 import { getNextFallbackModel, type FallbackEntry } from "../../agents/model-resolution"
-import { logFailoverEvent, log } from "../../shared/log"
+import { logFailoverEvent, log, error } from "../../shared/log"
+import { SessionCreationCorrelator } from "./correlator"
 import type { AgentConfig } from "@opencode-ai/sdk"
 
 const REVIEWER_FANOUT_SENTINEL = "<!-- guild:reviewer-fanout -->"
 const reviewerFanOutSeenByClient = new WeakMap<object, Set<string>>()
+
+const wizardHandoffSeenByClient = new WeakMap<object, Set<string>>()
+
+export const WIZARD_PLAN_COMPLETE_SENTINEL = "<!-- guild:wizard-plan-complete -->"
+const WIZARD_SPAWN_MOUNT_DELAY_MS = 300
+const WIZARD_SPAWN_APPEND_PROMPT_MAX_RETRIES = 3
+const WIZARD_SPAWN_APPEND_PROMPT_RETRY_DELAY_MS = 100
+
+export const sessionCreationCorrelator = new SessionCreationCorrelator()
 
 function getReviewerFanOutSeenSet(client: PluginContext["client"]): Set<string> {
   const key = client as unknown as object
@@ -22,6 +32,16 @@ function getReviewerFanOutSeenSet(client: PluginContext["client"]): Set<string> 
   if (!seen) {
     seen = new Set<string>()
     reviewerFanOutSeenByClient.set(key, seen)
+  }
+  return seen
+}
+
+function getWizardHandoffSeenSet(client: PluginContext["client"]): Set<string> {
+  const key = client as unknown as object
+  let seen = wizardHandoffSeenByClient.get(key)
+  if (!seen) {
+    seen = new Set<string>()
+    wizardHandoffSeenByClient.set(key, seen)
   }
   return seen
 }
@@ -282,6 +302,31 @@ export async function applyRuntimeEffects(args: {
 
         break
       }
+      case "wizardReturnHandoff": {
+        if (!sessionClient || !client) break
+
+        const seen = getWizardHandoffSeenSet(client)
+        const key = `wizard:${effect.originatingSessionId}`
+        if (seen.has(key)) break
+
+        seen.add(key)
+
+        const bardAgent = getAgentDisplayName("bard")
+        await sessionClient.restoreAgent({
+          sessionId: effect.originatingSessionId,
+          agent: bardAgent,
+        })
+
+        await sessionClient.promptAsync({
+          sessionId: effect.originatingSessionId,
+          parts: [{ type: "text", text: `**Wizard planning complete:** ${effect.planSummary}\n\nReady for /start-work when you want to execute.` }],
+          agent: bardAgent,
+        })
+
+        recordInjectedPrompt?.(effect.originatingSessionId, effect.planSummary, { kind: "wizard-return-handoff" })
+
+        break
+      }
       case "spawnFighterSession": {
         if (!sessionClient || !client) {
           break
@@ -308,13 +353,13 @@ export async function applyRuntimeEffects(args: {
           const errorMessage = createError instanceof Error ? createError.message : String(createError)
           console.error(`[guild:ERROR] spawnFighterSession create failed: ${errorMessage}`)
           log("[guild:spawnFighterSession] Session creation failed, falling back", { error: errorMessage })
-          applySpawnFighterFallback(output, fighterAgent, contextInjection)
+          applySpawnFallback(output, fighterAgent, contextInjection, FIGHTER_SPAWN_FALLBACK_MESSAGE)
           break
         }
 
         if (!fighterSessionId) {
           log("[guild:spawnFighterSession] Null session ID, falling back", { planName })
-          applySpawnFighterFallback(output, fighterAgent, contextInjection)
+          applySpawnFallback(output, fighterAgent, contextInjection, FIGHTER_SPAWN_FALLBACK_MESSAGE)
           break
         }
 
@@ -337,7 +382,7 @@ export async function applyRuntimeEffects(args: {
             fighterSessionId,
             planName,
           })
-          applySpawnFighterFallback(output, fighterAgent, contextInjection)
+          applySpawnFallback(output, fighterAgent, contextInjection, FIGHTER_SPAWN_FALLBACK_MESSAGE)
           break
         }
 
@@ -369,24 +414,84 @@ The Fighter session is now executing the plan independently. You can continue he
           break
         }
 
-        const { title, contextInjection } = effect
+        const { title, contextInjection, sessionId: originatingId } = effect
         const wizardAgent = getAgentDisplayName("wizard")
         const sessionTitle = `Wizard: ${title}`
 
         log("[guild:spawnWizardSession] Creating new Wizard session", { title })
 
+        // Step 1: Two-step guard — create session as preflight
+        let preflightId: string
         try {
-          const wizardSessionId = await sessionClient.createSession({
-            title: sessionTitle,
-            agent: wizardAgent,
-          })
+          preflightId = await sessionClient.createSession({ title: sessionTitle, agent: wizardAgent })
+        } catch (createError) {
+          const errorMessage = createError instanceof Error ? createError.message : String(createError)
+          error(`spawnWizardSession create failed: ${errorMessage}`)
+          log("[guild:spawnWizardSession] Session creation failed, falling back", { error: errorMessage })
+          applySpawnFallback(output, wizardAgent, contextInjection, WIZARD_SPAWN_FALLBACK_MESSAGE)
+          break
+        }
 
-          await sessionClient.promptAsync({
-            sessionId: wizardSessionId,
-            parts: [{ type: "text", text: contextInjection }],
-            agent: wizardAgent,
-          })
+        if (!preflightId) {
+          log("[guild:spawnWizardSession] Null preflight session ID, falling back", { title })
+          applySpawnFallback(output, wizardAgent, contextInjection, WIZARD_SPAWN_FALLBACK_MESSAGE)
+          break
+        }
 
+        // Primary path: interactive window-switch with correlation
+        try {
+          // Step 2: Arm correlator latch for the originating session
+          const correlationPromise = sessionCreationCorrelator.arm(originatingId)
+
+          // Step 3: Open a new session window via TUI command
+          await client.tui.executeCommand({ body: { command: "session_new" } })
+
+          // Step 4: Wait for mount delay, then retry appendPrompt
+          const seedPrompt = contextInjection
+          await new Promise((r) => setTimeout(r, WIZARD_SPAWN_MOUNT_DELAY_MS))
+
+          let appendSucceeded = false
+          for (let attempt = 0; attempt < WIZARD_SPAWN_APPEND_PROMPT_MAX_RETRIES; attempt++) {
+            try {
+              await client.tui.appendPrompt({ body: { text: seedPrompt } })
+              appendSucceeded = true
+              break
+            } catch (appendError) {
+              log("[guild:spawnWizardSession] appendPrompt failed, retrying", {
+                attempt: attempt + 1,
+                error: appendError instanceof Error ? appendError.message : String(appendError),
+              })
+              if (attempt < WIZARD_SPAWN_APPEND_PROMPT_MAX_RETRIES - 1) {
+                await new Promise((r) => setTimeout(r, WIZARD_SPAWN_APPEND_PROMPT_RETRY_DELAY_MS))
+              }
+            }
+          }
+
+          if (!appendSucceeded) {
+            throw new Error(`Failed to append prompt after ${WIZARD_SPAWN_APPEND_PROMPT_MAX_RETRIES} retries`)
+          }
+
+          // Step 5: Wait for the correlator to resolve with the new session ID
+          const newId = await correlationPromise
+
+          // Step 6: Restore agent and seed the new session
+          await sessionClient.restoreAgent({ sessionId: newId, agent: wizardAgent })
+
+          const seeded = await seedSessionWithRetry(
+            sessionClient,
+            newId,
+            contextInjection,
+            wizardAgent,
+            title,
+          )
+
+          if (!seeded) {
+            throw new Error(`Failed to seed Wizard session ${newId}`)
+          }
+
+          sessionCreationCorrelator.registerMapping(newId, originatingId)
+
+          // Handoff notification to originating session
           const handoffMessage = `
 
 ---
@@ -399,18 +504,52 @@ The Wizard session is now handling interactive planning independently. You can c
             appendToTextParts(output.parts, handoffMessage, "\n\n---\n")
           }
 
-          recordInjectedPrompt?.(effect.sessionId, `[spawn:Wizard:${wizardSessionId}:${title}]`)
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : String(error)
-          console.error(`[guild:ERROR] spawnWizardSession failed: ${errorMessage}`)
+          recordInjectedPrompt?.(originatingId, `[spawn:Wizard:${newId}:${title}]`)
+        } catch (primaryError) {
+          const errorMessage = primaryError instanceof Error ? primaryError.message : String(primaryError)
+          log("[guild:spawnWizardSession] Interactive path failed, using deterministic fallback", {
+            error: errorMessage,
+          })
 
-          if (output?.parts) {
-            appendToTextParts(output.parts, `\n\n---\n\n**Session spawn failed:** Could not create a new Wizard session (${errorMessage}).\n\nWizard will continue in the current session instead.`, "\n\n---\n")
-            appendToTextParts(output.parts, contextInjection, "\n\n")
-          }
+          // Deterministic fallback path
+          try {
+            const createdId = await sessionClient.createSession({
+              title: sessionTitle,
+              agent: wizardAgent,
+            })
 
-          if (output?.message) {
-            output.message.agent = wizardAgent
+            if (!createdId) {
+              throw new Error("Null session ID in fallback path")
+            }
+
+            const seeded = await seedSessionWithRetry(
+              sessionClient,
+              createdId,
+              contextInjection,
+              wizardAgent,
+              title,
+            )
+
+            if (!seeded) {
+              throw new Error(`Failed to seed Wizard session ${createdId} in fallback`)
+            }
+
+            sessionCreationCorrelator.registerMapping(createdId, originatingId)
+
+            if (output?.parts) {
+              appendToTextParts(
+                output.parts,
+                `\n\n---\n\n**Wizard planning started in background:** The plan for "${title}" is being generated in a new session. You will be notified when it completes.`,
+                "\n\n---\n",
+              )
+            }
+
+            recordInjectedPrompt?.(originatingId, `[spawn:Wizard:${createdId}:${title}]`)
+          } catch (fallbackError) {
+            const fallbackMessage = fallbackError instanceof Error ? fallbackError.message : String(fallbackError)
+            error(`spawnWizardSession fallback also failed: ${fallbackMessage}`)
+            log("[guild:spawnWizardSession] Fallback path also failed", { error: fallbackMessage })
+            applySpawnFallback(output, wizardAgent, contextInjection, WIZARD_SPAWN_FALLBACK_MESSAGE)
           }
         }
 
@@ -438,17 +577,21 @@ type EffectOutput = {
 const FIGHTER_SPAWN_FALLBACK_MESSAGE =
   "\n\n---\n\n**Could not open Fighter in new window. Running in current session instead.**"
 
-function applySpawnFighterFallback(
+const WIZARD_SPAWN_FALLBACK_MESSAGE =
+  "\n\n---\n\n**Could not open Wizard planning session. Continuing in current session instead.**"
+
+function applySpawnFallback(
   output: EffectOutput | undefined,
-  fighterAgent: string,
+  agent: string,
   contextInjection: string,
+  fallbackMessage: string,
 ): void {
   if (output?.parts) {
-    appendToTextParts(output.parts, FIGHTER_SPAWN_FALLBACK_MESSAGE, "\n\n---\n")
+    appendToTextParts(output.parts, fallbackMessage, "\n\n---\n")
     appendToTextParts(output.parts, contextInjection, "\n\n")
   }
   if (output?.message) {
-    output.message.agent = fighterAgent
+    output.message.agent = agent
   }
 }
 
@@ -457,7 +600,7 @@ async function seedSessionWithRetry(
   sessionId: string,
   text: string,
   agent: string,
-  planName: string,
+  label: string,
 ): Promise<boolean> {
   try {
     await sessionClient.promptAsync({
@@ -468,9 +611,9 @@ async function seedSessionWithRetry(
     return true
   } catch (promptError) {
     const errorMessage = promptError instanceof Error ? promptError.message : String(promptError)
-    log("[guild:spawnFighterSession] Prompt injection failed, retrying", {
+    log("[guild:seedSessionWithRetry] Prompt injection failed, retrying", {
       sessionId,
-      planName,
+      label,
       error: errorMessage,
     })
 
@@ -483,7 +626,7 @@ async function seedSessionWithRetry(
       return true
     } catch (retryError) {
       const retryMessage = retryError instanceof Error ? retryError.message : String(retryError)
-      console.error(`[guild:ERROR] spawnFighterSession prompt injection failed after retry: ${retryMessage}`)
+      error(`seedSessionWithRetry prompt injection failed after retry: ${retryMessage}`)
       return false
     }
   }

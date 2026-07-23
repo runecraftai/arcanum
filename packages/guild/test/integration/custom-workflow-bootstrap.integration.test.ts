@@ -30,7 +30,7 @@ describe("Integration: custom workflow bootstrap", () => {
 
   it("boots a user-defined workflow with custom roles and builtin fallbacks", async () => {
     fixture.writeProjectConfig({
-      disabled_agents: ["loom", "tapestry", "shuttle", "pattern", "spindle", "warp", "weft"],
+      disabled_agents: ["bard", "fighter", "ranger", "pattern", "warlock", "paladin", "cleric"],
       custom_agents: {
         "pipeline-lead": {
           prompt_file: "prompts/orchestrator.md",
@@ -83,12 +83,12 @@ describe("Integration: custom workflow bootstrap", () => {
       tools?: Record<string, boolean>
     }>
 
-    const disabledBuiltins = ["loom", "tapestry", "shuttle", "pattern", "spindle", "warp", "weft"]
+    const disabledBuiltins = ["bard", "fighter", "ranger", "pattern", "warlock", "paladin", "cleric"]
     for (const name of disabledBuiltins) {
       expect(agents[getAgentDisplayName(name)]).toBeUndefined()
     }
 
-    expect(agents[getAgentDisplayName("thread")]).toBeDefined()
+    expect(agents[getAgentDisplayName("rogue")]).toBeDefined()
 
     const lead = agents["Pipeline Lead"]
     expect(lead).toBeDefined()
@@ -113,11 +113,11 @@ describe("Integration: custom workflow bootstrap", () => {
 
     const defaultAgent = configObj.default_agent as string
     expect(defaultAgent).toBeDefined()
-    expect(defaultAgent).not.toBe(getAgentDisplayName("loom"))
+    expect(defaultAgent).not.toBe(getAgentDisplayName("bard"))
 
     const agentKeys = Object.keys(agents)
     expect(agentKeys.length).toBeGreaterThanOrEqual(4)
-    expect(agents[getAgentDisplayName("thread")]).toBeDefined()
+    expect(agents[getAgentDisplayName("rogue")]).toBeDefined()
     expect(agents["Pipeline Lead"]).toBeDefined()
     expect(agents["Data Validator"]).toBeDefined()
     expect(agents["Report Writer"]).toBeDefined()

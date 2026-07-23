@@ -41,6 +41,11 @@ describe("createPaladinAgent", () => {
     expect(config.tools?.["call_guild_agent"]).toBe(false)
   })
 
+  it("denies guild_spawn_wizard tool (Bard-only)", () => {
+    const config = createPaladinAgent("claude-sonnet-4")
+    expect(config.tools?.["guild_spawn_wizard"]).toBe(false)
+  })
+
   it("description contains Security or Auditor", () => {
     const config = createPaladinAgent("claude-sonnet-4")
     const desc = config.description ?? ""

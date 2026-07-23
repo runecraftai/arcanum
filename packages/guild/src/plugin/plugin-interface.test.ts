@@ -323,7 +323,7 @@ describe("createPluginInterface", () => {
   describe("config hook merge behavior", () => {
     it("merges Guild agents with existing user agents", async () => {
       const weaveAgents = {
-        "Loom (Main Orchestrator)": { model: "claude-opus-4", prompt: "orchestrate" },
+        "Bard (Guildmaster)": { model: "claude-opus-4", prompt: "orchestrate" },
       }
       const handler = {
         handle: async () => ({
@@ -331,7 +331,7 @@ describe("createPluginInterface", () => {
           tools: [],
           mcps: {},
           commands: {},
-          defaultAgent: "Loom (Main Orchestrator)",
+          defaultAgent: "Bard (Guildmaster)",
         }),
       } as unknown as ConfigHandler
 
@@ -352,7 +352,7 @@ describe("createPluginInterface", () => {
 
       const agents = config.agent as Record<string, unknown>
       expect(agents["my-custom-agent"]).toBeDefined()
-      expect(agents["Loom (Main Orchestrator)"]).toBeDefined()
+      expect(agents["Bard (Guildmaster)"]).toBeDefined()
     })
 
     it("lets Guild agents win on name collisions", async () => {
@@ -428,7 +428,7 @@ describe("createPluginInterface", () => {
           tools: [],
           mcps: {},
           commands: {},
-          defaultAgent: "Loom (Main Orchestrator)",
+          defaultAgent: "Bard (Guildmaster)",
         }),
       } as unknown as ConfigHandler
 
@@ -450,7 +450,7 @@ describe("createPluginInterface", () => {
 
     it("handles undefined config.agent gracefully", async () => {
       const weaveAgents = {
-        "Loom (Main Orchestrator)": { model: "claude-opus-4", prompt: "orchestrate" },
+        "Bard (Guildmaster)": { model: "claude-opus-4", prompt: "orchestrate" },
       }
       const handler = {
         handle: async () => ({
@@ -473,7 +473,7 @@ describe("createPluginInterface", () => {
       await iface.config(config as Parameters<typeof iface.config>[0])
 
       const agents = config.agent as Record<string, unknown>
-      expect(agents["Loom (Main Orchestrator)"]).toBeDefined()
+      expect(agents["Bard (Guildmaster)"]).toBeDefined()
     })
 
     it("sets default_agent when user has not configured one", async () => {
@@ -483,7 +483,7 @@ describe("createPluginInterface", () => {
           tools: [],
           mcps: {},
           commands: {},
-          defaultAgent: "Loom (Main Orchestrator)",
+          defaultAgent: "Bard (Guildmaster)",
         }),
       } as unknown as ConfigHandler
 
@@ -498,7 +498,7 @@ describe("createPluginInterface", () => {
       const config: Record<string, unknown> = {}
       await iface.config(config as Parameters<typeof iface.config>[0])
 
-      expect(config.default_agent).toBe("Loom (Main Orchestrator)")
+      expect(config.default_agent).toBe("Bard (Guildmaster)")
     })
   })
 
@@ -621,7 +621,7 @@ describe("createPluginInterface", () => {
     expect(tracked).toEqual(["/some/file.ts"])
   })
 
-  it("tool.execute.before blocks non-markdown Wizard writes through lifecycle policy", async () => {
+  it("tool.execute.before blocks non-.md Ranger writes outside .guild through rangerMdOnly policy", async () => {
     const iface = createPluginInterface({
       pluginConfig: baseConfig,
       hooks: makeHooks({ rangerMdOnlyEnabled: true }),
@@ -632,10 +632,10 @@ describe("createPluginInterface", () => {
 
     await expect(
       iface["tool.execute.before"](
-        { tool: "write", sessionID: "s1", callID: "c2", agent: "wizard" },
+        { tool: "write", sessionID: "s1", callID: "c2", agent: "ranger" },
         { args: { file_path: "/some/file.ts" } },
       ),
-    ).rejects.toThrow("Wizard agent can only write to .guild/ directory")
+    ).rejects.toThrow("Ranger agent can only write to .guild/ directory")
   })
 
   it("chat.message spawns Fighter session (windowed mode) when client is available", async () => {
@@ -662,7 +662,7 @@ describe("createPluginInterface", () => {
         text: renderTrustedBuiltinPrompt({ command: "start-work", sessionID: "s1" }),
       },
     ]
-    const message: Record<string, unknown> = { agent: "Loom (Main Orchestrator)" }
+    const message: Record<string, unknown> = { agent: "Bard (Guildmaster)" }
     const output = { message: message as never, parts }
 
     await primeBuiltinCommand(iface, { command: "start-work", sessionID: "s1" })
@@ -671,7 +671,7 @@ describe("createPluginInterface", () => {
 
     // Windowed mode: Bard session should NOT switch agents in-place
     // Agent should remain as Loom (or Bard display name)
-    expect(message.agent).toBe("Loom (Main Orchestrator)")
+    expect(message.agent).toBe("Bard (Guildmaster)")
 
     // The output should contain the handoff notification
     expect(parts[0].text).toContain("Fighter session spawned")
@@ -719,7 +719,7 @@ describe("createPluginInterface", () => {
 
     const originalText = "Hello world"
     const parts = [{ type: "text", text: originalText }]
-    const message: Record<string, unknown> = { agent: "Loom (Main Orchestrator)" }
+    const message: Record<string, unknown> = { agent: "Bard (Guildmaster)" }
     const output = { message: message as never, parts }
 
     await iface["chat.message"]({ sessionID: "s1" }, output)
@@ -727,7 +727,7 @@ describe("createPluginInterface", () => {
     expect(parts[0].text).toBe(originalText)
     expect(parts.length).toBe(1)
     // Agent should NOT be changed when switchAgent is null
-    expect(message.agent).toBe("Loom (Main Orchestrator)")
+    expect(message.agent).toBe("Bard (Guildmaster)")
   })
 
   it("chat.message substitutes $SESSION_ID and $TIMESTAMP in text parts before passing to startWork", async () => {
@@ -2311,12 +2311,12 @@ describe("analytics: agent name and cost tracking", () => {
     })
 
     await iface["chat.params"](
-      { sessionID: "s1", agent: "Loom (Main Orchestrator)", model: { limit: { context: 100_000 } } } as Parameters<typeof iface["chat.params"]>[0],
+      { sessionID: "s1", agent: "Bard (Guildmaster)", model: { limit: { context: 100_000 } } } as Parameters<typeof iface["chat.params"]>[0],
       {} as never,
     )
 
     const session = tracker.getSession("s1")!
-    expect(session.agentName).toBe("Loom (Main Orchestrator)")
+    expect(session.agentName).toBe("Bard (Guildmaster)")
   })
 
 
@@ -2678,7 +2678,7 @@ describe("workflow integration in plugin-interface", () => {
         path: { id: "sess-track" },
         body: {
           parts: [{ type: "text", text: "Next step prompt" }],
-          agent: "Tapestry (Execution Orchestrator)",
+          agent: "Fighter (Execution Lead)",
         },
       })
 
@@ -2709,7 +2709,7 @@ describe("workflow integration in plugin-interface", () => {
           text: renderTrustedBuiltinPrompt({ command: "run-workflow", sessionID: "s1", arguments: 'spec-driven "Add OAuth2"' }),
         },
       ]
-      const message: Record<string, unknown> = { agent: "Loom (Main Orchestrator)" }
+      const message: Record<string, unknown> = { agent: "Bard (Guildmaster)" }
       const output = { message: message as never, parts }
 
       await primeBuiltinCommand(iface, { command: "run-workflow", sessionID: "s1", arguments: 'spec-driven "Add OAuth2"' })
@@ -2718,7 +2718,7 @@ describe("workflow integration in plugin-interface", () => {
 
       expect(parts[0].text).toContain("Workflow Started")
       expect(parts[0].text).toContain("Add OAuth2 login")
-      expect(message.agent).toBe("cleric")
+      expect(message.agent).toBe("Cleric (Reviewer)")
     })
 
     it("does NOT trigger workflowStart for non-workflow messages", async () => {
@@ -2777,7 +2777,7 @@ describe("workflow integration in plugin-interface", () => {
           text: renderTrustedBuiltinPrompt({ command: "run-workflow", sessionID: "s1", arguments: 'spec-driven "Add OAuth2"' }),
         },
       ]
-      const message: Record<string, unknown> = { agent: "Loom (Main Orchestrator)" }
+      const message: Record<string, unknown> = { agent: "Bard (Guildmaster)" }
       const output = { message: message as never, parts }
 
       await primeBuiltinCommand(iface, { command: "run-workflow", sessionID: "s1", arguments: 'spec-driven "Add OAuth2"' })
@@ -2787,7 +2787,7 @@ describe("workflow integration in plugin-interface", () => {
       // startWork should NOT have been called for /run-workflow commands
       expect(startWorkCalled).toBe(false)
       // Agent should stay as Loom
-      expect(message.agent).toBe("Loom (Main Orchestrator)")
+      expect(message.agent).toBe("Bard (Guildmaster)")
       // Workflow context should be injected
       expect(parts[0].text).toContain("Workflow Started")
       // Plan Not Found should NOT appear
@@ -3666,14 +3666,14 @@ describe("workflow integration in plugin-interface", () => {
         path: { id: "ses-recover" },
         body: {
           parts: [],
-          agent: "Loom (Main Orchestrator)",
+          agent: "Bard (Guildmaster)",
         },
       })
       expect(promptAsync.mock.calls[1]?.[0]).toEqual({
         path: { id: "ses-recover" },
         body: {
           parts: [{ type: "text", text: "resume after compaction" }],
-          agent: "Loom (Main Orchestrator)",
+          agent: "Bard (Guildmaster)",
         },
       })
     })

@@ -6,6 +6,7 @@ export const RANGER_DEFAULTS: AgentConfig = {
   skills: ["guild-execute"],
   tools: {
     call_guild_agent: false,
+    guild_spawn_wizard: false,
   },
   prompt: `<Role>
 Ranger — domain specialist worker for Guild.

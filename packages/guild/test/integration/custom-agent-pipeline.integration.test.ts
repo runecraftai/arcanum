@@ -150,7 +150,7 @@ describe("E2E: Custom agent pipeline", () => {
     })
 
     // The builtin loom should be present, not the custom one
-    const loomAgent = managers.agents["loom"]
+    const loomAgent = managers.agents["bard"]
     expect(loomAgent).toBeDefined()
     expect(loomAgent.prompt).not.toContain("fake loom")
   })
@@ -190,7 +190,7 @@ describe("E2E: Custom agent pipeline", () => {
 describe("E2E: Disabled agents", () => {
   it("disabled agent excluded from agents map AND config handler output", async () => {
     const config = WeaveConfigSchema.parse({
-      disabled_agents: ["spindle", "thread"],
+      disabled_agents: ["warlock", "rogue"],
     })
 
     const managers = createManagers({
@@ -199,8 +199,8 @@ describe("E2E: Disabled agents", () => {
     })
 
     // Should not appear in agents map
-    expect(managers.agents["spindle"]).toBeUndefined()
-    expect(managers.agents["thread"]).toBeUndefined()
+    expect(managers.agents["warlock"]).toBeUndefined()
+    expect(managers.agents["rogue"]).toBeUndefined()
 
     // Should not appear in config handler output
     const result = await managers.configHandler.handle({
@@ -208,18 +208,18 @@ describe("E2E: Disabled agents", () => {
       agents: managers.agents,
     })
 
-    expect(result.agents[getAgentDisplayName("spindle")]).toBeUndefined()
-    expect(result.agents[getAgentDisplayName("thread")]).toBeUndefined()
+    expect(result.agents[getAgentDisplayName("warlock")]).toBeUndefined()
+    expect(result.agents[getAgentDisplayName("rogue")]).toBeUndefined()
 
     // Other agents should still be present
-    expect(result.agents[getAgentDisplayName("loom")]).toBeDefined()
-    expect(result.agents[getAgentDisplayName("tapestry")]).toBeDefined()
-    expect(result.agents[getAgentDisplayName("weft")]).toBeDefined()
+    expect(result.agents[getAgentDisplayName("bard")]).toBeDefined()
+    expect(result.agents[getAgentDisplayName("fighter")]).toBeDefined()
+    expect(result.agents[getAgentDisplayName("cleric")]).toBeDefined()
   })
 
   it("disabled agent references removed from Loom prompt", async () => {
     const config = WeaveConfigSchema.parse({
-      disabled_agents: ["spindle", "thread"],
+      disabled_agents: ["warlock", "rogue"],
     })
 
     const managers = createManagers({
@@ -227,23 +227,22 @@ describe("E2E: Disabled agents", () => {
       pluginConfig: config,
     })
 
-    const loomPrompt = managers.agents["loom"]?.prompt ?? ""
+    const loomPrompt = managers.agents["bard"]?.prompt ?? ""
 
     // Loom prompt should not reference disabled agents
-    expect(loomPrompt).not.toContain("Use thread")
-    expect(loomPrompt).not.toContain("spindle")
+    expect(loomPrompt).not.toContain("Rogue")
+    expect(loomPrompt).not.toContain("Warlock")
 
     // But should still reference enabled agents
-    expect(loomPrompt).toContain("pattern")
-    expect(loomPrompt).toContain("shuttle")
-    expect(loomPrompt).toContain("Weft")
-    expect(loomPrompt).toContain("Warp")
-    expect(loomPrompt).toContain("shuttle")
+    expect(loomPrompt).toContain("Ranger")
+    expect(loomPrompt).toContain("Cleric")
+    expect(loomPrompt).toContain("Paladin")
+    expect(loomPrompt).toContain("Fighter")
   })
 
   it("disabled agent references removed from Tapestry prompt", async () => {
     const config = WeaveConfigSchema.parse({
-      disabled_agents: ["weft"],
+      disabled_agents: ["cleric"],
     })
 
     const managers = createManagers({
@@ -251,14 +250,13 @@ describe("E2E: Disabled agents", () => {
       pluginConfig: config,
     })
 
-    const tapestryPrompt = managers.agents["tapestry"]?.prompt ?? ""
+    const tapestryPrompt = managers.agents["fighter"]?.prompt ?? ""
 
-    // Tapestry prompt should not delegate to disabled Weft agent
-    // (advisory text mentions "Weft" generically; check delegation line is absent)
-    expect(tapestryPrompt).not.toContain('Delegate to Weft')
+    // Tapestry prompt should not delegate to disabled Cleric agent
+    expect(tapestryPrompt).not.toContain("Delegate to Cleric")
 
-    // But should still reference warp
-    expect(tapestryPrompt).toContain("Warp")
+    // But should still reference paladin
+    expect(tapestryPrompt).toContain("Paladin")
   })
 
   it("disabled custom agent excluded from config handler output", async () => {
@@ -290,7 +288,7 @@ describe("E2E: Disabled agents", () => {
 
   it("warp can be disabled via disabled_agents config", async () => {
     const config = WeaveConfigSchema.parse({
-      disabled_agents: ["warp"],
+      disabled_agents: ["paladin"],
     })
 
     const managers = createManagers({
@@ -304,9 +302,9 @@ describe("E2E: Disabled agents", () => {
     })
 
     // All agents — including warp — should be disableable in a configurable framework
-    expect(result.agents[getAgentDisplayName("warp")]).toBeUndefined()
+    expect(result.agents[getAgentDisplayName("paladin")]).toBeUndefined()
     // Other agents should still be present
-    expect(result.agents[getAgentDisplayName("loom")]).toBeDefined()
+    expect(result.agents[getAgentDisplayName("bard")]).toBeDefined()
   })
 })
 
@@ -342,7 +340,7 @@ describe("E2E: Fingerprint injection into Loom prompt", () => {
       fingerprint,
     })
 
-    const loomPrompt = managers.agents["loom"]?.prompt ?? ""
+    const loomPrompt = managers.agents["bard"]?.prompt ?? ""
 
     // ProjectContext section should be present in the final Loom prompt
     expect(loomPrompt).toContain("<ProjectContext>")
@@ -360,7 +358,7 @@ describe("E2E: Fingerprint injection into Loom prompt", () => {
       fingerprint: null,
     })
 
-    const loomPrompt = managers.agents["loom"]?.prompt ?? ""
+    const loomPrompt = managers.agents["bard"]?.prompt ?? ""
     expect(loomPrompt).not.toContain("<ProjectContext>")
   })
 
@@ -373,7 +371,7 @@ describe("E2E: Fingerprint injection into Loom prompt", () => {
       // fingerprint not passed at all
     })
 
-    const loomPrompt = managers.agents["loom"]?.prompt ?? ""
+    const loomPrompt = managers.agents["bard"]?.prompt ?? ""
     expect(loomPrompt).not.toContain("<ProjectContext>")
   })
 })
@@ -458,7 +456,7 @@ describe("E2E: Prompt semantic equivalence", () => {
       pluginConfig: config,
     })
 
-    const loomPrompt = managers.agents["loom"]?.prompt ?? ""
+    const loomPrompt = managers.agents["bard"]?.prompt ?? ""
 
     // The prompt should contain all key sections
     expect(loomPrompt).toContain("<Role>")
@@ -469,14 +467,14 @@ describe("E2E: Prompt semantic equivalence", () => {
     expect(loomPrompt).toContain("<ReviewWorkflow>")
     expect(loomPrompt).toContain("<Style>")
 
-    // Should reference all 8 agents
-    expect(loomPrompt).toContain("thread")
-    expect(loomPrompt).toContain("spindle")
-    expect(loomPrompt).toContain("pattern")
-    expect(loomPrompt).toContain("shuttle")
-    expect(loomPrompt).toContain("Weft")
-    expect(loomPrompt).toContain("Warp")
-    expect(loomPrompt).toContain("Warp")
+    // Should reference all other agents
+    expect(loomPrompt).toContain("Rogue")
+    expect(loomPrompt).toContain("Warlock")
+    expect(loomPrompt).toContain("Wizard")
+    expect(loomPrompt).toContain("Ranger")
+    expect(loomPrompt).toContain("Cleric")
+    expect(loomPrompt).toContain("Paladin")
+    expect(loomPrompt).toContain("Fighter")
   })
 
   it("Tapestry prompt with no options matches default prompt", () => {
@@ -487,12 +485,12 @@ describe("E2E: Prompt semantic equivalence", () => {
       pluginConfig: config,
     })
 
-    const tapestryPrompt = managers.agents["tapestry"]?.prompt ?? ""
+    const tapestryPrompt = managers.agents["fighter"]?.prompt ?? ""
 
-    // Should contain key Tapestry sections
-    expect(tapestryPrompt).toContain("Tapestry")
-    expect(tapestryPrompt).toContain("Weft")
-    expect(tapestryPrompt).toContain("Warp")
+    // Should contain key Fighter sections
+    expect(tapestryPrompt).toContain("Fighter")
+    expect(tapestryPrompt).toContain("Cleric")
+    expect(tapestryPrompt).toContain("Paladin")
   })
 })
 
@@ -526,7 +524,7 @@ describe("E2E: Combined features", () => {
           cost: "CHEAP",
         },
       },
-      disabled_agents: ["spindle"],
+      disabled_agents: ["warlock"],
     })
     registeredKeys.push("test-agent")
 
@@ -540,10 +538,10 @@ describe("E2E: Combined features", () => {
     expect(managers.agents["test-agent"]).toBeDefined()
 
     // Disabled agent should be absent
-    expect(managers.agents["spindle"]).toBeUndefined()
+    expect(managers.agents["warlock"]).toBeUndefined()
 
     // Fingerprint should be in Loom prompt
-    const loomPrompt = managers.agents["loom"]?.prompt ?? ""
+    const loomPrompt = managers.agents["bard"]?.prompt ?? ""
     expect(loomPrompt).toContain("<ProjectContext>")
     expect(loomPrompt).toContain("typescript")
 
@@ -557,7 +555,7 @@ describe("E2E: Combined features", () => {
     })
 
     expect(result.agents["Test Agent"]).toBeDefined()
-    expect(result.agents[getAgentDisplayName("spindle")]).toBeUndefined()
-    expect(result.agents[getAgentDisplayName("loom")]).toBeDefined()
+    expect(result.agents[getAgentDisplayName("warlock")]).toBeUndefined()
+    expect(result.agents[getAgentDisplayName("bard")]).toBeDefined()
   })
 })

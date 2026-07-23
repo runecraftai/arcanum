@@ -58,7 +58,7 @@ describe("generateHealthReport", () => {
       diagnostics: [],
     }
     const agents = {
-      "Loom (Main Orchestrator)": {},
+      "Bard (Guildmaster)": {},
       "ranger": {},
       "my-reviewer": {},
     }

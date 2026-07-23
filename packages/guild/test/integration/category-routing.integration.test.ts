@@ -44,16 +44,16 @@ describe("Integration: category routing setup", () => {
       configDir: join(fixture.directory, ".opencode"),
     })
 
-    expect(managers.agents["shuttle-frontend"]).toBeDefined()
-    expect(managers.agents["shuttle-backend"]).toBeDefined()
-    expect(managers.agents["shuttle"]).toBeDefined()
+    expect(managers.agents["ranger-frontend"]).toBeDefined()
+    expect(managers.agents["ranger-backend"]).toBeDefined()
+    expect(managers.agents["ranger"]).toBeDefined()
 
-    const tapestryPrompt = managers.agents["tapestry"]?.prompt ?? ""
+    const fighterPrompt = managers.agents["fighter"]?.prompt ?? ""
 
-    expect(tapestryPrompt).toContain("<CategoryRouting>")
-    expect(tapestryPrompt).toContain("Match task's **Files** against category patterns in config declaration order")
-    expect(tapestryPrompt).toContain("shuttle-frontend: patterns [src/frontend/**]")
-    expect(tapestryPrompt).toContain("shuttle-backend: patterns [src/backend/**]")
-    expect(tapestryPrompt).toContain("shuttle: fallback for tasks that match no category patterns")
+    expect(fighterPrompt).toContain("<CategoryRouting>")
+    expect(fighterPrompt).toContain("Match task's **Files** against category patterns in config declaration order")
+    expect(fighterPrompt).toContain("ranger-frontend: patterns [src/frontend/**]")
+    expect(fighterPrompt).toContain("ranger-backend: patterns [src/backend/**]")
+    expect(fighterPrompt).toContain("ranger: fallback for tasks that match no category patterns")
   })
 })

@@ -8,7 +8,7 @@ interface PendingBuiltinCommand {
   issuedAt: number
 }
 
-export type TrustedInjectedPromptKind = "generic" | "reviewer-fanout"
+export type TrustedInjectedPromptKind = "generic" | "reviewer-fanout" | "wizard-return-handoff"
 
 export interface TrustedInjectedPromptMetadata {
   kind: TrustedInjectedPromptKind

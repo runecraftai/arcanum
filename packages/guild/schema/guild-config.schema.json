@@ -523,6 +523,9 @@
             },
             "archive_plan": {
               "type": "boolean"
+            },
+            "spawn_wizard": {
+              "type": "boolean"
             }
           },
           "additionalProperties": false

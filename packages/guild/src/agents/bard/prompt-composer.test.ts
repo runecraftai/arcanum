@@ -108,7 +108,7 @@ describe("buildDelegationSection", () => {
 
   it("clarifies Wizard versus Ranger routing boundary", () => {
     const section = buildDelegationSection(new Set())
-    expect(section).toContain("delegate to Wizard for planning, scoping, and work breakdown")
+    expect(section).toContain("Delegate to Wizard for planning, scoping, and work breakdown")
     expect(section).toContain("domain expertise rather than planning or scoping")
   })
 
@@ -151,6 +151,30 @@ describe("buildDelegationSection", () => {
     const section = buildDelegationSection(new Set())
     expect(section).toContain('subagent_type="ranger"')
     expect(section).toContain("case-sensitive")
+  })
+
+  it("delegation section maps interactive flow to guild_spawn_wizard and automatic to call_guild_agent", () => {
+    const section = buildDelegationSection(new Set())
+    // Find the Wizard delegation line
+    const wizardLine = section.split("\n").find((l) => l.includes("Delegate to Wizard for planning"))
+    expect(wizardLine).toBeDefined()
+    // Interactive: guild_spawn_wizard
+    expect(wizardLine).toContain("guild_spawn_wizard")
+    // Automatic: call_guild_agent (inline delegation)
+    expect(wizardLine).toContain("call_guild_agent")
+    // Must distinguish the two options
+    expect(wizardLine).toContain("interactive flow")
+    expect(wizardLine).toContain("automatic flow")
+  })
+
+  it("delegation section uses ask_user to let user choose mode before delegating", () => {
+    const section = buildDelegationSection(new Set())
+    const wizardLine = section.split("\n").find((l) => l.includes("Delegate to Wizard for planning"))
+    expect(wizardLine).toContain("offer two options first")
+    expect(wizardLine).toContain("interactive flow")
+    expect(wizardLine).toContain("automatic flow")
+    expect(wizardLine).toContain("After the choice")
+    expect(wizardLine).toContain("WizardMode")
   })
 
   it("mentions visible Weft review variants when configured", () => {
@@ -353,6 +377,42 @@ describe("individual section builders", () => {
     expect(section).toContain("MODE: automatic")
     expect(section).toContain("OpenCode `ask_user` tool")
     expect(section).toContain("choose one of those two options")
+  })
+
+  it("wizardModeSection maps interactive mode to guild_spawn_wizard (not call_guild_agent)", () => {
+    const section = buildWizardModeSection(new Set())
+    // Extract the interactive line
+    const interactiveLine = section.split("\n").find((l) => l.includes("MODE: interactive"))
+    expect(interactiveLine).toBeDefined()
+    expect(interactiveLine).toContain("guild_spawn_wizard")
+    expect(interactiveLine).not.toContain("call_guild_agent")
+  })
+
+  it("wizardModeSection maps automatic mode to call_guild_agent (not guild_spawn_wizard)", () => {
+    const section = buildWizardModeSection(new Set())
+    const automaticLine = section.split("\n").find((l) => l.includes("MODE: automatic"))
+    expect(automaticLine).toBeDefined()
+    expect(automaticLine).toContain("call_guild_agent")
+    expect(automaticLine).not.toContain("guild_spawn_wizard")
+  })
+
+  it("wizardModeSection does not mention effect type names (implementation details)", () => {
+    const section = buildWizardModeSection(new Set())
+    expect(section).not.toContain("spawnWizardSession")
+    expect(section).not.toContain("wizardReturnHandoff")
+  })
+
+  it("wizardModeSection interactive mode says spawns a separate Wizard session", () => {
+    const section = buildWizardModeSection(new Set())
+    const interactiveLine = section.split("\n").find((l) => l.includes("MODE: interactive"))
+    expect(interactiveLine).toContain("spawns an interactive Wizard planning session")
+  })
+
+  it("wizardModeSection automatic mode says delegate inline", () => {
+    const section = buildWizardModeSection(new Set())
+    const automaticLine = section.split("\n").find((l) => l.includes("MODE: automatic"))
+    expect(automaticLine).toContain("Delegate inline via")
+    expect(automaticLine).toContain("without extra back-and-forth")
   })
 
   it("buildWizardModeSection omits content when wizard is disabled", () => {
@@ -669,8 +729,7 @@ describe("Bard prompt skill references", () => {
   it("Delegation section routes to Wizard (who uses guild-scope, guild-spec, guild-plan) and Fighter (who uses guild-verify)", () => {
     const section = buildDelegationSection(new Set())
     // Wizard: planning, scoping, work breakdown
-    expect(section).toContain("delegate to Wizard for planning, scoping, and work breakdown")
-    // Fighter: /start-work for execution
+    expect(section).toContain("Delegate to Wizard for planning, scoping, and work breakdown")
     expect(section).toContain("/start-work")
     expect(section).toContain("Fighter")
   })

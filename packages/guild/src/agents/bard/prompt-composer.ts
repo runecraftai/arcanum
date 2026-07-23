@@ -94,7 +94,7 @@ export function buildDelegationSection(disabled: Set<string>, reviewModelVariant
   }
   if (isAgentEnabled("wizard", disabled)) {
     lines.push(
-      "- Use `call_guild_agent` to delegate to Wizard for planning, scoping, and work breakdown before substantial implementation begins. If the user has not chosen a mode yet, use the OpenCode \`ask_user\` tool to offer two options first: interactive flow (Wizard asks questions) or automatic flow (Wizard researches and drafts the plan without back-and-forth). After the choice, pass it explicitly as `MODE: interactive` or `MODE: automatic` in the Wizard handoff.",
+      "- Delegate to Wizard for planning, scoping, and work breakdown before substantial implementation begins. If the user has not chosen a mode yet, use the OpenCode \\`ask_user\\` tool to offer two options first: interactive flow (spawns a separate Wizard session via \\`guild_spawn_wizard\\`) or automatic flow (delegates inline via \\`call_guild_agent\\`). After the choice, follow the MODE instructions in <WizardMode>.",
     )
   }
   if (isAgentEnabled("fighter", disabled)) {
@@ -130,8 +130,8 @@ export function buildWizardModeSection(disabled: Set<string>): string {
   return `<WizardMode>
 When delegating to Wizard, make the mode explicit:
 
-- MODE: interactive — use when the user wants guided clarification. Wizard should ask the minimum necessary questions, then stop so Bard can relay answers back.
-- MODE: automatic — use when the user wants a straight plan. Wizard should research and draft the plan without extra back-and-forth.
+- MODE: interactive — use when the user wants guided clarification. Narrate "I'll open a separate interactive planning session for you now." then call \`guild_spawn_wizard\` with the user's planning goal as the \`goal\` parameter. This spawns an interactive Wizard planning session.
+- MODE: automatic — use when the user wants a straight plan. Delegate inline via \`call_guild_agent\`. Wizard should research and draft the plan without extra back-and-forth.
 - If the request is ambiguous, use the OpenCode \`ask_user\` tool to ask the user to choose one of those two options before delegating.
 </WizardMode>`
 }

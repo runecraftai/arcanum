@@ -40,4 +40,9 @@ describe("createSpindleAgent", () => {
     const config = createSpindleAgent("gemini-3-flash")
     expect(config.tools?.["call_guild_agent"]).toBe(false)
   })
+
+  it("denies guild_spawn_wizard tool (Bard-only)", () => {
+    const config = createSpindleAgent("gemini-3-flash")
+    expect(config.tools?.["guild_spawn_wizard"]).toBe(false)
+  })
 })

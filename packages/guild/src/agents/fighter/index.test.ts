@@ -44,6 +44,11 @@ describe("createFighterAgent", () => {
     expect(config.tools?.["call_guild_agent"]).toBe(true)
   })
 
+  it("denies guild_spawn_wizard tool (Bard-only)", () => {
+    const config = createFighterAgent("claude-sonnet-4")
+    expect(config.tools?.["guild_spawn_wizard"]).toBe(false)
+  })
+
   it("completion step references terminal hand-back to Bard", () => {
     const config = createFighterAgent("claude-sonnet-4")
     const prompt = config.prompt as string

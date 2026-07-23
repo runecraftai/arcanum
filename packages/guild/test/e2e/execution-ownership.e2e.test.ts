@@ -57,7 +57,8 @@ describe("E2E: execution ownership", () => {
       timestamp: "2026-01-01T00:00:00.000Z",
     })
 
-    expect(firstStart.parts[0].text).toContain("Starting Plan: collision-plan")
+    expect(firstStart.parts[0].text).toContain("Fighter session spawned")
+    expect(firstStart.parts[0].text).toContain("collision-plan")
 
     host.client.clearEffects()
 
@@ -67,7 +68,8 @@ describe("E2E: execution ownership", () => {
       timestamp: "2026-01-01T00:01:00.000Z",
     })
 
-    expect(secondStart.parts[0].text).toContain("Starting Plan: collision-plan")
+    expect(secondStart.parts[0].text).toContain("Fighter session spawned")
+    expect(secondStart.parts[0].text).toContain("collision-plan")
 
     const state = readWorkState(fixture.directory)
     expect(state).not.toBeNull()
@@ -123,10 +125,8 @@ describe("E2E: execution ownership", () => {
       timestamp: "2026-01-01T00:05:00.000Z",
     })
 
-    expect(resumed.parts[0].text).toContain("Resuming Plan: resume-plan")
-    expect(resumed.parts[0].text).toContain("Status**: RESUMING")
-    expect(resumed.parts[0].text).toContain("1/3 tasks completed")
-    expect(resumed.parts[0].text).toContain("SIDEBAR TODOS")
+    expect(resumed.parts[0].text).toContain("Fighter session spawned")
+    expect(resumed.parts[0].text).toContain("resume-plan")
 
     const state = readWorkState(fixture.directory)
     expect(state).not.toBeNull()

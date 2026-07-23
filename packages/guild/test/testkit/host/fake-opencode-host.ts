@@ -66,7 +66,7 @@ export class FakeOpencodeHost {
   }): Promise<HostOutput> {
     const output: HostOutput = {
       message: {
-        agent: args.agent ?? getAgentDisplayName("loom"),
+        agent: args.agent ?? getAgentDisplayName("bard"),
         ...(args.message ?? {}),
       },
       parts: args.parts.map(part => ({ ...part })),

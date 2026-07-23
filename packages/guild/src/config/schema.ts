@@ -174,6 +174,8 @@ export const ToolsConfigSchema = z.object({
   verify_gate: z.boolean().optional(),
   /** Enable or disable the guild_archive_plan tool. Default: true. */
   archive_plan: z.boolean().optional(),
+  /** Enable or disable the guild_spawn_wizard tool. Default: true. */
+  spawn_wizard: z.boolean().optional(),
 })
 
 export const GuildConfigSchema = z.object({

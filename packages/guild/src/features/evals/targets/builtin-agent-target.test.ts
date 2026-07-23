@@ -77,6 +77,7 @@ describe("resolveBuiltinAgentTarget", () => {
       edit: false,
       task: false,
       call_guild_agent: false,
+      guild_spawn_wizard: false,
     })
   })
 
@@ -84,7 +85,7 @@ describe("resolveBuiltinAgentTarget", () => {
     const result = resolveBuiltinAgentTarget({ kind: "builtin-agent-prompt", agent: "ranger" })
     expect(result.artifacts.agentMetadata?.sourceKind).toBe("default")
     expect(result.artifacts.agentMetadata?.agent).toBe("ranger")
-    expect(result.artifacts.toolPolicy).toEqual({ call_guild_agent: false })
+    expect(result.artifacts.toolPolicy).toEqual({ call_guild_agent: false, guild_spawn_wizard: false })
     expect(result.artifacts.renderedPrompt).toBeTruthy()
     expect(result.artifacts.renderedPrompt!.length).toBeGreaterThan(0)
     expect(result.artifacts.renderedPrompt).toContain("<Role>")

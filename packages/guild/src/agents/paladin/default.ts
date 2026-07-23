@@ -9,6 +9,7 @@ export const PALADIN_DEFAULTS: AgentConfig = {
     edit: false,
     task: false,
     call_guild_agent: false,
+    guild_spawn_wizard: false,
   },
   prompt: `<Role>
 Paladin — security and specification compliance auditor for Guild.

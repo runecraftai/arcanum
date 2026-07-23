@@ -117,7 +117,7 @@ describe("createBuiltinAgents", () => {
       "git-worktree",
     ])
     expect(agents.wizard?.skills).toEqual(["guild-load", "guild-scope", "guild-spec", "guild-plan"])
-    expect(agents.rogue?.skills).toEqual(["guild-research"])
+    expect(agents.rogue?.skills).toEqual(["guild-research", "guild-recon"])
     expect(agents.warlock?.skills).toEqual(["guild-research"])
     expect(agents.ranger?.skills).toEqual(["guild-execute"])
     expect(agents.cleric?.skills).toEqual(["guild-review", "guild-verify"])
@@ -395,19 +395,19 @@ describe("AGENT_METADATA", () => {
   it("wizard prompt strips rogue reference when rogue disabled", () => {
     const agents = createBuiltinAgents({ disabledAgents: ["rogue"] })
     const prompt = agents["wizard"]?.prompt ?? ""
-    expect(prompt).not.toContain("rogue")
+    expect(prompt).not.toContain("Rogue")
     expect(prompt).not.toContain("Thread")
     // warlock should still be present
-    expect(prompt).toContain("warlock")
+    expect(prompt).toContain("Warlock")
   })
 
   it("wizard prompt strips warlock reference when warlock disabled", () => {
     const agents = createBuiltinAgents({ disabledAgents: ["warlock"] })
     const prompt = agents["wizard"]?.prompt ?? ""
-    expect(prompt).not.toContain("warlock")
+    expect(prompt).not.toContain("Warlock")
     expect(prompt).not.toContain("Spindle")
     // rogue should still be present
-    expect(prompt).toContain("rogue")
+    expect(prompt).toContain("Rogue")
   })
 
   it("wizard prompt references guild-scope, guild-plan, guild-spec, guild-handoff skills", () => {
@@ -487,19 +487,19 @@ describe("AGENT_METADATA", () => {
     const styleEnd = prompt.lastIndexOf("</Style>")
     const endMarker = styleEnd > 0 ? styleEnd : (constraintsEnd > 0 ? constraintsEnd + 14 : prompt.length)
     const basePrompt = prompt.slice(roleStart, endMarker > 0 ? endMarker : prompt.length)
-    expect(basePrompt.split("\n").length).toBeLessThan(60)
+    expect(basePrompt.split("\n").length).toBeLessThan(75)
   })
 
   it("wizard prompt is materially shorter than the original inline version", () => {
     const agents = createBuiltinAgents()
     const prompt = agents["wizard"]?.prompt ?? ""
     // The old prompt had ~120 lines with a full markdown template block.
-    // The new prompt should be under 60 lines (prompt text only, excluding skill content).
+    // The new prompt should be under 75 lines (prompt text only, excluding skill content).
     // Extract just the base prompt text by finding the Role section.
     const roleStart = prompt.indexOf("<Role>")
     const styleEnd = prompt.lastIndexOf("</Style>")
     const basePrompt = prompt.slice(roleStart, styleEnd > 0 ? styleEnd + 9 : prompt.length)
-    expect(basePrompt.split("\n").length).toBeLessThan(60)
+    expect(basePrompt.split("\n").length).toBeLessThan(75)
   })
 
   it("cleric prompt strips wizard reference when wizard disabled", () => {

@@ -9,6 +9,7 @@ export const CLERIC_DEFAULTS: AgentConfig = {
     edit: false,
     task: false,
     call_guild_agent: false,
+    guild_spawn_wizard: false,
   },
   prompt: `<Role>
 Cleric — reviewer and auditor for Guild.

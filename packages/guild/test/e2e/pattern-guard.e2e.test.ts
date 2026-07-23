@@ -13,7 +13,7 @@ describe("E2E: pattern write guard", () => {
     fixture.cleanup()
   })
 
-  it("blocks Wizard from writing non-markdown files outside .guild", async () => {
+  it("blocks Ranger from writing non-.md files outside .guild", async () => {
     const host = await FakeOpencodeHost.boot({ directory: fixture.directory })
 
     await expect(
@@ -21,13 +21,13 @@ describe("E2E: pattern write guard", () => {
         sessionID: "sess-pattern",
         tool: "write",
         callID: "call-pattern-1",
-        agent: "wizard",
+        agent: "ranger",
         args: { file_path: `${fixture.directory}/src/app.ts` },
       }),
-    ).rejects.toThrow("Wizard agent can only write to .guild/ directory")
+    ).rejects.toThrow("Ranger agent can only write to .guild/ directory")
   })
 
-  it("allows Wizard to write markdown files inside .guild", async () => {
+  it("allows Ranger to write .md files inside .guild", async () => {
     const host = await FakeOpencodeHost.boot({ directory: fixture.directory })
 
     await expect(
@@ -35,7 +35,7 @@ describe("E2E: pattern write guard", () => {
         sessionID: "sess-pattern-ok",
         tool: "write",
         callID: "call-pattern-2",
-        agent: "wizard",
+        agent: "ranger",
         args: { file_path: `${fixture.directory}/.guild/plans/notes.md` },
       }),
     ).resolves.toBeUndefined()

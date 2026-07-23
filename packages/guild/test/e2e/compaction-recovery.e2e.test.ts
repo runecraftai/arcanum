@@ -51,7 +51,7 @@ describe("compaction recovery ownership matrix", () => {
     expect(host.client.promptAsyncCalls).toHaveLength(2)
     expect(host.client.promptAsyncCalls[0].body.agent).toBe("Bard (Guildmaster)")
     expect(host.client.promptAsyncCalls[0].body.parts).toEqual([])
-    expect(host.client.promptAsyncCalls[1].body.parts[0].text).toContain("Foreground agent restored: loom")
+    expect(host.client.promptAsyncCalls[1].body.parts[0].text).toContain("Foreground agent restored: bard")
   })
 
   it("restores Tapestry plan execution after compaction when ownerKind is plan", async () => {
@@ -75,7 +75,7 @@ describe("compaction recovery ownership matrix", () => {
         ownerRef: planPath,
         status: "running",
         sessionId: "sess-plan",
-        executorAgent: "tapestry",
+        executorAgent: "fighter",
       }),
     )
     executionLeaseRepository.writeSessionRuntime(
@@ -141,7 +141,7 @@ describe("compaction recovery ownership matrix", () => {
       fixture.directory,
       createSessionRuntimeState({
         sessionId: "sess-stale-plan",
-        foregroundAgent: "loom",
+        foregroundAgent: "bard",
         mode: "ad_hoc",
         status: "idle",
       }),
@@ -152,7 +152,7 @@ describe("compaction recovery ownership matrix", () => {
 
     expect(host.client.promptAsyncCalls).toHaveLength(2)
     expect(host.client.promptAsyncCalls[0].body.agent).toBe("Loom (Main Orchestrator)")
-    expect(host.client.promptAsyncCalls[1].body.parts[0].text).toContain("Foreground agent restored: loom")
+    expect(host.client.promptAsyncCalls[1].body.parts[0].text).toContain("Foreground agent restored: bard")
     expect(executionLeaseRepository.readExecutionLease(fixture.directory)).toBeNull()
   })
 
@@ -196,7 +196,7 @@ describe("compaction recovery ownership matrix", () => {
       fixture.directory,
       createSessionRuntimeState({
         sessionId: "sess-old",
-        foregroundAgent: "loom",
+        foregroundAgent: "bard",
         mode: "ad_hoc",
         status: "idle",
       }),
@@ -215,7 +215,7 @@ describe("compaction recovery ownership matrix", () => {
     expect(host.client.promptAsyncCalls[1].body.parts[0].text).not.toContain(CONTINUATION_MARKER)
     expect(executionLeaseRepository.readExecutionLease(fixture.directory)).toBeNull()
     expect(executionLeaseRepository.readSessionRuntime(fixture.directory, "sess-old")).toMatchObject({
-      foreground_agent: "tapestry",
+      foreground_agent: "fighter",
       mode: "plan",
     })
   })
@@ -233,7 +233,7 @@ describe("compaction recovery ownership matrix", () => {
         ownerRef: planPath,
         status: "running",
         sessionId: "sess-owner",
-        executorAgent: "tapestry",
+        executorAgent: "fighter",
       }),
     )
 
@@ -286,7 +286,7 @@ describe("compaction recovery ownership matrix", () => {
         ownerRef: planPath,
         status: "paused",
         sessionId: "sess-paused-plan",
-        executorAgent: "tapestry",
+        executorAgent: "fighter",
       }),
     )
     executionLeaseRepository.writeSessionRuntime(

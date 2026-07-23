@@ -9,6 +9,7 @@ export const WARLOCK_DEFAULTS: AgentConfig = {
     edit: false,
     task: false,
     call_guild_agent: false,
+    guild_spawn_wizard: false,
   },
   prompt: `<Role>
 Warlock — external researcher for Guild.

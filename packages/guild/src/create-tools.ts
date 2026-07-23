@@ -7,6 +7,7 @@ import { loadSkills, createSkillResolver } from "./features/skill-loader"
 import { createArchivePlanTool } from "./tools/archive-plan"
 import { createCompactContextTool } from "./tools/compact-context"
 import { createVerifyGateTool } from "./tools/verify-gate"
+import { createSpawnWizardTool } from "./tools/spawn-wizard"
 
 export interface ToolsResult {
   tools: ToolsRecord
@@ -47,6 +48,10 @@ export async function createTools(options: {
 
   if (pluginConfig.tools?.archive_plan !== false) {
     tools.guild_archive_plan = createArchivePlanTool({ directory: ctx.directory })
+  }
+
+  if (pluginConfig.tools?.spawn_wizard !== false) {
+    tools.guild_spawn_wizard = createSpawnWizardTool()
   }
 
   return {

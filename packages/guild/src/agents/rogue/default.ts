@@ -9,6 +9,7 @@ export const ROGUE_DEFAULTS: AgentConfig = {
     edit: false,
     task: false,
     call_guild_agent: false,
+    guild_spawn_wizard: false,
   },
   prompt: `<Role>
 Rogue — codebase scout for Guild.
