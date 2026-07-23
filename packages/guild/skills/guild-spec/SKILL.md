@@ -40,7 +40,7 @@ Drive a structured spec workflow that produces `spec.md` with problem statement,
 6. Write user stories in the `As a <role>, I want <capability>, so that <benefit>` shape. Each story has at least one acceptance criterion.
 7. Assign traceable requirement IDs (e.g., `REQ-001`, `REQ-002`) to each acceptance criterion. The same IDs flow into `tasks.md`.
 8. Capture edge cases as a bulleted list. Each edge case states the input and the expected behaviour.
-9. Define success criteria as a checklist. A success criterion is observable (a command, a file, a metric).
+9. Define success criteria as a markdown checklist using `- [ ]` per item (never emoji such as ✅) — see `guild-plan/references/FORMATS.md` for the canonical format. A success criterion is observable (a command, a file, a metric).
 10. Save to `.guild/plans/<slug>/spec.md`.
 
 ## Rationalizations

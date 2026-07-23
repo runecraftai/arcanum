@@ -44,11 +44,11 @@ describe("createFighterAgent", () => {
     expect(config.tools?.["call_guild_agent"]).toBe(true)
   })
 
-  it("completion step references terminal-state behavior", () => {
+  it("completion step references terminal hand-back to Bard", () => {
     const config = createFighterAgent("claude-sonnet-4")
     const prompt = config.prompt as string
     const planExec = prompt.slice(prompt.indexOf("<PlanExecution>"), prompt.indexOf("</PlanExecution>"))
-    expect(planExec).toContain("terminal-state behavior")
+    expect(planExec).toContain("hand control back to Bard")
   })
 
   it("contains a PostExecutionReview section", () => {

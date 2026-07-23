@@ -3,6 +3,7 @@ import type { ReviewerPlan } from "../../agents/review-resolver"
 import { applyRuntimeEffects } from "./apply-effects"
 import { clearFailoverGuard } from "../../application/failover/failover-guard"
 import { installTestSink, setLogLevel } from "../../shared/log"
+import { FIGHTER_TERMINAL_HANDOFF_DIRECTIVE } from "../../agents/fighter/prompt-composer"
 
 function fanOutPlan(scope: "direct" | "post-execution"): ReviewerPlan {
   return {
@@ -288,6 +289,7 @@ describe("applyRuntimeEffects", () => {
     expect(promptAsyncCalls[0]?.path.id).toBe("origin-session")
     expect(promptAsyncCalls[0]?.body.parts[0]?.text).toContain("<!-- guild:reviewer-fanout -->")
     expect(promptAsyncCalls[0]?.body.parts[0]?.text).toMatch(/nonce:[0-9a-f-]{36}/i)
+    expect(promptAsyncCalls[0]?.body.parts[0]?.text).toContain(FIGHTER_TERMINAL_HANDOFF_DIRECTIVE)
     expect(recorded).toHaveLength(1)
     expect(recorded[0]?.metadata?.kind).toBe("reviewer-fanout")
     expect(recorded[0]?.metadata?.nonce).toMatch(/^[0-9a-f-]{36}$/i)

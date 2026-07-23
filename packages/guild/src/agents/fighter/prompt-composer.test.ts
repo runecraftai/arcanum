@@ -52,27 +52,36 @@ describe("composeFighterPrompt", () => {
 
   it("PostExecutionReview includes Cleric and Paladin by default", () => {
     const prompt = composeFighterPrompt()
-    const reviewSection = prompt.slice(
-      prompt.indexOf("<PostExecutionReview>"),
-      prompt.indexOf("</PostExecutionReview>"),
-    )
+    const reviewSection = getSection(prompt, "PostExecutionReview")
+    expect(reviewSection).not.toBeNull()
     expect(reviewSection).toContain("Cleric")
     expect(reviewSection).toContain("Paladin")
   })
 
   it("PostExecutionReview mentions runtime-owned reviewer fan-out by default", () => {
     const prompt = composeFighterPrompt()
-    const reviewSection = prompt.slice(
-      prompt.indexOf("<PostExecutionReview>"),
-      prompt.indexOf("</PostExecutionReview>"),
-    )
+    const reviewSection = getSection(prompt, "PostExecutionReview")
+    expect(reviewSection).not.toBeNull()
     expect(reviewSection).toContain("runtime reviewer fan-out runs automatically")
     expect(reviewSection).toContain("do not delegate terminal reviewers via Task tool")
+    expect(reviewSection).toContain("Return control to Bard")
+    expect(reviewSection).toContain("ot reprocess or narrate the reviewer fan-out decision")
+  })
+
+  it("PostExecutionReview includes terminal hand-back when both Cleric and Paladin are disabled", () => {
+    const prompt = composeFighterPrompt({
+      disabledAgents: new Set(["cleric", "paladin"]),
+    })
+    const reviewSection = getSection(prompt, "PostExecutionReview")
+    expect(reviewSection).not.toBeNull()
+    expect(reviewSection).toContain("Report the summary")
+    expect(reviewSection).toContain("After reporting the change summary, stop. Return control to Bard")
+    expect(reviewSection).toContain("ot reprocess or narrate the reviewer fan-out decision")
   })
 })
 
 function getSection(prompt: string, tagName: string): string | null {
-  const startTag = `<${tagName}>`
+  const startTag = `<${tagName}>\n`
   const endTag = `</${tagName}>`
   const startIndex = prompt.indexOf(startTag)
 
@@ -172,10 +181,10 @@ describe("individual fighter section builders", () => {
     expect(section).toContain("final todowrite")
   })
 
-  it("buildTapestryPlanExecutionSection references Verification and terminal-state behavior", () => {
+  it("buildTapestryPlanExecutionSection references Verification and terminal hand-back to Bard", () => {
     const section = buildTapestryPlanExecutionSection()
     expect(section).toContain("Verification")
-    expect(section).toContain("terminal-state behavior")
+    expect(section).toContain("hand control back to Bard")
   })
 
   it("buildTapestryPlanExecutionSection mentions Cleric by default", () => {

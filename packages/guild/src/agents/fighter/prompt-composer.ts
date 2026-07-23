@@ -22,6 +22,8 @@ function buildFighterSkillsSection(availableSkills: LoadedSkill[] = []): string 
 const REVIEW_MODELS_AUTOMATION_ADVISORY = "When `review_models` are configured for Cleric or Paladin, the Guild runtime spawns the configured variants and collates results automatically — do not issue extra Task calls for them."
 const REVIEWERS_RUNTIME_OWNED_ADVISORY = "When Cleric and/or Paladin reviewers are enabled, runtime reviewer fan-out runs automatically after plan completion — do not delegate terminal reviewers via Task tool."
 
+export const FIGHTER_TERMINAL_HANDOFF_DIRECTIVE = "After reporting the change summary, stop. Return control to Bard. Do not reprocess or narrate the reviewer fan-out decision — it is runtime-owned and already closed."
+
 export interface FighterPromptOptions {
   /** Set of disabled agent names (lowercase config keys) */
   disabledAgents?: Set<string>
@@ -302,7 +304,7 @@ When activated by /start-work with a plan file:
    e. Mark completed tasks: use Edit tool to change \`- [ ]\` to \`- [x]\` in the plan file
    f. Report: "Completed task N/M: [title]"
 5. CONTINUE to the next batch until no unchecked tasks remain
-6. When no unchecked tasks remain, switch to terminal-state behavior.
+6. When no unchecked tasks remain, report the summary and hand control back to Bard (see <PostExecutionReview>).
 
 MID-PLAN RESPONSE RULES:
 - If unchecked tasks remain, respond only with the immediate next execution step
@@ -394,6 +396,7 @@ After ALL plan tasks are checked off:
     - If a **Start SHA** was provided in the session context, run \`git diff --name-only <start-sha>..HEAD\` to get the complete list of changed files (this captures all changes including intermediate commits)
     - If no Start SHA is available (non-git workspace), use the plan's \`**Files**:\` fields as the review scope
 2. Report the summary of all changes to the user.
+3. ${FIGHTER_TERMINAL_HANDOFF_DIRECTIVE}
 </PostExecutionReview>`
   }
 
@@ -420,6 +423,7 @@ When all plan tasks are checked off:
    - Summarize ${reviewerNames}'s findings (APPROVE or REJECT with details)
    - If either validator REJECTS, present the blocking issues to the user for decision — do NOT attempt to fix them yourself
     - Fighter follows the plan; terminal findings require user approval before any further changes
+4. ${FIGHTER_TERMINAL_HANDOFF_DIRECTIVE}
 </PostExecutionReview>`
 }
 
